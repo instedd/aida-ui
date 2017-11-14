@@ -20,6 +20,7 @@ default: &default
   # For details on connection pooling, see Rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  host: <%= ENV["DATABASE_HOST"] %>
 
 development:
   <<: *default
@@ -79,7 +80,4 @@ test:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
 production:
-  <<: *default
-  database: aida_production
-  username: aida
-  password: <%= ENV['AIDA_DATABASE_PASSWORD'] %>
+  url: <%= ENV['DATABASE_URL'] %>

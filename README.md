@@ -1,24 +1,21 @@
-# README
+# Aida UI
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Development environment
 
-Things you may want to cover:
+* Install Docker
 
-* Ruby version
+* First time / havoc environment
 
-* System dependencies
+```
+$ docker-compose run --rm app ./bin/rails db:drop # havoc environment
+$ docker-compose run --rm app ./bin/setup
+$ docker-compose run --rm app ./bin/yarn
+```
 
-* Configuration
+* Start database & webserver:
 
-* Database creation
+```
+$ docker-compose up
+```
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Open [http://localhost:3000](http://localhost:3000).
