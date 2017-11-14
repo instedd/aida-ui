@@ -1,0 +1,41 @@
+version: '2.0'
+
+services:
+  base: &base
+    build:
+      context: .
+      dockerfile: Dockerfile-dev
+    env_file: dev.env
+    pid: host
+    working_dir: /src
+    depends_on:
+      - db
+    volumes:
+      - .:/src
+      - bundle:/usr/local/bundle
+      - node_modules:/src/node_modules
+
+  app:
+    <<: *base
+    ports:
+      - "3000:3000"
+    command: /bin/sh -c './bin/update && bundle exec ./bin/rails s'
+
+  webpack:
+    <<: *base
+    ports:
+      - "3035:3035"
+    command: /bin/sh -c './bin/yarn install && bundle exec ./bin/webpack-dev-server'
+
+  db:
+    image: postgres:9.6
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD:
+    volumes:
+      - db:/var/lib/postgresql/data
+
+volumes:
+  db:
+  bundle:
+  node_modules:
