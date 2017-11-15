@@ -4,7 +4,8 @@
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {Hello, foo} from './hello'
+import {Hello} from '../app/hello'
+import '../app/App.scss'
 
 const render = () => {
   ReactDOM.render(<Hello name="React" />, document.getElementById('react-root'))
@@ -16,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 if (module.hot) {
-  module.hot.accept('./hello', () => {
+  module.hot.accept('../app/hello', () => {
     render()
     console.log("updated")
   });
