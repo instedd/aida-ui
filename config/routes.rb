@@ -3,8 +3,10 @@ Rails.application.routes.draw do
     resources :bots, only: [:index, :create]
   end
 
-  root to: 'welcome#index'
   get "/_design", to: 'welcome#design'
+
+  root to: 'welcome#index'
+  get "/b(/*path)", to: 'welcome#index'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
