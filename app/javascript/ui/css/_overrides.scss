@@ -1,0 +1,72 @@
+//------------- Overrides react-md classes ------------- //
+.material-icons {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+}
+
+.md-ink-container {
+  span {
+    display: none !important;
+  }
+}
+
+.md-toolbar--prominent {
+  height: auto;
+}
+
+input[type="checkbox"] + .md-btn--icon {
+  color: $md-black-base;
+  padding-left: 0 !important;
+  width: 34px;
+}
+
+.md-toolbar--text-white .md-btn {
+  color: $md-grey-500;
+  &:hover {
+    background: transparent;
+    color: $md-white-base;
+  }
+}
+
+.md-headline {
+  font-size: 20px;
+}
+
+// .mainToolbar nav.mainTabs {
+//   border-bottom: none;
+//   flex: none !important;
+//   display: inline-block !important;
+
+//   ul {
+//     display: inline-grid;
+//     grid-auto-flow: column;
+//     min-width: 680px;
+//     li {
+//       flex: none !important;
+//     }
+
+//   }
+// }
+
+
+.md-tabs {
+  transform: translateX(-56px);
+}
+.md-tab {
+  min-width: initial;
+}
+.md-tab-indicator {
+  height: 3px !important;
+}
+

@@ -1,0 +1,59 @@
+.grid {
+  min-height: 100vh;
+  // font-family: courier, serif;
+  font-size: .2rem;
+  color: white;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 200px auto 50px;
+  grid-template-areas:
+    "header"
+    "main"
+    "footer";
+  grid-row-gap: 3.5rem;
+}
+header{
+  grid-area: header;
+  height: 220px;
+}
+
+main {
+  grid-area: main;
+  display: grid;
+  grid-template-columns: minmax(min-content, 320px) auto;
+  grid-template-areas:
+    "sidebar main-content";
+  grid-column-gap: 5rem;
+  padding: 0 10%;
+}
+  .sidebar {
+    grid-area: sidebar;
+    align-self: start;
+  }
+  .main-content {
+    grid-area: main-content;
+  }
+
+footer {
+  grid-area: footer;
+}
+
+@media screen and (max-width: 33.9em) {
+  main {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "sidebar"
+      "main-content";
+    grid-auto-rows: auto;
+    grid-row-gap: 4rem;
+  }
+}
+
+
+
+/*/////////////////// Example 01 ///////////////////////////*/
+
+
+.md-subheader {
+  height: auto;
+}
