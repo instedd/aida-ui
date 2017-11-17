@@ -18,6 +18,13 @@
     "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-flow": "^6.23.0",
+    "flow-bin": "^0.59.0",
+    "json-schema-to-flow-type": "^0.2.6",
     "webpack-dev-server": "^2.9.4"
+  },
+  "scripts": {
+    "expand-schema": "yarn babel-node lib/tasks/expand-schema.js"
   }
 }

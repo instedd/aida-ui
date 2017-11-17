@@ -18,4 +18,20 @@ $ docker-compose run --rm app ./bin/yarn
 $ docker-compose up
 ```
 
+* Run flow
+
+```
+$ docker-compose run --rm app ./bin/yarn flow
+```
+
+* Expand type schema type
+
+The file `./app/schemas/types.json` contains type schema declaration
+that are translated and available at `./app/javascript/utils/types-generated-decl.jsx`
+by the following command.
+
+```
+$ docker-compose run --rm app ./bin/yarn expand-schema
+```
+
 Open [http://localhost:3000](http://localhost:3000).

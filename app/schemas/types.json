@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+
+  "definitions": {
+    "bot": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "name": { "type": "string" }
+      },
+      "additionalProperties": false,
+      "required": [ "id", "name" ]
+    }
+  },
+
+  "type": "object",
+  "properties": {
+    "bot": { "$ref": "#/definitions/bot" }
+  }
+}
