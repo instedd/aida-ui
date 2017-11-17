@@ -5,8 +5,8 @@ import thunkMiddleware from 'redux-thunk'
 
 import { BrowserRouter as Router, Redirect, Route, Link } from 'react-router-dom'
 import reducers from '../reducers'
-import { BotIndex } from '../components/botIndex'
-import { Bot } from '../components/bot'
+import { BotIndex } from '../components/BotIndex'
+import { Bot } from '../components/Bot'
 
 export const createAppStore = () => {
   return createStore(reducers, applyMiddleware(thunkMiddleware))
