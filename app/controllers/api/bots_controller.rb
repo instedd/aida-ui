@@ -9,6 +9,13 @@ class Api::BotsController < ApplicationController
     render json: bot_api_json(current_user_create_bot)
   end
 
+  def update
+    bot = current_user_bots.find(params[:id])
+    bot_params = params.require(:bot).permit(:name)
+    bot.update_attributes!(bot_params)
+    render json: bot_api_json(bot)
+  end
+
   private
 
   def bot_api_json(bot)

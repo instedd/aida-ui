@@ -8,7 +8,7 @@ export class Unauthorized {
 }
 
 const apiFetch = (url, options) => {
-  return fetch(`/api/v1/${url}`, { ...options })
+  return fetch(`/api/v1/${url}`, { ...options, credentials: 'same-origin' })
     .then(response => {
       return handleResponse(response, () => response)
     })
@@ -57,8 +57,45 @@ const handleResponse = (response, callback) => {
   }
 }
 
+const getCSRFToken = () => {
+  for (var meta of document.getElementsByTagName("meta"))
+    if (meta.name == "csrf-token")
+      return meta.content
+}
+
+const apiPutOrPostJSON = (url, schema, verb, body) => {
+  const options = {
+    method: verb,
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'X-CSRF-Token': getCSRFToken(),
+    }
+  }
+  if (body) {
+    options.body = JSON.stringify(body)
+  }
+  return apiFetchJSON(url, schema, options)
+}
+
+const apiPostJSON = (url, schema, body) => {
+  return apiPutOrPostJSON(url, schema, 'POST', body)
+}
+
+const apiPutJSON = (url, schema, body) => {
+  return apiPutOrPostJSON(url, schema, 'PUT', body)
+}
+
+const apiDelete = (url) => {
+  return apiFetch(url, {method: 'DELETE'})
+}
+
 const botSchema = new schema.Entity('bots')
 
 export const fetchBots = () => {
   return apiFetchJSON(`bots`, new schema.Array(botSchema))
+}
+
+export const updateBot = (bot) => {
+  return apiPutJSON(`bots/${bot.id}`, botSchema, {bot})
 }

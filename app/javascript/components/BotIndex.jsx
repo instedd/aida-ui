@@ -6,7 +6,7 @@ import { Redirect } from 'react-router-dom'
 import * as actions from '../actions/bots'
 import * as routes from '../utils/routes'
 
-import AppLayout from '../app/AppLayout'
+import AppLayout from './AppLayout'
 
 export class BotIndexComponent extends Component {
   componentDidMount() {

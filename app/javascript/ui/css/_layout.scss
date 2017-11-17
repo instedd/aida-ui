@@ -65,5 +65,13 @@ main {
     font-size: 1.5rem;
     color: white;
     margin: 0 0 0 1rem;
+    .md-text-field-container {
+      margin: 0.9rem 0 0 0;
+    }
+    .md-text-field {
+      font-size: 1.5rem;
+      color: inherit;
+      margin-top: 0;
+    }
   }
 }

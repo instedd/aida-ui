@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   namespace :api, path: "/api/v1" do
-    resources :bots, only: [:index, :create]
+    resources :bots, only: [:index, :create, :update]
   end
 
   get "/_design", to: 'welcome#design'

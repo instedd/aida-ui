@@ -4,7 +4,8 @@ import { connect } from 'react-redux'
 
 import * as actions from '../actions/bots'
 
-import AppLayout from '../app/AppLayout'
+import AppLayout from './AppLayout'
+import BotLayout from './BotLayout'
 
 export class BotComponent extends Component {
   componentDidMount() {
@@ -18,7 +19,7 @@ export class BotComponent extends Component {
     const { botsLoaded, bot } = this.props
 
     if (botsLoaded == true && bot != null) {
-      return <AppLayout title={bot.name}/>
+      return <BotLayout bot={bot}/>
     } else if (botsLoaded == true && bot == null) {
       // TODO if items exists but no id, then 404
       return <AppLayout title="Bot not found" />

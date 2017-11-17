@@ -4,7 +4,7 @@ import Header from '../ui/Header'
 import SideBar from '../ui/SideBar'
 import { MainContentDemo } from '../ui/MainContent'
 import Footer from '../ui/Footer'
-import Icon from './Icon'
+import Icon from '../components/Icon'
 
 export const App = () =>
   <Layout
