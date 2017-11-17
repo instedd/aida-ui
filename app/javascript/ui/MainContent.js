@@ -2,11 +2,14 @@ import React, { Component } from 'react';
 import * as Md from 'react-md';
 // import ScrollableAnchor from 'react-scrollable-anchor'
 
-class MainContent extends Component {
+export const MainContent = ({children}) =>
+  <div className='main-content'>{children}</div>
+
+export class MainContentDemo extends Component {
   render() {
 
     return (
-      <div className='main-content'>
+      <MainContent>
         <h1 className='md-display-1 black'>Front desk</h1>
         <p className='md-headline'>This are the basic messages your boot needs to handle. The front desk will assign other messages to the skill that will be better suited to respond</p>
         <Md.TextField
@@ -69,7 +72,7 @@ class MainContent extends Component {
        <ScrollableAnchor id={'section1'}>
         <div className='end'> How are you world? </div>
       </ScrollableAnchor>*/}
-      </div>
+      </MainContent>
     );
   }
 }

@@ -30,7 +30,7 @@ export default class HeaderSubNav extends Component {
           <MenuButton
             id="more-menu"
             className="btn-more"
-            buttonChildren="more_vert"
+            buttonChildren={<i className='material-icons dummy'>more_vert</i>}
             label=""
             flat
             position={MenuButton.Positions.BELOW}

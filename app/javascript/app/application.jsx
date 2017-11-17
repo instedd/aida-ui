@@ -12,20 +12,13 @@ export const createAppStore = () => {
   return createStore(reducers, applyMiddleware(thunkMiddleware))
 }
 
-export class App extends Component {
-  render() {
-    const { store } = this.props
-
-    return (
-      <Provider store={store}>
-        <Router>
-          <div>
-            <Route exact path="/" render={() => <Redirect to="/b"/>}  />
-            <Route exact path="/b" component={BotIndex} />
-            <Route exact path="/b/:id" component={Bot}/>
-          </div>
-        </Router>
-      </Provider>
-    )
-  }
-}
+export const App = ({store}) =>
+  <Provider store={store}>
+    <Router>
+      <div>
+        <Route exact path="/" render={() => <Redirect to="/b"/>} />
+        <Route exact path="/b" component={BotIndex} />
+        <Route exact path="/b/:id" component={Bot} />
+      </div>
+    </Router>
+  </Provider>
