@@ -1,23 +1,25 @@
-import React, { Component } from 'react';
-import ListItem from 'react-md/lib/Lists/ListItem';
-import MenuButton from 'react-md/lib/Menus/MenuButton';
-
+import React, { Component } from 'react'
+import { ListItem, MenuButton, FontIcon, IconSeparator } from 'react-md';
 
 export default class UserMenu extends Component {
 
   render() {
+    const items = [
+      <ListItem key={0} primaryText="Item One" />,
+      <ListItem key={1} primaryText="Item Two" />,
+      <ListItem key={2} primaryText="Item Three" />,
+      <ListItem key={3} primaryText="Item Four" />,
+    ]
+
     return (
       <MenuButton
         id="user-menu"
-        buttonChildren="arrow_drop_down"
-        label="Robert Stevenson"
         flat
         position={MenuButton.Positions.BELOW}
-      >
-        <ListItem primaryText="Item One" />
-        <ListItem primaryText="Item Two" />
-        <ListItem primaryText="Item Three" />
-        <ListItem primaryText="Item Four" />
+        menuItems={items}>
+        <IconSeparator label="Robert Stevenson">
+          <FontIcon>arrow_drop_down</FontIcon>
+        </IconSeparator>
       </MenuButton>
     );
   }

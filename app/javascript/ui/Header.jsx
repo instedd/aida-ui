@@ -5,7 +5,7 @@ import * as Md from 'react-md';
 
 const nav = <nav>
               <div className='sections'>
-                <Md.Button href='/' flat label="Bots" />
+                <Md.Button href='/' flat>Bots</Md.Button>
               </div>
               <UserMenu />
             </nav>

@@ -6,10 +6,17 @@ import * as Md from 'react-md';
 
 export default class HeaderSubNav extends Component {
   render() {
+    const items = [
+      <Md.ListItem key={0} primaryText={<i className='material-icons dummy'>more_vert</i>} />,
+      <Md.ListItem key={1} primaryText="Item One" />,
+      <Md.ListItem key={2} primaryText="Item Two" />,
+      <Md.ListItem key={3} primaryText="Item Three" />,
+      <Md.ListItem key={4} primaryText="Item Four" />,
+    ]
 
     return (
         <nav className="mainTabs">
-          <Md.Tabs id="tabs">
+          <Md.Tabs tabId="mainTabs">
             <Md.Tab label="Analytics" active />
             <Md.Tab label="Data" />
             <Md.Tab label="Channels" />
@@ -30,16 +37,10 @@ export default class HeaderSubNav extends Component {
           <MenuButton
             id="more-menu"
             className="btn-more"
-            buttonChildren={<i className='material-icons dummy'>more_vert</i>}
-            label=""
             flat
             position={MenuButton.Positions.BELOW}
-          >
-            <Md.ListItem primaryText={<i className='material-icons dummy'>more_vert</i>} />
-            <Md.ListItem primaryText="Item One" />
-            <Md.ListItem primaryText="Item Two" />
-            <Md.ListItem primaryText="Item Three" />
-            <Md.ListItem primaryText="Item Four" />
+            menuItems={items}>
+            <i className='material-icons dummy'>more_vert</i>
           </MenuButton>
 
 
