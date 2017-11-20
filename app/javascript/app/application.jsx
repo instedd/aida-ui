@@ -3,10 +3,11 @@ import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 
-import { BrowserRouter as Router, Redirect, Route, Link } from 'react-router-dom'
+import { BrowserRouter, Redirect, Route, Link } from 'react-router-dom'
 import reducers from '../reducers'
+
 import { BotIndex } from '../components/BotIndex'
-import { Bot } from '../components/Bot'
+import { BotLayout } from '../components/BotLayout'
 
 export const createAppStore = () => {
   return createStore(reducers, applyMiddleware(thunkMiddleware))
@@ -14,11 +15,11 @@ export const createAppStore = () => {
 
 export const App = ({store}) =>
   <Provider store={store}>
-    <Router>
+    <BrowserRouter>
       <div>
         <Route exact path="/" render={() => <Redirect to="/b"/>} />
         <Route exact path="/b" component={BotIndex} />
-        <Route exact path="/b/:id" component={Bot} />
+        <Route path="/b/:id" component={BotLayout} />
       </div>
-    </Router>
+    </BrowserRouter>
   </Provider>
