@@ -1,3 +1,6 @@
+/* @flow */
+import * as T from '../utils/types'
+
 import * as actions from '../actions/bots'
 import * as botActions from '../actions/bot'
 
@@ -6,7 +9,7 @@ const initialState = {
   items: null,
 }
 
-export default (state, action) => {
+export default (state : T.BotsState, action : T.Action) : T.BotsState => {
   state = state || initialState
   switch (action.type) {
     case actions.FETCH: return fetch(state, action)

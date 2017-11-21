@@ -6,11 +6,11 @@ export const RECEIVE = 'BOTS_RECEIVE'
 export const RECEIVE_ERROR = 'BOTS_RECEIVE_ERROR'
 export const FETCH = 'BOTS_FETCH'
 
-export const fetchBots = () => (dispatch : any, getState : any) => {
+export const fetchBots = () => (dispatch : T.Dispatch, getState : T.GetState) => {
   const state = getState()
 
   // Don't fetch Bots if they are already being fetched
-  if (state.bots.fetching) {
+  if ((state.bots.fetching : boolean)) {
     return
   }
 
@@ -19,11 +19,11 @@ export const fetchBots = () => (dispatch : any, getState : any) => {
     .then(response => dispatch(receiveBots(response.entities.bots || {})))
 }
 
-export const startFetchingBots = () => ({
+export const startFetchingBots = () : T.BotsAction => ({
   type: FETCH
 })
 
-export const receiveBots = (items : T.ById<T.Bot>) => ({
+export const receiveBots = (items : T.ById<T.Bot>) : T.BotsAction => ({
   type: RECEIVE,
   items
 })
