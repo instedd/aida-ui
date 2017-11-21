@@ -1,7 +1,7 @@
 import React, { Component, Children, cloneElement } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { Route } from 'react-router-dom'
+import { Route, Redirect } from 'react-router-dom'
 
 import EditableTitleLabel from '../ui/EditableTitleLabel'
 import { HeaderNavLink } from '../ui/Header'
