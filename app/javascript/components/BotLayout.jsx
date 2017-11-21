@@ -22,7 +22,7 @@ export class BotLayoutComponent extends Component {
   }
 
   render() {
-    const { botsLoaded, bot, children } = this.props
+    const { botsLoaded, bot, children, botActions } = this.props
 
     if (botsLoaded == true && bot != null) {
       return <AppLayout
