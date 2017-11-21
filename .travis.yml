@@ -1,0 +1,30 @@
+sudo: required
+
+services:
+  - docker
+
+env:
+  COMPOSE_VERSION: 1.14.0
+
+cache:
+  directories:
+    - ~/cache
+
+before_install:
+  - curl -L https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+
+install:
+  - docker-compose pull
+
+before_install:
+  - mv docker-compose.ci.yml docker-compose.override.yml
+  - docker-compose up -d db
+  - docker-compose run --rm app ./bin/setup
+  - docker-compose run --rm app ./bin/yarn
+
+script:
+  - docker-compose run --rm app rspec
+  - docker-compose run --rm app bundle exec ./bin/webpack
+  - docker-compose run --rm app bundle exec ./bin/yarn flow
