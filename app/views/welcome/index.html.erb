@@ -1,2 +1,6 @@
 <div id="root"></div>
+<%= javascript_tag do -%>
+  var userEmail = '<%=j current_user.email %>';
+  var userName = '<%=j current_user.display_name %>';
+<% end -%>
 <%= javascript_pack_tag 'application' %>

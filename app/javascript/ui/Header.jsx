@@ -1,22 +1,26 @@
 import React, { Component, Children } from 'react';
-import { Tabs, Tab, ListItem, MenuButton, Toolbar, Button } from 'react-md';
+import { Tabs, Tab, ListItem, MenuButton, Toolbar, Button } from 'react-md'
 import { withRouter } from 'react-router'
 import { Link } from 'react-router-dom'
 import UserMenu from './UserMenu'
 
-const nav = <nav>
-              <div className='sections'>
-                <Button href='/' flat>Bots</Button>
-              </div>
-              <UserMenu />
-            </nav>
+const nav = ({userName, logoutUrl}) => {
+  return (
+    <nav>
+      <div className='sections'>
+        <Button href='/' flat>Bots</Button>
+      </div>
+      <UserMenu userName={userName} logoutUrl={logoutUrl}/>
+    </nav>
+  )
+}
 
-export const Header = ({icon, title, headerNavLinks}) => {
+export const Header = ({icon, title, headerNavLinks, userName, logoutUrl}) => {
   return (
     <Toolbar
       className='mainToolbar'
       colored
-      nav={nav}
+      nav={nav({userName, logoutUrl})}
       title={
         <div className='sub-nav'>
           {icon}

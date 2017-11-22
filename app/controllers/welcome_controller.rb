@@ -15,7 +15,10 @@ class WelcomeController < ApplicationController
 
   def logout
     sign_out :user
-    redirect_to root_path
+    respond_to do |format|
+      format.all { head :no_content }
+      format.html { redirect_to after_sign_out_path_for(:user) }
+    end
   end
 
   def design

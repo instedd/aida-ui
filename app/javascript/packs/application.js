@@ -9,10 +9,13 @@
 
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
+import { dispatch } from 'redux'
 import { App, createAppStore } from '../app/application'
 
-import { fetchBots } from '../actions/bots'
+import { authInit } from '../actions/auth'
 const store = createAppStore()
+store.dispatch(authInit(userEmail, userName))
+
 
 // console.log(store.getState())
 // const unsubscribe = store.subscribe(() =>
