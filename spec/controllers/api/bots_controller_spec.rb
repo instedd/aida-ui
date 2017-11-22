@@ -10,7 +10,7 @@ RSpec.describe Api::BotsController, type: :controller do
   end
 
   describe "update" do
-    let!(:bot) { Bot.create! name: "original" }
+    let!(:bot) { Bot.create_prepared! }
 
     it "can update the name" do
       put :update, params: { id: bot.id, bot: { name: "updated" } }

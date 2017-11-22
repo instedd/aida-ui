@@ -1,12 +1,12 @@
 class Api::BotsController < ApplicationController
   def index
-    current_user_create_bot if current_user_bots.count == 0
+    Bot.create_prepared! if current_user_bots.count == 0
 
     render json: current_user_bots.map { |b| bot_api_json(b) }
   end
 
   def create
-    render json: bot_api_json(current_user_create_bot)
+    render json: bot_api_json(Bot.create_prepared!)
   end
 
   def update
@@ -23,18 +23,6 @@ class Api::BotsController < ApplicationController
       id: bot.id,
       name: bot.name
     }
-  end
-
-  def current_user_create_bot
-    bot = Bot.create!
-    bot.name = "Bot #{bot.id}"
-    bot.save!
-
-    bot.channels.create! kind: "facebook", name: "facebook", config: {
-      "page_id" => "", "verify_token" => "", "access_token" => ""
-    }
-
-    bot
   end
 
   def current_user_bots
