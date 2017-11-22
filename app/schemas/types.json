@@ -10,6 +10,17 @@
       },
       "additionalProperties": false,
       "required": [ "id", "name" ]
+    },
+
+    "facebookChannelConfig": {
+      "type": "object",
+      "properties": {
+        "page_id": { "type": "string" },
+        "verify_token": { "type": "string" },
+        "access_token": { "type": "string" }
+      },
+      "additionalProperties": false,
+      "required": [ "page_id", "verify_token", "access_token" ]
     }
   },
 

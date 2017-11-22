@@ -30,6 +30,10 @@ class Api::BotsController < ApplicationController
     bot.name = "Bot #{bot.id}"
     bot.save!
 
+    bot.channels.create! kind: "facebook", name: "facebook", config: {
+      "page_id" => "", "verify_token" => "", "access_token" => ""
+    }
+
     bot
   end
 

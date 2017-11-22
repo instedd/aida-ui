@@ -32,6 +32,7 @@ gem 'jbuilder', '~> 2.5'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
+gem 'json-schema'
 
 gem 'devise', '~> 4.3.0'
 gem 'alto_guisso', github: 'instedd/alto_guisso', branch: 'master'
