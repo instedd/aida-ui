@@ -11,3 +11,10 @@ export type FacebookChannelConfig = {
   access_token: string;
 };
 
+export type Channel = {
+  id: number;
+  name: string;
+  kind: "facebook";
+  config: FacebookChannelConfig;
+};
+

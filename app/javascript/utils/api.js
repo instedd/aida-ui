@@ -4,6 +4,7 @@ import { schema } from 'normalizr'
 import { apiFetchJSON, apiPutJSON } from './api-rails'
 
 const botSchema = new schema.Entity('bots')
+const channelSchema = new schema.Entity('channels')
 
 export const fetchBots = () => {
   return (apiFetchJSON(`bots`, new schema.Array(botSchema)) : Promise<{entities: {bots: T.ById<T.Bot>}}>)
@@ -11,4 +12,12 @@ export const fetchBots = () => {
 
 export const updateBot = (bot : T.Bot) => {
   return apiPutJSON(`bots/${bot.id}`, botSchema, {bot})
+}
+
+export const fetchChannels = (botId : number) => {
+  return (apiFetchJSON(`bots/${botId}/channels`, new schema.Array(channelSchema)) : Promise<{entities: {channels: T.ById<T.Channel>}}>)
+}
+
+export const updateChannel = (channel : T.Channel) => {
+  return apiPutJSON(`channels/${channel.id}`, channelSchema, {channel})
 }

@@ -21,6 +21,22 @@
       },
       "additionalProperties": false,
       "required": [ "page_id", "verify_token", "access_token" ]
+    },
+
+    "channel" : {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer" },
+            "name": { "type": "string" },
+            "kind": { "type": "string", "enum": ["facebook"] },
+            "config": { "$ref": "#/definitions/facebookChannelConfig" }
+          },
+          "additionalProperties": false,
+          "required": [ "id", "name", "kind", "config" ]
+        }
+      ]
     }
   },
 
