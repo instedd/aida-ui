@@ -25,6 +25,11 @@ export type BotsAction = {
   type: 'BOTS_FETCH',
 };
 
+export type ChannelAction = {
+  type: "CHANNEL_UPDATE",
+  channel: T.Channel,
+};
+
 export type ChannelsAction = {
   type: 'CHANNELS_RECEIVE',
   scope: ?any,
@@ -36,7 +41,7 @@ export type ChannelsAction = {
   scope: ?any,
 };
 
-export type Action = AuthAction | BotAction | BotsAction | ChannelsAction;
+export type Action = AuthAction | BotAction | BotsAction | ChannelAction | ChannelsAction;
 
 export type Dispatch = (action : Action) => void;
 

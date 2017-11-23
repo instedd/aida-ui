@@ -2,6 +2,7 @@
 import * as T from '../utils/types'
 
 import * as actions from '../actions/channels'
+import * as channelActions from '../actions/channel'
 
 const initialState = {
   fetching: false,
@@ -14,7 +15,7 @@ export default (state : T.ChannelsState, action : T.Action) : T.ChannelsState =>
   switch (action.type) {
     case actions.FETCH: return fetch(state, action)
     case actions.RECEIVE: return receive(state, action)
-    // case botActions.UPDATE: return update(state, action)
+    case channelActions.UPDATE: return update(state, action)
     default: return state
   }
 }
@@ -39,14 +40,14 @@ const fetch = (state, action) => {
   }
 }
 
-// const update = (state, action) => {
-//   const {bot} = action
+const update = (state, action) => {
+  const {channel} = action
 
-//   return {
-//     ...state,
-//     items: {
-//       ...state.items,
-//       ...{[bot.id]: bot}
-//     }
-//   }
-// }
+  return {
+    ...state,
+    items: {
+      ...state.items,
+      ...{[channel.id]: channel}
+    }
+  }
+}
