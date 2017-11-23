@@ -13,4 +13,33 @@ class Bot < ApplicationRecord
 
     bot
   end
+
+  def published?
+    uuid.present?
+  end
+
+  def manifest
+    {
+      version: 1,
+      languages: ['en'],
+      front_desk: {
+        greeting: {message:{en: ''}},
+        introduction: {message:{en: ''}},
+        not_understood: {message:{en: ''}},
+        clarification: {message:{en: ''}},
+        threshold: 0.5
+      },
+      skills: [
+        {
+          type: :language_detector,
+          explanation: 'Choose your language',
+          languages: {en: ['english']}
+        }
+      ],
+      variables: [],
+      channels: channels.map do |channel|
+        channel.config.merge(type: channel.kind)
+      end
+    }
+  end
 end
