@@ -3,7 +3,11 @@ Rails.application.routes.draw do
   guisso_for :user
 
   namespace :api, path: "/api/v1" do
-    resources :bots, only: [:index, :create, :update]
+    resources :bots, only: [:index, :create, :update] do
+      resources :channels, only: [:index]
+    end
+
+    resources :channels, only: [:update]
   end
 
   get "/_design", to: 'welcome#design'

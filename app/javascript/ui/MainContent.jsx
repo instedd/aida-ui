@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import * as Md from 'react-md';
 // import ScrollableAnchor from 'react-scrollable-anchor'
+import Title from './Title'
+import Headline from './Headline'
 
 export const MainContent = ({children}) =>
   <div className='main-content'>{children}</div>
@@ -10,8 +12,9 @@ export class MainContentDemo extends Component {
 
     return (
       <MainContent>
-        <h1 className='md-display-1 black'>Front desk</h1>
-        <p className='md-headline'>This are the basic messages your boot needs to handle. The front desk will assign other messages to the skill that will be better suited to respond</p>
+        <Title>Front desk</Title>
+        <Headline>This are the basic messages your boot needs to handle. The front desk will assign other messages to the skill that will be better suited to respond</Headline>
+
         <Md.TextField
           label="Greeting"
           lineDirection="center"
