@@ -1,7 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Api::ChannelsController, type: :controller do
-  let!(:bot) { Bot.create_prepared! }
+  let!(:user) { User.create! email: "user@example.com" }
+  before(:each) { sign_in user }
+
+  let!(:bot) { Bot.create_prepared!(user) }
   let!(:channel) { bot.channels.first }
 
   describe "index" do

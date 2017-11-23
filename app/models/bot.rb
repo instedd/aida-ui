@@ -1,8 +1,9 @@
 class Bot < ApplicationRecord
+  belongs_to :owner, class_name: "User"
   has_many :channels
 
-  def self.create_prepared!
-    bot = Bot.create!
+  def self.create_prepared!(user)
+    bot = Bot.create! owner: user
     bot.name = "Bot #{bot.id}"
     bot.save!
 

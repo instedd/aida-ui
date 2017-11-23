@@ -1,16 +1,16 @@
-class Api::BotsController < ApplicationController
+class Api::BotsController < ApplicationApiController
   def index
-    Bot.create_prepared! if current_user_bots.count == 0
+    Bot.create_prepared!(current_user) if current_user.bots.count == 0
 
-    render json: current_user_bots.map { |b| bot_api_json(b) }
+    render json: current_user.bots.map { |b| bot_api_json(b) }
   end
 
   def create
-    render json: bot_api_json(Bot.create_prepared!)
+    render json: bot_api_json(Bot.create_prepared!(current_user))
   end
 
   def update
-    bot = current_user_bots.find(params[:id])
+    bot = current_user.bots.find(params[:id])
     bot_params = params.require(:bot).permit(:name)
     bot.update_attributes!(bot_params)
     render json: bot_api_json(bot)
@@ -23,9 +23,5 @@ class Api::BotsController < ApplicationController
       id: bot.id,
       name: bot.name
     }
-  end
-
-  def current_user_bots
-    Bot.all
   end
 end

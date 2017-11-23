@@ -6,6 +6,8 @@ class Channel < ApplicationRecord
 
   validate :config_must_match_schema
 
+  scope :of_bots_owned_by, -> (user) { Channel.where(bot: user.bots) }
+
   private
 
   def config_must_match_schema

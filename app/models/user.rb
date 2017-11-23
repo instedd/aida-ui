@@ -4,6 +4,7 @@ class User < ApplicationRecord
   devise :omniauthable, :trackable
 
   has_many :identities, dependent: :destroy
+  has_many :bots, foreign_key: :owner_id
 
   def display_name
     name || email

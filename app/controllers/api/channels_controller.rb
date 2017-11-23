@@ -1,12 +1,12 @@
-class Api::ChannelsController < ApplicationController
+class Api::ChannelsController < ApplicationApiController
   def index
-    channels = current_user_bots.find(params[:bot_id]).channels
+    channels = current_user.bots.find(params[:bot_id]).channels
 
     render json: channels.map { |c| channel_api_json(c) }
   end
 
   def update
-    channel = current_user_channels.find(params[:id])
+    channel = Channel.of_bots_owned_by(current_user).find(params[:id])
     channel_params = params.require(:channel).permit(:name, config: {})
     channel.update_attributes!(channel_params)
     render json: channel_api_json(channel)
@@ -21,13 +21,5 @@ class Api::ChannelsController < ApplicationController
       kind: channel.kind,
       config: channel.config
     }
-  end
-
-  def current_user_bots
-    Bot.all
-  end
-
-  def current_user_channels
-    Channel.all
   end
 end
