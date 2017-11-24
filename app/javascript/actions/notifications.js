@@ -9,6 +9,6 @@ export const pushNotification = (message : string) => ({
   message
 })
 
-export const dismissNotification = (notif : any) => ({
+export const dismissNotification = () => ({
   type: DISMISS
 })

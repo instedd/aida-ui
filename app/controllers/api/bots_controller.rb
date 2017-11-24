@@ -31,7 +31,7 @@ class Api::BotsController < ApplicationApiController
     {
       id: bot.id,
       name: bot.name,
-      uuid: bot.uuid
+      published: bot.published?
     }
   end
 end

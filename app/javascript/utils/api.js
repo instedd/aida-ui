@@ -23,5 +23,5 @@ export const updateChannel = (channel : T.Channel) => {
 }
 
 export const publishBot = (bot : T.Bot) => {
-  return apiPostJSON(`bots/${bot.id}/publish`, null, {bot})
+  return apiPostJSON(`bots/${bot.id}/publish`)
 }

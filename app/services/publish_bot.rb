@@ -1,12 +1,10 @@
 class PublishBot
   def self.run(bot)
-    backend = Backend.new
-
     if bot.published?
-      backend.update_bot(bot.uuid, bot.manifest)
+      Backend.update_bot(bot.uuid, bot.manifest)
 
     else
-      uuid = backend.create_bot(bot.manifest)
+      uuid = Backend.create_bot(bot.manifest)
       bot.uuid = uuid
       bot.save!
 
