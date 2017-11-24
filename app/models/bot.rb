@@ -3,10 +3,12 @@ class Bot < ApplicationRecord
   has_many :channels, dependent: :destroy
   has_many :behaviours, dependent: :destroy
 
+  validate :has_single_front_desk
+
   def self.create_prepared!(user)
-    bot = Bot.create! owner: user
+    bot = Bot.new owner: user
     bot.name = "Bot #{bot.id}"
-    bot.save!
+    bot.save(validate: false)
 
     bot.channels.create! kind: "facebook", name: "facebook", config: {
       "page_id" => "", "verify_token" => "", "access_token" => ""
@@ -14,6 +16,7 @@ class Bot < ApplicationRecord
 
     bot.behaviours.create_front_desk!
 
+    bot.save!
     bot
   end
 
@@ -52,5 +55,13 @@ class Bot < ApplicationRecord
 
   def skills
     behaviours.where.not(kind: "front_desk").order(:order)
+  end
+
+  private
+
+  def has_single_front_desk
+    if behaviours.where(kind: "front_desk").count != 1
+      errors[:base] << "Must have a single front desk behaviour"
+    end
   end
 end
