@@ -21,7 +21,7 @@ class Api::BotsController < ApplicationApiController
     if PublishBot.run(bot)
       render json: {result: :ok}
     else
-      render json: {result: :error}
+      render json: {result: :error}, status: :bad_request
     end
   end
 

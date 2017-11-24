@@ -2,6 +2,8 @@
 import * as T from '../utils/types'
 import * as api from '../utils/api'
 
+import { pushNotification } from './notifications'
+
 export const UPDATE = 'BOT_UPDATE'
 export const PUBLISH = 'BOT_PUBLISH'
 
@@ -15,5 +17,7 @@ export const updateBot = (bot : T.Bot) => (dispatch : T.Dispatch, getState : T.G
 export const publishBot = (bot : T.Bot) => (dispatch : T.Dispatch) => {
   dispatch({type: PUBLISH, bot})
 
-  api.publishBot(bot)
+  return api.publishBot(bot)
+            .then(() => dispatch(pushNotification('The bot was published successfully')))
+            .catch(() => dispatch(pushNotification('Bot publication failed')))
 }
