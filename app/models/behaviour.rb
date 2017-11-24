@@ -8,6 +8,23 @@ class Behaviour < ApplicationRecord
 
   default_scope { order(:order) }
 
+  def self.create_front_desk!(params = {})
+    default_params = {
+      kind: "front_desk",
+      name: "Front Desk",
+      order: 0,
+      enabled: true,
+      config: {
+        "greeting" => { "message" => { "en" => "" }},
+        "introduction" => { "message" => { "en" => "" }},
+        "not_understood" => { "message" => { "en" => "" }},
+        "clarification" => { "message" => { "en" => "" }},
+        "threshold" => 0.7
+      }
+    }
+    create! default_params.merge(params)
+  end
+
   private
 
   def config_must_match_schema

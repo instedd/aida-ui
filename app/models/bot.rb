@@ -12,13 +12,7 @@ class Bot < ApplicationRecord
       "page_id" => "", "verify_token" => "", "access_token" => ""
     }
 
-    bot.behaviours.create! kind: "front_desk", name: "Front Desk", order: 0, enabled: true, config: {
-      "greeting" => { "message" => { "en" => "" }},
-      "introduction" => { "message" => { "en" => "" }},
-      "not_understood" => { "message" => { "en" => "" }},
-      "clarification" => { "message" => { "en" => "" }},
-      "threshold" => 0.7
-    }
+    bot.behaviours.create_front_desk!
 
     bot
   end
