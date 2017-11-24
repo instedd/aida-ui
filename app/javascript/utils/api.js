@@ -1,7 +1,7 @@
 // @flow
 import * as T from './types'
 import { schema } from 'normalizr'
-import { apiFetchJSON, apiPutJSON } from './api-rails'
+import { apiFetchJSON, apiPutJSON, apiPostJSON } from './api-rails'
 
 const botSchema = new schema.Entity('bots')
 const channelSchema = new schema.Entity('channels')
@@ -20,4 +20,8 @@ export const fetchChannels = (botId : number) => {
 
 export const updateChannel = (channel : T.Channel) => {
   return apiPutJSON(`channels/${channel.id}`, channelSchema, {channel})
+}
+
+export const publishBot = (bot : T.Bot) => {
+  return apiPostJSON(`bots/${bot.id}/publish`, null, {bot})
 }

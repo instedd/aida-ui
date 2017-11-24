@@ -14,6 +14,9 @@ export type AuthAction = {
 export type BotAction = {
   type: "BOT_UPDATE",
   bot: T.Bot,
+} | {
+  type: "BOT_PUBLISH",
+  bot: T.Bot,
 };
 
 export type BotsAction = {

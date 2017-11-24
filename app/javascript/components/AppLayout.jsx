@@ -6,13 +6,14 @@ import Header from '../ui/Header'
 import MainContent from '../ui/MainContent'
 import Icon from './Icon'
 
-export const AppLayout = ({title, headerNavLinks, userName, children}) => {
+export const AppLayout = ({title, headerNavLinks, userName, children, buttonAction}) => {
   const header = (
     <Header icon={<Icon/>}
             title={title || "WFP chat bot"}
             userName={userName}
             logoutUrl="/logout"
-            headerNavLinks={headerNavLinks} />
+            headerNavLinks={headerNavLinks}
+            buttonAction={buttonAction} />
   )
 
   return (

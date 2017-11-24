@@ -40,6 +40,7 @@ export class BotLayoutComponent extends Component {
           // <HeaderNavLink label="Translations" to="#" />,
           // <HeaderNavLink label="Collaborators" to="#" />,
         ]}
+        buttonAction={() => botActions.publishBot(bot)}
         >
 
         <Route exact path="/b/:id" render={({match}) => <Redirect to={r.botChannel(match.params.id)} />} />
