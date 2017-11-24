@@ -18,7 +18,7 @@ export default (state : T.NotifState, action : T.Action) : T.NotifState => {
 
 const push = (state, action) => {
   const toasts = state.toasts.slice()
-  toasts.push({text: action.message})
+  toasts.push({text: action.message, action: null})
   return {
     ...state,
     toasts

@@ -44,7 +44,14 @@ export type ChannelsAction = {
   scope: ?any,
 };
 
-export type Action = AuthAction | BotAction | BotsAction | ChannelAction | ChannelsAction;
+export type NotificationsAction = {
+  type: 'NOTIF_PUSH',
+  message: string
+} | {
+  type: 'NOTIF_DISMISS'
+};
+
+export type Action = AuthAction | BotAction | BotsAction | ChannelAction | ChannelsAction | NotificationsAction;
 
 export type Dispatch = (action : Action) => void;
 
@@ -64,10 +71,15 @@ export type ChannelsState = {
   items: ?ById<T.Channel>
 };
 
+export type NotifState = {
+  toasts: Array<{text: string, action: any}>
+};
+
 export type State = {
+  auth: AuthState,
   bots: BotsState,
   channels: ChannelsState,
+  notifications: NotifState,
 };
 
 export type GetState = () => State;
-
