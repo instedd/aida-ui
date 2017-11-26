@@ -16,12 +16,22 @@ class Api::BotsController < ApplicationApiController
     render json: bot_api_json(bot)
   end
 
+  def publish
+    bot = current_user.bots.find(params[:id])
+    if PublishBot.run(bot)
+      render json: {result: :ok}
+    else
+      render json: {result: :error}, status: :bad_request
+    end
+  end
+
   private
 
   def bot_api_json(bot)
     {
       id: bot.id,
-      name: bot.name
+      name: bot.name,
+      published: bot.published?
     }
   end
 end

@@ -35,6 +35,16 @@ services:
     volumes:
       - db:/var/lib/postgresql/data
 
+  backend:
+    image: instedd/aida:dev
+    ports:
+      - "4000:80"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: ecto://root:@db/aida-backend
+    command: /bin/sh -c 'mix ecto.migrate && mix phx.server'
+
 volumes:
   db:
   bundle:

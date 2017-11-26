@@ -10,6 +10,8 @@
 $ docker-compose run --rm app ./bin/rails db:drop # havoc environment
 $ docker-compose run --rm app ./bin/setup
 $ docker-compose run --rm app ./bin/yarn
+$ docker-compose run --rm backend mix ecto.drop # drop backend database
+$ docker-compose run --rm backend mix ecto.setup
 ```
 
 * Start database & webserver:

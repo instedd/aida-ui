@@ -15,7 +15,7 @@ const nav = ({userName, logoutUrl}) => {
   )
 }
 
-export const Header = ({icon, title, headerNavLinks, userName, logoutUrl}) => {
+export const Header = ({icon, title, headerNavLinks, userName, logoutUrl, buttonAction}) => {
   return (
     <Toolbar
       className='mainToolbar'
@@ -27,7 +27,7 @@ export const Header = ({icon, title, headerNavLinks, userName, logoutUrl}) => {
           <h1>{title}</h1>
         </div>
       }
-      children={<HeaderSubNavWithRouter headerNavLinks={headerNavLinks} />}
+      children={<HeaderSubNavWithRouter headerNavLinks={headerNavLinks} onClick={buttonAction} />}
       prominent
     />
   )

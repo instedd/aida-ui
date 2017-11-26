@@ -5,6 +5,9 @@ Rails.application.routes.draw do
   namespace :api, path: "/api/v1" do
     resources :bots, only: [:index, :create, :update] do
       resources :channels, only: [:index]
+      member do
+        post :publish
+      end
     end
 
     resources :channels, only: [:update]
