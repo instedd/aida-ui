@@ -1,38 +1,36 @@
 .grid {
   min-height: 100vh;
-  // font-family: courier, serif;
-  font-size: .2rem;
+  font-size: 1rem;
   color: white;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 200px auto 50px;
+  grid-template-rows: 210px auto 50px;
   grid-template-areas:
     "header"
     "main"
     "footer";
-  grid-row-gap: 3.5rem;
 }
-header{
+header {
   grid-area: header;
-  height: 220px;
+  height: 210px;
 }
 
 main {
   grid-area: main;
   display: grid;
-  grid-template-columns: minmax(min-content, 320px) auto;
+  grid-template-columns: minmax(min-content, 320px) auto 90px;
   grid-template-areas:
-    "sidebar main-content";
-  grid-column-gap: 5rem;
-  padding: 0 10%;
-}
+    "sidebar main-content button-area";
   .sidebar {
     grid-area: sidebar;
     align-self: start;
   }
   .main-content {
     grid-area: main-content;
+  .button-area {
+    grid-area: button-area;
   }
+}
 
 footer {
   grid-area: footer;
@@ -48,11 +46,6 @@ footer {
     grid-row-gap: 4rem;
   }
 }
-
-
-
-/*/////////////////// Example 01 ///////////////////////////*/
-
 
 .md-subheader {
   height: auto;
