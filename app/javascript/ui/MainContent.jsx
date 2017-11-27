@@ -59,7 +59,7 @@ export class MainContentDemo extends Component {
           id="field04"
         />
         <Md.Checkbox
-          id="greeting"
+          id="clarification"
           name="simple-checkboxes[]"
           label="Ask for clarification when several skills claim a high confidence"
         />
