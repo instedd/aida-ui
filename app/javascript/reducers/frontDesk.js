@@ -1,3 +1,5 @@
+// @flow
+import * as T from '../utils/types'
 import * as actions from '../actions/frontDesk'
 
 const initialState = {
@@ -6,7 +8,7 @@ const initialState = {
   data: {}
 }
 
-export default (state, action) => {
+export default (state : T.FrontDeskState, action : T.FrontDeskAction) => {
   state = state || initialState
   switch (action.type) {
     case actions.FETCH: return fetching(state, action)

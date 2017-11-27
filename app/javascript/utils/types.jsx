@@ -44,6 +44,19 @@ export type ChannelsAction = {
   scope: ?any,
 };
 
+export type FrontDeskAction = {
+  type: 'FRONT_DESK_FETCH',
+  botId: number
+} | {
+  type: 'FRONT_DESK_FETCH_SUCCESS',
+  data: T.FrontDesk
+} | {
+  type: 'FRONT_DESK_FETCH_ERROR'
+} | {
+  type: 'FRONT_DESK_UPDATE_CONFIG',
+  config: T.FrontDeskConfig
+};
+
 export type NotificationsAction = {
   type: 'NOTIF_PUSH',
   message: string
@@ -51,7 +64,7 @@ export type NotificationsAction = {
   type: 'NOTIF_DISMISS'
 };
 
-export type Action = AuthAction | BotAction | BotsAction | ChannelAction | ChannelsAction | NotificationsAction;
+export type Action = AuthAction | BotAction | BotsAction | ChannelAction | ChannelsAction | FrontDeskAction | NotificationsAction;
 
 export type Dispatch = (action : Action) => void;
 
@@ -71,6 +84,12 @@ export type ChannelsState = {
   items: ?ById<T.Channel>
 };
 
+export type FrontDeskState = {
+  fetching: boolean,
+  botId: ?number,
+  data: ?T.FrontDesk
+};
+
 export type NotifState = {
   toasts: Array<{text: string, action: any}>
 };
@@ -79,6 +98,7 @@ export type State = {
   auth: AuthState,
   bots: BotsState,
   channels: ChannelsState,
+  frontDesk: FrontDeskState,
   notifications: NotifState,
 };
 

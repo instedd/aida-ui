@@ -5,6 +5,7 @@ import { apiFetchJSON, apiPutJSON, apiPostJSON } from './api-rails'
 
 const botSchema = new schema.Entity('bots')
 const channelSchema = new schema.Entity('channels')
+const frontDeskSchema = new schema.Entity('front_desks')
 
 export const fetchBots = () => {
   return (apiFetchJSON(`bots`, new schema.Array(botSchema)) : Promise<{entities: {bots: T.ById<T.Bot>}}>)
@@ -31,5 +32,5 @@ export const fetchFrontDesk = (botId : number) => {
 }
 
 export const updateFrontDesk = (botId : number, front_desk : T.FrontDesk) => {
-  return apiPutJSON(`bots/${botId}/front_desk`, null, {front_desk})
+  return apiPutJSON(`bots/${botId}/front_desk`, frontDeskSchema, {front_desk})
 }
