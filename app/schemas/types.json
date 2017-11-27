@@ -37,19 +37,7 @@
     },
 
     "message": {
-      "type": "object",
-      "properties": {
-        "message": {"$ref": "#/definitions/localized_string"}
-      },
-      "additionalProperties": false,
-      "required": ["message"]
-    },
-
-    "localized_string": {
-      "type": "object",
-      "patternProperties": {"^[a-z]{2,3}$": {"type": "string"}},
-      "minProperties": 1,
-      "additionalProperties": false
+      "type": "string"
     },
 
     "channel" : {

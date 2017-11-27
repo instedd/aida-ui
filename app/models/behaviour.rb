@@ -1,7 +1,6 @@
 class Behaviour < ApplicationRecord
   belongs_to :bot
 
-  validates :name, presence: true
   validates :kind, inclusion: { in: %w(front_desk) }
 
   validate :config_must_match_schema
@@ -15,14 +14,29 @@ class Behaviour < ApplicationRecord
       order: 0,
       enabled: true,
       config: {
-        "greeting" => { "message" => { "en" => "" }},
-        "introduction" => { "message" => { "en" => "" }},
-        "not_understood" => { "message" => { "en" => "" }},
-        "clarification" => { "message" => { "en" => "" }},
+        "greeting" => "",
+        "introduction" => "",
+        "not_understood" => "",
+        "clarification" => "",
         "threshold" => 0.7
       }
     }
     create! default_params.merge(params)
+  end
+
+  def manifest_fragment
+    case kind
+    when "front_desk"
+      {
+        greeting: localized_message(:greeting),
+        introduction: localized_message(:introduction),
+        not_understood: localized_message(:not_understood),
+        clarification: localized_message(:clarification),
+        threshold: config["threshold"]
+      }
+    else
+      raise NotImplementedError
+    end
   end
 
   private
@@ -46,4 +60,11 @@ class Behaviour < ApplicationRecord
     end
   end
 
+  def localized_message(key)
+    {
+      message: {
+        en: config[key.to_s]
+      }
+    }
+  end
 end

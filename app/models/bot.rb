@@ -28,13 +28,7 @@ class Bot < ApplicationRecord
     {
       version: 1,
       languages: ['en'],
-      front_desk: {
-        greeting: {message:{en: ''}},
-        introduction: {message:{en: ''}},
-        not_understood: {message:{en: ''}},
-        clarification: {message:{en: ''}},
-        threshold: 0.5
-      },
+      front_desk: front_desk.manifest_fragment,
       skills: [
         {
           type: :language_detector,
