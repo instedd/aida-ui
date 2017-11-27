@@ -30,6 +30,6 @@ export const fetchFrontDesk = (botId : number) => {
   return apiFetchJSON(`bots/${botId}/front_desk`)
 }
 
-export const updateFrontDesk = (botId, front_desk) => {
+export const updateFrontDesk = (botId : number, front_desk : T.FrontDesk) => {
   return apiPutJSON(`bots/${botId}/front_desk`, null, {front_desk})
 }

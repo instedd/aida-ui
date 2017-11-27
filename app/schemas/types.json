@@ -54,6 +54,15 @@
           "required": [ "id", "name", "kind", "config" ]
         }
       ]
+    },
+
+    "frontDesk": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "config": { "$ref": "#/definitions/frontDeskConfig" }
+      },
+      "required": [ "id", "config" ]
     }
   },
 
