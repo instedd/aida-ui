@@ -14,36 +14,36 @@
   .st4{opacity:0.2}
 }
 
-.skills-list {
-  .heading-title {
-    font-size: 1.8rem;
-    font-weight: 400;
-    color: $md-black-base;
-    padding-top: 1rem;
-  }
-  .subheading-title {
-    font-size: 1.1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: $md-grey-500;
-    margin-bottom: 1rem;
-  }
-  .md-list-tile {
-    height: 50px;
-  }
-  .md-text,
-  .md-icon {
-    color: $md-black-base;
-  }
-  .md-tile-text--primary {
-    // @extend .md-subheading-2;
-  }
-  .md-tile-content--left-icon {
-    padding-left: 20px;
-  }
-  .addlink .md-text,
-  .addlink .md-icon {
-    color: $md-blue-500 !important;
+.sidebar {
+  .md-list {
+    .md-subheader:first-child {
+      font-size: 1.14em;
+      font-weight: 400;
+      line-height: 2;
+      color: $md-black-base;
+      padding: 3.2em 3em 0 1.2em;
+    }
+    .md-subheader:nth-child(2) {
+      font-size: 1em;
+      line-height: 1.5;
+      color: $md-grey-500;
+      margin-bottom: 1.5em;
+    }
+    .md-list-tile {
+      height: 60px;
+      padding-right: 3.2em;
+    }
+    .md-text,
+    .md-icon {
+      color: $md-black-base;
+    }
+    .md-tile-content {
+      padding-left: 1em;
+    }
+    .addlink .md-text,
+    .addlink .md-icon {
+      color: $md-secondary-color;
+    }
   }
 }
 

@@ -23,7 +23,9 @@ main {
     "sidebar main-content button-area";
   .sidebar {
     grid-area: sidebar;
-    align-self: start;
+    align-self: stretch;
+    background: $md-white-base;
+    border-right: 1px solid $md-grey-300;
   }
   .main-content {
     grid-area: main-content;
