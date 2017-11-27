@@ -1,5 +1,7 @@
 // @flow
 import * as T from '../utils/types'
+import { debounced } from '../utils'
+
 import * as api from '../utils/api'
 
 export const FETCH = 'FRONT_DESK_FETCH'
@@ -30,6 +32,11 @@ export const updateFrontDeskConfig = (key : string, value : any) => (dispatch : 
   dispatch({type: UPDATE_CONFIG, config})
 
   if (frontDesk.botId && data && data.id) {
-    api.updateFrontDesk(frontDesk.botId, {...data, config})
+    dispatch(updateFrontDeskDelayed(frontDesk.botId, {...data, config}))
   }
 }
+
+const updateFrontDeskDelayed = (botId, frontDesk) => debounced('FRONT_DESK_UPDATE')(dispatch => {
+  console.log('Saving front desk configuration')
+  api.updateFrontDesk(botId, frontDesk)
+})
