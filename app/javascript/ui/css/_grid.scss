@@ -29,6 +29,9 @@ main {
   }
   .main-content {
     grid-area: main-content;
+    background: $md-white-base;
+    padding: 86px 100px 70px;
+  }
   .button-area {
     grid-area: button-area;
   }
