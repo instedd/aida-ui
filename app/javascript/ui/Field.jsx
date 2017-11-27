@@ -3,7 +3,7 @@ import { TextField } from 'react-md';
 
 export class Field extends Component {
   render() {
-    const {label, value, onChange, id} = this.props
+    const {label, value, onChange, id, helpText} = this.props
 
     return <TextField
       label={label}
@@ -11,6 +11,7 @@ export class Field extends Component {
       lineDirection="center"
       value={value}
       onChange={onChange}
+      helpText={helpText}
     />
   }
 }

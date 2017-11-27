@@ -6,6 +6,7 @@
     "babel-preset-react": "^6.24.1",
     "coffeescript": "1.12.7",
     "isomorphic-fetch": "^2.2.1",
+    "lodash": "^4.17.4",
     "normalizr": "^3.2.4",
     "prop-types": "^15.6.0",
     "react": "^16.1.1",

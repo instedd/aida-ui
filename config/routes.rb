@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       member do
         post :publish
       end
+      resource :front_desk, only: [:show, :update]
     end
 
     resources :channels, only: [:update]

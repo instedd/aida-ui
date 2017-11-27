@@ -25,3 +25,11 @@ export const updateChannel = (channel : T.Channel) => {
 export const publishBot = (bot : T.Bot) => {
   return apiPostJSON(`bots/${bot.id}/publish`)
 }
+
+export const fetchFrontDesk = (botId : number) => {
+  return apiFetchJSON(`bots/${botId}/front_desk`)
+}
+
+export const updateFrontDesk = (botId, front_desk) => {
+  return apiPutJSON(`bots/${botId}/front_desk`, null, {front_desk})
+}
