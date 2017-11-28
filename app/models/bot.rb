@@ -1,16 +1,22 @@
 class Bot < ApplicationRecord
   belongs_to :owner, class_name: "User"
-  has_many :channels
+  has_many :channels, dependent: :destroy
+  has_many :behaviours, dependent: :destroy
+
+  validate :has_single_front_desk
 
   def self.create_prepared!(user)
-    bot = Bot.create! owner: user
+    bot = Bot.new owner: user
     bot.name = "Bot #{bot.id}"
-    bot.save!
+    bot.save(validate: false)
 
     bot.channels.create! kind: "facebook", name: "facebook", config: {
       "page_id" => "", "verify_token" => "", "access_token" => ""
     }
 
+    bot.behaviours.create_front_desk!
+
+    bot.save!
     bot
   end
 
@@ -22,13 +28,7 @@ class Bot < ApplicationRecord
     {
       version: 1,
       languages: ['en'],
-      front_desk: {
-        greeting: {message:{en: ''}},
-        introduction: {message:{en: ''}},
-        not_understood: {message:{en: ''}},
-        clarification: {message:{en: ''}},
-        threshold: 0.5
-      },
+      front_desk: front_desk.manifest_fragment,
       skills: [
         {
           type: :language_detector,
@@ -41,5 +41,21 @@ class Bot < ApplicationRecord
         channel.config.merge(type: channel.kind)
       end
     }
+  end
+
+  def front_desk
+    behaviours.find_by(kind: "front_desk")
+  end
+
+  def skills
+    behaviours.where.not(kind: "front_desk").order(:order)
+  end
+
+  private
+
+  def has_single_front_desk
+    if behaviours.where(kind: "front_desk").count != 1
+      errors[:base] << "Must have a single front desk behaviour"
+    end
   end
 end

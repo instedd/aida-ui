@@ -23,6 +23,23 @@
       "required": [ "page_id", "verify_token", "access_token" ]
     },
 
+    "frontDeskConfig": {
+      "type": "object",
+      "properties": {
+        "greeting": {"$ref": "#/definitions/message"},
+        "introduction": {"$ref": "#/definitions/message"},
+        "not_understood": {"$ref": "#/definitions/message"},
+        "clarification": {"$ref": "#/definitions/message"},
+        "threshold": { "maximum": 1, "minimum": 0 }
+      },
+      "additionalProperties": false,
+      "required": ["greeting", "introduction", "not_understood", "clarification", "threshold"]
+    },
+
+    "message": {
+      "type": "string"
+    },
+
     "channel" : {
       "oneOf": [
         {
