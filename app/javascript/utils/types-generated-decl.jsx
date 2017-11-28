@@ -16,7 +16,7 @@ export type FrontDeskConfig = {
   introduction: Message;
   not_understood: Message;
   clarification: Message;
-  threshold: any;
+  threshold: number;
 };
 
 export type Message = string;
