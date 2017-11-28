@@ -4,6 +4,7 @@ import bots from './bots'
 import channels from './channels'
 import frontDesk from './frontDesk'
 import notifications from './notifications'
+import skills from './skills'
 
 export default combineReducers({
   auth,
@@ -11,4 +12,5 @@ export default combineReducers({
   channels,
   frontDesk,
   notifications,
+  skills,
 })

@@ -85,6 +85,24 @@
         "config": { "$ref": "#/definitions/frontDeskConfig" }
       },
       "required": [ "id", "config" ]
+    },
+
+    "skill": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "kind": { "enum": [
+          "language_detector",
+          "keyword_responder"
+        ] },
+        "name": { "type": "string" },
+        "enabled": { "type": "boolean" },
+        "config": { "oneOf": [
+          { "$ref": "#/definitions/languageDetectorConfig" },
+          { "$ref": "#/definitions/keywordResponderConfig" }
+        ] }
+      },
+      "required": [ "id", "kind", "name", "enabled", "config" ]
     }
   },
 

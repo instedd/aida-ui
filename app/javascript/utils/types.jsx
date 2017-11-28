@@ -64,9 +64,34 @@ export type NotificationsAction = {
   type: 'NOTIF_DISMISS'
 };
 
+export type SkillAction = {
+  type: "SKILL_UPDATE",
+  skill: T.Skill,
+};
+
+export type SkillsAction = {
+  type: 'SKILLS_RECEIVE',
+  scope: ?any,
+  items: ById<T.Skill>,
+} | {
+  type: 'SKILLS_RECEIVE_ERROR',
+} | {
+  type: 'SKILLS_FETCH',
+  scope: ?any,
+};
+
 export type Thunk = (dispatch : Dispatch, getState : ?GetState) => void;
 
-export type Action = AuthAction | BotAction | BotsAction | ChannelAction | ChannelsAction | FrontDeskAction | NotificationsAction | Thunk;
+export type Action = AuthAction
+                   | BotAction
+                   | BotsAction
+                   | ChannelAction
+                   | ChannelsAction
+                   | FrontDeskAction
+                   | NotificationsAction
+                   | SkillAction
+                   | SkillsAction
+                   | Thunk;
 
 export type Dispatch = (action : Action) => void;
 
@@ -96,12 +121,19 @@ export type NotifState = {
   toasts: Array<{text: string, action: any}>
 };
 
+export type SkillsState = {
+  fetching: boolean,
+  scope: ?any,
+  items: ?ById<T.Skill>
+};
+
 export type State = {
   auth: AuthState,
   bots: BotsState,
   channels: ChannelsState,
   frontDesk: FrontDeskState,
   notifications: NotifState,
+  skills: SkillsState,
 };
 
 export type GetState = () => State;
