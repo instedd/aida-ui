@@ -1,9 +1,10 @@
 import React, { Component, Children, cloneElement } from 'react'
+import FrontDesk from './FrontDesk'
 
 export class BotBehaviour extends Component {
   render() {
     const { bot } = this.props
 
-    return <p>Behaviour of {bot.name}</p>
+    return <FrontDesk bot={bot} />
   }
 }
