@@ -1,17 +1,21 @@
 import React, { Component } from 'react'
-import * as Md from 'react-md'
+import { FontIcon, List, Subheader, Switch, ListItem, ListItemControl } from 'react-md'
 
-const Chat = () => <Md.FontIcon>chat</Md.FontIcon>;
-const Add = () => <Md.FontIcon>add</Md.FontIcon>;
+const Chat = () => <FontIcon>chat</FontIcon>;
+const Add = () => <FontIcon>add</FontIcon>;
+const Flag = () => <FontIcon>language</FontIcon>;
+const Check = () => <FontIcon>assignment</FontIcon>;
 
 export default class SkillsBar extends Component {
   render() {
-    return <div>
-      <Md.List className="skills-list">
-        <Md.Subheader primaryText="Skills" className="heading-title" />
-        <Md.ListItem leftIcon={<Chat />} primaryText="Front desk" />
-        <Md.ListItem leftIcon={<Add />} primaryText="Add skill" className="addlink" />
-      </Md.List>
+    return <div className="sidebar">
+      <List className="skills-list">
+        <Subheader primaryText="Skills" className="heading-title" />
+        <ListItem leftIcon={<Chat />} primaryText="Front desk" />
+        <ListItem leftIcon={<Flag />} primaryText="Language detector" rightIcon={<Switch name="lang" aria-label="toggle" id="toggle-lang-detector"/>} />
+        <ListItem leftIcon={<Check />} primaryText="Keyword responder" rightIcon={<Switch name="keyword" aria-label="toggle" id="toggle-keyword-responder"/>} />
+        <ListItem leftIcon={<Add />} primaryText="Add skill" className="addlink" />
+      </List>
     </div>
   }
 }
