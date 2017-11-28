@@ -27,7 +27,7 @@ RSpec.describe Api::FrontDesksController, type: :controller do
                 threshold: 0.7
               }
             }
-          }
+          }, as: :json
 
       expect(response).to be_success
       bot.reload
