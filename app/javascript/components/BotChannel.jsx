@@ -28,7 +28,7 @@ class BotChannelComponent extends Component {
     const { channel, bot } = this.props
 
     if (channel) {
-      return <div>
+      return <div className="single-content">
         <Title>Setup a Facebook channel</Title>
         <Headline>
           In order to setup this channel you first need to

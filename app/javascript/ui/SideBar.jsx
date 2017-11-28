@@ -4,13 +4,14 @@ import * as Md from 'react-md';
 const Chat = () => <Md.FontIcon>chat</Md.FontIcon>;
 const Add = () => <Md.FontIcon>add</Md.FontIcon>;
 
-class SideBar extends Component {
+export const SideBar = ({children}) =>
+  <div className='sidebar'>{children}</div>
+
+export class SideBarDemo extends Component {
   render() {
-
-
     return (
-      <div className="sidebar">
-        <Md.List className="md-paper md-paper--2 rounded skills-list">
+      <SideBar>
+        <Md.List className="skills-list">
           <Md.Subheader primaryText="Skills" className="heading-title" />
           <Md.Subheader primaryText="Add skills to your bot in order to make it more versatile" className="subheading-title" />
           <Md.ListItem
@@ -111,9 +112,8 @@ class SideBar extends Component {
             className="addlink"
           />
         </Md.List>
-      </div>
+      </SideBar>
     );
   }
 }
 
-export default SideBar;

@@ -5,7 +5,7 @@ import Title from './Title'
 import Headline from './Headline'
 
 export const MainContent = ({children}) =>
-  <div className='main-content'>{children}</div>
+  <div>{children}</div>
 
 export class MainContentDemo extends Component {
   render() {
