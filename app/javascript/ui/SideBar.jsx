@@ -12,7 +12,6 @@ class SideBar extends Component {
       <div className="sidebar">
         <Md.List >
           <Md.Subheader primaryText="Skills" />
-          <Md.Subheader primaryText="Add skills to your bot in order to make it more versatile" />
           <Md.ListItem
             leftIcon={<Chat />}
             primaryText="Front desk"

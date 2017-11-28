@@ -25,7 +25,7 @@ export const App = () =>
         />
       }
       footer={<Footer/>}>
-      <MainContentDemo />
       <SideBar />
+      <MainContentDemo />
     </Layout>
   </BrowserRouter>
