@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
+import { MainContent } from '../ui/MainContent'
 import Title from '../ui/Title'
 import Headline from '../ui/Headline'
 import Field from '../ui/Field'
@@ -28,7 +29,7 @@ class BotChannelComponent extends Component {
     const { channel, bot } = this.props
 
     if (channel) {
-      return <div>
+      return <MainContent>
         <Title>Setup a Facebook channel</Title>
         <Headline>
           In order to setup this channel you first need to
@@ -39,7 +40,7 @@ class BotChannelComponent extends Component {
         <Field label="Page ID" value={channel.config.page_id} onChange={this.updateConfigField("page_id")} />
         <Field label="Verify Token" value={channel.config.verify_token} onChange={this.updateConfigField("verify_token")} />
         <Field label="Access Token" value={channel.config.access_token} onChange={this.updateConfigField("access_token")} />
-      </div>
+      </MainContent>
     } else {
       return <p>Loading channels for {bot.name}</p>
     }
