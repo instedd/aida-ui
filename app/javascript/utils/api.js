@@ -1,7 +1,7 @@
 // @flow
 import * as T from './types'
 import { schema } from 'normalizr'
-import { apiFetchJSON, apiPutJSON, apiPostJSON, apiDeleteJSON } from './api-rails'
+import { apiFetchJSON, apiPutJSON, apiPostJSON, apiDelete } from './api-rails'
 
 const botSchema = new schema.Entity('bots')
 const channelSchema = new schema.Entity('channels')
@@ -40,14 +40,14 @@ export const fetchSkills = (botId : number) => {
   return apiFetchJSON(`bots/${botId}/skills`, new schema.Array(skillSchema))
 }
 
-export const createSkill = (botId : number, skill_kind : T.Skill) => {
-  return apiPostJSON(`bots/${botId}/skills`, {skill_kind})
+export const createSkill = (botId : number, skill_kind : string) => {
+  return apiPostJSON(`bots/${botId}/skills`, null, {skill_kind})
 }
 
 export const updateSkill = (skill : T.Skill) => {
-  return apiPutJSON(`skills/${skill.id}`, skillSchema, {skill})
+  return apiPutJSON(`skills/${skill.id}`, null, {skill})
 }
 
 export const destroySkill = (skill : T.Skill) => {
-  return apiDeleteJSON(`skills/${skill.id}`)
+  return apiDelete(`skills/${skill.id}`)
 }

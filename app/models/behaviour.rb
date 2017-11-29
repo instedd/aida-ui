@@ -40,7 +40,7 @@ class Behaviour < ApplicationRecord
                        }
                      when "keyword_responder"
                        {
-                         kind: "language_detector",
+                         kind: "keyword_responder",
                          name: "Keyword responder",
                          config: {
                            "explanation" => "",

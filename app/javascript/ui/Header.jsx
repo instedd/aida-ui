@@ -45,7 +45,7 @@ class HeaderSubNav extends Component {
 
     let selectedTab = 0
     Children.forEach(this.props.headerNavLinks, (e, index) => {
-      if (this.props.location.pathname == e.props.to)
+      if (this.props.location.pathname.startsWith(e.props.to))
         selectedTab = index
     })
 
