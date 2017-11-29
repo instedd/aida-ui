@@ -1,0 +1,44 @@
+version: '2.0'
+
+services:
+  ui:
+    image: aida-ui:dev
+    depends_on:
+      - db
+    environment:
+      DATABASE_HOST: db
+      DATABASE_URL: postgres://root:@db/aida-ui
+      SECRET_KEY_BASE: secret
+      SETTINGS__BACKEND__URL: http://backend/
+      VIRTUAL_HOST: '*'
+
+  backend:
+    image: instedd/aida:dev
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: ecto://root:@db/aida-backend
+      VIRTUAL_HOST: '*/callback, */callback/*'
+      VIRTUAL_HOST_WEIGHT: 1
+    command: /bin/sh -c 'mix ecto.migrate && mix phx.server'
+
+  db:
+    image: postgres:9.6
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD:
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  proxy:
+    image: 'dockercloud/haproxy:1.6.7'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    links:
+      - ui
+      - backend
+    ports:
+      - '3000:80'
+
+volumes:
+  db:

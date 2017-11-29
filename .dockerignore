@@ -1,0 +1,6 @@
+tmp/*
+log/*
+.git
+docker-compose*.yml
+app/public/packs/*
+app/public/packs-test/*
