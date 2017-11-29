@@ -10,12 +10,20 @@
     "main"
     "footer";
 }
+
 header {
   grid-area: header;
 }
 
 main {
   grid-area: main;
+}
+
+footer {
+  grid-area: footer;
+}
+
+.main-with-sidebar {
   display: grid;
   grid-template-columns: minmax(min-content, 320px) auto 90px;
   grid-template-areas:
@@ -36,18 +44,28 @@ main {
   }
 }
 
-footer {
-  grid-area: footer;
-}
-
 @media screen and (max-width: 33.9em) {
-  main {
+  .main-with-sidebar {
     grid-template-columns: 1fr;
     grid-template-areas:
       "sidebar"
       "main-content";
     grid-auto-rows: auto;
     grid-row-gap: 4rem;
+  }
+}
+
+.main-fullwidth {
+  background: $md-white-base;
+
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 700px 1fr;
+  grid-template-areas:
+    ". main-content .";
+  .main-content {
+    grid-area: main-content;
+    padding: 86px 100px 70px;
   }
 }
 
