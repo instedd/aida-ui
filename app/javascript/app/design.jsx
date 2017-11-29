@@ -6,8 +6,9 @@ import { MainContent } from '../ui/MainContent'
 import Footer from '../ui/Footer'
 import Title from '../ui/Title'
 import Headline from '../ui/Headline'
+import Field from '../ui/Field'
 import Icon from '../components/Icon'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, Route, Redirect } from 'react-router-dom'
 import * as Md from 'react-md'
 
 export const App = () =>
@@ -20,8 +21,8 @@ export const App = () =>
           headerNavLinks={[
             <HeaderNavLink label="Analytics" to="#" />,
             <HeaderNavLink label="Data" to="#" />,
-            <HeaderNavLink label="Channels" to="#" />,
-            <HeaderNavLink label="Behaviour" to="#" />,
+            <HeaderNavLink label="Channels" to="/_design/channel" />,
+            <HeaderNavLink label="Behaviour" to="/_design/behaviour" />,
             <HeaderNavLink label="Translations" to="#" />,
             <HeaderNavLink label="Collaborators" to="#" />,
           ]}
@@ -29,9 +30,25 @@ export const App = () =>
       }
       footer={<Footer/>}>
 
-      <MainContentDemo />
+      <Route exact path="/_design" render={() => <Redirect to="/_design/behaviour"/>} />
+      <Route exact path="/_design/behaviour" component={MainContentDemo} />
+      <Route exact path="/_design/channel" component={MainFullWidthDemo} />
     </Layout>
   </BrowserRouter>
+
+const MainFullWidthDemo = () =>
+  <MainContent>
+    <Title>Setup a Facebook channel</Title>
+    <Headline>
+      In order to setup this channel you first need to
+      create a <a href="https://www.facebook.com/business/products/pages" target="_blank">Facebook page</a> and
+      then <a href="https://developers.facebook.com/docs/messenger-platform/getting-started/app-setup" target="_blank">subscribe a bot</a>.
+    </Headline>
+
+    <Field label="Page ID" />
+    <Field label="Verify Token" />
+    <Field label="Access Token" />
+  </MainContent>
 
 class MainContentDemo extends Component {
   render() {
