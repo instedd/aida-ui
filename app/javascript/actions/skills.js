@@ -35,7 +35,7 @@ export const receiveSkills = (scope : any, items : T.ById<T.Skill>) : T.SkillsAc
   items
 })
 
-export const createSkill = (scope : {botId : number}, skillKind : string) => (dispatch : T.Dispatch, getState) => {
+export const createSkill = (scope : {botId : number}, skillKind : string) => (dispatch : T.Dispatch, getState : T.GetState) => {
   const state = getState()
   if (state.skills.creating) {
     return

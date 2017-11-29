@@ -57,7 +57,7 @@ const update = (state, action) => {
 }
 
 const create = (state, action) => {
-  if (action.scope.botId == state.scope.botId) {
+  if (state.scope && action.scope.botId == state.scope.botId) {
     return {
       ...state,
       creating: action.skillKind
@@ -68,7 +68,7 @@ const create = (state, action) => {
 }
 
 const createSuccess = (state, action) => {
-  if (action.scope.botId == state.scope.botId) {
+  if (state.scope && action.scope.botId == state.scope.botId) {
     const {skill} = action
     return {
       ...state,
@@ -84,8 +84,7 @@ const createSuccess = (state, action) => {
 }
 
 const createError = (state, action) => {
-  if (action.scope.botId == state.scope.botId) {
-    const {skill} = action
+  if (state.scope && action.scope.botId == state.scope.botId) {
     return {
       ...state,
       creating: null
