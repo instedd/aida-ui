@@ -14,7 +14,7 @@ Rails.application.routes.draw do
     resources :channels, only: [:update]
   end
 
-  get "/_design", to: 'welcome#design'
+  get "/_design(/*path)", to: 'welcome#design'
   get "/login", to: 'welcome#login'
   get "/logout", to: 'welcome#logout'
 

@@ -10,9 +10,8 @@ class SideBar extends Component {
 
     return (
       <div className="sidebar">
-        <Md.List className="md-paper md-paper--2 rounded skills-list">
-          <Md.Subheader primaryText="Skills" className="heading-title" />
-          <Md.Subheader primaryText="Add skills to your bot in order to make it more versatile" className="subheading-title" />
+        <Md.List >
+          <Md.Subheader primaryText="Skills" />
           <Md.ListItem
             leftIcon={<Chat />}
             primaryText="Front desk"
