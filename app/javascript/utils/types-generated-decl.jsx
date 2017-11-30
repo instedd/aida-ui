@@ -47,9 +47,17 @@ export type FrontDesk = {
 
 export type Skill = {
   id: number;
-  kind: "language_detector" | "keyword_responder";
+  kind: "language_detector";
   name: string;
   enabled: boolean;
-  config: LanguageDetectorConfig | KeywordResponderConfig;
+  order: number;
+  config: LanguageDetectorConfig;
+} | {
+  id: number;
+  kind: "keyword_responder";
+  name: string;
+  enabled: boolean;
+  order: number;
+  config: KeywordResponderConfig;
 };
 

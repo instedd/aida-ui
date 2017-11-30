@@ -88,21 +88,32 @@
     },
 
     "skill": {
-      "type": "object",
-      "properties": {
-        "id": { "type": "integer" },
-        "kind": { "enum": [
-          "language_detector",
-          "keyword_responder"
-        ] },
-        "name": { "type": "string" },
-        "enabled": { "type": "boolean" },
-        "config": { "oneOf": [
-          { "$ref": "#/definitions/languageDetectorConfig" },
-          { "$ref": "#/definitions/keywordResponderConfig" }
-        ] }
-      },
-      "required": [ "id", "kind", "name", "enabled", "config" ]
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer" },
+            "kind": { "enum": [ "language_detector" ] },
+            "name": { "type": "string" },
+            "enabled": { "type": "boolean" },
+            "order": { "type": "integer" },
+            "config": { "$ref": "#/definitions/languageDetectorConfig" }
+          },
+          "required": [ "id", "kind", "name", "enabled", "order", "config" ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer" },
+            "kind": { "enum": [ "keyword_responder" ] },
+            "name": { "type": "string" },
+            "enabled": { "type": "boolean" },
+            "order": { "type": "integer" },
+            "config": { "$ref": "#/definitions/keywordResponderConfig" }
+          },
+          "required": [ "id", "kind", "name", "enabled", "order", "config" ]
+        }
+      ]
     }
   },
 

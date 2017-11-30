@@ -34,6 +34,8 @@ const mapStateToProps = (state, {skillId}) => {
     }
   } else if (items) {
     return { skill: items[skillId] }
+  } else {
+    return {}
   }
 }
 
