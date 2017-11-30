@@ -8,7 +8,24 @@ body {
   flex-direction: column;
   min-height: 100vh;
 }
+.grid {
+  min-height: 100vh;
+  font-size: 1rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 210px auto 50px;
+  grid-template-areas:
+    "header"
+    "main"
+    "footer";
+}
+
+header {
+  grid-area: header;
+}
+
 main {
+  grid-area: main;
   display: flex;
   flex: 1;
   > .container {
@@ -16,6 +33,11 @@ main {
   }
 }
 
+footer {
+  grid-area: footer;
+  color: $md-grey-500;
+  padding: 17px 20px;
+}
 
 .mainToolbar {
   flex-direction: column;
