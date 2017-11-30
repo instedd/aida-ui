@@ -19,8 +19,6 @@ const skillIcon = (kind) => {
       return (<FontIcon>assignment</FontIcon>)
     case 'ADD':
       return (<FontIcon>add</FontIcon>)
-    case 'LOADING':
-      return (<FontIcon>hourglass_empty</FontIcon>)
   }
 }
 
@@ -70,14 +68,9 @@ class SkillsBar extends Component {
       primaryText: defaultSkillName(kind),
       leftIcon: skillIcon(kind),
       onClick: () => {
-        actions.createSkill({botId: bot.id}, kind)
-        history.push(routes.botSkill(bot.id, 'new'))
+        actions.createSkill({botId: bot.id}, kind, history)
       }
     }))
-
-    const creatingSkill = creating
-                        ? <ListItem leftIcon={skillIcon(creating)} primaryText="Adding skill..." />
-                        : null
 
     return (
       <div className="sidebar">
@@ -87,7 +80,6 @@ class SkillsBar extends Component {
                     primaryText="Front desk"
                     onClick={() => history.push(routes.botFrontDesk(bot.id))}/>
           {skillsItems}
-          {creatingSkill}
           <DropdownMenu id="add-skill-menu"
                         block={true}
                         anchor={{x: DropdownMenu.HorizontalAnchors.INNER_LEFT, y: DropdownMenu.VerticalAnchors.OVERLAP}}

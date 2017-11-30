@@ -3,39 +3,28 @@ import { Redirect } from 'react-router-dom'
 import Title from '../ui/Title'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import maxBy from 'lodash/maxBy'
 
 import * as routes from '../utils/routes'
 
 class BotSkill extends Component {
   render() {
-    const { bot, skill, skillId } = this.props
-    if (skillId == 'new') {
-      if (skill) {
-        return <Redirect to={routes.botSkill(bot.id, skill.id)} />
-      } else {
-        return <Title>Adding skill...</Title>
-      }
-    } else if (skill) {
-      return <Title>{skill.name}</Title>
-    } else {
+    const { bot, skill, loading } = this.props
+    if (loading) {
       return <Title>Loading skill...</Title>
+    } else if (skill) {
+      return <Title>{skill.name} #{skill.id}</Title>
+    } else {
+      return <Redirect to={routes.botFrontDesk(bot.id)} />
     }
   }
 }
 
 const mapStateToProps = (state, {skillId}) => {
-  const { items, creating } = state.skills
-  if (skillId == 'new') {
-    if (creating || !items) {
-      return { skill: null, creating }
-    } else {
-      return { skill: maxBy(Object.values(items), 'order') }
-    }
-  } else if (items) {
-    return { skill: items[skillId] }
+  const { items } = state.skills
+  if (items) {
+    return { loading: false, skill: items[skillId] }
   } else {
-    return {}
+    return { loading: true }
   }
 }
 
