@@ -1,29 +1,54 @@
-# Aida UI
+# AIDA UI
+
+This repository contains the ui for the [AIDA engine](https://github.com/instedd/aida).
 
 ## Development environment
 
 * Install Docker
 
-* First time / havoc environment
+* First time
 
 ```
-$ docker-compose run --rm app ./bin/rails db:drop # havoc environment
-$ docker-compose run --rm app ./bin/setup
-$ docker-compose run --rm app ./bin/yarn
-$ docker-compose run --rm backend mix ecto.drop # drop backend database
+$ docker-compose run --rm ui ./bin/setup
+$ docker-compose run --rm ui ./bin/yarn
 $ docker-compose run --rm backend mix ecto.setup
-```
-
-* Start database & webserver:
-
-```
 $ docker-compose up
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+* Upgrade
+
+```
+$ docker-compose pull
+$ docker-compose restart
+```
+
+* Destroy
+
+```
+$ docker-compose run --rm ui ./bin/rails db:drop
+$ docker-compose run --rm backend mix ecto.drop
+```
+
+Or
+
+```
+$ docker-compose down -v
+```
+
+### Tools for development
+
+* Run specs
+
+```
+$ docker-compose run --rm ui rspec
 ```
 
 * Run flow
 
 ```
-$ docker-compose run --rm app ./bin/yarn flow
+$ docker-compose run --rm ui ./bin/yarn flow
 ```
 
 * Expand type schema type
@@ -33,11 +58,8 @@ that are translated and available at `./app/javascript/utils/types-generated-dec
 by the following command.
 
 ```
-$ docker-compose run --rm app ./bin/yarn expand-schema
+$ docker-compose run --rm ui ./bin/yarn expand-schema
 ```
-
-Open [http://localhost:3000](http://localhost:3000).
-
 
 ## Production environment
 

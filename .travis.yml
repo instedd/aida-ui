@@ -21,10 +21,10 @@ install:
 before_install:
   - mv docker-compose.ci.yml docker-compose.override.yml
   - docker-compose up -d db
-  - docker-compose run --rm app ./bin/setup
-  - docker-compose run --rm app ./bin/yarn
+  - docker-compose run --rm ui ./bin/setup
+  - docker-compose run --rm ui ./bin/yarn
 
 script:
-  - docker-compose run --rm app rspec
-  - docker-compose run --rm app bundle exec ./bin/webpack
-  - docker-compose run --rm app bundle exec ./bin/yarn flow
+  - docker-compose run --rm ui rspec
+  - docker-compose run --rm ui bundle exec ./bin/webpack
+  - docker-compose run --rm ui bundle exec ./bin/yarn flow

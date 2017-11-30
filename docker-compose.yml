@@ -15,7 +15,7 @@ services:
       - bundle:/usr/local/bundle
       - node_modules:/src/node_modules
 
-  app:
+  ui:
     <<: *base
     ports:
       - "3000:3000"
