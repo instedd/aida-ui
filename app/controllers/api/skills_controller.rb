@@ -12,6 +12,7 @@ class Api::SkillsController < ApplicationApiController
 
     render json: skill_api_json(new_skill), status: :created
   rescue RuntimeError => e
+    # Handle invalid skill kind failure
     render json: {error: e.message}, status: :bad_request
   end
 
