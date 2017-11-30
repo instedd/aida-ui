@@ -83,16 +83,9 @@ export type SkillsAction = {
   type: 'SKILLS_FETCH',
   scope: ?any,
 } | {
-  type: 'SKILLS_CREATE',
-  scope: Scope,
-  skillKind: string
-} | {
   type: 'SKILLS_CREATE_SUCCESS',
   scope: Scope,
   skill: T.Skill
-} | {
-  type: 'SKILLS_CREATE_ERROR',
-  scope: Scope,
 };
 
 export type Thunk = (dispatch : Dispatch, getState : ?GetState) => void;
@@ -139,8 +132,7 @@ export type NotifState = {
 export type SkillsState = {
   fetching: boolean,
   scope: ?Scope,
-  items: ?ById<T.Skill>,
-  creating: ?string
+  items: ?ById<T.Skill>
 };
 
 export type State = {
