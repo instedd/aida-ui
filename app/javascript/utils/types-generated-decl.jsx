@@ -20,18 +20,23 @@ export type FrontDeskConfig = {
 };
 
 export type LanguageDetectorConfig = {
-  explanation: Message;
-  languages: any;
+  explanation: string;
+  languages: Array<{
+    code: string;
+    keywords: KeywordList;
+  }>;
 };
 
 export type KeywordResponderConfig = {
   explanation: Message;
   clarification: Message;
-  keywords: string;
+  keywords: KeywordList;
   response: Message;
 };
 
 export type Message = string;
+
+export type KeywordList = string;
 
 export type Channel = {
   id: number;

@@ -54,7 +54,7 @@ RSpec.describe Api::SkillsController, type: :controller do
               enabled: false,
               config: {
                 explanation: "Say 'english'",
-                languages: ['en']
+                languages: [{code: 'en', keywords: 'english'}]
               }
             }
           }

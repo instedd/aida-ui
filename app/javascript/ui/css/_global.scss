@@ -90,3 +90,26 @@
       font-size: 15px;
   }
 }
+
+.languages-list {
+  overflow: unset;
+
+  .md-text-field-container {
+    margin-top: 0;
+  }
+
+  tbody .md-table-row {
+    border-bottom: none;
+  }
+
+  .addlink .md-text,
+  .addlink .md-icon {
+    color: $md-secondary-color;
+  }
+}
+
+#lang-menu-list .md-list-tile .md-tile-content {
+  display: grid;
+  grid-template-columns: 10em 2em;
+  grid-column-gap: 1em;
+}
