@@ -5,7 +5,7 @@ import { debounced } from '../utils'
 
 export const UPDATE = 'SKILL_UPDATE'
 
-export const updateSkill = (skill : T.Skill) => (dispatch : T.Dispatch, getState : T.GetState) => {
+export const updateSkill = (skill : T.Skill) => (dispatch : T.Dispatch) => {
   dispatch({type: UPDATE, skill})
   dispatch(updateSkillDelayed(skill))
 }
