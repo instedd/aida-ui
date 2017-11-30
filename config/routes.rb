@@ -9,9 +9,11 @@ Rails.application.routes.draw do
         post :publish
       end
       resource :front_desk, only: [:show, :update]
+      resources :skills, only: [:index, :create]
     end
 
     resources :channels, only: [:update]
+    resources :skills, only: [:update, :destroy]
   end
 
   get "/_design(/*path)", to: 'welcome#design'

@@ -1,11 +1,14 @@
 class Behaviour < ApplicationRecord
   belongs_to :bot
 
-  validates :kind, inclusion: { in: %w(front_desk) }
+  validates :kind, inclusion: { in: %w(front_desk language_detector keyword_responder) }
 
   validate :config_must_match_schema
 
   default_scope { order(:order) }
+
+  scope :of_bots_owned_by, -> (user) { Behaviour.where(bot: user.bots) }
+  scope :skills, ->{ where.not(kind: 'front_desk') }
 
   def self.create_front_desk!(params = {})
     default_params = {
@@ -22,6 +25,34 @@ class Behaviour < ApplicationRecord
       }
     }
     create! default_params.merge(params)
+  end
+
+  def self.create_skill!(kind, params = {})
+    default_params = case kind
+                     when "language_detector"
+                       {
+                         kind: "language_detector",
+                         name: "Language detector",
+                         config: {
+                           "explanation" => "",
+                           "languages" => []
+                         }
+                       }
+                     when "keyword_responder"
+                       {
+                         kind: "keyword_responder",
+                         name: "Keyword responder",
+                         config: {
+                           "explanation" => "",
+                           "clarification" => "",
+                           "keywords" => [],
+                           "responses" => []
+                         }
+                       }
+                     else
+                       fail "invalid skill type #{kind}"
+                     end
+    create! default_params.merge({enabled: true}).deep_merge(params)
   end
 
   def manifest_fragment
@@ -55,6 +86,10 @@ class Behaviour < ApplicationRecord
     case kind
     when "front_desk"
       "#/definitions/frontDeskConfig"
+    when "language_detector"
+      "#/definitions/languageDetectorConfig"
+    when "keyword_responder"
+      "#/definitions/keywordResponderConfig"
     else
       fail "config schema not defined"
     end

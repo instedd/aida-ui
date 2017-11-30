@@ -19,6 +19,18 @@ export type FrontDeskConfig = {
   threshold: number;
 };
 
+export type LanguageDetectorConfig = {
+  explanation: Message;
+  languages: any;
+};
+
+export type KeywordResponderConfig = {
+  explanation: Message;
+  clarification: Message;
+  keywords: any;
+  responses: any;
+};
+
 export type Message = string;
 
 export type Channel = {
@@ -31,5 +43,21 @@ export type Channel = {
 export type FrontDesk = {
   id: number;
   config: FrontDeskConfig;
+};
+
+export type Skill = {
+  id: number;
+  kind: "language_detector";
+  name: string;
+  enabled: boolean;
+  order: number;
+  config: LanguageDetectorConfig;
+} | {
+  id: number;
+  kind: "keyword_responder";
+  name: string;
+  enabled: boolean;
+  order: number;
+  config: KeywordResponderConfig;
 };
 

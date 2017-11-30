@@ -45,7 +45,7 @@ export class BotLayoutComponent extends Component {
 
         <Route exact path="/b/:id" render={({match}) => <Redirect to={r.botChannel(match.params.id)} />} />
         <Route exact path="/b/:id/channel" render={() => <BotChannel bot={bot} />} />
-        <Route exact path="/b/:id/behaviour" render={() => <BotBehaviour bot={bot} />} />
+        <Route path="/b/:id/behaviour" render={() => <BotBehaviour bot={bot} />} />
 
         {/* Children.map(children, c => cloneElement(c, {bot})) */}
       </AppLayout>
