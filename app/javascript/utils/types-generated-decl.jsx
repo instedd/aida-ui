@@ -27,8 +27,8 @@ export type LanguageDetectorConfig = {
 export type KeywordResponderConfig = {
   explanation: Message;
   clarification: Message;
-  keywords: any;
-  responses: any;
+  keywords: string;
+  response: Message;
 };
 
 export type Message = string;

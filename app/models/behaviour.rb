@@ -45,8 +45,8 @@ class Behaviour < ApplicationRecord
                          config: {
                            "explanation" => "",
                            "clarification" => "",
-                           "keywords" => [],
-                           "responses" => []
+                           "keywords" => "",
+                           "response" => ""
                          }
                        }
                      else
@@ -64,6 +64,18 @@ class Behaviour < ApplicationRecord
         not_understood: localized_message(:not_understood),
         clarification: localized_message(:clarification),
         threshold: config["threshold"]
+      }
+    when "keyword_responder"
+      {
+        type: kind,
+        id: id.to_s,
+        name: name,
+        explanation: localized_value(:explanation),
+        clarification: localized_value(:clarification),
+        response: localized_value(:response),
+        keywords: localized_value(:keywords) do |keywords|
+          keywords.split(/,\s*/)
+        end
       }
     else
       raise NotImplementedError
@@ -100,6 +112,13 @@ class Behaviour < ApplicationRecord
       message: {
         en: config[key.to_s]
       }
+    }
+  end
+
+  def localized_value(key, &block)
+    value = config[key.to_s]
+    {
+      en: if block_given? then yield value else value end
     }
   end
 end

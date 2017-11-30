@@ -29,13 +29,9 @@ class Bot < ApplicationRecord
       version: 1,
       languages: ['en'],
       front_desk: front_desk.manifest_fragment,
-      skills: [
-        {
-          type: :language_detector,
-          explanation: 'Choose your language',
-          languages: {en: ['english']}
-        }
-      ],
+      skills: skills.map do |skill|
+        skill.manifest_fragment
+      end,
       variables: [],
       channels: channels.map do |channel|
         channel.config.merge(type: channel.kind)

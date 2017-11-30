@@ -51,11 +51,11 @@
       "properties": {
         "explanation": { "$ref": "#/definitions/message" },
         "clarification": { "$ref": "#/definitions/message" },
-        "keywords": { "type": "array" },
-        "responses": { "type": "array" }
+        "keywords": { "type": "string" },
+        "response": { "$ref": "#/definitions/message" }
       },
       "additionalProperties": false,
-      "required": [ "explanation", "clarification", "keywords", "responses" ]
+      "required": [ "explanation", "clarification", "keywords", "response" ]
     },
 
     "message": {
