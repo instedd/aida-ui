@@ -5,7 +5,8 @@ class WelcomeController < ApplicationController
     if user_signed_in?
       render :index
     else
-      render :landing
+      # render :landing
+      redirect_to login_path
     end
   end
 
