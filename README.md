@@ -98,5 +98,5 @@ $ docker-compose -f docker-compose.production.yml down -v
 * Local build
 
 ```
-$ docker build -t aida-ui:dev .
+$ docker build -t instedd/aida-ui:dev .
 ```
