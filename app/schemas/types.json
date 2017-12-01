@@ -39,8 +39,19 @@
     "languageDetectorConfig": {
       "type": "object",
       "properties": {
-        "explanation": { "$ref": "#/definitions/message" },
-        "languages": { "type": "array" }
+        "explanation": { "type": "string" },
+        "languages": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": { "type": "string" },
+              "keywords": { "$ref": "#/definitions/keywordList" }
+            },
+            "required": [ "code", "keywords" ]
+          }
+        }
       },
       "additionalProperties": false,
       "required": [ "explanation", "languages" ]
@@ -51,7 +62,7 @@
       "properties": {
         "explanation": { "$ref": "#/definitions/message" },
         "clarification": { "$ref": "#/definitions/message" },
-        "keywords": { "type": "string" },
+        "keywords": { "$ref": "#/definitions/keywordList" },
         "response": { "$ref": "#/definitions/message" }
       },
       "additionalProperties": false,
@@ -59,6 +70,10 @@
     },
 
     "message": {
+      "type": "string"
+    },
+
+    "keywordList": {
       "type": "string"
     },
 

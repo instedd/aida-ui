@@ -7,15 +7,18 @@ import { bindActionCreators } from 'redux'
 import * as routes from '../utils/routes'
 
 import KeywordResponder from './KeywordResponder'
+import LanguageDetector from './LanguageDetector'
 
 const SkillComponent = ({skill}) => {
   const { kind } = skill
 
   switch (kind) {
     case 'keyword_responder':
-      return <KeywordResponder skill={skill} />
+      return (<KeywordResponder skill={skill} />)
+    case 'language_detector':
+      return (<LanguageDetector skill={skill} />)
     default:
-      return <Title>{skill.name} #{skill.id}</Title>
+      return (<Title>{skill.name} #{skill.id}</Title>)
   }
 }
 

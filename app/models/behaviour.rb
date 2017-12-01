@@ -34,8 +34,10 @@ class Behaviour < ApplicationRecord
                          kind: "language_detector",
                          name: "Language detector",
                          config: {
-                           "explanation" => "",
-                           "languages" => []
+                           "explanation" => "To chat in english, say 'english'",
+                           "languages" => [
+                             { "code" => "en", "keywords" => "english, en" }
+                           ]
                          }
                        }
                      when "keyword_responder"
@@ -76,6 +78,14 @@ class Behaviour < ApplicationRecord
         keywords: localized_value(:keywords) do |keywords|
           keywords.split(/,\s*/)
         end
+      }
+    when "language_detector"
+      {
+        type: kind,
+        explanation: config["explanation"],
+        languages: Hash[config["languages"].map do |lang|
+                          [lang["code"], lang["keywords"].split(/,\s*/)]
+                        end]
       }
     else
       raise NotImplementedError
