@@ -7,8 +7,9 @@ class Bot < ApplicationRecord
 
   def self.create_prepared!(user)
     bot = Bot.new owner: user
-    bot.name = "Bot #{bot.id}"
     bot.save(validate: false)
+
+    bot.name = "Bot #{bot.id}"
 
     bot.channels.create! kind: "facebook", name: "facebook", config: {
       "page_id" => "", "verify_token" => "", "access_token" => ""

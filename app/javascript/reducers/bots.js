@@ -14,6 +14,7 @@ export default (state : T.BotsState, action : T.Action) : T.BotsState => {
   switch (action.type) {
     case actions.FETCH: return fetch(state, action)
     case actions.RECEIVE: return receive(state, action)
+    case actions.CREATE_SUCCESS: return createSuccess(state, action)
     case botActions.UPDATE: return update(state, action)
     default: return state
   }
@@ -38,6 +39,17 @@ const fetch = (state, action) => {
 const update = (state, action) => {
   const {bot} = action
 
+  return {
+    ...state,
+    items: {
+      ...state.items,
+      ...{[bot.id]: bot}
+    }
+  }
+}
+
+const createSuccess = (state, action) => {
+  const {bot} = action
   return {
     ...state,
     items: {

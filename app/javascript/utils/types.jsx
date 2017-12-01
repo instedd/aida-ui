@@ -30,7 +30,10 @@ export type BotsAction = {
   type: 'BOTS_RECEIVE_ERROR',
 } | {
   type: 'BOTS_FETCH',
-};
+} | {
+  type: 'BOTS_CREATE_SUCCESS',
+  bot: T.Bot,
+}
 
 export type ChannelAction = {
   type: "CHANNEL_UPDATE",

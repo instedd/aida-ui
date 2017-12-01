@@ -12,6 +12,10 @@ export const fetchBots = () => {
   return (apiFetchJSON(`bots`, new schema.Array(botSchema)) : Promise<{entities: {bots: T.ById<T.Bot>}}>)
 }
 
+export const createBot = () => {
+  return apiPostJSON(`bots`)
+}
+
 export const updateBot = (bot : T.Bot) => {
   return apiPutJSON(`bots/${bot.id}`, botSchema, {bot})
 }
