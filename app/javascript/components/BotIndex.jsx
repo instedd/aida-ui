@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { Redirect } from 'react-router-dom'
+import { withRouter } from 'react-router'
+
+import { MainContent } from '../ui/MainContent'
+import { Listing, Column } from '../ui/Listing'
 
 import * as actions from '../actions/bots'
 import * as routes from '../utils/routes'
@@ -14,16 +17,23 @@ export class BotIndexComponent extends Component {
   }
 
   render() {
-    const { bots } = this.props
+    const { bots, history, actions } = this.props
 
     if (bots) {
-      const botIds = Object.keys(bots)
-      if (botIds.length > 0) {
-        return <Redirect to={routes.bot(botIds[0])} />
-      }
+      return <AppLayout title="Bots" buttonIcon="add" buttonAction={() => actions.createBot(history)}>
+        <MainContent>
+          <Listing items={Object.values(bots)} title={`${Object.keys(bots).length} bots`}
+            onItemClick={b => history.push(routes.bot(b.id))}>
+            <Column title="Name" render={b => b.name} />
+            <Column title="Type" render={b => "Facebook"} />
+            <Column title="Uses" render={b => null} />
+            <Column title="Last activity date" render={d => null} />
+          </Listing>
+        </MainContent>
+      </AppLayout>
+    } else {
+      return <AppLayout title="Bots"><p>Loading bots...</p></AppLayout>
     }
-
-    return <AppLayout><p>Loading bots...</p></AppLayout>
   }
 }
 
@@ -35,4 +45,4 @@ const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(actions, dispatch),
 })
 
-export const BotIndex = connect(mapStateToProps, mapDispatchToProps)(BotIndexComponent)
+export const BotIndex = withRouter(connect(mapStateToProps, mapDispatchToProps)(BotIndexComponent))
