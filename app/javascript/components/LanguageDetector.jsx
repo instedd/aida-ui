@@ -6,6 +6,7 @@ import { Button,
          EditDialogColumn,
          FontIcon,
          TableBody,
+         TableFooter,
          TableColumn,
          TableRow
 } from 'react-md'
@@ -53,7 +54,7 @@ class LanguageDetector extends Component {
 
     const langRows = map(config.languages, ({code, keywords}, index) => {
       return (
-        <TableRow>
+        <TableRow key={index}>
           <TableColumn>
             {index > 0 ? <Button icon iconChildren="close" onClick={() => removeLanguage(index)} /> : null}
           </TableColumn>
@@ -84,6 +85,8 @@ class LanguageDetector extends Component {
         <DataTable plain className="languages-list">
           <TableBody>
             {langRows}
+          </TableBody>
+          <TableBody>
             <TableRow className="addlink" onClick={addLanguage}>
               <TableColumn>
                 <Button icon iconChildren="add" />

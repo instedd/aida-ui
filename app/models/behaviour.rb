@@ -83,8 +83,8 @@ class Behaviour < ApplicationRecord
       {
         type: kind,
         explanation: config["explanation"],
-        languages: Hash[config["languages"].map do |code, keywords|
-                          [code, keywords.split(/,\s*/)]
+        languages: Hash[config["languages"].map do |lang|
+                          [lang["code"], lang["keywords"].split(/,\s*/)]
                         end]
       }
     else
