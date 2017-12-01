@@ -31,14 +31,42 @@ const defaultSkillName = (kind) => {
   }
 }
 
-const SkillListItem = ({skill, onClick, onToggle}) => {
+const SkillListItem = ({skill, onClick, actions}) => {
   const toggleId = `toggle-skill-${skill.id}`
-  const skillSwitch = <Switch id={toggleId} name={toggleId}
-                              aria-label="toggle" checked={skill.enabled}
-                              onChange={onToggle} onClick={(e) => e.stopPropagation() }/>
+  const menuId = `menu-skill-${skill.id}`
+  const skillActionItems = [
+    <ListItem key={0}
+              leftIcon={<FontIcon>edit</FontIcon>}
+              primaryText="Rename"
+              onClick={() => null} />,
+    <ListItem key={1}
+              leftIcon={<FontIcon>close</FontIcon>}
+              primaryText="Delete"
+              onClick={() => actions.deleteSkill(skill) }/>,
+  ]
+  const skillControls = (
+    <div style={{display: 'flex'}}>
+      <Switch id={toggleId}
+              name={toggleId}
+              aria-label="toggle"
+              checked={skill.enabled}
+              onChange={() => actions.toggleSkill(skill)}
+              onClick={(e) => e.stopPropagation() }/>
+      <MenuButton
+        id={menuId}
+        className="btn-more"
+        flat
+        cascading
+        onClick={(e) => e.stopPropagation()}
+        position={MenuButton.Positions.BELOW}
+        menuItems={skillActionItems}>
+        <i className='material-icons dummy'>more_vert</i>
+      </MenuButton>
+    </div>
+  )
   return (<ListItem leftIcon={skillIcon(skill.kind)}
                     primaryText={skill.name}
-                    rightIcon={skillSwitch}
+                    rightIcon={skillControls}
                     onClick={onClick} />)
 }
 
@@ -55,9 +83,8 @@ class SkillsBar extends Component {
 
     const skillsItems = skills
                       ? skills.map(skill => (
-                        <SkillListItem skill={skill} key={skill.id}
-                                       onClick={() => history.push(routes.botSkill(bot.id, skill.id))}
-                                       onToggle={() => skillActions.toggleSkill(skill)} />
+                        <SkillListItem skill={skill} key={skill.id} actions={skillActions}
+                                       onClick={() => history.push(routes.botSkill(bot.id, skill.id))} />
                       ))
                       : [<ListItem key="loading"
                                    leftIcon={skillIcon('LOADING')}
@@ -81,6 +108,7 @@ class SkillsBar extends Component {
                     onClick={() => history.push(routes.botFrontDesk(bot.id))}/>
           {skillsItems}
           <DropdownMenu id="add-skill-menu"
+                        cascading
                         block={true}
                         anchor={{x: DropdownMenu.HorizontalAnchors.INNER_LEFT, y: DropdownMenu.VerticalAnchors.OVERLAP}}
                         position={DropdownMenu.Positions.TOP_LEFT}

@@ -1,5 +1,6 @@
 /* @flow */
 import * as T from '../utils/types'
+import omit from 'lodash/omit'
 
 import * as actions from '../actions/skills'
 import * as skillActions from '../actions/skill'
@@ -17,6 +18,7 @@ export default (state : T.SkillsState, action : T.Action) : T.SkillsState => {
     case actions.RECEIVE: return receive(state, action)
     case actions.CREATE_SUCCESS: return createSuccess(state, action)
     case skillActions.UPDATE: return update(state, action)
+    case skillActions.DELETE: return deleteSkill(state, action)
     default: return state
   }
 }
@@ -53,6 +55,15 @@ const update = (state, action) => {
   }
 }
 
+const deleteSkill = (state, action) => {
+  const {skillId} = action
+
+  return {
+    ...state,
+    items: omit(state.items, [skillId])
+  }
+}
+
 const createSuccess = (state, action) => {
   if (state.scope && action.scope.botId == state.scope.botId) {
     const {skill} = action
@@ -67,4 +78,3 @@ const createSuccess = (state, action) => {
     return state
   }
 }
-
