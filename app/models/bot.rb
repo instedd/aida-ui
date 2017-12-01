@@ -30,7 +30,7 @@ class Bot < ApplicationRecord
       version: 1,
       languages: ['en'],
       front_desk: front_desk.manifest_fragment,
-      skills: skills.map do |skill|
+      skills: skills.enabled.map do |skill|
         skill.manifest_fragment
       end,
       variables: [],

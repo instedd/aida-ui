@@ -9,6 +9,7 @@ class Behaviour < ApplicationRecord
 
   scope :of_bots_owned_by, -> (user) { Behaviour.where(bot: user.bots) }
   scope :skills, ->{ where.not(kind: 'front_desk') }
+  scope :enabled, ->{ where(enabled: true) }
 
   def self.create_front_desk!(params = {})
     default_params = {

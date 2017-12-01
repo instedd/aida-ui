@@ -17,4 +17,5 @@ const updateSkillDelayed = (skill) => debounced(`SKILL_UPDATE_${skill.id}`)(disp
 
 export const toggleSkill = (skill : T.Skill) => (dispatch : T.Dispatch) => {
   console.log(`Toggle skill ${skill.id}`)
+  dispatch(updateSkill({...skill, enabled: !skill.enabled}))
 }
