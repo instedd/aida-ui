@@ -25,7 +25,7 @@ const SectionNav = ({sectionNavLinks}) => {
 
 const SectionNavWithRouter = withRouter(SectionNav)
 
-export const Header = ({icon, title, sectionNavLinks, headerNavLinks, userName, logoutUrl, buttonAction}) => {
+export const Header = ({icon, title, sectionNavLinks, headerNavLinks, userName, logoutUrl, buttonAction, buttonIcon}) => {
   return (
     <Toolbar
       className='mainToolbar'
@@ -37,7 +37,7 @@ export const Header = ({icon, title, sectionNavLinks, headerNavLinks, userName, 
           <h1>{title}</h1>
         </div>
       }
-      children={<HeaderSubNavWithRouter headerNavLinks={headerNavLinks} onClick={buttonAction} />}
+      children={<HeaderSubNavWithRouter headerNavLinks={headerNavLinks} buttonAction={buttonAction} buttonIcon={buttonIcon} />}
       prominent
     />
   )
@@ -83,11 +83,11 @@ class HeaderSubNav extends Component {
           </MenuButton>
 
           <Button
-            onClick={this.props.onClick}
+            onClick={this.props.buttonAction}
             floating
             secondary
             className="md-cell--right md-cell--bottom add-button">
-            track_changes
+            {this.props.buttonIcon}
           </Button>
         </nav>
     );

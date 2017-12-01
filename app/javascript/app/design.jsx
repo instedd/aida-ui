@@ -30,6 +30,7 @@ export const App = () =>
             <HeaderNavLink label="Translations" to="#" />,
             <HeaderNavLink label="Collaborators" to="#" />,
           ]}
+          buttonIcon="add"
         />
       }
       footer={<Footer/>}>

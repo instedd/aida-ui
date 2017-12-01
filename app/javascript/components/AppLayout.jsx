@@ -9,15 +9,15 @@ import Icon from './Icon'
 
 import * as notifActions from '../actions/notifications'
 
-export const AppLayout = ({title, headerNavLinks, userName, children, buttonAction, toasts, notifActions}) => {
+export const AppLayout = ({title, headerNavLinks, userName, children, buttonAction, buttonIcon, toasts, notifActions}) => {
   const header = (
     <Header icon={<Icon/>}
-            title={title || "WFP chat bot"}
+            title={title}
             userName={userName}
             logoutUrl="/logout"
             sectionNavLinks={[<SectionNavLink label="Bots" to="/b" />]}
             headerNavLinks={headerNavLinks}
-            buttonAction={buttonAction} />
+            buttonAction={buttonAction} buttonIcon={buttonIcon} />
   )
 
   return (
