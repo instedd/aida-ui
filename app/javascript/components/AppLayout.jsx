@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux'
 import { Snackbar } from 'react-md'
 
 import Layout from '../ui/Layout'
-import Header from '../ui/Header'
+import Header, { SectionNavLink } from '../ui/Header'
 import Icon from './Icon'
 
 import * as notifActions from '../actions/notifications'
@@ -15,6 +15,7 @@ export const AppLayout = ({title, headerNavLinks, userName, children, buttonActi
             title={title || "WFP chat bot"}
             userName={userName}
             logoutUrl="/logout"
+            sectionNavLinks={[<SectionNavLink label="Bots" to="/b" />]}
             headerNavLinks={headerNavLinks}
             buttonAction={buttonAction} />
   )

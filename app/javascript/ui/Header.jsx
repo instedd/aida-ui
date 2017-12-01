@@ -4,23 +4,33 @@ import { withRouter } from 'react-router'
 import { Link } from 'react-router-dom'
 import UserMenu from './UserMenu'
 
-const nav = ({userName, logoutUrl}) => {
+const nav = ({sectionNavLinks, userName, logoutUrl}) => {
   return (
     <nav>
-      <div className='sections'>
-        <Button href='/' flat>Bots</Button>
-      </div>
+      <SectionNavWithRouter sectionNavLinks={sectionNavLinks} />
       <UserMenu userName={userName} logoutUrl={logoutUrl}/>
     </nav>
   )
 }
 
-export const Header = ({icon, title, headerNavLinks, userName, logoutUrl, buttonAction}) => {
+const SectionNav = ({sectionNavLinks}) => {
+  return (
+    <div className='sections'>
+      { Children.map(sectionNavLinks, (e, index) =>
+        <Button to={e.props.to} flat component={Link} key={index}>{e.props.label}</Button>
+      )}
+    </div>
+  )
+}
+
+const SectionNavWithRouter = withRouter(SectionNav)
+
+export const Header = ({icon, title, sectionNavLinks, headerNavLinks, userName, logoutUrl, buttonAction}) => {
   return (
     <Toolbar
       className='mainToolbar'
       colored
-      nav={nav({userName, logoutUrl})}
+      nav={nav({sectionNavLinks, userName, logoutUrl})}
       title={
         <div className='sub-nav'>
           {icon}
@@ -87,6 +97,12 @@ class HeaderSubNav extends Component {
 const HeaderSubNavWithRouter = withRouter(HeaderSubNav)
 
 export class HeaderNavLink extends Component {
+  render() {
+    return null
+  }
+}
+
+export class SectionNavLink extends Component {
   render() {
     return null
   }

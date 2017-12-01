@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Layout from '../ui/Layout'
-import Header, { HeaderNavLink } from '../ui/Header'
+import Header, { HeaderNavLink, SectionNavLink } from '../ui/Header'
 import SideBar from '../ui/SideBar'
 import { MainContent } from '../ui/MainContent'
 import Footer from '../ui/Footer'
@@ -18,6 +18,10 @@ export const App = () =>
         <Header userName="johndoe" logoutUrl="#"
           icon={<Icon/>}
           title="WFP chat bot"
+          sectionNavLinks={[
+            <SectionNavLink label="Bots" to="/" />,
+            <SectionNavLink label="Other" to="/" />,
+          ]}
           headerNavLinks={[
             <HeaderNavLink label="Analytics" to="#" />,
             <HeaderNavLink label="Data" to="#" />,
