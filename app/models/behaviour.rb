@@ -95,7 +95,40 @@ class Behaviour < ApplicationRecord
     end
   end
 
+  def translation_keys
+    case kind
+    when "front_desk"
+      [
+        translation_key("greeting",       "Greeting"),
+        translation_key("introduction",   "Skills introduction"),
+        translation_key("not_understood", "Didn't understand message"),
+        translation_key("clarification",  "Clarification message")
+      ]
+    when "keyword_responder"
+      [
+        translation_key("explanation",   "Skill explanation"),
+        translation_key("clarification", "Clarification message"),
+        translation_key("response",      "Response message"),
+        translation_key("keywords",      "Valid keywords (comma separated)")
+      ]
+    when "language_detector"
+      [
+        translation_key("explanation", "Language message")
+      ]
+    else
+      raise NotImplementedError
+    end
+  end
+
   private
+
+  def translation_key(key, label)
+    {
+      key: key,
+      label: label,
+      default_translation: config[key]
+    }
+  end
 
   def config_must_match_schema
     unless JSON::Validator.validate(schema_file, config, fragment: config_schema_fragment)

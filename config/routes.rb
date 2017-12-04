@@ -10,6 +10,11 @@ Rails.application.routes.draw do
       end
       resource :front_desk, only: [:show, :update]
       resources :skills, only: [:index, :create]
+      resources :translations, only: [:index] do
+        collection do
+          put :update
+        end
+      end
     end
 
     resources :channels, only: [:update]

@@ -14,6 +14,13 @@ RSpec.describe Behaviour, type: :model do
       expect(fragment).to_not be_nil
       expect(fragment.keys).to match_array(%i(greeting introduction clarification not_understood threshold))
     end
+
+    it "returns translation keys" do
+      keys = bot.front_desk.translation_keys
+      expect(keys).to be_an(Array)
+      expect(keys.size).to eq(4)
+      expect(keys.first.keys).to match_array(%i(key label default_translation))
+    end
   end
 
   describe "keyword_responder" do
@@ -29,6 +36,14 @@ RSpec.describe Behaviour, type: :model do
       expect(fragment).to_not be_nil
       expect(fragment.keys).to match_array(%i(type id name explanation keywords response clarification))
     end
+
+    it "returns translation keys" do
+      responder = bot.skills.create_skill!('keyword_responder')
+      keys = responder.translation_keys
+      expect(keys).to be_an(Array)
+      expect(keys.size).to eq(4)
+      expect(keys.first.keys).to match_array(%i(key label default_translation))
+    end
   end
 
   describe "language_detector" do
@@ -43,6 +58,14 @@ RSpec.describe Behaviour, type: :model do
       fragment = detector.manifest_fragment
       expect(fragment).to_not be_nil
       expect(fragment.keys).to match_array(%i(type explanation languages))
+    end
+
+    it "returns translation keys" do
+      responder = bot.skills.create_skill!('language_detector')
+      keys = responder.translation_keys
+      expect(keys).to be_an(Array)
+      expect(keys.size).to eq(1)
+      expect(keys.first.keys).to match_array(%i(key label default_translation))
     end
   end
 end
