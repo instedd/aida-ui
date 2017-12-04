@@ -74,6 +74,9 @@ export type NotificationsAction = {
 export type SkillAction = {
   type: "SKILL_UPDATE",
   skill: T.Skill,
+} | {
+  type: "SKILL_DELETE",
+  skillId: number
 };
 
 export type SkillsAction = {

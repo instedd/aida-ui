@@ -29,15 +29,23 @@ RSpec.describe Api::SkillsController, type: :controller do
   describe "create" do
     it "creates a new skill given a type" do
       expect do
-        post :create, params: { bot_id: bot.id, skill_kind: "language_detector" }
+        post :create, params: { bot_id: bot.id, kind: "language_detector" }
       end.to change(bot.skills, :count).by(1)
 
       expect(response.status).to eq(201)
       expect(json_body['kind']).to eq("language_detector")
     end
 
+    it "creates a new skill with a given name" do
+      post :create, params: { bot_id: bot.id, kind: "keyword_responder", name: "Test" }
+
+      expect(response.status).to eq(201)
+      expect(json_body['kind']).to eq("keyword_responder")
+      expect(json_body['name']).to eq("Test")
+    end
+
     it "rejects invalid skill types" do
-      post :create, params: { bot_id: bot.id, skill_kind: "invalid_type" }
+      post :create, params: { bot_id: bot.id, kind: "invalid_type" }
       expect(response.status).to eq(400)
 
       expect(bot.skills.count).to be_zero

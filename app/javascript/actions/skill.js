@@ -4,6 +4,7 @@ import * as api from '../utils/api'
 import { debounced } from '../utils'
 
 export const UPDATE = 'SKILL_UPDATE'
+export const DELETE = 'SKILL_DELETE'
 
 export const updateSkill = (skill : T.Skill) => (dispatch : T.Dispatch) => {
   dispatch({type: UPDATE, skill})
@@ -19,4 +20,9 @@ export const toggleSkill = (skill : T.Skill) => (dispatch : T.Dispatch) => {
   console.log(`Toggle skill ${skill.id}`)
   const toggledSkill = ({...skill, enabled: !skill.enabled} : any)
   dispatch(updateSkill((toggledSkill : T.Skill)))
+}
+
+export const deleteSkill = (skill : T.Skill) => (dispatch : T.Dispatch) => {
+  dispatch({type: DELETE, skillId: skill.id})
+  api.destroySkill(skill)
 }
