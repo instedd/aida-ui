@@ -41,7 +41,7 @@
   }
 }
 
-.md-text-field-container  {
+.aida-field {
   margin-top: 3rem;
 }
 
@@ -94,10 +94,6 @@
 .languages-list {
   overflow: unset;
 
-  .md-text-field-container {
-    margin-top: 0;
-  }
-
   tbody .md-table-row {
     border-bottom: none;
   }
@@ -112,4 +108,15 @@
   display: grid;
   grid-template-columns: 10em 2em;
   grid-column-gap: 1em;
+}
+
+#translations-table {
+  tbody .md-table-row {
+    border-bottom: none;
+  }
+}
+
+.translation-key {
+  padding-left: 2em;
+  display: inline-block;
 }

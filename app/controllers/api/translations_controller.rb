@@ -23,7 +23,7 @@ class Api::TranslationsController < ApplicationApiController
         translation = behaviour.translations.find_or_create_by!(key: params[:key],
                                                                 lang: params[:lang])
         translation.update_attributes! value: params[:value]
-        head :ok
+        head :no_content
       else
         render json: {error: "Invalid language #{params['lang']}"},
                status: :bad_request
@@ -56,7 +56,7 @@ class Api::TranslationsController < ApplicationApiController
             }
             languages.drop(1).inject(result) do |memo, lang|
               translation = behaviour_translations.find do |t|
-                t.lang == lang
+                t.lang == lang && t.key == keys[:key]
               end
               memo[lang] = translation.value rescue ''
               memo

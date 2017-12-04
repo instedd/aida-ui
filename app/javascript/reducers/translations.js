@@ -60,6 +60,10 @@ const update = (state, action) => {
           return key
         }
       })
+      return {
+        ...behaviour,
+        keys: updatedKeys
+      }
     } else {
       return behaviour
     }

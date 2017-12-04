@@ -62,15 +62,15 @@ RSpec.describe Bot, type: :model do
     end
 
     it "returns all skills translation keys" do
-      skill_1 = bot.skills.create_skill! 'language_detector', order: 1
+      # language detector has no translatable keys
+      bot.skills.create_skill! 'language_detector', order: 1
       skill_2 = bot.skills.create_skill! 'keyword_responder', order: 2
       keys = bot.translation_keys
 
       expect(keys).to be_an(Array)
-      expect(keys.size).to eq(3)
+      expect(keys.size).to eq(2)
       expect(keys[0][:id]).to eq(bot.front_desk.id)
-      expect(keys[1][:id]).to eq(skill_1.id)
-      expect(keys[2][:id]).to eq(skill_2.id)
+      expect(keys[1][:id]).to eq(skill_2.id)
     end
   end
 end

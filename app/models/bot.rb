@@ -65,12 +65,15 @@ class Bot < ApplicationRecord
 
   def translation_keys
     behaviours.map do |behaviour|
-      {
-        id: behaviour.id,
-        label: behaviour.name,
-        keys: behaviour.translation_keys
-      }
-    end
+      keys = behaviour.translation_keys
+      if keys.present?
+        {
+          id: behaviour.id,
+          label: behaviour.name,
+          keys: keys
+        }
+      end
+    end.compact
   end
 
   private

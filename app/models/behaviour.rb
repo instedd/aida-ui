@@ -112,9 +112,7 @@ class Behaviour < ApplicationRecord
         translation_key("keywords",      "Valid keywords (comma separated)")
       ]
     when "language_detector"
-      [
-        translation_key("explanation", "Language message")
-      ]
+      []
     else
       raise NotImplementedError
     end

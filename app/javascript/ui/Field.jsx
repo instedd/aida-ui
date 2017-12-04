@@ -7,6 +7,7 @@ export class Field extends Component {
 
     return <TextField
       label={label}
+      className="aida-field"
       id={id || label}
       lineDirection="center"
       value={value}

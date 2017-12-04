@@ -27,7 +27,7 @@ RSpec.describe Api::TranslationsController, type: :controller do
       expect(json_body['default_language']).to eq('en')
       expect(json_body['languages']).to eq(['en', 'es', 'de'])
       expect(json_body['behaviours']).to be_an(Array)
-      expect(json_body['behaviours'].size).to eq(3)
+      expect(json_body['behaviours'].size).to eq(2)
       json_body['behaviours'].each do |behaviour|
         expect(behaviour).to be_a(Hash)
         expect(behaviour.keys).to match_array(%w(id label keys))
@@ -48,7 +48,7 @@ RSpec.describe Api::TranslationsController, type: :controller do
                              lang: 'es',
                              value: 'Hola, soy un bot' }
 
-      expect(response).to be_success
+      expect(response.status).to eq(204)
 
       translation = bot.translations.where(behaviour_id: bot.front_desk.id,
                                            key: 'greeting',

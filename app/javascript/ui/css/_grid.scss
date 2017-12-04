@@ -67,6 +67,11 @@ footer {
     grid-area: main-content;
     padding: 86px 100px 70px;
   }
+
+  &.wide {
+    grid-template-columns: 100%;
+    grid-template-areas: "main-content";
+  }
 }
 
 .md-subheader {

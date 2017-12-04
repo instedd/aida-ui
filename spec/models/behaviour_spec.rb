@@ -60,12 +60,11 @@ RSpec.describe Behaviour, type: :model do
       expect(fragment.keys).to match_array(%i(type explanation languages))
     end
 
-    it "returns translation keys" do
+    it "has no translation keys" do
       responder = bot.skills.create_skill!('language_detector')
       keys = responder.translation_keys
       expect(keys).to be_an(Array)
-      expect(keys.size).to eq(1)
-      expect(keys.first.keys).to match_array(%i(key label default_translation))
+      expect(keys).to be_empty
     end
   end
 end
