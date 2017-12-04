@@ -34,8 +34,8 @@ export const receiveSkills = (scope : any, items : T.ById<T.Skill>) : T.SkillsAc
   items
 })
 
-export const createSkill = (scope : {botId : number}, skillKind : string, history : any) => (dispatch : T.Dispatch) => {
-  return api.createSkill(scope.botId, skillKind)
+export const createSkill = (scope : {botId : number}, {kind, name} : {name: ?string, kind: string}, history : any) => (dispatch : T.Dispatch) => {
+  return api.createSkill(scope.botId, kind, name)
             .then(skill => {
               dispatch(skillCreated(scope, skill))
               history.push(routes.botSkill(scope.botId, skill.id))

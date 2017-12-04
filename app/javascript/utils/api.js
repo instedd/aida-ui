@@ -44,8 +44,8 @@ export const fetchSkills = (botId : number) => {
   return apiFetchJSON(`bots/${botId}/skills`, new schema.Array(skillSchema))
 }
 
-export const createSkill = (botId : number, skill_kind : string) => {
-  return apiPostJSON(`bots/${botId}/skills`, null, {skill_kind})
+export const createSkill = (botId : number, skill_kind : string, skill_name : ?string) => {
+  return apiPostJSON(`bots/${botId}/skills`, null, {skill_kind, skill_name})
 }
 
 export const updateSkill = (skill : T.Skill) => {

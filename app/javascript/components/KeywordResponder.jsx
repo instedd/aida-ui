@@ -27,7 +27,7 @@ class KeywordResponder extends Component {
 
     return (
       <div>
-        <Title>{name}</Title>
+        <Title>Keyword responder</Title>
         <Headline>
           When a message sent by the user contains one of the keywords this
           skill responds with the predefined message

@@ -8,7 +8,11 @@ class Api::SkillsController < ApplicationApiController
   def create
     bot = current_user.bots.find(params[:bot_id])
     new_order = bot.behaviours.last.order + 1
-    new_skill = bot.behaviours.create_skill!(params[:skill_kind], order: new_order)
+    attrs = { order: new_order }
+    if params[:skill_name].present?
+      attrs[:name] = params[:skill_name]
+    end
+    new_skill = bot.behaviours.create_skill!(params[:skill_kind], attrs)
 
     render json: skill_api_json(new_skill), status: :created
   rescue RuntimeError => e
