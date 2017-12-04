@@ -59,7 +59,7 @@ const skillDescription = (kind) => {
 const isSkillRenameable = (kind) => includes(RENAMEABLE_SKILLS, kind)
 
 
-const SkillListItem = ({skill, onClick, onDeleteSkill, onRenameSkill}) => {
+const SkillListItem = ({skill, onClick, onToggleSkill, onDeleteSkill, onRenameSkill}) => {
   const toggleId = `toggle-skill-${skill.id}`
   const menuId = `menu-skill-${skill.id}`
   let actionItems = []
@@ -80,7 +80,7 @@ const SkillListItem = ({skill, onClick, onDeleteSkill, onRenameSkill}) => {
               name={toggleId}
               aria-label="toggle"
               checked={skill.enabled}
-              onChange={() => actions.toggleSkill(skill)}
+              onChange={() => onToggleSkill(skill)}
               onClick={(e) => e.stopPropagation() }/>
       <MenuButton
         id={menuId}
@@ -160,8 +160,9 @@ class SkillsBar extends Component {
 
     const skillsItems = skills
                       ? skills.map(skill => (
-                        <SkillListItem skill={skill} key={skill.id} actions={skillActions}
+                        <SkillListItem skill={skill} key={skill.id}
                                        onClick={() => history.push(routes.botSkill(bot.id, skill.id))}
+                                       onToggleSkill={(skill) => skillActions.toggleSkill(skill)}
                                        onRenameSkill={(skill) => openDialog(skill)}
                                        onDeleteSkill={(skill) => skillActions.deleteSkill(skill)} />
                       ))
