@@ -1,6 +1,8 @@
 class Behaviour < ApplicationRecord
   belongs_to :bot
 
+  has_many :translations, dependent: :destroy
+
   validates :kind, inclusion: { in: %w(front_desk language_detector keyword_responder) }
 
   validate :config_must_match_schema

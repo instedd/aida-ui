@@ -2,6 +2,7 @@ class Bot < ApplicationRecord
   belongs_to :owner, class_name: "User"
   has_many :channels, dependent: :destroy
   has_many :behaviours, dependent: :destroy
+  has_many :translations, through: :behaviours
 
   validate :has_single_front_desk
 

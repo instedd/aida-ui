@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171124193432) do
+ActiveRecord::Schema.define(version: 20171204175114) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,6 +54,17 @@ ActiveRecord::Schema.define(version: 20171124193432) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "translations", force: :cascade do |t|
+    t.bigint "behaviour_id"
+    t.string "key", null: false
+    t.string "lang", null: false
+    t.string "value", limit: 1024
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["behaviour_id", "key", "lang"], name: "index_translations_on_behaviour_id_and_key_and_lang", unique: true
+    t.index ["behaviour_id"], name: "index_translations_on_behaviour_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", null: false
     t.string "name"
@@ -70,4 +81,5 @@ ActiveRecord::Schema.define(version: 20171124193432) do
   add_foreign_key "behaviours", "bots"
   add_foreign_key "bots", "users", column: "owner_id"
   add_foreign_key "channels", "bots"
+  add_foreign_key "translations", "behaviours"
 end
