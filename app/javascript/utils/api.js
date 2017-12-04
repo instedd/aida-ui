@@ -55,3 +55,13 @@ export const updateSkill = (skill : T.Skill) => {
 export const destroySkill = (skill : T.Skill) => {
   return apiDelete(`skills/${skill.id}`)
 }
+
+export const fetchTranslations = (botId : number) => {
+  return apiFetchJSON(`bots/${botId}/translations`)
+}
+
+export const updateTranslation = (botId : number, translation : T.Translation) => {
+  const behaviour_id = translation.behaviourId
+  const { key, lang, value } = translation
+  return apiPutJSON(`bots/${botId}/translations`, null, {behaviour_id, key, lang, value})
+}

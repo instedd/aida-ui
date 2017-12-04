@@ -25,9 +25,10 @@ RSpec.describe Api::TranslationsController, type: :controller do
       expect(response).to be_success
       expect(json_body).to be_a(Hash)
       expect(json_body['default_language']).to eq('en')
-      expect(json_body['keys']).to be_an(Array)
-      expect(json_body['keys'].size).to eq(3)
-      json_body['keys'].each do |behaviour|
+      expect(json_body['languages']).to eq(['en', 'es', 'de'])
+      expect(json_body['behaviours']).to be_an(Array)
+      expect(json_body['behaviours'].size).to eq(3)
+      json_body['behaviours'].each do |behaviour|
         expect(behaviour).to be_a(Hash)
         expect(behaviour.keys).to match_array(%w(id label keys))
         expect(behaviour["keys"]).to be_an(Array)

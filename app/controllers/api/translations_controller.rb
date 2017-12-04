@@ -42,7 +42,8 @@ class Api::TranslationsController < ApplicationApiController
 
     {
       default_language: default_language,
-      keys: translation_keys.map do |behaviour_keys|
+      languages: languages,
+      behaviours: translation_keys.map do |behaviour_keys|
         behaviour_translations = translations_by_behaviour[behaviour_keys[:id]] || []
         {
           id: behaviour_keys[:id],

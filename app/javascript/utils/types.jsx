@@ -9,6 +9,32 @@ export type Scope = {
   botId: number
 };
 
+export type Translation = {
+  behaviourId: number,
+  key: string,
+  lang: string,
+  value: ?string
+};
+
+export type TranslationKey = {
+  _key: string,
+  _lang: string,
+};
+
+export type BehaviourTranslations = {
+  id: number,
+  label: string,
+  keys: Array<TranslationKey>,
+};
+
+export type TranslationBehaviours = Array<BehaviourTranslations>;
+
+export type TranslationsIndex = {
+  languages: Array<string>,
+  default_language: string,
+  behaviours: TranslationBehaviours
+};
+
 export type AuthAction = {
   type: 'AUTH_INIT',
   userEmail: string,
@@ -94,6 +120,19 @@ export type SkillsAction = {
   skill: T.Skill
 };
 
+export type TranslationsAction = {
+  type: 'TRANSLATIONS_FETCH',
+  scope: Scope,
+} | {
+  type: 'TRANSLATIONS_RECEIVE',
+  scope: Scope,
+  data: TranslationsIndex
+} | {
+  type: 'TRANSLATION_UPDATE',
+  botId: number,
+  translation: Translation,
+};
+
 export type Thunk = (dispatch : Dispatch, getState : ?GetState) => void;
 
 export type Action = AuthAction
@@ -105,6 +144,7 @@ export type Action = AuthAction
                    | NotificationsAction
                    | SkillAction
                    | SkillsAction
+                   | TranslationsAction
                    | Thunk;
 
 export type Dispatch = (action : Action) => void;
@@ -141,6 +181,14 @@ export type SkillsState = {
   items: ?ById<T.Skill>
 };
 
+export type TranslationsState = {
+  fetching: boolean,
+  scope: ?Scope,
+  languages: ?Array<string>,
+  defaultLanguage: ?string,
+  behaviours: ?TranslationBehaviours
+};
+
 export type State = {
   auth: AuthState,
   bots: BotsState,
@@ -148,6 +196,7 @@ export type State = {
   frontDesk: FrontDeskState,
   notifications: NotifState,
   skills: SkillsState,
+  translations: TranslationsState,
 };
 
 export type GetState = () => State;
