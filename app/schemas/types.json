@@ -86,6 +86,28 @@
       "required": []
     },
 
+    "scheduledMessagesConfig": {
+      "type": "object",
+      "properties": {
+        "schedule_type": { "type": "string", "enum": ["since_last_incoming_message"] },
+        "messages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "delay": { "type": "number" },
+              "message": { "$ref": "#/definitions/message" }
+            },
+            "additionalProperties": false,
+            "required": [ "id", "delay", "message" ]
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": [ "schedule_type", "messages" ]
+    },
+
     "message": {
       "type": "string"
     },
@@ -197,6 +219,18 @@
             "enabled": { "type": "boolean" },
             "order": { "type": "integer" },
             "config": { "$ref": "#/definitions/surveyConfig" }
+          },
+          "required": [ "id", "kind", "name", "enabled", "order", "config" ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer" },
+            "kind": { "enum": [ "scheduled_messages" ] },
+            "name": { "type": "string" },
+            "enabled": { "type": "boolean" },
+            "order": { "type": "integer" },
+            "config": { "$ref": "#/definitions/scheduledMessagesConfig" }
           },
           "required": [ "id", "kind", "name", "enabled", "order", "config" ]
         }

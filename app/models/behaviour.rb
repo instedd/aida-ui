@@ -3,7 +3,7 @@ class Behaviour < ApplicationRecord
 
   has_many :translations, dependent: :destroy
 
-  validates :kind, inclusion: { in: %w(front_desk language_detector keyword_responder survey) }
+  validates :kind, inclusion: { in: %w(front_desk language_detector keyword_responder survey scheduled_messages) }
 
   validate :config_must_match_schema
 
@@ -62,6 +62,15 @@ class Behaviour < ApplicationRecord
                            "schedule" => "",
                            "questions" => [],
                            "choice_lists" => []
+                         }
+                       }
+                     when "scheduled_messages"
+                       {
+                         kind: "scheduled_messages",
+                         name: "Scheduled messages",
+                         config: {
+                           "schedule_type" => "since_last_incoming_message",
+                           "messages" => []
                          }
                        }
                      else
@@ -127,6 +136,16 @@ class Behaviour < ApplicationRecord
               }
             end
           }
+        end
+      }
+    when "scheduled_messages"
+      {
+        type: kind,
+        id: id.to_s,
+        name: name,
+        messages: config["messages"].map do |message|
+          # TODO proper i18n
+          { delay: message["delay"], message: { en: message["message"] } }
         end
       }
     else
@@ -213,6 +232,8 @@ class Behaviour < ApplicationRecord
       "#/definitions/keywordResponderConfig"
     when "survey"
       "#/definitions/surveyConfig"
+    when "scheduled_messages"
+      "#/definitions/scheduledMessagesConfig"
     else
       fail "config schema not defined"
     end

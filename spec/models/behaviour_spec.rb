@@ -174,4 +174,19 @@ RSpec.describe Behaviour, type: :model do
                                                                            'no,nope,later'])
     end
   end
+
+  describe "scheduled_messages" do
+    it "creates valid skill" do
+      detector = bot.skills.create_skill!('scheduled_messages')
+      expect(detector).to be_valid
+      expect(detector).to be_enabled
+    end
+
+    it "generates manifest fragment" do
+      detector = bot.skills.create_skill!('scheduled_messages')
+      fragment = detector.manifest_fragment
+      expect(fragment).to_not be_nil
+      expect(fragment.keys).to match_array(%i(type id name messages))
+    end
+  end
 end

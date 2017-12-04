@@ -40,6 +40,15 @@ export type SurveyConfig = {
   choice_lists?: Array<SurveyChoiceList>;
 };
 
+export type ScheduledMessagesConfig = {
+  schedule_type: "since_last_incoming_message";
+  messages: Array<{
+    id: string;
+    delay: number;
+    message: Message;
+  }>;
+};
+
 export type Message = string;
 
 export type KeywordList = string;
@@ -96,4 +105,12 @@ export type Skill = {
   enabled: boolean;
   order: number;
   config: SurveyConfig;
+} | {
+  id: number;
+  kind: "scheduled_messages";
+  name: string;
+  enabled: boolean;
+  order: number;
+  config: ScheduledMessagesConfig;
 };
+

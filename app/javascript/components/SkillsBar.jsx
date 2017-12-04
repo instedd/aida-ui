@@ -19,8 +19,8 @@ import * as routes from '../utils/routes'
 import * as actions from '../actions/skills'
 import * as skillActions from '../actions/skill'
 
-const SKILL_KINDS = ['language_detector', 'keyword_responder', 'survey']
-const RENAMEABLE_SKILLS = ['keyword_responder', 'survey']
+const SKILL_KINDS = ['language_detector', 'keyword_responder', 'survey', 'scheduled_messages']
+const RENAMEABLE_SKILLS = ['keyword_responder', 'survey', 'scheduled_messages']
 
 const skillIcon = (kind) => {
   switch (kind) {
@@ -32,6 +32,8 @@ const skillIcon = (kind) => {
       return 'reply'
     case 'survey':
       return 'assignment_turned_in'
+    case 'scheduled_messages':
+      return 'query_builder'
     case 'ADD':
       return 'add'
   }
@@ -45,6 +47,8 @@ const defaultSkillName = (kind) => {
       return 'Keyword responder'
     case 'survey':
       return 'Survey'
+    case 'scheduled_messages':
+      return 'Scheduled messages'
   }
 }
 
@@ -54,6 +58,8 @@ const skillDescription = (kind) => {
       return 'This skill will let your users query for information using simple keywords'
     case 'survey':
       return 'This skill will let you examine users opinions'
+    case 'scheduled_messages':
+      return 'This skill will let you send messages automatically on a schedule'
     default:
       return ''
   }
