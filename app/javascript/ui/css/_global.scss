@@ -41,6 +41,14 @@
   }
 }
 
+.md-headline a {
+  color: $md-lime-500;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 .ui-field {
   margin-top: 3rem;
 }
