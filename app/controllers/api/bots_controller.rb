@@ -25,6 +25,15 @@ class Api::BotsController < ApplicationApiController
     end
   end
 
+  def unpublish
+    bot = current_user.bots.find(params[:id])
+    if UnpublishBot.run(bot)
+      head :no_content
+    else
+      render json: {result: :error}, status: :bad_request
+    end
+  end
+
   private
 
   def bot_api_json(bot)

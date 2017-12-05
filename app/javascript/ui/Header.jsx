@@ -25,7 +25,7 @@ const SectionNav = ({sectionNavLinks}) => {
 
 const SectionNavWithRouter = withRouter(SectionNav)
 
-export const Header = ({icon, title, sectionNavLinks, headerNavLinks, userName, logoutUrl, buttonAction, buttonIcon}) => {
+export const Header = ({icon, title, sectionNavLinks, headerNavLinks, actionLinks, userName, logoutUrl, buttonAction, buttonIcon}) => {
   return (
     <Toolbar
       className='mainToolbar'
@@ -37,7 +37,7 @@ export const Header = ({icon, title, sectionNavLinks, headerNavLinks, userName, 
           <h1>{title}</h1>
         </div>
       }
-      children={<HeaderSubNavWithRouter headerNavLinks={headerNavLinks} buttonAction={buttonAction} buttonIcon={buttonIcon} />}
+      children={<HeaderSubNavWithRouter headerNavLinks={headerNavLinks} actionLinks={actionLinks} buttonAction={buttonAction} buttonIcon={buttonIcon} />}
       prominent
     />
   )
@@ -46,17 +46,17 @@ export const Header = ({icon, title, sectionNavLinks, headerNavLinks, userName, 
 class HeaderSubNav extends Component {
   render() {
     const items = [
-      <ListItem key={0} primaryText={<i className='material-icons dummy'>more_vert</i>} />,
-      <ListItem key={1} primaryText="Item One" />,
-      <ListItem key={2} primaryText="Item Two" />,
-      <ListItem key={3} primaryText="Item Three" />,
-      <ListItem key={4} primaryText="Item Four" />,
+      <ListItem key={0} primaryText={<i className='material-icons dummy'>more_vert</i>} />
     ]
 
     let selectedTab = 0
     Children.forEach(this.props.headerNavLinks, (e, index) => {
       if (this.props.location.pathname.startsWith(e.props.to))
         selectedTab = index
+    })
+
+    Children.forEach(this.props.actionLinks, (e, index) => {
+      items.push(<ListItem key={index+1} primaryText={e.props.label} onClick={e.props.onClick} />)
     })
 
     return (

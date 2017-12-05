@@ -32,6 +32,10 @@ export const publishBot = (bot : T.Bot) => {
   return apiPostJSON(`bots/${bot.id}/publish`)
 }
 
+export const unpublishBot = (bot : T.Bot) => {
+  return apiDelete(`bots/${bot.id}/publish`)
+}
+
 export const fetchFrontDesk = (botId : number) => {
   return apiFetchJSON(`bots/${botId}/front_desk`)
 }

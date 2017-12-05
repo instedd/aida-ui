@@ -26,31 +26,37 @@ export class BotLayoutComponent extends Component {
     const { botsLoaded, bot, children, botActions } = this.props
 
     if (botsLoaded == true && bot != null) {
-      return <AppLayout
-        title={
-          <EditableTitleLabel
-            title={bot.name}
+      return (
+        <AppLayout
+          title={
+            <EditableTitleLabel
+              title={bot.name}
             onSubmit={(name) => { botActions.updateBot({...bot, name}) }} />
-        }
-        headerNavLinks={[
-          // <HeaderNavLink label="Analytics" to="#" />,
-          // <HeaderNavLink label="Data" to="#" />,
-          // TODO: use active="/b/:id/channel"  to allow deep linking
-          <HeaderNavLink label="Channel" to={r.botChannel(bot.id)} />,
-          <HeaderNavLink label="Behaviour" to={r.botBehaviour(bot.id)} />,
-          <HeaderNavLink label="Translations" to={r.botTranslations(bot.id)} />,
-          // <HeaderNavLink label="Collaborators" to="#" />,
-        ]}
-        buttonAction={() => botActions.publishBot(bot)} buttonIcon="publish"
+          }
+          headerNavLinks={[
+            // <HeaderNavLink label="Analytics" to="#" />,
+            // <HeaderNavLink label="Data" to="#" />,
+            // TODO: use active="/b/:id/channel"  to allow deep linking
+            <HeaderNavLink label="Channel" to={r.botChannel(bot.id)} />,
+            <HeaderNavLink label="Behaviour" to={r.botBehaviour(bot.id)} />,
+            <HeaderNavLink label="Translations" to={r.botTranslations(bot.id)} />,
+            // <HeaderNavLink label="Collaborators" to="#" />,
+          ]}
+          actionLinks={[
+            <HeaderNavLink label="Rename" />,
+            <HeaderNavLink label="Unpublish" onClick={() => botActions.unpublishBot(bot)}/>,
+            <HeaderNavLink label="Delete" />,
+          ]}
+          buttonAction={() => botActions.publishBot(bot)} buttonIcon="publish"
         >
+          <Route exact path="/b/:id" render={({match}) => <Redirect to={r.botChannel(match.params.id)} />} />
+          <Route exact path="/b/:id/channel" render={() => <BotChannel bot={bot} />} />
+          <Route path="/b/:id/behaviour" render={() => <BotBehaviour bot={bot} />} />
+          <Route exact path="/b/:id/translations" render={() => <BotTranslations bot={bot} />} />
 
-        <Route exact path="/b/:id" render={({match}) => <Redirect to={r.botChannel(match.params.id)} />} />
-        <Route exact path="/b/:id/channel" render={() => <BotChannel bot={bot} />} />
-        <Route path="/b/:id/behaviour" render={() => <BotBehaviour bot={bot} />} />
-        <Route exact path="/b/:id/translations" render={() => <BotTranslations bot={bot} />} />
-
-        {/* Children.map(children, c => cloneElement(c, {bot})) */}
-      </AppLayout>
+          {/* Children.map(children, c => cloneElement(c, {bot})) */}
+        </AppLayout>
+      )
     } else if (botsLoaded == true && bot == null) {
       // TODO if items exists but no id, then 404
       return <AppLayout title="Bot not found" />

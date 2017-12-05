@@ -4,9 +4,7 @@ class UnpublishBot
       Backend.destroy_bot(bot.uuid)
       bot.uuid = nil
       bot.save!
-
     end
-
 
   rescue BackendError => e
     puts "Failed to unpublish bot: #{e}"

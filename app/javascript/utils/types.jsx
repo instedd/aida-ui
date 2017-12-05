@@ -47,6 +47,9 @@ export type BotAction = {
 } | {
   type: "BOT_PUBLISH",
   bot: T.Bot,
+} | {
+  type: "BOT_UNPUBLISH",
+  bot: T.Bot,
 };
 
 export type BotsAction = {
