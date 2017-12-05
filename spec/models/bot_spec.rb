@@ -26,6 +26,36 @@ RSpec.describe Bot, type: :model do
       bot.reload
       expect(bot.manifest[:skills].size).to eq(0)
     end
+
+    describe "with multiple languages" do
+      let!(:language_detector) {
+        bot.skills.create_skill! 'language_detector',
+                                 config: {
+                                   languages: [
+                                     {code: 'en', keywords: 'en'},
+                                     {code: 'es', keywords: 'es'}
+                                   ]
+                                 }
+      }
+
+      it "outputs available languages" do
+        expect(bot.manifest[:languages]).to match_array(['en', 'es'])
+      end
+
+      it "outputs localized messages with their translations" do
+        bot.front_desk.update_attributes! config: {
+                                            "greeting" => "Hi!",
+                                            "introduction" => "I'm a bot",
+                                            "not_understood" => "I don't understand",
+                                            "clarification" => "Please repeat",
+                                            "threshold" => 0.7
+                                          }
+        bot.front_desk.translations.create! key: 'greeting', lang: 'es', value: 'Hola'
+
+        manifest = bot.manifest.with_indifferent_access
+        expect(manifest[:front_desk][:greeting]).to match({ message: { en: 'Hi!', es: 'Hola' }})
+      end
+    end
   end
 
   describe "available_languages" do

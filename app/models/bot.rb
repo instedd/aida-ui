@@ -29,7 +29,7 @@ class Bot < ApplicationRecord
   def manifest
     {
       version: 1,
-      languages: ['en'],
+      languages: available_languages,
       front_desk: front_desk.manifest_fragment,
       skills: skills.enabled.map do |skill|
         skill.manifest_fragment

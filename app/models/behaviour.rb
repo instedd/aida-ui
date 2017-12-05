@@ -153,16 +153,40 @@ class Behaviour < ApplicationRecord
 
   def localized_message(key)
     {
-      message: {
-        en: config[key.to_s]
-      }
+      message: localized_value(key)
     }
   end
 
   def localized_value(key, &block)
+    languages = bot.available_languages
+    key_translations = translations.select { |t| t.key == key.to_s }
+
+    default_language = languages.first
     value = config[key.to_s]
-    {
-      en: if block_given? then yield value else value end
-    }
+    default_value = if block_given?
+                      yield value
+                    else
+                      value
+                    end
+
+    # value for default language
+    result = { default_language => default_value }
+
+    # values for other languages, with fallback to default language
+    languages.drop(1).map do |lang|
+      translation = key_translations.find { |t| t.lang == lang }
+      value = if translation.present?
+                if block_given?
+                  yield translation.value
+                else
+                  translation.value
+                end
+              else
+                default_value
+              end
+      result[lang] = value
+    end
+
+    result
   end
 end
