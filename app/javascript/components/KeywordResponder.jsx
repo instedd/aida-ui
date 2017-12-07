@@ -1,14 +1,10 @@
 import React, { Component } from 'react'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
 
 import Title from '../ui/Title'
 import Headline from '../ui/Headline'
 import Field from '../ui/Field'
 
-import * as actions from '../actions/skill'
-
-class KeywordResponder extends Component {
+export default class KeywordResponder extends Component {
   render() {
     const { skill, actions } = this.props
     const { name, config } = skill
@@ -45,12 +41,3 @@ class KeywordResponder extends Component {
     )
   }
 }
-
-const mapStateToProps = (state) => ({
-})
-
-const mapDispatchToProps = (dispatch) => ({
-  actions: bindActionCreators(actions, dispatch)
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(KeywordResponder)

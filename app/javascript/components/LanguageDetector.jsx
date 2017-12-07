@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
 import { Button,
          DataTable,
          EditDialogColumn,
@@ -17,9 +15,7 @@ import Headline from '../ui/Headline'
 import Field from '../ui/Field'
 import LanguageSelector from './LanguageSelector'
 
-import * as actions from '../actions/skill'
-
-class LanguageDetector extends Component {
+export default class LanguageDetector extends Component {
   render() {
     const { skill, actions } = this.props
     const { name, config } = skill
@@ -101,12 +97,3 @@ class LanguageDetector extends Component {
     )
   }
 }
-
-const mapStateToProps = (state) => ({
-})
-
-const mapDispatchToProps = (dispatch) => ({
-  actions: bindActionCreators(actions, dispatch)
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(LanguageDetector)
