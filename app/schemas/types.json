@@ -69,12 +69,72 @@
       "required": [ "explanation", "clarification", "keywords", "response" ]
     },
 
+    "surveyConfig": {
+      "type": "object",
+      "properties": {
+        "schedule": { "type": "string" },
+        "questions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/surveyQuestion" }
+        },
+        "choice_lists": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/surveyChoiceList" }
+        }
+      },
+      "additionalProperties": false,
+      "required": []
+    },
+
     "message": {
       "type": "string"
     },
 
     "keywordList": {
       "type": "string"
+    },
+
+    "surveyQuestion": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [ "type", "name", "choices", "message" ],
+          "properties": {
+            "type": { "enum": [ "select_one", "select_many" ]},
+            "name": { "type": "string" },
+            "choices": { "type": "string" },
+            "message": { "$ref": "#/definitions/message" }
+          }
+        },
+        {
+          "type": "object",
+          "required": [ "type", "name", "message" ],
+          "properties": {
+            "type": { "enum": [ "integer", "decimal", "text" ]},
+            "name": { "type": "string" },
+            "message": { "$ref": "#/definitions/message" }
+          }
+        }
+      ]
+    },
+
+    "surveyChoiceList": {
+      "type": "object",
+      "required": [ "name", "choices" ],
+      "properties": {
+        "name": { "type": "string" },
+        "choices": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [ "name", "labels" ],
+            "properties": {
+              "name": { "type": "string" },
+              "labels": { "$ref": "#/definitions/keywordList" }
+            }
+          }
+        }
+      }
     },
 
     "channel" : {
@@ -125,6 +185,18 @@
             "enabled": { "type": "boolean" },
             "order": { "type": "integer" },
             "config": { "$ref": "#/definitions/keywordResponderConfig" }
+          },
+          "required": [ "id", "kind", "name", "enabled", "order", "config" ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer" },
+            "kind": { "enum": [ "survey" ] },
+            "name": { "type": "string" },
+            "enabled": { "type": "boolean" },
+            "order": { "type": "integer" },
+            "config": { "$ref": "#/definitions/surveyConfig" }
           },
           "required": [ "id", "kind", "name", "enabled", "order", "config" ]
         }
