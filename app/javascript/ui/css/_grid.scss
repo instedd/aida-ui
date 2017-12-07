@@ -1,7 +1,6 @@
 .grid {
   min-height: 100vh;
   font-size: 1rem;
-  color: white;
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 210px auto 50px;
@@ -21,6 +20,8 @@ main {
 
 footer {
   grid-area: footer;
+  color: $md-grey-500;
+  padding: 17px 20px;
 }
 
 .main-with-sidebar {

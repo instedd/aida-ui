@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux'
 import { Snackbar } from 'react-md'
 
 import Layout from '../ui/Layout'
+import Footer from '../ui/Footer'
 import Header, { SectionNavLink } from '../ui/Header'
 import Icon from './Icon'
 
@@ -21,7 +22,7 @@ export const AppLayout = ({title, headerNavLinks, userName, children, buttonActi
   )
 
   return (
-    <Layout header={header}>
+    <Layout header={header} footer={<Footer>version {window.version}</Footer>}>
       {children}
       <Snackbar toasts={toasts} autohide={true} onDismiss={notifActions.dismissNotification} />
     </Layout>

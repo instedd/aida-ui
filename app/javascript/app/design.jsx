@@ -33,7 +33,7 @@ export const App = () =>
           buttonIcon="add"
         />
       }
-      footer={<Footer/>}>
+      footer={<Footer>Version: 0.0</Footer>}>
 
       <Route exact path="/_design" render={() => <Redirect to="/_design/behaviour"/>} />
       <Route exact path="/_design/behaviour" component={MainContentDemo} />

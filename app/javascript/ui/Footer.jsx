@@ -1,15 +1,8 @@
 import React, { Component } from 'react';
-// import Md from 'react-md';
 
-class Footer extends Component {
-  render() {
+export const Footer = ({children}) =>
+  <footer>
+    {children}
+  </footer>
 
-    return (
-      <footer>
-        Footer
-      </footer>
-    );
-  }
-}
-
-export default Footer;
+export default Footer
