@@ -2,6 +2,7 @@ class Bot < ApplicationRecord
   belongs_to :owner, class_name: "User"
   has_many :channels, dependent: :destroy
   has_many :behaviours, dependent: :destroy
+  has_many :translations, through: :behaviours
 
   validate :has_single_front_desk
 
@@ -28,7 +29,7 @@ class Bot < ApplicationRecord
   def manifest
     {
       version: 1,
-      languages: ['en'],
+      languages: available_languages,
       front_desk: front_desk.manifest_fragment,
       skills: skills.enabled.map do |skill|
         skill.manifest_fragment
@@ -46,6 +47,33 @@ class Bot < ApplicationRecord
 
   def skills
     behaviours.where.not(kind: "front_desk").order(:order)
+  end
+
+  def language_detector
+    behaviours.where(kind: "language_detector").first
+  end
+
+  def available_languages
+    if detector = language_detector
+      detector.config["languages"].map do |lang|
+        lang["code"]
+      end
+    else
+      ['en']
+    end
+  end
+
+  def translation_keys
+    behaviours.map do |behaviour|
+      keys = behaviour.translation_keys
+      if keys.present?
+        {
+          id: behaviour.id,
+          label: behaviour.name,
+          keys: keys
+        }
+      end
+    end.compact
   end
 
   private

@@ -1,6 +1,8 @@
 class Behaviour < ApplicationRecord
   belongs_to :bot
 
+  has_many :translations, dependent: :destroy
+
   validates :kind, inclusion: { in: %w(front_desk language_detector keyword_responder) }
 
   validate :config_must_match_schema
@@ -93,7 +95,38 @@ class Behaviour < ApplicationRecord
     end
   end
 
+  def translation_keys
+    case kind
+    when "front_desk"
+      [
+        translation_key("greeting",       "Greeting"),
+        translation_key("introduction",   "Skills introduction"),
+        translation_key("not_understood", "Didn't understand message"),
+        translation_key("clarification",  "Clarification message")
+      ]
+    when "keyword_responder"
+      [
+        translation_key("explanation",   "Skill explanation"),
+        translation_key("clarification", "Clarification message"),
+        translation_key("response",      "Response message"),
+        translation_key("keywords",      "Valid keywords (comma separated)")
+      ]
+    when "language_detector"
+      []
+    else
+      raise NotImplementedError
+    end
+  end
+
   private
+
+  def translation_key(key, label)
+    {
+      key: key,
+      label: label,
+      default_translation: config[key]
+    }
+  end
 
   def config_must_match_schema
     unless JSON::Validator.validate(schema_file, config, fragment: config_schema_fragment)
@@ -120,16 +153,40 @@ class Behaviour < ApplicationRecord
 
   def localized_message(key)
     {
-      message: {
-        en: config[key.to_s]
-      }
+      message: localized_value(key)
     }
   end
 
   def localized_value(key, &block)
+    languages = bot.available_languages
+    key_translations = translations.select { |t| t.key == key.to_s }
+
+    default_language = languages.first
     value = config[key.to_s]
-    {
-      en: if block_given? then yield value else value end
-    }
+    default_value = if block_given?
+                      yield value
+                    else
+                      value
+                    end
+
+    # value for default language
+    result = { default_language => default_value }
+
+    # values for other languages, with fallback to default language
+    languages.drop(1).map do |lang|
+      translation = key_translations.find { |t| t.lang == lang }
+      value = if translation.present?
+                if block_given?
+                  yield translation.value
+                else
+                  translation.value
+                end
+              else
+                default_value
+              end
+      result[lang] = value
+    end
+
+    result
   end
 end

@@ -12,6 +12,7 @@ import * as r from '../utils/routes'
 import AppLayout from './AppLayout'
 import { BotChannel } from '../components/BotChannel'
 import { BotBehaviour } from '../components/BotBehaviour'
+import BotTranslations from '../components/BotTranslations'
 
 export class BotLayoutComponent extends Component {
   componentDidMount() {
@@ -37,7 +38,7 @@ export class BotLayoutComponent extends Component {
           // TODO: use active="/b/:id/channel"  to allow deep linking
           <HeaderNavLink label="Channel" to={r.botChannel(bot.id)} />,
           <HeaderNavLink label="Behaviour" to={r.botBehaviour(bot.id)} />,
-          // <HeaderNavLink label="Translations" to="#" />,
+          <HeaderNavLink label="Translations" to={r.botTranslations(bot.id)} />,
           // <HeaderNavLink label="Collaborators" to="#" />,
         ]}
         buttonAction={() => botActions.publishBot(bot)} buttonIcon="publish"
@@ -46,6 +47,7 @@ export class BotLayoutComponent extends Component {
         <Route exact path="/b/:id" render={({match}) => <Redirect to={r.botChannel(match.params.id)} />} />
         <Route exact path="/b/:id/channel" render={() => <BotChannel bot={bot} />} />
         <Route path="/b/:id/behaviour" render={() => <BotBehaviour bot={bot} />} />
+        <Route exact path="/b/:id/translations" render={() => <BotTranslations bot={bot} />} />
 
         {/* Children.map(children, c => cloneElement(c, {bot})) */}
       </AppLayout>
