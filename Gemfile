@@ -35,6 +35,8 @@ gem 'jbuilder', '~> 2.5'
 gem 'json-schema'
 gem 'config'
 gem 'httparty'
+gem 'roo', '~> 2.7.0'
+gem 'roo-xls'
 
 gem 'devise', '~> 4.3.0'
 gem 'alto_guisso', github: 'instedd/alto_guisso', branch: 'master'
