@@ -1,8 +1,3 @@
-.md-icon-separator {
-  > i {
-    order: 2;
-  }
-}
 
 #Logos {
   margin-left: -60px;
@@ -100,4 +95,19 @@
 .translation-key {
   padding-left: 2em;
   display: inline-block;
+}
+
+.file-upload-control {
+  padding: 0;
+  margin: 4px 0;
+  border: 1px dashed $md-grey-500;
+  .md-btn--text {
+    text-transform: none;
+  }
+  &.upload-error {
+    border-color: red;
+    .md-icon-text {
+      color: red;
+    }
+  }
 }

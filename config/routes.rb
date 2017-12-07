@@ -20,6 +20,8 @@ Rails.application.routes.draw do
 
     resources :channels, only: [:update]
     resources :skills, only: [:update, :destroy]
+
+    post :xls_form, to: 'xls_form#upload'
   end
 
   get "/_design(/*path)", to: 'welcome#design'

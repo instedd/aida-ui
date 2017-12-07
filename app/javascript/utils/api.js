@@ -69,3 +69,9 @@ export const updateTranslation = (botId : number, translation : T.Translation) =
   const { key, lang, value } = translation
   return apiPutJSON(`bots/${botId}/translations`, null, {behaviour_id, key, lang, value})
 }
+
+export const uploadXlsForm = (file) => {
+  const formData = new FormData()
+  formData.append('file', file)
+  return apiPostJSON(`xls_form`, null, formData)
+}

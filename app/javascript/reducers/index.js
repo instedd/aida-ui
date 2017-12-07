@@ -6,6 +6,7 @@ import frontDesk from './frontDesk'
 import notifications from './notifications'
 import skills from './skills'
 import translations from './translations'
+import xlsForms from './xlsForms'
 
 export default combineReducers({
   auth,
@@ -15,4 +16,5 @@ export default combineReducers({
   notifications,
   skills,
   translations,
+  xlsForms,
 })
