@@ -14,33 +14,6 @@
   .st4{opacity:0.2}
 }
 
-.sidebar {
-  .md-list {
-    .md-subheader {
-      font-size: 1.14em;
-      font-weight: 400;
-      line-height: 2;
-      color: $md-black-base;
-      padding: 3.2em 3em 1.5em 1.2em;
-    }
-    .md-list-tile {
-      height: 60px;
-      padding-right: 3.2em;
-    }
-    .md-text,
-    .md-icon {
-      color: $md-black-base;
-    }
-    .md-tile-content {
-      padding-left: 1em;
-    }
-    .addlink .md-text,
-    .addlink .md-icon {
-      color: $md-secondary-color;
-    }
-  }
-}
-
 .md-headline a {
   color: $md-lime-500;
   text-decoration: none;

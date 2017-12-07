@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Layout from '../ui/Layout'
 import Header, { HeaderNavLink, SectionNavLink } from '../ui/Header'
-import SideBar from '../ui/SideBar'
+import SideBar, { SidebarItem, SidebarMenuItem } from '../ui/SideBar'
 import { MainContent } from '../ui/MainContent'
 import Footer from '../ui/Footer'
 import Title from '../ui/Title'
@@ -57,9 +57,21 @@ const MainFullWidthDemo = () =>
 
 class MainContentDemo extends Component {
   render() {
+    const skillActions = ([
+      <SidebarMenuItem key="0" icon="edit" label="Rename" />,
+      <SidebarMenuItem key="1" icon="close" label="Delete" />,
+    ])
+
+    const sidebar = (<SideBar title="Skills">
+      <SidebarItem id="abc" icon="chat" label="Front desk" active={true}/>
+      <SidebarItem id="abc" icon="flag" label="Language detector" enabled={true} items={skillActions} />
+      <SidebarItem id="abc" icon="loop" label="Collect feedback" enabled={false} items={skillActions} />
+      <SidebarItem id="abc" icon="place" label="Geo-locator" enabled={true} items={skillActions} />
+      <SidebarItem id="abc" icon="assignment_turned_in" label="Food survey" enabled={false} items={skillActions} />
+    </SideBar>)
 
     return (
-      <MainContent sidebar={<SideBar/>}>
+      <MainContent sidebar={sidebar}>
         <Title>Front desk</Title>
         <Headline>This are the basic messages your boot needs to handle. The front desk will assign other messages to the skill that will be better suited to respond</Headline>
 
