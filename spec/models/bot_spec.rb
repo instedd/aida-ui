@@ -16,7 +16,7 @@ RSpec.describe Bot, type: :model do
     it "generates manifest" do
       manifest = bot.manifest
       expect(manifest).to_not be_nil
-      expect(manifest[:version]).to eq(1)
+      expect(manifest[:version]).to eq("1")
       expect(manifest.keys).to match_array(%i(version languages front_desk skills variables channels))
     end
 
