@@ -6,7 +6,6 @@ services:
     depends_on:
       - db
     environment:
-      DATABASE_HOST: db
       DATABASE_URL: postgres://root:@db/aida-ui
       SECRET_KEY_BASE: secret
       SETTINGS__BACKEND__URL: http://backend/
