@@ -10,15 +10,15 @@ import Icon from './Icon'
 
 import * as notifActions from '../actions/notifications'
 
-export const AppLayout = ({title, headerNavLinks, actionLinks, userName, children, buttonAction, buttonIcon, toasts, notifActions}) => {
+export const AppLayout = ({title, headerNav, headerNavExtra, userName, children, buttonAction, buttonIcon, toasts, notifActions}) => {
   const header = (
     <Header icon={<Icon/>}
             title={title}
             userName={userName}
             logoutUrl="/logout"
             sectionNavLinks={[<SectionNavLink label="Bots" to="/b" />]}
-            headerNavLinks={headerNavLinks}
-            actionLinks={actionLinks}
+            headerNav={headerNav}
+            headerNavExtra={headerNavExtra}
             buttonAction={buttonAction} buttonIcon={buttonIcon} />
   )
 

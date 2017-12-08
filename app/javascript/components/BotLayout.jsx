@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Route, Redirect } from 'react-router-dom'
 
 import EditableTitleLabel from '../ui/EditableTitleLabel'
-import { HeaderNavLink } from '../ui/Header'
+import { HeaderNavLink, HeaderNavAction } from '../ui/Header'
 
 import * as botActions from '../actions/bot'
 import * as botsActions from '../actions/bots'
@@ -33,7 +33,7 @@ export class BotLayoutComponent extends Component {
               title={bot.name}
             onSubmit={(name) => { botActions.updateBot({...bot, name}) }} />
           }
-          headerNavLinks={[
+          headerNav={[
             // <HeaderNavLink label="Analytics" to="#" />,
             // <HeaderNavLink label="Data" to="#" />,
             // TODO: use active="/b/:id/channel"  to allow deep linking
@@ -42,10 +42,10 @@ export class BotLayoutComponent extends Component {
             <HeaderNavLink label="Translations" to={r.botTranslations(bot.id)} />,
             // <HeaderNavLink label="Collaborators" to="#" />,
           ]}
-          actionLinks={[
-            <HeaderNavLink label="Rename" />,
-            <HeaderNavLink label="Unpublish" onClick={() => botActions.unpublishBot(bot)}/>,
-            <HeaderNavLink label="Delete" />,
+          headerNavExtra={[
+            // <HeaderNavAction label="Rename" />,
+            <HeaderNavAction label="Unpublish" onClick={() => botActions.unpublishBot(bot)}/>,
+            // <HeaderNavAction label="Delete" />,
           ]}
           buttonAction={() => botActions.publishBot(bot)} buttonIcon="publish"
         >
