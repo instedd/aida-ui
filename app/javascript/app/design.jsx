@@ -64,10 +64,10 @@ class MainContentDemo extends Component {
 
     const sidebar = (<SideBar title="Skills">
       <SidebarItem id="abc" icon="chat" label="Front desk" active={true}/>
-      <SidebarItem id="abc" icon="flag" label="Language detector" enabled={true} items={skillActions} />
-      <SidebarItem id="abc" icon="loop" label="Collect feedback" enabled={false} items={skillActions} />
-      <SidebarItem id="abc" icon="place" label="Geo-locator" enabled={true} items={skillActions} />
-      <SidebarItem id="abc" icon="assignment_turned_in" label="Food survey" enabled={false} items={skillActions} />
+      <SidebarItem id="abc" icon="flag" label="Language detector" enabled={true} menuItems={skillActions} />
+      <SidebarItem id="abc" icon="loop" label="Collect feedback" enabled={false} menuItems={skillActions} />
+      <SidebarItem id="abc" icon="place" label="Geo-locator" enabled={true} menuItems={skillActions} />
+      <SidebarItem id="abc" icon="assignment_turned_in" label="Food survey" enabled={false} menuItems={skillActions} />
     </SideBar>)
 
     return (

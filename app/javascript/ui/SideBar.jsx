@@ -1,48 +1,54 @@
 import React, { Component } from 'react';
 import { FontIcon, List, Subheader, Switch, ListItem, ListItemControl, MenuButton } from 'react-md'
 
-export const SidebarMenuItem = ({icon, label}) => {
-  return (<ListItem 
+export const SidebarMenuItem = ({icon, label, onClick}) => {
+  return (<ListItem
     leftIcon={<FontIcon>{icon}</FontIcon>}
-    primaryText={label} />)
+    primaryText={label}
+    onClick={onClick} />)
 }
 
-export const SidebarItem = ({id, icon, label, enabled, active, menu, items}) => {
+export const SidebarItem = ({id, className, icon, label, enabled, active, menuItems, onClick, onToggle}) => {
   const itemClassActive = active ? "sidebar-item-active" : ""
-  
+
   if (enabled != null) {
     const itemClassDisabled = enabled ? "" : "sidebar-item-disabled"
     const append = (<div className="sidebar-item-append">
-      <Switch 
+      <Switch
         id={id}
         name="skills"
         aria-label={label}
-        labelBefore 
-        checked={enabled} />
+        labelBefore
+        checked={enabled}
+        onChange={onToggle}
+        onClick={(e) => e.stopPropagation()}
+        />
       <MenuButton className="btn-more" icon cascading
-        id="sidebar-item-menu"
-        onClick={(e) => e.stopPropagation()} 
+        id={id + "-menu"}
+        onClick={(e) => e.stopPropagation()}
         position={MenuButton.Positions.TOP_LEFT}
         anchor={{
           x: MenuButton.HorizontalAnchors.INNER_LEFT,
           y: MenuButton.VerticalAnchors.OVERLAP,
         }}
-        menuItems={items} >
+        menuItems={menuItems} >
         more_vert
       </MenuButton>
     </div>)
 
     return (<ListItem
-      className={itemClassActive + " " + itemClassDisabled}
+      className={(className || "") + " " + itemClassActive + " " + itemClassDisabled}
       leftIcon={<FontIcon>{icon}</FontIcon>}
       primaryText={label}
       rightIcon={append}
+      onClick={onClick}
     />)
   } else {
     return (<ListItem
-      className={itemClassActive}
+      className={(className || "") + " " + itemClassActive}
       leftIcon={<FontIcon>{icon}</FontIcon>}
       primaryText={label}
+      onClick={onClick}
     />)
   }
 }
