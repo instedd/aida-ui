@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Layout from '../ui/Layout'
-import Header, { HeaderNavLink, SectionNavLink } from '../ui/Header'
+import Header, { HeaderNavLink, HeaderNavAction, SectionNavLink } from '../ui/Header'
 import SideBar, { SidebarItem, SidebarMenuItem } from '../ui/SideBar'
 import { MainContent } from '../ui/MainContent'
 import Footer from '../ui/Footer'
@@ -22,13 +22,17 @@ export const App = () =>
             <SectionNavLink label="Bots" to="/" />,
             <SectionNavLink label="Other" to="/" />,
           ]}
-          headerNavLinks={[
+          headerNav={[
             <HeaderNavLink label="Analytics" to="#" />,
             <HeaderNavLink label="Data" to="#" />,
             <HeaderNavLink label="Channels" to="/_design/channel" />,
             <HeaderNavLink label="Behaviour" to="/_design/behaviour" />,
             <HeaderNavLink label="Translations" to="#" />,
             <HeaderNavLink label="Collaborators" to="#" />,
+          ]}
+          headerNavExtra={[
+            <HeaderNavAction label="Lorem" />,
+            <HeaderNavAction label="Ipsum" />,
           ]}
           buttonIcon="add"
         />

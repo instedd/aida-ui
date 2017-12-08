@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       resources :channels, only: [:index]
       member do
         post :publish
+        delete :publish, action: :unpublish
       end
       resource :front_desk, only: [:show, :update]
       resources :skills, only: [:index, :create]

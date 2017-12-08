@@ -25,7 +25,7 @@ const SectionNav = ({sectionNavLinks}) => {
 
 const SectionNavWithRouter = withRouter(SectionNav)
 
-export const Header = ({icon, title, sectionNavLinks, headerNavLinks, userName, logoutUrl, buttonAction, buttonIcon}) => {
+export const Header = ({icon, title, sectionNavLinks, headerNav, headerNavExtra, userName, logoutUrl, buttonAction, buttonIcon}) => {
   return (
     <Toolbar
       className='mainToolbar'
@@ -37,7 +37,7 @@ export const Header = ({icon, title, sectionNavLinks, headerNavLinks, userName, 
           <h1>{title}</h1>
         </div>
       }
-      children={<HeaderSubNavWithRouter headerNavLinks={headerNavLinks} buttonAction={buttonAction} buttonIcon={buttonIcon} />}
+      children={<HeaderSubNavWithRouter headerNav={headerNav} headerNavExtra={headerNavExtra} buttonAction={buttonAction} buttonIcon={buttonIcon} />}
       prominent
     />
   )
@@ -46,26 +46,29 @@ export const Header = ({icon, title, sectionNavLinks, headerNavLinks, userName, 
 class HeaderSubNav extends Component {
   render() {
     const items = [
-      <ListItem key={0} primaryText={<i className='material-icons dummy'>more_vert</i>} />,
-      <ListItem key={1} primaryText="Item One" />,
-      <ListItem key={2} primaryText="Item Two" />,
-      <ListItem key={3} primaryText="Item Three" />,
-      <ListItem key={4} primaryText="Item Four" />,
+      <ListItem key={0} primaryText={<i className='material-icons dummy'>more_vert</i>} />
     ]
 
     let selectedTab = 0
-    Children.forEach(this.props.headerNavLinks, (e, index) => {
+    Children.forEach(this.props.headerNav, (e, index) => {
+      // TODO allow HeaderNavAction to be active
       if (this.props.location.pathname.startsWith(e.props.to))
         selectedTab = index
+    })
+
+    Children.forEach(this.props.headerNavExtra, (e, index) => {
+      // TODO allow HeaderNavLink to be used as headerNavExtra
+      items.push(<ListItem key={index+1} primaryText={e.props.label} onClick={e.props.onClick} />)
     })
 
     return (
         <nav className="mainTabs">
           {(() => {
-            if (this.props.headerNavLinks) {
+            if (this.props.headerNav) {
               return (
                 <Tabs id="mainTabs" tabId="mainTabs" defaultTabIndex={selectedTab}>
-                  { Children.map(this.props.headerNavLinks, (e, index) =>
+                  { Children.map(this.props.headerNav, (e, index) =>
+                    // TODO allow HeaderNavAction to be used as headerNav
                     <Tab label={e.props.label} key={index} component={Link} to={e.props.to} />
                   )}
                 </Tabs>
@@ -73,14 +76,20 @@ class HeaderSubNav extends Component {
             }
           })()}
 
-          <MenuButton
-            id="more-menu"
-            className="btn-more"
-            flat
-            position={MenuButton.Positions.BELOW}
-            menuItems={items}>
-            <i className='material-icons dummy'>more_vert</i>
-          </MenuButton>
+          {(() => {
+            if (items.length > 1) {
+              return (
+                <MenuButton
+                  id="more-menu"
+                  className="btn-more"
+                  flat
+                  position={MenuButton.Positions.BELOW}
+                  menuItems={items}>
+                  <i className='material-icons dummy'>more_vert</i>
+                </MenuButton>
+              )
+            }
+          })()}
 
           <Button
             onClick={this.props.buttonAction}
@@ -96,7 +105,16 @@ class HeaderSubNav extends Component {
 
 const HeaderSubNavWithRouter = withRouter(HeaderSubNav)
 
+// HeaderNavLink relates to react-router-dom
+// The link is active (ie: highlighted) if the current location is prefix
 export class HeaderNavLink extends Component {
+  render() {
+    return null
+  }
+}
+
+// TODO HeaderNavAction should allow active property
+export class HeaderNavAction extends Component {
   render() {
     return null
   }
