@@ -3,15 +3,12 @@ import { FontIcon,
          DialogContainer,
          Button,
          TextField,
-         List,
-         Subheader,
-         Switch,
          ListItem,
-         ListItemControl,
          DropdownMenu,
          Menu,
-         MenuButton
 } from 'react-md'
+import SideBar, { SidebarItem, SidebarMenuItem } from '../ui/SideBar'
+
 import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -28,13 +25,13 @@ const RENAMEABLE_SKILLS = ['keyword_responder']
 const skillIcon = (kind) => {
   switch (kind) {
     case 'front_desk':
-      return (<FontIcon>chat</FontIcon>)
+      return 'chat'
     case 'language_detector':
-      return (<FontIcon>language</FontIcon>)
+      return 'language'
     case 'keyword_responder':
-      return (<FontIcon>assignment</FontIcon>)
+      return 'assignment'
     case 'ADD':
-      return (<FontIcon>add</FontIcon>)
+      return 'add'
   }
 }
 
@@ -59,45 +56,23 @@ const skillDescription = (kind) => {
 const isSkillRenameable = (kind) => includes(RENAMEABLE_SKILLS, kind)
 
 
-const SkillListItem = ({skill, onClick, onToggleSkill, onDeleteSkill, onRenameSkill}) => {
-  const toggleId = `toggle-skill-${skill.id}`
-  const menuId = `menu-skill-${skill.id}`
+const SkillListItem = ({skill, active, onClick, onToggleSkill, onDeleteSkill, onRenameSkill}) => {
   let actionItems = []
   if (isSkillRenameable(skill.kind)) {
-    actionItems.push(<ListItem key={0}
-                               leftIcon={<FontIcon>edit</FontIcon>}
-                               primaryText="Rename"
+    actionItems.push(<SidebarMenuItem key={0}
+                               icon="edit"
+                               label="Rename"
                                onClick={() => onRenameSkill(skill)} />)
   }
-  actionItems.push(<ListItem key={1}
-                             leftIcon={<FontIcon>close</FontIcon>}
-                             primaryText="Delete"
+  actionItems.push(<SidebarMenuItem key={1}
+                             icon="close"
+                             label="Delete"
                              onClick={() => onDeleteSkill(skill)}/>)
 
-  const skillControls = (
-    <div style={{display: 'flex'}}>
-      <Switch id={toggleId}
-              name={toggleId}
-              aria-label="toggle"
-              checked={skill.enabled}
-              onChange={() => onToggleSkill(skill)}
-              onClick={(e) => e.stopPropagation() }/>
-      <MenuButton
-        id={menuId}
-        className="btn-more"
-        flat
-        cascading
-        onClick={(e) => e.stopPropagation()}
-        position={MenuButton.Positions.BELOW}
-        menuItems={actionItems}>
-        <i className='material-icons dummy'>more_vert</i>
-      </MenuButton>
-    </div>
-  )
-  return (<ListItem leftIcon={skillIcon(skill.kind)}
-                    primaryText={skill.name}
-                    rightIcon={skillControls}
-                    onClick={onClick} />)
+  return (<SidebarItem id={`skill-${skill.id}`}
+    icon={skillIcon(skill.kind)} label={skill.name}
+    enabled={skill.enabled} active={active}
+    onClick={onClick} onToggle={onToggleSkill} menuItems={actionItems} />)
 }
 
 class SkillNameDialog extends Component {
@@ -154,26 +129,27 @@ class SkillsBar extends Component {
   }
 
   render() {
-    const { bot, skills, creating, history, actions, skillActions } = this.props
+    const { bot, skills, creating, history, location, actions, skillActions } = this.props
     const { dialogSkill } = this.state
     const dialogVisible = !!dialogSkill
 
     const skillsItems = skills
                       ? skills.map(skill => (
                         <SkillListItem skill={skill} key={skill.id}
+                                       active={location.pathname == routes.botSkill(bot.id, skill.id)}
                                        onClick={() => history.push(routes.botSkill(bot.id, skill.id))}
-                                       onToggleSkill={(skill) => skillActions.toggleSkill(skill)}
-                                       onRenameSkill={(skill) => openDialog(skill)}
-                                       onDeleteSkill={(skill) => skillActions.deleteSkill(skill)} />
+                                       onToggleSkill={() => skillActions.toggleSkill(skill)}
+                                       onRenameSkill={() => openDialog(skill)}
+                                       onDeleteSkill={() => skillActions.deleteSkill(skill)} />
                       ))
-                      : [<ListItem key="loading"
-                                   leftIcon={skillIcon('LOADING')}
-                                   primaryText="Loading skills..." />]
+                      : [<SidebarItem key="loading"
+                                   icon={skillIcon('LOADING')}
+                                   label="Loading skills..." />]
 
     const skillKindItems = SKILL_KINDS.map(kind => ({
       key: kind,
       primaryText: defaultSkillName(kind),
-      leftIcon: skillIcon(kind),
+      leftIcon: <FontIcon>{skillIcon(kind)}</FontIcon>,
       onClick: () => {
         if (isSkillRenameable(kind)) {
           openDialog({ kind, name: defaultSkillName(kind) })
@@ -205,32 +181,32 @@ class SkillsBar extends Component {
     }
 
     return (
-      <div className="sidebar">
-        <List className="skills-list">
-          <Subheader primaryText="Skills" className="heading-title" />
-          <ListItem leftIcon={skillIcon('front_desk')}
-                    primaryText="Front desk"
-                    onClick={() => history.push(routes.botFrontDesk(bot.id))}/>
-          {skillsItems}
-          <DropdownMenu id="add-skill-menu"
-                        cascading
-                        block={true}
-                        anchor={{x: DropdownMenu.HorizontalAnchors.INNER_LEFT, y: DropdownMenu.VerticalAnchors.OVERLAP}}
-                        position={DropdownMenu.Positions.TOP_LEFT}
-                        menuItems={skillKindItems}>
-            <ListItem id="add-skill"
-                      leftIcon={skillIcon('ADD')}
-                      primaryText="Add skill"
-                      className="addlink"
-                      onClick={(e) => e.stopPropagation() }/>
-          </DropdownMenu>
-        </List>
+      <SideBar title="Skills">
+        <SidebarItem icon={skillIcon('front_desk')}
+                  label="Front desk"
+                  active={location.pathname == routes.botFrontDesk(bot.id)}
+                  onClick={() => history.push(routes.botFrontDesk(bot.id))}/>
+
+        {skillsItems}
+
+        <DropdownMenu id="add-skill-menu"
+                      cascading
+                      block={true}
+                      anchor={{x: DropdownMenu.HorizontalAnchors.INNER_LEFT, y: DropdownMenu.VerticalAnchors.OVERLAP}}
+                      position={DropdownMenu.Positions.TOP_LEFT}
+                      menuItems={skillKindItems}>
+          <SidebarItem id="add-skill"
+                    icon={skillIcon('ADD')}
+                    label="Add skill"
+                    className="addlink"
+                    onClick={(e) => e.stopPropagation() }/>
+        </DropdownMenu>
 
         <SkillNameDialog visible={dialogVisible}
                          skill={dialogSkill}
                          onClose={closeDialog}
                          onSubmit={dialogSubmit} />
-      </div>
+      </SideBar>
     )
   }
 }

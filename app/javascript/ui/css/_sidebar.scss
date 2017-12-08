@@ -1,0 +1,78 @@
+.sidebar {
+  .sidebar-item-append {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    .md-selection-control-container {
+      height: 100%;
+    }
+    .md-icon {
+      color: $md-grey-500;
+    }
+    button {
+      visibility: hidden;
+    }
+    .md-list-item {
+      padding-bottom: 1em;
+      &:last-child {
+        padding-bottom: 0;
+      }
+      .md-list-tile {
+        padding: 0 6em 0 1em;
+      }
+      .md-text, .md-icon {
+        color: $md-black-base;
+      }
+    }
+  }
+
+  .md-subheader {
+    color: $md-black-base;
+    font-size: 1.14em;
+    line-height: 1;
+    padding: 3.2em 3em 1.7em 1.2em;
+  }
+  .md-list-tile {
+    height: 60px;
+    padding-right: 0;
+    &--active {
+      background: $md-grey-100;
+      button {
+        visibility: visible;
+      }
+    }
+  }
+  .md-icon {
+    @extend .md-text;
+    font-size: 24px;
+  }
+  .md-tile-content {
+    padding-left: 1em;
+    .md-tile-text--primary {
+      font-size: 16px;
+    }
+  }
+  .addlink .md-text,
+  .addlink .md-icon {
+    color: $md-secondary-color;
+  }
+  > .md-menu-container > .md-list--menu {
+    .md-list-item {
+      padding-bottom: 1em;
+      &:last-child {
+        padding-bottom: 0;
+      }
+    }
+    .md-list-tile {
+      padding: 0 6em 0 1.1em;
+    }
+  }
+  .sidebar-item-active {
+    background: $md-grey-300;
+  }
+  .sidebar-item-disabled {
+    .md-text, .md-icon {
+      color: $md-grey-500;
+    }
+  }
+}
