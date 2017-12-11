@@ -1,18 +1,11 @@
 import React, { Component } from 'react'
-import { Button,
-         DataTable,
-         EditDialogColumn,
-         FontIcon,
-         TableBody,
-         TableFooter,
-         TableColumn,
-         TableRow
-} from 'react-md'
+import { EditDialogColumn, TableColumn } from 'react-md'
 import map from 'lodash/map'
 
 import Title from '../ui/Title'
 import Headline from '../ui/Headline'
 import Field from '../ui/Field'
+import KeyValueListField from '../ui/KeyValueListField'
 import LanguageSelector from './LanguageSelector'
 
 export default class LanguageDetector extends Component {
@@ -48,23 +41,6 @@ export default class LanguageDetector extends Component {
       updateConfig('languages')(newLangs)
     }
 
-    const langRows = map(config.languages, ({code, keywords}, index) => {
-      return (
-        <TableRow key={index}>
-          <TableColumn>
-            {index > 0 ? <Button icon iconChildren="close" onClick={() => removeLanguage(index)} /> : null}
-          </TableColumn>
-          <EditDialogColumn inline inlineIcon={null} value={keywords} onChange={updateLanguage(index, 'keywords')}/>
-          <TableColumn>
-            <FontIcon>chevron_right</FontIcon>
-          </TableColumn>
-          <TableColumn>
-            <LanguageSelector code={code} onChange={updateLanguage(index, 'code')} />
-          </TableColumn>
-        </TableRow>
-      )
-    })
-
     return (
       <div>
         <Title>Language detector</Title>
@@ -76,23 +52,14 @@ export default class LanguageDetector extends Component {
         <Field id="ld-explanation" label="Language message"
                value={config.explanation} onChange={updateConfig('explanation')} />
 
-        <h4>Available languages</h4>
-
-        <DataTable plain className="languages-list">
-          <TableBody>
-            {langRows}
-          </TableBody>
-          <TableBody>
-            <TableRow className="addlink" onClick={addLanguage}>
-              <TableColumn>
-                <Button icon iconChildren="add" />
-              </TableColumn>
-              <TableColumn colSpan={3}>
-                Add language
-              </TableColumn>
-            </TableRow>
-          </TableBody>
-        </DataTable>
+        <KeyValueListField
+          label="Available languages"
+          items={config.languages}
+          createItemLabel="Add language" onCreateItem={addLanguage}
+          canRemoveItem={(item, index) => index > 0} onRemoveItem={(item, index) => removeLanguage(index)}
+          renderKey={({code, keywords}, index) => <EditDialogColumn inline inlineIcon={null} value={keywords} onChange={updateLanguage(index, 'keywords')}/>}
+          renderValue={({code, keywords}, index) => <TableColumn><LanguageSelector code={code} onChange={updateLanguage(index, 'code')} /></TableColumn>}
+        />
       </div>
     )
   }
