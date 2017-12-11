@@ -3,7 +3,7 @@ class Behaviour < ApplicationRecord
 
   has_many :translations, dependent: :destroy
 
-  validates :kind, inclusion: { in: %w(front_desk language_detector keyword_responder) }
+  validates :kind, inclusion: { in: %w(front_desk language_detector keyword_responder survey) }
 
   validate :config_must_match_schema
 
@@ -54,6 +54,16 @@ class Behaviour < ApplicationRecord
                            "response" => ""
                          }
                        }
+                     when "survey"
+                       {
+                         kind: "survey",
+                         name: "Survey",
+                         config: {
+                           "schedule" => "",
+                           "questions" => [],
+                           "choice_lists" => []
+                         }
+                       }
                      else
                        fail "invalid skill type #{kind}"
                      end
@@ -90,6 +100,35 @@ class Behaviour < ApplicationRecord
                           [lang["code"], lang["keywords"].split(/,\s*/)]
                         end]
       }
+    when "survey"
+      {
+        type: kind,
+        id: id.to_s,
+        name: name,
+        schedule: config["schedule"],
+        questions: config["questions"].map.with_index do |question, i|
+          {
+            type: question["type"],
+            name: question["name"],
+            message: localized_value("questions/#{i}/message")
+          }.tap do |question_fragment|
+            question_fragment[:choices] = question["choices"] if question["choices"].present?
+          end
+        end,
+        choice_lists: config["choice_lists"].map.with_index do |choice_list, i|
+          {
+            name: choice_list["name"],
+            choices: choice_list["choices"].map.with_index do |choice, j|
+              {
+                name: choice["name"],
+                labels: localized_value("choice_lists/#{i}/choices/#{j}/labels") do |labels|
+                  labels.split(/,\s*/)
+                end
+              }
+            end
+          }
+        end
+      }
     else
       raise NotImplementedError
     end
@@ -113,6 +152,19 @@ class Behaviour < ApplicationRecord
       ]
     when "language_detector"
       []
+    when "survey"
+      [
+        config["questions"].map.with_index do |question, i|
+          translation_key("questions/#{i}/message",
+                          "Question #{question['name']}")
+        end,
+        config["choice_lists"].map.with_index do |choice_list, i|
+          choice_list["choices"].map.with_index do |choice, j|
+            translation_key("choice_lists/#{i}/choices/#{j}/labels",
+                            "Choices #{choice_list['name']}, option #{choice['name']}")
+          end
+        end
+      ].flatten
     else
       raise NotImplementedError
     end
@@ -120,11 +172,24 @@ class Behaviour < ApplicationRecord
 
   private
 
+  def get_in_config(key)
+    key.to_s.split(/\//).inject(config) do |value, part|
+      case value
+      when Array
+        value[part.to_i]
+      when Hash
+        value[part]
+      else
+        fail "invalid config path #{key}"
+      end
+    end
+  end
+
   def translation_key(key, label)
     {
       key: key,
       label: label,
-      default_translation: config[key]
+      default_translation: get_in_config(key)
     }
   end
 
@@ -146,6 +211,8 @@ class Behaviour < ApplicationRecord
       "#/definitions/languageDetectorConfig"
     when "keyword_responder"
       "#/definitions/keywordResponderConfig"
+    when "survey"
+      "#/definitions/surveyConfig"
     else
       fail "config schema not defined"
     end
@@ -162,7 +229,7 @@ class Behaviour < ApplicationRecord
     key_translations = translations.select { |t| t.key == key.to_s }
 
     default_language = languages.first
-    value = config[key.to_s]
+    value = get_in_config(key)
     default_value = if block_given?
                       yield value
                     else

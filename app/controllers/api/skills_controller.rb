@@ -7,7 +7,7 @@ class Api::SkillsController < ApplicationApiController
 
   def create
     bot = current_user.bots.find(params[:bot_id])
-    new_order = bot.behaviours.last.order + 1
+    new_order = [bot.behaviours.count, bot.behaviours.pluck(:order).compact.max + 1].max
     attrs = { order: new_order }
     if params[:name].present?
       attrs[:name] = params[:name]

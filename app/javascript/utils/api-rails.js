@@ -71,12 +71,16 @@ const apiPutOrPostJSON = (url, schema, verb, body) => {
     method: verb,
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json',
       'X-CSRF-Token': getCSRFToken(),
     }
   }
   if (body) {
-    options.body = JSON.stringify(body)
+    if (body instanceof FormData) {
+      options.body = body
+    } else {
+      options.body = JSON.stringify(body)
+      options.headers['Content-Type'] = 'application/json'
+    }
   }
   return apiFetchJSON(url, schema, options)
 }

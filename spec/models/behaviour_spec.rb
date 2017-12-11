@@ -99,4 +99,79 @@ RSpec.describe Behaviour, type: :model do
       expect(keys).to be_empty
     end
   end
+
+  describe "survey" do
+    let!(:survey) {
+      bot.skills.create_skill!('survey', config: {
+                                 schedule: '2017-12-15T14:30:00Z',
+                                 questions: [
+                                   { type: 'select_one',
+                                     name: 'opt_in',
+                                     choices: 'yes_no',
+                                     message: 'Can I ask you a question?' },
+                                   { type: 'integer',
+                                     name: 'age',
+                                     message: 'How old are you?' }
+                                 ],
+                                 choice_lists: [
+                                   { name: 'yes_no',
+                                     choices: [
+                                       { name: 'yes', labels: 'yes,yep,sure,ok' },
+                                       { name: 'no', labels: 'no,nope,later' }
+                                     ]}
+                                 ]
+                               })
+    }
+
+    it "creates valid skill" do
+      expect(survey).to be_valid
+      expect(survey).to be_enabled
+    end
+
+    it "generates manifest fragment" do
+      fragment = survey.manifest_fragment
+      expect(fragment).to_not be_nil
+      expect(fragment.keys).to match_array(%i(type id schedule name questions choice_lists))
+      expect(fragment[:questions].size).to eq(2)
+      expect(fragment[:questions][0]).to match({ type: 'select_one',
+                                                 name: 'opt_in',
+                                                 choices: 'yes_no',
+                                                 message: {
+                                                   'en' => 'Can I ask you a question?'
+                                                 }})
+      expect(fragment[:questions][1]).to match({ type: 'integer',
+                                                 name: 'age',
+                                                 message: {
+                                                   'en' => 'How old are you?'
+                                                 }})
+      expect(fragment[:choice_lists].size).to eq(1)
+      expect(fragment[:choice_lists][0]).to match({ name: 'yes_no',
+                                                    choices: [
+                                                      { name: 'yes',
+                                                        labels: {
+                                                          'en' => ['yes', 'yep', 'sure', 'ok']
+                                                        }
+                                                      },
+                                                      { name: 'no',
+                                                        labels: {
+                                                          'en' => ['no', 'nope', 'later']
+                                                        }
+                                                      }
+                                                    ]
+                                                  })
+    end
+
+    it "returns translation keys for questions and choice lists" do
+      keys = survey.translation_keys
+      expect(keys).to be_an(Array)
+      expect(keys.map { |key| key[:key] }).to match_array(['questions/0/message',
+                                                           'questions/1/message',
+                                                           'choice_lists/0/choices/0/labels',
+                                                           'choice_lists/0/choices/1/labels'])
+      expect(keys.map { |key| key[:default_translation] }).to match_array(['Can I ask you a question?',
+                                                                           'How old are you?',
+                                                                           'yes,yep,sure,ok',
+                                                                           'no,nope,later'])
+    end
+  end
 end
