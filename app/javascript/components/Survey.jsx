@@ -10,7 +10,8 @@ import Headline from '../ui/Headline'
 
 class Survey extends Component {
   render() {
-    const { uploadingStatus, skill, actions, xlsFormsActions } = this.props
+    const { uploadStatus, skill, actions, xlsFormsActions } = this.props
+    const { uploading, error: uploadError } = uploadStatus
     const { name, config } = skill
 
     const updateConfig = (key) => {
@@ -31,17 +32,16 @@ class Survey extends Component {
 
     const date = config.schedule ? new Date(config.schedule) : undefined
     const surveyLoaded = config.questions.length > 0
-    const uploading = uploadingStatus === true
     let formLabel, formIcon, formExtraClass
 
     if (uploading) {
       formLabel = "Uploading form"
       formIcon = (<FontIcon>hourglass_empty</FontIcon>)
     } else if (surveyLoaded) {
-      formLabel = `${config.questions.length} questions`
+      formLabel = config.questions.length == 1 ? '1 question' : `${config.questions.length} questions`
       formIcon = (<FontIcon>check</FontIcon>)
-    } else if (uploadingStatus && uploadingStatus.error) {
-      formLabel = `Error in uploaded form: ${uploadingStatus.error.error}`
+    } else if (uploadError) {
+      formLabel = `Error in uploaded form: ${uploadError}`
       formIcon = (<FontIcon>close</FontIcon>)
       formExtraClass = 'upload-error'
     } else {
@@ -92,7 +92,7 @@ class Survey extends Component {
 }
 
 const mapStateToProps = (state, {skill}) => ({
-  uploadingStatus: state.xlsForms.uploading[skill.id]
+  uploadStatus: state.xlsForms.uploadStatus[skill.id] || { uploading: false }
 })
 
 const mapDispatchToProps = (dispatch) => ({

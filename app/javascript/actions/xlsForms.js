@@ -12,7 +12,9 @@ export const UPLOAD_ERROR = 'XLSFORMS_UPLOAD_ERROR'
 export const uploadXlsFormFor = (survey, file) => (dispatch, getState) => {
   const state = getState()
 
-  if (state.xlsForms.uploading[survey.id] === true) {
+  const uploadStatus = state.xlsForms.uploadStatus[survey.id]
+  if (uploadStatus && uploadStatus.uploading) {
+    // already uploading a file for this survey
     return
   }
 
@@ -21,6 +23,7 @@ export const uploadXlsFormFor = (survey, file) => (dispatch, getState) => {
     ...survey,
     config: assign(survey.config, {questions: [], choice_lists: []})
   }))
+
   return api.uploadXlsForm(file)
             .then(form => {
               const newState = getState()
@@ -39,6 +42,8 @@ export const uploadXlsFormFor = (survey, file) => (dispatch, getState) => {
                 errResponse.json().then(error => {
                   dispatch(uploadError(survey.id, error))
                 })
+              } else {
+                dispatch(uploadError(survey.id, errResponse.statusText))
               }
             })
 }
@@ -61,6 +66,6 @@ const uploadError = (surveyId, error) => {
   return {
     type: UPLOAD_ERROR,
     surveyId,
-    error
+    error: error.error
   }
 }

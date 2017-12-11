@@ -5,7 +5,7 @@ import map from 'lodash/map'
 import * as actions from '../actions/xlsForms'
 
 const initialState = {
-  uploading: {},
+  uploadStatus: {},
 }
 
 export default (state : T.XlsFormsState, action : T.Action) : T.XlsFormsState => {
@@ -22,9 +22,9 @@ const upload = (state, action) => {
   const { surveyId } = action
   return {
     ...state,
-    uploading: {
-      ...state.uploading,
-      [surveyId]: true
+    uploadStatus: {
+      ...state.uploadStatus,
+      [surveyId]: { uploading: true }
     },
   }
 }
@@ -33,9 +33,9 @@ const uploadSuccess = (state, action) => {
   const { surveyId } = action
   return {
     ...state,
-    uploading: {
-      ...state.uploading,
-      [surveyId]: null
+    uploadStatus: {
+      ...state.uploadStatus,
+      [surveyId]: { uploading: false, error: null }
     }
   }
 }
@@ -44,9 +44,9 @@ const uploadError = (state, action) => {
   const { surveyId, error } = action
   return {
     ...state,
-    uploading: {
-      ...state.uploading,
-      [surveyId]: { error }
+    uploadStatus: {
+      ...state.uploadStatus,
+      [surveyId]: { uploading: false, error }
     }
   }
 }
