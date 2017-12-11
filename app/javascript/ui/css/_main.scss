@@ -52,3 +52,16 @@
 .md-subheader {
   height: auto;
 }
+
+.main-grey {
+  background: $md-grey-200;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr minmax(min-content, 320px) 1fr;
+  grid-template-areas: ". empty-content .";
+  .empty-content {
+    grid-area: empty-content;
+    height: 100%;
+    align-self: center;
+  }
+}
