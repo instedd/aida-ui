@@ -3,6 +3,7 @@ import Layout from '../ui/Layout'
 import Header, { HeaderNavLink, HeaderNavAction, SectionNavLink } from '../ui/Header'
 import SideBar, { SidebarItem, SidebarMenuItem } from '../ui/SideBar'
 import { MainContent } from '../ui/MainContent'
+import { EmptyContent } from '../ui/EmptyContent'
 import Footer from '../ui/Footer'
 import Title from '../ui/Title'
 import Headline from '../ui/Headline'
@@ -45,6 +46,11 @@ export const App = () =>
       <Route exact path="/_design/empty" component={EmptyDemo} />
     </Layout>
   </BrowserRouter>
+
+const EmptyDemo = () =>
+  <EmptyContent icon='storage'>
+    <Headline>You have no data collected on this proyect</Headline>
+  </EmptyContent>
 
 const MainFullWidthDemo = () =>
   <MainContent>
