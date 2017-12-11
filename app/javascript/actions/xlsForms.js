@@ -9,7 +9,7 @@ export const UPLOAD = 'XLSFORMS_UPLOAD'
 export const UPLOAD_SUCCESS = 'XLSFORMS_UPLOAD_SUCCESS'
 export const UPLOAD_ERROR = 'XLSFORMS_UPLOAD_ERROR'
 
-export const uploadXlsFormFor = (survey, file) => (dispatch, getState) => {
+export const uploadXlsFormFor = (survey : T.Skill, file : any) => (dispatch : T.Dispatch, getState : T.GetState) => {
   const state = getState()
 
   const uploadStatus = state.xlsForms.uploadStatus[survey.id]
@@ -19,21 +19,24 @@ export const uploadXlsFormFor = (survey, file) => (dispatch, getState) => {
   }
 
   dispatch(startUpload(survey.id))
-  dispatch(skillActions.updateSkill({
+  const emptySurvey = ({
     ...survey,
     config: assign(survey.config, {questions: [], choice_lists: []})
-  }))
+  } : any)
+  dispatch(skillActions.updateSkill((emptySurvey : T.Skill)))
 
   return api.uploadXlsForm(file)
             .then(form => {
               const newState = getState()
-              const latestSkill = newState.skills.items[survey.id]
+              const latestSkill = newState.skills.items &&
+                                  newState.skills.items[survey.id.toString()]
 
               if (latestSkill) {
-                dispatch(skillActions.updateSkill({
+                const uploadedSurvey = ({
                   ...latestSkill,
                   config: assign(latestSkill.config, form)
-                }))
+                } : any)
+                dispatch(skillActions.updateSkill((uploadedSurvey : T.Skill)))
               }
               dispatch(uploadSucceeded(survey.id, form))
             })

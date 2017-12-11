@@ -136,6 +136,18 @@ export type TranslationsAction = {
   translation: Translation,
 };
 
+export type XlsFormsAction = {
+  type: 'XLSFORMS_UPLOAD',
+  surveyId: number,
+} | {
+  type: 'XLSFORMS_UPLOAD_SUCCESS',
+  surveyId: number,
+} | {
+  type: 'XLSFORMS_UPLOAD_ERROR',
+  surveyId: number,
+  error: string
+};
+
 export type Thunk = (dispatch : Dispatch, getState : ?GetState) => void;
 
 export type Action = AuthAction
@@ -148,6 +160,7 @@ export type Action = AuthAction
                    | SkillAction
                    | SkillsAction
                    | TranslationsAction
+                   | XlsFormsAction
                    | Thunk;
 
 export type Dispatch = (action : Action) => void;
@@ -192,6 +205,12 @@ export type TranslationsState = {
   behaviours: ?TranslationBehaviours
 };
 
+export type XlsFormsState = {
+  uploadStatus: {
+    [number]: { uploading: boolean, error: ?string }
+  }
+};
+
 export type State = {
   auth: AuthState,
   bots: BotsState,
@@ -200,6 +219,7 @@ export type State = {
   notifications: NotifState,
   skills: SkillsState,
   translations: TranslationsState,
+  xlsForms: XlsFormsState,
 };
 
 export type GetState = () => State;

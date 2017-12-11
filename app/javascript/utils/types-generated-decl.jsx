@@ -34,9 +34,34 @@ export type KeywordResponderConfig = {
   response: Message;
 };
 
+export type SurveyConfig = {
+  schedule?: string;
+  questions?: Array<SurveyQuestion>;
+  choice_lists?: Array<SurveyChoiceList>;
+};
+
 export type Message = string;
 
 export type KeywordList = string;
+
+export type SurveyQuestion = {
+  type: "select_one" | "select_many";
+  name: string;
+  choices: string;
+  message: Message;
+} | {
+  type: "integer" | "decimal" | "text";
+  name: string;
+  message: Message;
+};
+
+export type SurveyChoiceList = {
+  name: string;
+  choices: Array<{
+    name: string;
+    labels: KeywordList;
+  }>;
+};
 
 export type Channel = {
   id: number;
@@ -64,5 +89,11 @@ export type Skill = {
   enabled: boolean;
   order: number;
   config: KeywordResponderConfig;
+} | {
+  id: number;
+  kind: "survey";
+  name: string;
+  enabled: boolean;
+  order: number;
+  config: SurveyConfig;
 };
-
