@@ -110,9 +110,10 @@ class Behaviour < ApplicationRecord
           {
             type: question["type"],
             name: question["name"],
-            choices: question["choices"],
             message: localized_value("questions/#{i}/message")
-          }
+          }.tap do |question_fragment|
+            question_fragment[:choices] = question["choices"] if question["choices"].present?
+          end
         end,
         choice_lists: config["choice_lists"].map.with_index do |choice_list, i|
           {

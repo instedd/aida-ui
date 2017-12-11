@@ -139,6 +139,11 @@ RSpec.describe Behaviour, type: :model do
                                                  message: {
                                                    'en' => 'Can I ask you a question?'
                                                  }})
+      expect(fragment[:questions][1]).to match({ type: 'integer',
+                                                 name: 'age',
+                                                 message: {
+                                                   'en' => 'How old are you?'
+                                                 }})
       expect(fragment[:choice_lists].size).to eq(1)
       expect(fragment[:choice_lists][0]).to match({ name: 'yes_no',
                                                     choices: [
