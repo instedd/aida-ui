@@ -3,6 +3,7 @@
   flex-direction: column;
   justify-content: center;
   color: $md-grey-500;
+  padding: 100px 0;
   .md-icon {
     color: inherit;
     font-size: 162px;
@@ -21,5 +22,18 @@
   }
   .md-headline a {
     color: $md-secondary-color;
+  }
+  .md-divider {
+    margin: 50px 0;
+  }
+  .md-btn {
+    width: max-content;
+    margin: 40px auto;
+    border-radius: 3px;
+    &--text {
+      font-size: 1.15em;
+      padding: 14px 16px;
+      height: auto;
+    }
   }
 }
