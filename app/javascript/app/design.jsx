@@ -136,18 +136,6 @@ class MainContentDemo extends Component {
           name="simple-checkboxes[]"
           label="Ask for clarification when several skills claim a high confidence"
         />
-
-{/*        <Md.ExpansionList style={{ padding: 16 }}>
-          <Md.ExpansionPanel  secondaryLabel="Do you smoke?" defaultExpanded>
-          </Md.ExpansionPanel>
-          <Md.ExpansionPanel secondaryLabel="Do you drink?">
-          </Md.ExpansionPanel>
-          <Md.ExpansionPanel secondaryLabel="How are you today?">
-          </Md.ExpansionPanel>
-        </Md.ExpansionList>
-       <ScrollableAnchor id={'section1'}>
-        <div className='end'> How are you world? </div>
-      </ScrollableAnchor>*/}
       </MainContent>
     );
   }
