@@ -15,4 +15,11 @@
     line-height: 1.25;
     text-align: center;
   }
+  span {
+    display: block;
+    padding-top: .5em;
+  }
+  .md-headline a {
+    color: $md-secondary-color;
+  }
 }

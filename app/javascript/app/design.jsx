@@ -49,7 +49,9 @@ export const App = () =>
 
 const EmptyDemo = () =>
   <EmptyContent icon='storage'>
-    <Headline>You have no data collected on this proyect</Headline>
+    <Headline>You have no data collected on this proyect 
+    <span><a href="#" target="_blank">Create One</a></span>
+    </Headline>
   </EmptyContent>
 
 const MainFullWidthDemo = () =>
