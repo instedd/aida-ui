@@ -1,0 +1,18 @@
+.empty-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: $md-grey-500;
+  .md-icon {
+    color: inherit;
+    font-size: 162px;
+    display: block;
+    margin: 0 auto;
+  }
+  .md-headline {
+    color: inherit;
+    font-size: 1.7em;
+    line-height: 1.25;
+    text-align: center;
+  }
+}
