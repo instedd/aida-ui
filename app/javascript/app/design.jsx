@@ -24,7 +24,7 @@ export const App = () =>
           ]}
           headerNav={[
             <HeaderNavLink label="Analytics" to="#" />,
-            <HeaderNavLink label="Data" to="#" />,
+            <HeaderNavLink label="Data" to="/_design/empty" />,
             <HeaderNavLink label="Channels" to="/_design/channel" />,
             <HeaderNavLink label="Behaviour" to="/_design/behaviour" />,
             <HeaderNavLink label="Translations" to="#" />,
@@ -42,6 +42,7 @@ export const App = () =>
       <Route exact path="/_design" render={() => <Redirect to="/_design/behaviour"/>} />
       <Route exact path="/_design/behaviour" component={MainContentDemo} />
       <Route exact path="/_design/channel" component={MainFullWidthDemo} />
+      <Route exact path="/_design/empty" component={EmptyDemo} />
     </Layout>
   </BrowserRouter>
 
