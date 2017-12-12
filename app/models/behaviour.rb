@@ -154,7 +154,7 @@ class Behaviour < ApplicationRecord
         schedule_type: config["schedule_type"],
         messages: config["messages"].map do |message|
           {
-            delay: message["delay"],
+            delay: message["delay"].to_s,
             message: localized_value("messages/[id=#{message['id']}]/message")
           }
         end
