@@ -40,6 +40,10 @@
   .main-content {
     grid-area: main-content;
     padding: 60px 0px 90px;
+
+    .md-paper {
+      background-color: $md-white-base;
+    }
   }
 }
 

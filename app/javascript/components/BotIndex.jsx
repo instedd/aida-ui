@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 
-import { MainContent } from '../ui/MainContent'
+import { MainGrey } from '../ui/MainGrey'
 import { Listing, Column } from '../ui/Listing'
 
 import * as actions from '../actions/bots'
@@ -21,7 +21,7 @@ export class BotIndexComponent extends Component {
 
     if (bots) {
       return <AppLayout title="Bots" buttonIcon="add" buttonAction={() => actions.createBot(history)}>
-        <MainContent>
+        <MainGrey>
           <Listing items={Object.values(bots)} title={`${Object.keys(bots).length} bots`}
             onItemClick={b => history.push(routes.bot(b.id))}>
             <Column title="Name" render={b => b.name} />
@@ -29,7 +29,7 @@ export class BotIndexComponent extends Component {
             <Column title="Uses" render={b => null} />
             <Column title="Last activity date" render={d => null} />
           </Listing>
-        </MainContent>
+        </MainGrey>
       </AppLayout>
     } else {
       return <AppLayout title="Bots"><p>Loading bots...</p></AppLayout>
