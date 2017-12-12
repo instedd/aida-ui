@@ -28,7 +28,7 @@ export const App = () =>
             <SectionNavLink label="Other" to="/" />,
           ]}
           headerNav={[
-            <HeaderNavLink label="Analytics" to="#" />,
+            <HeaderNavLink label="Analytics" to="/_design/analytics" />,
             <HeaderNavLink label="Data" to="/_design/empty" />,
             <HeaderNavLink label="Channels" to="/_design/channel" />,
             <HeaderNavLink label="Behaviour" to="/_design/behaviour" />,
@@ -45,11 +45,31 @@ export const App = () =>
       footer={<Footer>Version: 0.0</Footer>}>
 
       <Route exact path="/_design" render={() => <Redirect to="/_design/behaviour"/>} />
+      <Route exact path="/_design/analytics" component={MainAnalyticsDemo} />
       <Route exact path="/_design/behaviour" component={MainContentDemo} />
       <Route exact path="/_design/channel" component={MainFullWidthDemo} />
       <Route exact path="/_design/empty" component={EmptyDemo} />
     </Layout>
   </BrowserRouter>
+
+const MainAnalyticsDemo = () =>
+  <MainGrey>
+    <SelectField
+      id="select-field-5"
+      placeholder="All bots"
+      className="md-cell"
+      menuItems={[{ label: 'Apples', value: 'A', }, {label: 'Bananas', value: 'B', }]}
+      position={SelectField.Positions.BELOW}
+      simplifiedMenu={false }
+    />
+    <Listing items={[{name: "WFP Chat bot"}, {name: "Kenia water supply"}]} title="2 Bots"
+      onItemClick={b => null}>
+      <Column title="Name" render={b => b.name} />
+      <Column title="Type" render={b => "Facebook"} />
+      <Column title="Uses" render={b => null} />
+      <Column title="Last activity date" render={d => null} />
+    </Listing>
+  </MainGrey>
 
 const EmptyDemo = () =>
   <EmptyContent icon='storage'>
