@@ -13,6 +13,14 @@ class Behaviour < ApplicationRecord
   scope :skills, ->{ where.not(kind: 'front_desk') }
   scope :enabled, ->{ where(enabled: true) }
 
+  # duplicated in ScheduledMessages.jsx
+  DELAY_OPTIONS = {
+    60 => '1 hour',
+    1440 => '1 day',
+    10080 => '1 week',
+    282240 => '1 month', # 28 days month so we end up in the same day of week
+  }
+
   def self.create_front_desk!(params = {})
     default_params = {
       kind: "front_desk",
@@ -143,9 +151,12 @@ class Behaviour < ApplicationRecord
         type: kind,
         id: id.to_s,
         name: name,
+        schedule_type: config["schedule_type"],
         messages: config["messages"].map do |message|
-          # TODO proper i18n
-          { delay: message["delay"], message: { en: message["message"] } }
+          {
+            delay: message["delay"],
+            message: localized_value("messages/[id=#{message['id']}]/message")
+          }
         end
       }
     else
@@ -184,6 +195,10 @@ class Behaviour < ApplicationRecord
           end
         end
       ].flatten
+    when "scheduled_messages"
+      config["messages"].map.with_index do |message, i|
+        translation_key("messages/[id=#{message['id']}]/message", DELAY_OPTIONS[message['delay']])
+      end
     else
       raise NotImplementedError
     end
@@ -195,7 +210,11 @@ class Behaviour < ApplicationRecord
     key.to_s.split(/\//).inject(config) do |value, part|
       case value
       when Array
-        value[part.to_i]
+        if part =~ /\[(.*)=(.*)\]/
+          value.select { |e| e[$1] == $2 }.first
+        else
+          value[part.to_i]
+        end
       when Hash
         value[part]
       else

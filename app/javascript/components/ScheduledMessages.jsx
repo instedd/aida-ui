@@ -40,6 +40,7 @@ class ScheduledMessages extends Component {
       updateConfig('messages')(newMessages)
     }
 
+    // duplicated in behaviour.rb
     const delayOptions = [
       {value: 60, label: '1 hour'},
       {value: 1440, label: '1 day'},

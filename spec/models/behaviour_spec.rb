@@ -186,7 +186,7 @@ RSpec.describe Behaviour, type: :model do
       detector = bot.skills.create_skill!('scheduled_messages')
       fragment = detector.manifest_fragment
       expect(fragment).to_not be_nil
-      expect(fragment.keys).to match_array(%i(type id name messages))
+      expect(fragment.keys).to match_array(%i(type id name schedule_type messages))
     end
   end
 end
