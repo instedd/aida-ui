@@ -10,6 +10,7 @@ import * as actions from '../actions/skill'
 import KeywordResponder from './KeywordResponder'
 import LanguageDetector from './LanguageDetector'
 import Survey from './Survey'
+import ScheduledMessages from './ScheduledMessages'
 
 const SkillComponent = ({skill, actions}) => {
   const { kind } = skill
@@ -21,6 +22,8 @@ const SkillComponent = ({skill, actions}) => {
       return (<LanguageDetector skill={skill} actions={actions} />)
     case 'survey':
       return (<Survey skill={skill} actions={actions} />)
+    case 'scheduled_messages':
+      return (<ScheduledMessages skill={skill} actions={actions} />)
     default:
       return (<Title>{skill.name} #{skill.id}</Title>)
   }

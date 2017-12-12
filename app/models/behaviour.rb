@@ -3,7 +3,7 @@ class Behaviour < ApplicationRecord
 
   has_many :translations, dependent: :destroy
 
-  validates :kind, inclusion: { in: %w(front_desk language_detector keyword_responder survey) }
+  validates :kind, inclusion: { in: %w(front_desk language_detector keyword_responder survey scheduled_messages) }
 
   validate :config_must_match_schema
 
@@ -12,6 +12,14 @@ class Behaviour < ApplicationRecord
   scope :of_bots_owned_by, -> (user) { Behaviour.where(bot: user.bots) }
   scope :skills, ->{ where.not(kind: 'front_desk') }
   scope :enabled, ->{ where(enabled: true) }
+
+  # duplicated in ScheduledMessages.jsx
+  DELAY_OPTIONS = {
+    60 => '1 hour',
+    1440 => '1 day',
+    10080 => '1 week',
+    282240 => '1 month', # 28 days month so we end up in the same day of week
+  }
 
   def self.create_front_desk!(params = {})
     default_params = {
@@ -62,6 +70,15 @@ class Behaviour < ApplicationRecord
                            "schedule" => "",
                            "questions" => [],
                            "choice_lists" => []
+                         }
+                       }
+                     when "scheduled_messages"
+                       {
+                         kind: "scheduled_messages",
+                         name: "Scheduled messages",
+                         config: {
+                           "schedule_type" => "since_last_incoming_message",
+                           "messages" => []
                          }
                        }
                      else
@@ -129,6 +146,19 @@ class Behaviour < ApplicationRecord
           }
         end
       }
+    when "scheduled_messages"
+      {
+        type: kind,
+        id: id.to_s,
+        name: name,
+        schedule_type: config["schedule_type"],
+        messages: config["messages"].map do |message|
+          {
+            delay: message["delay"].to_s,
+            message: localized_value("messages/[id=#{message['id']}]/message")
+          }
+        end
+      }
     else
       raise NotImplementedError
     end
@@ -165,6 +195,10 @@ class Behaviour < ApplicationRecord
           end
         end
       ].flatten
+    when "scheduled_messages"
+      config["messages"].map.with_index do |message, i|
+        translation_key("messages/[id=#{message['id']}]/message", DELAY_OPTIONS[message['delay']])
+      end
     else
       raise NotImplementedError
     end
@@ -176,7 +210,11 @@ class Behaviour < ApplicationRecord
     key.to_s.split(/\//).inject(config) do |value, part|
       case value
       when Array
-        value[part.to_i]
+        if part =~ /\[(.*)=(.*)\]/
+          value.select { |e| e[$1] == $2 }.first
+        else
+          value[part.to_i]
+        end
       when Hash
         value[part]
       else
@@ -213,6 +251,8 @@ class Behaviour < ApplicationRecord
       "#/definitions/keywordResponderConfig"
     when "survey"
       "#/definitions/surveyConfig"
+    when "scheduled_messages"
+      "#/definitions/scheduledMessagesConfig"
     else
       fail "config schema not defined"
     end
