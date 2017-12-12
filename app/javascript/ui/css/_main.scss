@@ -34,7 +34,7 @@
   background: $md-grey-200;
   width: 100%;
   display: grid;
-  grid-template-columns: 125px 1fr 125px;
+  grid-template-columns: 10% 1fr 10%;
   grid-template-areas:
     ". main-content .";
   .main-content {
