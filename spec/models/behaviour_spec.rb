@@ -1,3 +1,4 @@
+# coding: utf-8
 require 'rails_helper'
 
 RSpec.describe Behaviour, type: :model do
@@ -161,13 +162,31 @@ RSpec.describe Behaviour, type: :model do
                                                   })
     end
 
+    it "generates manifest with translations" do
+      add_languages 'en', 'es'
+      survey.translations.create! key: 'questions/[name=opt_in]/message', lang: 'es', value: 'Puedo preguntarte algo?'
+      survey.translations.create! key: 'questions/[name=age]/message', lang: 'es', value: 'Qué edad tenés?'
+      survey.translations.create! key: 'choice_lists/[name=yes_no]/choices/[name=yes]/labels', lang: 'es', value: 'si,sep,claro'
+      survey.translations.create! key: 'choice_lists/[name=yes_no]/choices/[name=no]/labels', lang: 'es', value: 'no,luego'
+
+      fragment = survey.manifest_fragment
+      expect(fragment[:questions][0][:message]).to match({ 'en' => 'Can I ask you a question?',
+                                                           'es' => 'Puedo preguntarte algo?' })
+      expect(fragment[:questions][1][:message]).to match({ 'en' => 'How old are you?',
+                                                           'es' => 'Qué edad tenés?' })
+      expect(fragment[:choice_lists][0][:choices][0][:labels]).to match({ 'en' => ['yes', 'yep', 'sure', 'ok'],
+                                                                          'es' => ['si', 'sep', 'claro'] })
+      expect(fragment[:choice_lists][0][:choices][1][:labels]).to match({ 'en' => ['no', 'nope', 'later'],
+                                                                          'es' => ['no', 'luego'] })
+    end
+
     it "returns translation keys for questions and choice lists" do
       keys = survey.translation_keys
       expect(keys).to be_an(Array)
-      expect(keys.map { |key| key[:key] }).to match_array(['questions/0/message',
-                                                           'questions/1/message',
-                                                           'choice_lists/0/choices/0/labels',
-                                                           'choice_lists/0/choices/1/labels'])
+      expect(keys.map { |key| key[:key] }).to match_array(['questions/[name=opt_in]/message',
+                                                           'questions/[name=age]/message',
+                                                           'choice_lists/[name=yes_no]/choices/[name=yes]/labels',
+                                                           'choice_lists/[name=yes_no]/choices/[name=no]/labels'])
       expect(keys.map { |key| key[:default_translation] }).to match_array(['Can I ask you a question?',
                                                                            'How old are you?',
                                                                            'yes,yep,sure,ok',

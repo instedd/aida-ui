@@ -127,7 +127,7 @@ class Behaviour < ApplicationRecord
           {
             type: question["type"],
             name: question["name"],
-            message: localized_value("questions/#{i}/message")
+            message: localized_value("questions/[name=#{question['name']}]/message")
           }.tap do |question_fragment|
             question_fragment[:choices] = question["choices"] if question["choices"].present?
           end
@@ -138,7 +138,7 @@ class Behaviour < ApplicationRecord
             choices: choice_list["choices"].map.with_index do |choice, j|
               {
                 name: choice["name"],
-                labels: localized_value("choice_lists/#{i}/choices/#{j}/labels") do |labels|
+                labels: localized_value("choice_lists/[name=#{choice_list['name']}]/choices/[name=#{choice['name']}]/labels") do |labels|
                   labels.split(/,\s*/)
                 end
               }
@@ -184,13 +184,13 @@ class Behaviour < ApplicationRecord
       []
     when "survey"
       [
-        config["questions"].map.with_index do |question, i|
-          translation_key("questions/#{i}/message",
+        config["questions"].map do |question|
+          translation_key("questions/[name=#{question['name']}]/message",
                           "Question #{question['name']}")
         end,
-        config["choice_lists"].map.with_index do |choice_list, i|
-          choice_list["choices"].map.with_index do |choice, j|
-            translation_key("choice_lists/#{i}/choices/#{j}/labels",
+        config["choice_lists"].map do |choice_list|
+          choice_list["choices"].map do |choice|
+            translation_key("choice_lists/[name=#{choice_list['name']}]/choices/[name=#{choice['name']}]/labels",
                             "Choices #{choice_list['name']}, option #{choice['name']}")
           end
         end
