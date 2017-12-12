@@ -45,7 +45,7 @@ class ScheduledMessages extends Component {
       {value: 60, label: '1 hour'},
       {value: 1440, label: '1 day'},
       {value: 10080, label: '1 week'},
-      {value: 282240, label: '1 month'}, // 28 days month so we end up in the same day of week
+      {value: 40320, label: '1 month'}, // 28 days month so we end up in the same day of week
     ]
 
     return (

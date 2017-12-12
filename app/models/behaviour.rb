@@ -18,7 +18,7 @@ class Behaviour < ApplicationRecord
     60 => '1 hour',
     1440 => '1 day',
     10080 => '1 week',
-    282240 => '1 month', # 28 days month so we end up in the same day of week
+    40320 => '1 month', # 28 days month so we end up in the same day of week
   }
 
   def self.create_front_desk!(params = {})
