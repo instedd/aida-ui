@@ -5,6 +5,7 @@ import channels from './channels'
 import frontDesk from './frontDesk'
 import notifications from './notifications'
 import skills from './skills'
+import stats from './stats'
 import translations from './translations'
 import xlsForms from './xlsForms'
 
@@ -15,6 +16,7 @@ export default combineReducers({
   frontDesk,
   notifications,
   skills,
+  stats,
   translations,
   xlsForms,
 })

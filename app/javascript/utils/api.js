@@ -75,3 +75,7 @@ export const uploadXlsForm = (file : any) => {
   formData.append('file', file)
   return apiPostJSON(`xls_form`, null, formData)
 }
+
+export const fetchStats = (botId : number, period : string) => {
+  return apiFetchJSON(`bots/${botId}/stats`, null, {period})
+}

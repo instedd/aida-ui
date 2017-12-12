@@ -35,6 +35,22 @@ export type TranslationsIndex = {
   behaviours: TranslationBehaviours
 };
 
+export type BehaviourStats = {
+  id: number,
+  label: string,
+  kind: string,
+  users: number
+};
+
+export type BotStats = {
+  active_users: number,
+  messages_received: number,
+  messages_sent: number,
+  behaviours: Array<BehaviourStats>;
+};
+
+export type StatsPeriod = "today" | "this_week" | "this_month";
+
 export type AuthAction = {
   type: 'AUTH_INIT',
   userEmail: string,
@@ -123,6 +139,22 @@ export type SkillsAction = {
   skill: T.Skill
 };
 
+export type StatsAction = {
+  type: 'STATS_FETCH',
+  botId: number,
+  period: StatsPeriod
+} | {
+  type: 'STATS_FETCH_SUCCESS',
+  botId: number,
+  period: StatsPeriod,
+  data: BotStats
+} | {
+  type: 'STATS_FETCH_ERROR',
+  botId: number,
+  period: StatsPeriod,
+  error: string
+};
+
 export type TranslationsAction = {
   type: 'TRANSLATIONS_FETCH',
   scope: Scope,
@@ -159,6 +191,7 @@ export type Action = AuthAction
                    | NotificationsAction
                    | SkillAction
                    | SkillsAction
+                   | StatsAction
                    | TranslationsAction
                    | XlsFormsAction
                    | Thunk;
@@ -197,6 +230,13 @@ export type SkillsState = {
   items: ?ById<T.Skill>
 };
 
+export type StatsState = {
+  fetching: boolean,
+  botId: ?number,
+  period: ?StatsPeriod,
+  data: ?BotStats
+};
+
 export type TranslationsState = {
   fetching: boolean,
   scope: ?Scope,
@@ -218,6 +258,7 @@ export type State = {
   frontDesk: FrontDeskState,
   notifications: NotifState,
   skills: SkillsState,
+  stats: StatsState,
   translations: TranslationsState,
   xlsForms: XlsFormsState,
 };
