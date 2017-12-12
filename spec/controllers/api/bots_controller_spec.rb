@@ -21,4 +21,22 @@ RSpec.describe Api::BotsController, type: :controller do
       expect(bot.name).to eq("updated")
     end
   end
+
+  describe "destroy" do
+    let!(:bot) { Bot.create_prepared!(user) }
+
+    it "can delete a bot" do
+      expect do
+        delete :destroy, params: { id: bot.id }
+      end.to change(Bot, :count).by(-1)
+    end
+
+    it "unpublishes a bot before deleting it" do
+      bot.update_attributes! uuid: 'bot-id'
+
+      expect(Backend).to receive(:destroy_bot).with('bot-id').and_return(true)
+
+      delete :destroy, params: { id: bot.id }
+    end
+  end
 end

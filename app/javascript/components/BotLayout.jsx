@@ -1,7 +1,9 @@
 import React, { Component, Children, cloneElement } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router'
 import { Route, Redirect } from 'react-router-dom'
+import { DialogContainer, Button } from 'react-md'
 
 import EditableTitleLabel from '../ui/EditableTitleLabel'
 import { HeaderNavLink, HeaderNavAction } from '../ui/Header'
@@ -15,6 +17,10 @@ import { BotBehaviour } from '../components/BotBehaviour'
 import BotTranslations from '../components/BotTranslations'
 
 export class BotLayoutComponent extends Component {
+  state = {
+    dialogVisible: false
+  }
+
   componentDidMount() {
     const { botsLoaded } = this.props
     if (!botsLoaded) {
@@ -23,7 +29,32 @@ export class BotLayoutComponent extends Component {
   }
 
   render() {
-    const { botsLoaded, bot, children, botActions } = this.props
+    const { botsLoaded, bot, children, botActions, history } = this.props
+    const { dialogVisible } = this.state
+
+    const showDialog = () => this.setState({ dialogVisible: true })
+    const hideDialog = () => this.setState({ dialogVisible: false })
+    const deleteBot = () => {
+      botActions.deleteBot(bot)
+      history.replace(r.botIndex())
+      hideDialog()
+    }
+
+    const dialogActions = [
+      { secondary: true, children: 'Cancel', onClick: hideDialog },
+      (<Button flat primary onClick={deleteBot}>Delete</Button>)
+    ]
+    const confirmationDialog = (
+      <DialogContainer
+        id="delete-bot-dialog"
+        visible={dialogVisible}
+        onHide={hideDialog}
+        actions={dialogActions}
+        title="Delete bot?">
+        <h4>This will destroy the bot and all its associated data. Are you sure?</h4>
+        <b>This action cannot be undone.</b>
+      </DialogContainer>
+    )
 
     if (botsLoaded == true && bot != null) {
       return (
@@ -45,7 +76,7 @@ export class BotLayoutComponent extends Component {
           headerNavExtra={[
             // <HeaderNavAction label="Rename" />,
             <HeaderNavAction label="Unpublish" onClick={() => botActions.unpublishBot(bot)}/>,
-            // <HeaderNavAction label="Delete" />,
+            <HeaderNavAction label="Delete" onClick={showDialog} />,
           ]}
           buttonAction={() => botActions.publishBot(bot)} buttonIcon="publish"
         >
@@ -55,6 +86,8 @@ export class BotLayoutComponent extends Component {
           <Route exact path="/b/:id/translations" render={() => <BotTranslations bot={bot} />} />
 
           {/* Children.map(children, c => cloneElement(c, {bot})) */}
+
+          {confirmationDialog}
         </AppLayout>
       )
     } else if (botsLoaded == true && bot == null) {
@@ -84,5 +117,4 @@ const mapDispatchToProps = (dispatch) => ({
   botsActions: bindActionCreators(botsActions, dispatch),
 })
 
-export const BotLayout = connect(mapStateToProps, mapDispatchToProps)(BotLayoutComponent)
-
+export const BotLayout = withRouter(connect(mapStateToProps, mapDispatchToProps)(BotLayoutComponent))

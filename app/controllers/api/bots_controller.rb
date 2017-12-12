@@ -16,6 +16,13 @@ class Api::BotsController < ApplicationApiController
     render json: bot_api_json(bot)
   end
 
+  def destroy
+    bot = current_user.bots.find(params[:id])
+    UnpublishBot.run(bot) if bot.published?
+    bot.destroy
+    head :no_content
+  end
+
   def publish
     bot = current_user.bots.find(params[:id])
     if PublishBot.run(bot)

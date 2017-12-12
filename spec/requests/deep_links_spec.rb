@@ -4,6 +4,10 @@ RSpec.describe "deep links", type: :request do
   let!(:user) { User.create! email: "user@example.com" }
   before(:each) { sign_in user }
 
+  before(:example) {
+    expect(Backend).to receive(:version).at_least(:once).and_return('fake-version')
+  }
+
   def deep_link_success(path)
     get path
     expect(response).to be_success

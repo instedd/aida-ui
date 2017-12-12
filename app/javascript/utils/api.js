@@ -20,6 +20,10 @@ export const updateBot = (bot : T.Bot) => {
   return apiPutJSON(`bots/${bot.id}`, botSchema, {bot})
 }
 
+export const deleteBot = (bot : T.Bot) => {
+  return apiDelete(`bots/${bot.id}`)
+}
+
 export const fetchChannels = (botId : number) => {
   return (apiFetchJSON(`bots/${botId}/channels`, new schema.Array(channelSchema)) : Promise<{entities: {channels: T.ById<T.Channel>}}>)
 }
