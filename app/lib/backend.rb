@@ -27,6 +27,16 @@ class Backend
       handle_response { delete("/api/bots/#{uuid}") }
     end
 
+    def usage_summary(uuid, params = {})
+      query = { bot_id: uuid, period: :today }.merge(params)
+      handle_response { get("/api/stats/usage_summary", query: query) }
+    end
+
+    def users_per_skill(uuid, params = {})
+      query = { bot_id: uuid, period: :today }.merge(params)
+      handle_response { get("/api/stats/users_per_skill", query: query) }
+    end
+
     private
 
     def handle_response(&block)
@@ -34,8 +44,10 @@ class Backend
       if response.code >= 200 and response.code < 300
         if response.code == 204
           :ok
-        else
+        elsif response.parsed_response.is_a?(Hash) && response.parsed_response.include?('data')
           response.parsed_response['data']
+        else
+          response.parsed_response
         end
       else
         raise BackendError.new(response)

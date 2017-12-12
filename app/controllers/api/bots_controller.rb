@@ -34,6 +34,14 @@ class Api::BotsController < ApplicationApiController
     end
   end
 
+  def stats
+    bot = current_user.bots.find(params[:id])
+    data = GatherBotStats.run(bot, params[:period])
+    render json: data
+  rescue RuntimeError => e
+    render json: {error: e.message}, status: :bad_request
+  end
+
   private
 
   def bot_api_json(bot)
