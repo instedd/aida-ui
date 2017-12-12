@@ -1,0 +1,58 @@
+.main-empty {
+  background: $md-grey-200;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr minmax(min-content, 320px) 1fr;
+  grid-template-areas: ". main-content .";
+  .main-content {
+    grid-area: main-content;
+    height: 100%;
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: $md-grey-500;
+    padding: 100px 0;
+    span {
+      display: block;
+      padding-top: .5em;
+    }
+    p {
+      color: inherit;
+      font-size: 1.15em;
+      line-height: 2;
+      text-align: center;
+    }
+    .md-icon {
+      color: inherit;
+      font-size: 162px;
+      display: block;
+      margin: 0 auto;
+    }
+    .md-headline {
+      color: inherit;
+      font-size: 1.7em;
+      line-height: 1.25;
+      text-align: center;
+    }
+    .md-headline a {
+      color: $md-secondary-color;
+    }
+    .md-divider {
+      margin: 50px 0;
+    }
+    .md-btn {
+      width: max-content;
+      margin: 40px auto;
+      border-radius: 3px;
+      &--text {
+        font-size: 1.15em;
+        padding: 14px 16px;
+        height: auto;
+      }
+      &.md-text {
+        color: inherit;
+      }
+    }
+  }
+}
