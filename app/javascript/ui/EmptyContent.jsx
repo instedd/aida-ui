@@ -1,15 +1,14 @@
 import React, { Component } from 'react'
-import { MainGrey } from '../ui/MainGrey'
 import { FontIcon } from 'react-md'
 
 export const EmptyContent = ({icon, children}) => {
   return (
-  <MainGrey>
-    <div className='empty-content'>
+  <div className='main-empty'>    
+    <div className='main-content'>
       <FontIcon>{icon}</FontIcon>
       {children}
     </div>
-  </MainGrey>
+  </div>
   )}
 
 export default EmptyContent
