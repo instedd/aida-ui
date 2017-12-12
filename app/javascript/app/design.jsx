@@ -1,17 +1,20 @@
 import React, { Component } from 'react'
-import Layout from '../ui/Layout'
+import { BrowserRouter, Route, Redirect } from 'react-router-dom'
+import { SelectField, Divider, Button, TextField, Checkbox } from 'react-md'
+
 import Header, { HeaderNavLink, HeaderNavAction, SectionNavLink } from '../ui/Header'
 import SideBar, { SidebarItem, SidebarMenuItem } from '../ui/SideBar'
 import { MainContent } from '../ui/MainContent'
 import { MainGrey } from '../ui/MainGrey'
 import { EmptyContent } from '../ui/EmptyContent'
+import Layout from '../ui/Layout'
 import Footer from '../ui/Footer'
 import Title from '../ui/Title'
 import Headline from '../ui/Headline'
 import Field from '../ui/Field'
+import { Listing, Column } from '../ui/Listing'
+
 import Icon from '../components/Icon'
-import { BrowserRouter, Route, Redirect } from 'react-router-dom'
-import * as Md from 'react-md'
 
 export const App = () =>
   <BrowserRouter>
@@ -25,7 +28,7 @@ export const App = () =>
             <SectionNavLink label="Other" to="/" />,
           ]}
           headerNav={[
-            <HeaderNavLink label="Analytics" to="#" />,
+            <HeaderNavLink label="Analytics" to="/_design/analytics" />,
             <HeaderNavLink label="Data" to="/_design/empty" />,
             <HeaderNavLink label="Channels" to="/_design/channel" />,
             <HeaderNavLink label="Behaviour" to="/_design/behaviour" />,
@@ -42,21 +45,41 @@ export const App = () =>
       footer={<Footer>Version: 0.0</Footer>}>
 
       <Route exact path="/_design" render={() => <Redirect to="/_design/behaviour"/>} />
+      <Route exact path="/_design/analytics" component={MainAnalyticsDemo} />
       <Route exact path="/_design/behaviour" component={MainContentDemo} />
       <Route exact path="/_design/channel" component={MainFullWidthDemo} />
       <Route exact path="/_design/empty" component={EmptyDemo} />
     </Layout>
   </BrowserRouter>
 
+const MainAnalyticsDemo = () =>
+  <MainGrey>
+    <SelectField
+      id="select-field-5"
+      placeholder="All bots"
+      className="md-cell"
+      menuItems={[{ label: 'Apples', value: 'A', }, {label: 'Bananas', value: 'B', }]}
+      position={SelectField.Positions.BELOW}
+      simplifiedMenu={false }
+    />
+    <Listing items={[{name: "WFP Chat bot"}, {name: "Kenia water supply"}]} title="2 Bots"
+      onItemClick={b => null}>
+      <Column title="Name" render={b => b.name} />
+      <Column title="Type" render={b => "Facebook"} />
+      <Column title="Uses" render={b => null} />
+      <Column title="Last activity date" render={d => null} />
+    </Listing>
+  </MainGrey>
+
 const EmptyDemo = () =>
   <EmptyContent icon='storage'>
     <Headline>You have no data collected on this proyect
     <span><a href="#" target="_blank">Create One</a></span>
     </Headline>
-    <Md.Divider />
+    <Divider />
     <p>You’ll be able to manage behaviour, translations and access data.</p>
-    <Md.Button flat secondary swapTheming>Accept Invitation</Md.Button>
-    <Md.Button flat>Back to Channels</Md.Button>
+    <Button flat secondary swapTheming>Accept Invitation</Button>
+    <Button flat>Back to Channels</Button>
   </EmptyContent>
 
 const MainFullWidthDemo = () =>
@@ -93,50 +116,50 @@ class MainContentDemo extends Component {
         <Title>Front desk</Title>
         <Headline>This are the basic messages your boot needs to handle. The front desk will assign other messages to the skill that will be better suited to respond</Headline>
 
-        <Md.TextField
+        <TextField
           label="Greeting"
           lineDirection="center"
           defaultValue="Hello I'm a simple chatbot"
           id="field01"
         />
-        <Md.Checkbox
+        <Checkbox
           id="greeting"
           name="simple-checkboxes[]"
           label="Show greeting after language selection"
         />
 
-        <Md.TextField
+        <TextField
           label="Skills introduction"
           lineDirection="center"
           defaultValue="I'm always learning new skills, but I can already help  you with a few things"
           id="field02"
         />
-        <Md.Checkbox
+        <Checkbox
           id="skills"
           name="simple-checkboxes[]"
           label="Always show skill introduction for first time users"
         />
 
-        <Md.TextField
+        <TextField
           label="Didn't understand message"
           lineDirection="center"
           defaultValue="Sorry I didn't understand that. Let me tell you some examples of things I can help you with."
           id="field03"
         />
-        <Md.Checkbox
+        <Checkbox
           id="understand"
           name="simple-checkboxes[]"
           label="Repeat skills introduction for first time users"
         />
         <p>Show when no skill claims more than 70% confidence</p>
 
-        <Md.TextField
+        <TextField
           label="Clarification message"
           lineDirection="center"
           defaultValue="I am not sure what you meant. Please use a short sentence with a simple topic"
           id="field04"
         />
-        <Md.Checkbox
+        <Checkbox
           id="clarification"
           name="simple-checkboxes[]"
           label="Ask for clarification when several skills claim a high confidence"
