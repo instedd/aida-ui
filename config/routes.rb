@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   guisso_for :user
 
   namespace :api, path: "/api/v1" do
-    resources :bots, only: [:index, :create, :update] do
+    resources :bots, only: [:index, :create, :update, :destroy] do
       resources :channels, only: [:index]
       member do
         post :publish
