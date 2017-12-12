@@ -1,5 +1,6 @@
 /* @flow */
 import * as T from '../utils/types'
+import omit from 'lodash/omit'
 
 import * as actions from '../actions/bots'
 import * as botActions from '../actions/bot'
@@ -16,6 +17,7 @@ export default (state : T.BotsState, action : T.Action) : T.BotsState => {
     case actions.RECEIVE: return receive(state, action)
     case actions.CREATE_SUCCESS: return createSuccess(state, action)
     case botActions.UPDATE: return update(state, action)
+    case botActions.DELETE: return deleteBot(state, action)
     default: return state
   }
 }
@@ -45,6 +47,15 @@ const update = (state, action) => {
       ...state.items,
       ...{[bot.id]: bot}
     }
+  }
+}
+
+const deleteBot = (state, action) => {
+  const {botId} = action
+
+  return {
+    ...state,
+    items: omit(state.items, [botId])
   }
 }
 

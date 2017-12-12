@@ -66,6 +66,9 @@ export type BotAction = {
 } | {
   type: "BOT_UNPUBLISH",
   bot: T.Bot,
+} | {
+  type: "BOT_DELETE",
+  botId: number,
 };
 
 export type BotsAction = {
