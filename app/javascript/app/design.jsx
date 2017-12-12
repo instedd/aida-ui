@@ -3,6 +3,8 @@ import Layout from '../ui/Layout'
 import Header, { HeaderNavLink, HeaderNavAction, SectionNavLink } from '../ui/Header'
 import SideBar, { SidebarItem, SidebarMenuItem } from '../ui/SideBar'
 import { MainContent } from '../ui/MainContent'
+import { MainGrey } from '../ui/MainGrey'
+import { EmptyContent } from '../ui/EmptyContent'
 import Footer from '../ui/Footer'
 import Title from '../ui/Title'
 import Headline from '../ui/Headline'
@@ -24,7 +26,7 @@ export const App = () =>
           ]}
           headerNav={[
             <HeaderNavLink label="Analytics" to="#" />,
-            <HeaderNavLink label="Data" to="#" />,
+            <HeaderNavLink label="Data" to="/_design/empty" />,
             <HeaderNavLink label="Channels" to="/_design/channel" />,
             <HeaderNavLink label="Behaviour" to="/_design/behaviour" />,
             <HeaderNavLink label="Translations" to="#" />,
@@ -42,8 +44,20 @@ export const App = () =>
       <Route exact path="/_design" render={() => <Redirect to="/_design/behaviour"/>} />
       <Route exact path="/_design/behaviour" component={MainContentDemo} />
       <Route exact path="/_design/channel" component={MainFullWidthDemo} />
+      <Route exact path="/_design/empty" component={EmptyDemo} />
     </Layout>
   </BrowserRouter>
+
+const EmptyDemo = () =>
+  <EmptyContent icon='storage'>
+    <Headline>You have no data collected on this proyect
+    <span><a href="#" target="_blank">Create One</a></span>
+    </Headline>
+    <Md.Divider />
+    <p>You’ll be able to manage behaviour, translations and access data.</p>
+    <Md.Button flat secondary swapTheming>Accept Invitation</Md.Button>
+    <Md.Button flat>Back to Channels</Md.Button>
+  </EmptyContent>
 
 const MainFullWidthDemo = () =>
   <MainContent>
@@ -127,18 +141,6 @@ class MainContentDemo extends Component {
           name="simple-checkboxes[]"
           label="Ask for clarification when several skills claim a high confidence"
         />
-
-{/*        <Md.ExpansionList style={{ padding: 16 }}>
-          <Md.ExpansionPanel  secondaryLabel="Do you smoke?" defaultExpanded>
-          </Md.ExpansionPanel>
-          <Md.ExpansionPanel secondaryLabel="Do you drink?">
-          </Md.ExpansionPanel>
-          <Md.ExpansionPanel secondaryLabel="How are you today?">
-          </Md.ExpansionPanel>
-        </Md.ExpansionList>
-       <ScrollableAnchor id={'section1'}>
-        <div className='end'> How are you world? </div>
-      </ScrollableAnchor>*/}
       </MainContent>
     );
   }
