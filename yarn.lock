@@ -1464,6 +1464,14 @@ create-hmac@^1.1.0, create-hmac@^1.1.2, create-hmac@^1.1.4:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
+create-react-class@^15.5.2:
+  version "15.6.2"
+  resolved "https://registry.yarnpkg.com/create-react-class/-/create-react-class-15.6.2.tgz#cf1ed15f12aad7f14ef5f2dfe05e6c42f91ef02a"
+  dependencies:
+    fbjs "^0.8.9"
+    loose-envify "^1.3.1"
+    object-assign "^4.1.1"
+
 cross-spawn@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-3.0.1.tgz#1256037ecb9f0c5f79e3d6ef135e30770184b982"
@@ -1614,6 +1622,88 @@ currently-unhandled@^0.4.1:
   dependencies:
     array-find-index "^1.0.1"
 
+d3-array@1, d3-array@^1.1.1, d3-array@^1.2.0:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/d3-array/-/d3-array-1.2.1.tgz#d1ca33de2f6ac31efadb8e050a021d7e2396d5dc"
+
+d3-collection@1, d3-collection@^1.0.3:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/d3-collection/-/d3-collection-1.0.4.tgz#342dfd12837c90974f33f1cc0a785aea570dcdc2"
+
+d3-color@1, d3-color@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/d3-color/-/d3-color-1.0.3.tgz#bc7643fca8e53a8347e2fbdaffa236796b58509b"
+
+d3-contour@^1.1.0:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/d3-contour/-/d3-contour-1.1.2.tgz#21f5456fcf57645922d69a27a58e782c91f842b3"
+  dependencies:
+    d3-array "^1.1.1"
+
+d3-format@1, d3-format@^1.2.0:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/d3-format/-/d3-format-1.2.1.tgz#4e19ecdb081a341dafaf5f555ee956bcfdbf167f"
+
+d3-geo@^1.6.4:
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/d3-geo/-/d3-geo-1.9.1.tgz#157e3b0f917379d0f73bebfff3be537f49fa7356"
+  dependencies:
+    d3-array "1"
+
+d3-hierarchy@^1.1.4:
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/d3-hierarchy/-/d3-hierarchy-1.1.5.tgz#a1c845c42f84a206bcf1c01c01098ea4ddaa7a26"
+
+d3-interpolate@1, d3-interpolate@^1.1.4:
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/d3-interpolate/-/d3-interpolate-1.1.6.tgz#2cf395ae2381804df08aa1bf766b7f97b5f68fb6"
+  dependencies:
+    d3-color "1"
+
+d3-path@1:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/d3-path/-/d3-path-1.0.5.tgz#241eb1849bd9e9e8021c0d0a799f8a0e8e441764"
+
+d3-sankey@^0.7.1:
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/d3-sankey/-/d3-sankey-0.7.1.tgz#d229832268fc69a7fec84803e96c2256a614c521"
+  dependencies:
+    d3-array "1"
+    d3-collection "1"
+    d3-shape "^1.2.0"
+
+d3-scale@^1.0.5:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/d3-scale/-/d3-scale-1.0.7.tgz#fa90324b3ea8a776422bd0472afab0b252a0945d"
+  dependencies:
+    d3-array "^1.2.0"
+    d3-collection "1"
+    d3-color "1"
+    d3-format "1"
+    d3-interpolate "1"
+    d3-time "1"
+    d3-time-format "2"
+
+d3-shape@^1.1.0, d3-shape@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/d3-shape/-/d3-shape-1.2.0.tgz#45d01538f064bafd05ea3d6d2cb748fd8c41f777"
+  dependencies:
+    d3-path "1"
+
+d3-time-format@2:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/d3-time-format/-/d3-time-format-2.1.1.tgz#85b7cdfbc9ffca187f14d3c456ffda268081bb31"
+  dependencies:
+    d3-time "1"
+
+d3-time@1:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/d3-time/-/d3-time-1.0.8.tgz#dbd2d6007bf416fe67a76d17947b784bffea1e84"
+
+d3-voronoi@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/d3-voronoi/-/d3-voronoi-1.1.2.tgz#1687667e8f13a2d158c80c1480c5a29cb0d8973c"
+
 d@1:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/d/-/d-1.0.0.tgz#754bb5bfe55451da69a58b94d45f4c5b0462d58f"
@@ -1745,6 +1835,10 @@ dns-txt@^2.0.2:
 dom-helpers@^3.2.0, dom-helpers@^3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/dom-helpers/-/dom-helpers-3.2.1.tgz#3203e07fed217bd1f424b019735582fc37b2825a"
+
+dom-walk@^0.1.0:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/dom-walk/-/dom-walk-0.1.1.tgz#672226dc74c8f799ad35307df936aba11acd6018"
 
 domain-browser@^1.1.1:
   version "1.1.7"
@@ -2059,7 +2153,7 @@ faye-websocket@~0.11.0:
   dependencies:
     websocket-driver ">=0.5.1"
 
-fbjs@^0.8.16, fbjs@^0.8.4:
+fbjs@^0.8.16, fbjs@^0.8.4, fbjs@^0.8.9:
   version "0.8.16"
   resolved "https://registry.yarnpkg.com/fbjs/-/fbjs-0.8.16.tgz#5e67432f550dc41b572bf55847b8aca64e5337db"
   dependencies:
@@ -2294,6 +2388,13 @@ glob@^7.0.0, glob@^7.0.3, glob@^7.0.5, glob@^7.1.2, glob@~7.1.1:
     minimatch "^3.0.4"
     once "^1.3.0"
     path-is-absolute "^1.0.0"
+
+global@^4.3.1:
+  version "4.3.2"
+  resolved "https://registry.yarnpkg.com/global/-/global-4.3.2.tgz#e76989268a6c74c38908b1305b10fc0e394e9d0f"
+  dependencies:
+    min-document "^2.19.0"
+    process "~0.5.1"
 
 globals@^9.18.0:
   version "9.18.0"
@@ -3278,6 +3379,12 @@ mime@1.4.1, mime@^1.3.4:
 mimic-fn@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/mimic-fn/-/mimic-fn-1.1.0.tgz#e667783d92e89dbd342818b5230b9d62a672ad18"
+
+min-document@^2.19.0:
+  version "2.19.0"
+  resolved "https://registry.yarnpkg.com/min-document/-/min-document-2.19.0.tgz#7bd282e3f5842ed295bb748cdd9f1ffa2c824685"
+  dependencies:
+    dom-walk "^0.1.0"
 
 minimalistic-assert@^1.0.0:
   version "1.0.0"
@@ -4329,6 +4436,10 @@ process@^0.11.0:
   version "0.11.10"
   resolved "https://registry.yarnpkg.com/process/-/process-0.11.10.tgz#7332300e840161bda3e69a1d1d91a7d4bc16f182"
 
+process@~0.5.1:
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/process/-/process-0.5.2.tgz#1638d8a8e34c2f440a91db95ab9aeb677fc185cf"
+
 promise-each@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/promise-each/-/promise-each-2.2.0.tgz#3353174eff2694481037e04e01f77aa0fb6d1b60"
@@ -4502,6 +4613,15 @@ react-md@^1.0.15:
     react-transition-group "^1.2.1"
     resize-observer-polyfill "^1.4.2"
 
+react-motion@^0.4.8:
+  version "0.4.8"
+  resolved "https://registry.yarnpkg.com/react-motion/-/react-motion-0.4.8.tgz#23bb2dd27c2d8e00d229e45572d105efcf40a35e"
+  dependencies:
+    create-react-class "^15.5.2"
+    performance-now "^0.2.0"
+    prop-types "^15.5.8"
+    raf "^3.1.0"
+
 react-motion@^0.5.0:
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/react-motion/-/react-motion-0.5.2.tgz#0dd3a69e411316567927917c6626551ba0607316"
@@ -4588,6 +4708,27 @@ react-transition-group@^1.2.1:
     loose-envify "^1.3.1"
     prop-types "^15.5.6"
     warning "^3.0.0"
+
+react-vis@^1.8.0:
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/react-vis/-/react-vis-1.8.0.tgz#e78d04dd82fcfe57145ff7378b6d2c765932834b"
+  dependencies:
+    d3-array "^1.2.0"
+    d3-collection "^1.0.3"
+    d3-color "^1.0.3"
+    d3-contour "^1.1.0"
+    d3-format "^1.2.0"
+    d3-geo "^1.6.4"
+    d3-hierarchy "^1.1.4"
+    d3-interpolate "^1.1.4"
+    d3-sankey "^0.7.1"
+    d3-scale "^1.0.5"
+    d3-shape "^1.1.0"
+    d3-voronoi "^1.1.2"
+    deep-equal "^1.0.1"
+    global "^4.3.1"
+    prop-types "^15.5.8"
+    react-motion "^0.4.8"
 
 react@^16.1.1:
   version "16.1.1"

@@ -1,0 +1,12 @@
+.ui-metric {
+  h1 {
+    margin: 0;
+    font-size: 3.3em;
+    line-height: 1em;
+  }
+  h1, span {
+    color: $md-grey-900;
+    text-transform: uppercase;
+  }
+  margin-bottom: 3em;
+}

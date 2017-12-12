@@ -43,6 +43,9 @@
 
     .md-paper {
       background-color: $md-white-base;
+      &.md-select-field {
+        background-color: inherit;
+      }
     }
   }
 }

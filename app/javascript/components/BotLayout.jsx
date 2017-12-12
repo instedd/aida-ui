@@ -15,6 +15,7 @@ import AppLayout from './AppLayout'
 import { BotChannel } from '../components/BotChannel'
 import { BotBehaviour } from '../components/BotBehaviour'
 import BotTranslations from '../components/BotTranslations'
+import BotAnalytics from '../components/BotAnalytics'
 
 export class BotLayoutComponent extends Component {
   state = {
@@ -65,7 +66,7 @@ export class BotLayoutComponent extends Component {
             onSubmit={(name) => { botActions.updateBot({...bot, name}) }} />
           }
           headerNav={[
-            // <HeaderNavLink label="Analytics" to="#" />,
+            <HeaderNavLink label="Analytics" to={r.botAnalytics(bot.id)} />,
             // <HeaderNavLink label="Data" to="#" />,
             // TODO: use active="/b/:id/channel"  to allow deep linking
             <HeaderNavLink label="Channel" to={r.botChannel(bot.id)} />,
@@ -81,6 +82,7 @@ export class BotLayoutComponent extends Component {
           buttonAction={() => botActions.publishBot(bot)} buttonIcon="publish"
         >
           <Route exact path="/b/:id" render={({match}) => <Redirect to={r.botChannel(match.params.id)} />} />
+          <Route exact path="/b/:id/analytics" render={() => <BotAnalytics bot={bot} />} />
           <Route exact path="/b/:id/channel" render={() => <BotChannel bot={bot} />} />
           <Route path="/b/:id/behaviour" render={() => <BotBehaviour bot={bot} />} />
           <Route exact path="/b/:id/translations" render={() => <BotTranslations bot={bot} />} />

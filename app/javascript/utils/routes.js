@@ -2,6 +2,8 @@ export const botIndex = () => '/b'
 
 export const bot = (botId) => `/b/${botId}`
 
+export const botAnalytics = (botId) => `/b/${botId}/analytics`
+
 export const botChannel = (botId) => `/b/${botId}/channel`
 
 export const botBehaviour = (botId) => `/b/${botId}/behaviour`
