@@ -7,20 +7,25 @@ class GatherBotStats
     summary = Backend.usage_summary(bot.uuid)
     users_per_skill = Backend.users_per_skill(bot.uuid)
 
+    skills = bot.skills.index_by(&:id)
     {
       active_users: summary['active_users'],
       messages_sent: summary['messages_sent'],
       messages_received: summary['messages_received'],
-      behaviours: bot.behaviours.map do |behaviour|
-        users = users_per_skill.detect { |ups| ups['skill_id'] == behaviour.id.to_s }
-        user_count = users['count'] rescue 0
-        {
-          id: behaviour.id,
-          label: behaviour.name,
-          kind: behaviour.kind,
-          users: user_count
-        }
-      end
+      behaviours: users_per_skill.map do |ups|
+        behaviour = skills[ups['skill_id'].to_i]
+        if behaviour
+          {
+            id: behaviour.id,
+            label: behaviour.name,
+            kind: behaviour.kind,
+            users: ups['count']
+          }
+        else
+          # behaviour was deleted or we don't know anything about it for other reasons
+          nil
+        end
+      end.compact
     }
   end
 end
