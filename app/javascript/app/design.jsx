@@ -50,9 +50,13 @@ export const App = () =>
 
 const EmptyDemo = () =>
   <EmptyContent icon='storage'>
-    <Headline>You have no data collected on this proyect 
+    <Headline>You have no data collected on this proyect
     <span><a href="#" target="_blank">Create One</a></span>
     </Headline>
+    <Md.Divider />
+    <p>You’ll be able to manage behaviour, translations and access data.</p>
+    <Md.Button flat secondary swapTheming>Accept Invitation</Md.Button>
+    <Md.Button flat>Back to Channels</Md.Button>
   </EmptyContent>
 
 const MainFullWidthDemo = () =>

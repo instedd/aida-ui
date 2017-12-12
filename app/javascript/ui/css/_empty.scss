@@ -4,6 +4,16 @@
   justify-content: center;
   color: $md-grey-500;
   padding: 100px 0;
+  span {
+    display: block;
+    padding-top: .5em;
+  }
+  p {
+    color: inherit;
+    font-size: 1.15em;
+    line-height: 2;
+    text-align: center;
+  }
   .md-icon {
     color: inherit;
     font-size: 162px;
@@ -15,10 +25,6 @@
     font-size: 1.7em;
     line-height: 1.25;
     text-align: center;
-  }
-  span {
-    display: block;
-    padding-top: .5em;
   }
   .md-headline a {
     color: $md-secondary-color;
@@ -34,6 +40,9 @@
       font-size: 1.15em;
       padding: 14px 16px;
       height: auto;
+    }
+    &.md-text {
+      color: inherit;
     }
   }
 }
