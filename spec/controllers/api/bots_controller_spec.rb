@@ -5,10 +5,16 @@ RSpec.describe Api::BotsController, type: :controller do
   before(:each) { sign_in user }
 
   describe "index" do
-    it "ensures a bot exists" do
-      expect(Bot.count).to eq(0)
+    let!(:bot) { Bot.create_prepared!(user) }
+
+    it "returns the list of bots" do
       get :index
-      expect(Bot.count).to eq(1)
+
+      expect(response).to be_success
+      expect(json_body).to match_array([{ id: bot.id,
+                                          name: bot.name,
+                                          published: bot.published?,
+                                          channel_setup: bot.channels.first.setup? }])
     end
   end
 
