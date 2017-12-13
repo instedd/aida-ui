@@ -55,7 +55,8 @@ class Api::BotsController < ApplicationApiController
     {
       id: bot.id,
       name: bot.name,
-      published: bot.published?
+      published: bot.published?,
+      channel_setup: bot.channels.first.setup?,
     }
   end
 end

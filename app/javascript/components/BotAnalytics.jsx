@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { Grid, Cell, Paper, SelectField } from 'react-md'
+import { Grid, Cell, Paper, SelectField, Divider } from 'react-md'
 import { FlexibleWidthXYPlot, YAxis, XAxis, HorizontalBarSeries, VerticalGridLines } from 'react-vis'
 
 import { MainGrey } from '../ui/MainGrey'
+import { EmptyContent } from '../ui/EmptyContent'
+import { Headline } from '../ui/Headline'
 import { Metric } from '../ui/Metric'
 
 import * as actions from '../actions/stats'
@@ -14,11 +16,14 @@ const DEFAULT_PERIOD = "this_week"
 class BotAnalyticsComponent extends Component {
 
   componentDidMount() {
-    this.props.actions.fetchStats(this.props.bot.id, DEFAULT_PERIOD)
+    const { bot, actions} = this.props
+    if (bot.published) {
+      actions.fetchStats(bot.id, DEFAULT_PERIOD)
+    }
   }
 
   render() {
-    const { bot, fetching, period, data, actions} = this.props
+    const { bot, fetching, period, data, actions } = this.props
 
     // const data = [
     //   {x: 605, y: 'Front desk'},
@@ -28,6 +33,16 @@ class BotAnalyticsComponent extends Component {
     //   {x: 105, y: 'Food delivery'},
     //   {x: 120, y: 'Profile data'},
     // ];
+
+    if (!bot.published) {
+      return (
+        <EmptyContent icon='sentiment_neutral'>
+          <Headline>No analytics available</Headline>
+          <Divider />
+          <p>You’ll be able to view analytics once the bot is published.</p>
+        </EmptyContent>
+      )
+    }
 
     const l = (value) => fetching ? "..." : value
 

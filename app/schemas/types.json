@@ -6,10 +6,12 @@
       "type": "object",
       "properties": {
         "id": { "type": "integer" },
-        "name": { "type": "string" }
+        "name": { "type": "string" },
+        "published": { "type": "boolean" },
+        "channel_setup": { "type": "boolean" }
       },
       "additionalProperties": false,
-      "required": [ "id", "name" ]
+      "required": [ "id", "name", "published", "channel_setup" ]
     },
 
     "facebookChannelConfig": {

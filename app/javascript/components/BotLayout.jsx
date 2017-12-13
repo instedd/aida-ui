@@ -58,6 +58,16 @@ export class BotLayoutComponent extends Component {
     )
 
     if (botsLoaded == true && bot != null) {
+      const defaultTab = (bot) => {
+        if (bot.published) {
+          return r.botAnalytics(bot.id)
+        } else if (bot.channel_setup) {
+          return r.botBehaviour(bot.id)
+        } else {
+          return r.botChannel(bot.id)
+        }
+      }
+
       return (
         <AppLayout
           title={
@@ -81,7 +91,7 @@ export class BotLayoutComponent extends Component {
           ]}
           buttonAction={() => botActions.publishBot(bot)} buttonIcon="publish"
         >
-          <Route exact path="/b/:id" render={({match}) => <Redirect to={r.botChannel(match.params.id)} />} />
+          <Route exact path="/b/:id" render={() => <Redirect to={defaultTab(bot)} />} />
           <Route exact path="/b/:id/analytics" render={() => <BotAnalytics bot={bot} />} />
           <Route exact path="/b/:id/channel" render={() => <BotChannel bot={bot} />} />
           <Route path="/b/:id/behaviour" render={() => <BotBehaviour bot={bot} />} />

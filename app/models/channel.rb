@@ -8,6 +8,12 @@ class Channel < ApplicationRecord
 
   scope :of_bots_owned_by, -> (user) { Channel.where(bot: user.bots) }
 
+  def setup?
+    config["page_id"].present? &&
+    config["verify_token"].present? &&
+    config["access_token"].present?
+  end
+
   private
 
   def config_must_match_schema

@@ -20,7 +20,10 @@ export const publishBot = (bot : T.Bot) => (dispatch : T.Dispatch) => {
   dispatch({type: PUBLISH, bot})
 
   return api.publishBot(bot)
-            .then(() => dispatch(pushNotification('The bot was published successfully')))
+            .then(() => {
+              dispatch(pushNotification('The bot was published successfully'))
+              dispatch({type: UPDATE, bot: {...bot, published: true}})
+            })
             .catch(() => dispatch(pushNotification('Bot publication failed')))
 }
 
@@ -28,7 +31,10 @@ export const unpublishBot = (bot : T.Bot) => (dispatch : T.Dispatch) => {
   dispatch({type: UNPUBLISH, bot})
 
   return api.unpublishBot(bot)
-            .then(() => dispatch(pushNotification('The bot was unpublished')))
+            .then(() => {
+              dispatch(pushNotification('The bot was unpublished'))
+              dispatch({type: UPDATE, bot: {...bot, published: false}})
+            })
             .catch(() => dispatch(pushNotification('Error unpublishing bot')))
 }
 

@@ -3,6 +3,8 @@
 export type Bot = {
   id: number;
   name: string;
+  published: boolean;
+  channel_setup: boolean;
 };
 
 export type FacebookChannelConfig = {
