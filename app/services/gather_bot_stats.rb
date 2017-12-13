@@ -21,11 +21,27 @@ class GatherBotStats
             kind: behaviour.kind,
             users: ups['count']
           }
+        elsif ups['skill_id'] == "front_desk"
+          {
+            id: "front_desk",
+            label: "Front desk",
+            kind: "front_desk",
+            users: ups['count']
+          }
+        elsif ups['skill_id'] == "language_detector"
+          {
+            id: "language_detector",
+            label: "Language detector",
+            kind: "language_detector",
+            users: ups['count']
+          }
         else
           # behaviour was deleted or we don't know anything about it for other reasons
           nil
         end
       end.compact
+
     }
+
   end
 end

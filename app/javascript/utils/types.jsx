@@ -36,7 +36,7 @@ export type TranslationsIndex = {
 };
 
 export type BehaviourStats = {
-  id: number,
+  id: number|string,
   label: string,
   kind: string,
   users: number
