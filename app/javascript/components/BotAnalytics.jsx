@@ -25,15 +25,6 @@ class BotAnalyticsComponent extends Component {
   render() {
     const { bot, fetching, period, data, actions } = this.props
 
-    // const data = [
-    //   {x: 605, y: 'Front desk'},
-    //   {x: 450, y: 'Language detector'},
-    //   {x: 380, y: 'Food survey'},
-    //   {x: 10,  y: 'Inactivity check'},
-    //   {x: 105, y: 'Food delivery'},
-    //   {x: 120, y: 'Profile data'},
-    // ];
-
     if (!bot.published) {
       return (
         <EmptyContent icon='sentiment_neutral'>
@@ -78,13 +69,15 @@ class BotAnalyticsComponent extends Component {
                 } else if (data.behaviours.length == 0) {
                   return (<center>No data available</center>)
                 } else {
+                  const chart_data = data.behaviours.map(({label, users}) => ({x: users, y: label}))
+
                   return (<FlexibleWidthXYPlot height={300}
                       margin={{left: 140, right: 20, top: 10, bottom: 40}}
                       yType="ordinal" xType="linear">
                     <VerticalGridLines />
                     <XAxis />
                     <YAxis style={{text: { fontSize: "1em" }}} />
-                    <HorizontalBarSeries data={data.reverse()} color="#cedd36" />
+                    <HorizontalBarSeries data={chart_data} color="#cedd36" />
                   </FlexibleWidthXYPlot>)
                 }
               })()}
