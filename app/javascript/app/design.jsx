@@ -7,6 +7,7 @@ import SideBar, { SidebarItem, SidebarMenuItem } from '../ui/SideBar'
 import { MainContent } from '../ui/MainContent'
 import { MainGrey } from '../ui/MainGrey'
 import { EmptyContent } from '../ui/EmptyContent'
+import { EmptyLoader } from '../ui/Loader'
 import Layout from '../ui/Layout'
 import Footer from '../ui/Footer'
 import Title from '../ui/Title'
@@ -32,7 +33,7 @@ export const App = () =>
             <HeaderNavLink label="Data" to="/_design/empty" />,
             <HeaderNavLink label="Channels" to="/_design/channel" />,
             <HeaderNavLink label="Behaviour" to="/_design/behaviour" />,
-            <HeaderNavLink label="Translations" to="#" />,
+            <HeaderNavLink label="Translations" to="/_design/translations" />,
             <HeaderNavLink label="Collaborators" to="#" />,
           ]}
           headerNavExtra={[
@@ -49,6 +50,7 @@ export const App = () =>
       <Route exact path="/_design/behaviour" component={MainContentDemo} />
       <Route exact path="/_design/channel" component={MainFullWidthDemo} />
       <Route exact path="/_design/empty" component={EmptyDemo} />
+      <Route exact path="/_design/translations" component={LoaderDemo} />
     </Layout>
   </BrowserRouter>
 
@@ -70,6 +72,9 @@ const MainAnalyticsDemo = () =>
       <Column title="Last activity date" render={d => null} />
     </Listing>
   </MainGrey>
+
+const LoaderDemo = () =>
+  <EmptyLoader>Loading translations</EmptyLoader>
 
 const EmptyDemo = () =>
   <EmptyContent icon='storage'>

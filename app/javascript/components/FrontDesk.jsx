@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import Title from '../ui/Title'
 import Headline from '../ui/Headline'
 import Field from '../ui/Field'
+import Loader from '../ui/Loader'
 
 import * as frontDeskActions from '../actions/frontDesk'
 
@@ -23,7 +24,7 @@ class FrontDesk extends Component {
     const config = data ? data.config : {}
 
     if (!loaded) {
-      return <Title>Loading front desk data...</Title>
+      return <Loader>Loading front desk data</Loader>
     }
 
     const updateConfig = (key) => {

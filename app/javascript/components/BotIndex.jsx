@@ -7,6 +7,7 @@ import { MainGrey } from '../ui/MainGrey'
 import { Listing, Column } from '../ui/Listing'
 import EmptyContent from '../ui/EmptyContent'
 import Headline from '../ui/Headline'
+import { EmptyLoader } from '../ui/Loader'
 
 import * as actions from '../actions/bots'
 import * as routes from '../utils/routes'
@@ -22,7 +23,7 @@ export class BotIndexComponent extends Component {
     const { bots, history, actions } = this.props
 
     if (!bots) {
-      return <AppLayout title="Bots"><p>Loading bots...</p></AppLayout>
+      return <AppLayout title="Bots"><EmptyLoader>Loading bots</EmptyLoader></AppLayout>
     } else {
       const botList = Object.values(bots)
       const createBot = () => actions.createBot(history)

@@ -41,6 +41,13 @@
   min-width: auto;
 }
 
+.loader {
+  width: 100%;
+  p {
+    color: $md-grey-500;
+    text-align: center;
+  }
+}
 
 /* ========== Helper classes ============ */
 

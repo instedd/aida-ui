@@ -6,6 +6,7 @@ import { MainContent } from '../ui/MainContent'
 import Title from '../ui/Title'
 import Headline from '../ui/Headline'
 import Field from '../ui/Field'
+import { EmptyLoader }  from '../ui/Loader'
 
 import * as channelActions from '../actions/channel'
 import * as channelsActions from '../actions/channels'
@@ -42,7 +43,7 @@ class BotChannelComponent extends Component {
         <Field label="Access Token" value={channel.config.access_token} onChange={this.updateConfigField("access_token")} />
       </MainContent>
     } else {
-      return <p>Loading channels for {bot.name}</p>
+      return <EmptyLoader>Loading channels for {bot.name}</EmptyLoader>
     }
   }
 }

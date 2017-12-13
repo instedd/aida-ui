@@ -7,6 +7,7 @@ import { DialogContainer, Button } from 'react-md'
 
 import EditableTitleLabel from '../ui/EditableTitleLabel'
 import { HeaderNavLink, HeaderNavAction } from '../ui/Header'
+import { EmptyLoader } from '../ui/Loader'
 
 import * as botActions from '../actions/bot'
 import * as botsActions from '../actions/bots'
@@ -106,7 +107,7 @@ export class BotLayoutComponent extends Component {
       // TODO if items exists but no id, then 404
       return <AppLayout title="Bot not found" />
     } else {
-      return <AppLayout><p>Loading bot...</p></AppLayout>
+      return <AppLayout><EmptyLoader>Loading bot</EmptyLoader></AppLayout>
     }
   }
 }

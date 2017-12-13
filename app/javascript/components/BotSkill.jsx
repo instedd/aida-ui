@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
-import Title from '../ui/Title'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+
+import Title from '../ui/Title'
+import { Loader } from '../ui/Loader'
 
 import * as routes from '../utils/routes'
 import * as actions from '../actions/skill'
@@ -33,7 +35,7 @@ class BotSkill extends Component {
   render() {
     const { bot, skill, actions, loading } = this.props
     if (loading) {
-      return <Title>Loading skill...</Title>
+      return <Loader>Loading skill</Loader>
     } else if (skill) {
       return <SkillComponent skill={skill} actions={actions}/>
     } else {

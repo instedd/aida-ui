@@ -14,6 +14,7 @@ import map from 'lodash/map'
 
 import MainContent from '../ui/MainContent'
 import Title from '../ui/Title'
+import { EmptyLoader } from '../ui/Loader'
 
 import * as actions from '../actions/translations'
 import { languageNameByCode } from '../utils/lang'
@@ -92,11 +93,7 @@ class BotTranslations extends Component {
     const { bot, languages, defaultLang, behaviours, actions } = this.props
     const { firstLang, secondLang } = this.state
     if (!behaviours) {
-      return (
-        <MainContent>
-          <Title>Loading translations...</Title>
-        </MainContent>
-      )
+      return <EmptyLoader>Loading translations</EmptyLoader>
     }
 
     const langItems = map(languages || [], value => {
