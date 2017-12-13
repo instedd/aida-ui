@@ -17,6 +17,7 @@ import { BotChannel } from '../components/BotChannel'
 import { BotBehaviour } from '../components/BotBehaviour'
 import BotTranslations from '../components/BotTranslations'
 import BotAnalytics from '../components/BotAnalytics'
+import BotData from '../components/BotData'
 
 export class BotLayoutComponent extends Component {
   state = {
@@ -78,7 +79,7 @@ export class BotLayoutComponent extends Component {
           }
           headerNav={[
             <HeaderNavLink label="Analytics" to={r.botAnalytics(bot.id)} />,
-            // <HeaderNavLink label="Data" to="#" />,
+            <HeaderNavLink label="Data" to={r.botData(bot.id)} />,
             // TODO: use active="/b/:id/channel"  to allow deep linking
             <HeaderNavLink label="Channel" to={r.botChannel(bot.id)} />,
             <HeaderNavLink label="Behaviour" to={r.botBehaviour(bot.id)} />,
@@ -93,6 +94,7 @@ export class BotLayoutComponent extends Component {
           buttonAction={() => botActions.publishBot(bot)} buttonIcon="publish"
         >
           <Route exact path="/b/:id" render={() => <Redirect to={defaultTab(bot)} />} />
+          <Route exact path="/b/:id/data" render={() => <BotData bot={bot} />} />
           <Route exact path="/b/:id/analytics" render={() => <BotAnalytics bot={bot} />} />
           <Route exact path="/b/:id/channel" render={() => <BotChannel bot={bot} />} />
           <Route path="/b/:id/behaviour" render={() => <BotBehaviour bot={bot} />} />

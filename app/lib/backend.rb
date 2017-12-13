@@ -27,6 +27,10 @@ class Backend
       handle_response { delete("/api/bots/#{uuid}") }
     end
 
+    def session_data(uuid)
+      handle_response { get("/api/bots/#{uuid}/session_data") }
+    end
+
     def usage_summary(uuid, params = {})
       query = { bot_id: uuid, period: :today }.merge(params)
       handle_response { get("/api/stats/usage_summary", query: query) }

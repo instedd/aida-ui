@@ -30,6 +30,34 @@ class Api::BotsController < ApplicationApiController
     end
   end
 
+  def data
+    bot = current_user.bots.find(params[:id])
+    cols = []
+    data = []
+
+    data = Backend.session_data(bot.uuid) if bot.published?
+    cols = data[0]["data"].keys if data.length > 0
+
+    csv_data = CSV.generate do |csv|
+      csv << ["id", *cols]
+      data.each do |r|
+        row = [r["id"]]
+        cols.each do |c|
+          value = r["data"][c]
+          if value.is_a?(Array)
+            row << value.join(", ")
+          else
+            row << value
+          end
+        end
+
+        csv << row
+      end
+    end
+
+    send_data csv_data
+  end
+
   def unpublish
     bot = current_user.bots.find(params[:id])
     if UnpublishBot.run(bot)

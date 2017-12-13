@@ -9,6 +9,7 @@ Rails.application.routes.draw do
         post :publish
         delete :publish, action: :unpublish
         get :stats
+        get :data
       end
       resource :front_desk, only: [:show, :update]
       resources :skills, only: [:index, :create]
