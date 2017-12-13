@@ -52,8 +52,8 @@ class BotAnalyticsComponent extends Component {
           id="period"
           menuItems={[
             {label: "Chatbot performance today", value: "today"},
-            {label: "Chatbot performance this week", value: "this_week"},
-            {label: "Chatbot performance this month", value: "this_month"}
+            {label: "Chatbot performance last 7 days", value: "this_week"},
+            {label: "Chatbot performance last 30 days", value: "this_month"}
           ]}
           stripActiveItem={false}
           position={SelectField.Positions.BELOW}
