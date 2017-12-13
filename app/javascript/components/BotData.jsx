@@ -20,7 +20,7 @@ export class BotData extends Component {
 
     return (
       <EmptyContent icon='file_download'>
-        <Button flat secondary href={`/api/v1/bots/${bot.id}/data`}>Download CSV</Button>
+        <Button flat secondary href={`/api/v1/bots/${bot.id}/data.csv`}>Download CSV</Button>
       </EmptyContent>
     )
   }
