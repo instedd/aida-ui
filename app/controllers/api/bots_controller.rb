@@ -1,7 +1,5 @@
 class Api::BotsController < ApplicationApiController
   def index
-    Bot.create_prepared!(current_user) if current_user.bots.count == 0
-
     render json: current_user.bots.map { |b| bot_api_json(b) }
   end
 
