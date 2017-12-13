@@ -32,13 +32,13 @@ class Backend
     end
 
     def usage_summary(uuid, params = {})
-      query = { bot_id: uuid, period: :today }.merge(params)
-      handle_response { get("/api/stats/usage_summary", query: query) }
+      query = { period: :today }.merge(params)
+      handle_response { get("/api/bots/#{uuid}/stats/usage_summary", query: query) }
     end
 
     def users_per_skill(uuid, params = {})
-      query = { bot_id: uuid, period: :today }.merge(params)
-      handle_response { get("/api/stats/users_per_skill", query: query) }
+      query = { period: :today }.merge(params)
+      handle_response { get("/api/bots/#{uuid}/stats/users_per_skill", query: query) }
     end
 
     private
