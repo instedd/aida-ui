@@ -34,7 +34,7 @@ export class BotIndexComponent extends Component {
            <EmptyContent icon='chat_bubble_outline'>
              <Headline>
                You have no bots yet
-               <span><a onClick={createBot}>Create One</a></span>
+               <span><a href="javascript:" onClick={createBot}>Create One</a></span>
              </Headline>
            </EmptyContent>
         )
