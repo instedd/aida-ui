@@ -9,9 +9,9 @@ class GatherBotStats
 
     skills = bot.skills.index_by(&:id)
     {
-      active_users: summary['active_users'],
-      messages_sent: summary['messages_sent'],
-      messages_received: summary['messages_received'],
+      active_users: summary['active_users'] || 0,
+      messages_sent: summary['messages_sent'] || 0,
+      messages_received: summary['messages_received'] || 0,
       behaviours: users_per_skill.map do |ups|
         behaviour = skills[ups['skill_id'].to_i]
         if behaviour
