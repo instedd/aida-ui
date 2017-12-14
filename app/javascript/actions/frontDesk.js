@@ -37,6 +37,5 @@ export const updateFrontDeskConfig = (key : string, value : any) => (dispatch : 
 }
 
 const updateFrontDeskDelayed = (botId, frontDesk) => debounced(`FRONT_DESK_UPDATE_${botId}`)(dispatch => {
-  console.log('Saving front desk configuration')
   api.updateFrontDesk(botId, frontDesk)
 })

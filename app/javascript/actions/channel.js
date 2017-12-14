@@ -11,6 +11,5 @@ export const updateChannel = (channel : T.Channel) => (dispatch : T.Dispatch, ge
 }
 
 const updateChannelDelayed = (channel) => debounced(`CHANNEL_UPDATE_${channel.id}`)(dispatch => {
-  console.log('Saving channel configuration')
   api.updateChannel(channel)
 })
