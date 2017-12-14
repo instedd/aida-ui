@@ -18,6 +18,8 @@ export default (state : T.BotsState, action : T.Action) : T.BotsState => {
     case actions.CREATE_SUCCESS: return createSuccess(state, action)
     case botActions.UPDATE: return update(state, action)
     case botActions.DELETE: return deleteBot(state, action)
+    case botActions.PUBLISH_SUCCESS: return publishSuccess(state, action)
+    case botActions.UNPUBLISH_SUCCESS: return unpublishSuccess(state, action)
     default: return state
   }
 }
@@ -67,5 +69,37 @@ const createSuccess = (state, action) => {
       ...state.items,
       ...{[bot.id]: bot}
     }
+  }
+}
+
+const publishSuccess = (state, action) => {
+  const {botId} = action
+  const bot = state.items && state.items[botId.toString()]
+  if (bot) {
+    return {
+      ...state,
+      items: {
+        ...state.items,
+        ...{[botId]: {...bot, published: true}}
+      }
+    }
+  } else {
+    return state
+  }
+}
+
+const unpublishSuccess = (state, action) => {
+  const {botId} = action
+  const bot = state.items && state.items[botId.toString()]
+  if (bot) {
+    return {
+      ...state,
+      items: {
+        ...state.items,
+        ...{[botId]: {...bot, published: false}}
+      }
+    }
+  } else {
+    return state
   }
 }

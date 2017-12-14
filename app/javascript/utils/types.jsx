@@ -62,10 +62,16 @@ export type BotAction = {
   bot: T.Bot,
 } | {
   type: "BOT_PUBLISH",
-  bot: T.Bot,
+  botId: number,
+} | {
+  type: "BOT_PUBLISH_SUCCESS",
+  botId: number,
 } | {
   type: "BOT_UNPUBLISH",
-  bot: T.Bot,
+  botId: number,
+} | {
+  type: "BOT_UNPUBLISH_SUCCESS",
+  botId: number,
 } | {
   type: "BOT_DELETE",
   botId: number,
