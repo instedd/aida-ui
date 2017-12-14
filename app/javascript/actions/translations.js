@@ -7,6 +7,23 @@ export const FETCH = 'TRANSLATIONS_FETCH'
 export const RECEIVE = 'TRANSLATIONS_RECEIVE'
 export const UPDATE = 'TRANSLATION_UPDATE'
 
+export const translationsFetch = (scope : T.Scope) : T.TranslationsAction => ({
+  type: FETCH,
+  scope,
+})
+
+export const translationsReceive = (scope : T.Scope, data : T.TranslationsIndex) : T.TranslationsAction => ({
+  type: RECEIVE,
+  scope,
+  data
+})
+
+export const translationsUpdate = (botId : number, translation : T.Translation) : T.TranslationsAction => ({
+  type: UPDATE,
+  botId,
+  translation
+})
+
 export const fetchTranslations = (scope : {botId : number}) => (dispatch : T.Dispatch, getState : T.GetState) => {
   const state = getState()
 
@@ -15,24 +32,13 @@ export const fetchTranslations = (scope : {botId : number}) => (dispatch : T.Dis
     return
   }
 
-  dispatch(startFetchingTranslations(scope))
+  dispatch(translationsFetch(scope))
   return api.fetchTranslations(scope.botId)
-            .then(response => dispatch(receiveTranslations(scope, response)))
+            .then(response => dispatch(translationsReceive(scope, response)))
 }
 
-export const startFetchingTranslations = (scope : any) : T.TranslationsAction => ({
-  type: FETCH,
-  scope,
-})
-
-export const receiveTranslations = (scope : any, data : T.TranslationsIndex) : T.TranslationsAction => ({
-  type: RECEIVE,
-  scope,
-  data
-})
-
 export const updateTranslation = (botId : number, translation : T.Translation) => (dispatch : T.Dispatch) => {
-  dispatch({type: UPDATE, botId, translation})
+  dispatch(translationsUpdate(botId, translation))
   dispatch(updateTranslationDelayed(botId, translation))
 }
 

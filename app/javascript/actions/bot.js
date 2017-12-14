@@ -36,6 +36,11 @@ export const botUnpublishSuccess = (botId : number) : T.BotAction => ({
   botId
 })
 
+export const botDelete = (botId : number) : T.BotAction => ({
+  type: DELETE,
+  botId
+})
+
 export const updateBot = (bot : T.Bot) => (dispatch : T.Dispatch, getState : T.GetState) => {
   dispatch(botUpdate(bot))
 
@@ -67,5 +72,5 @@ export const unpublishBot = (bot : T.Bot) => (dispatch : T.Dispatch) => {
 
 export const deleteBot = (bot : T.Bot) => (dispatch : T.Dispatch) => {
   return api.deleteBot(bot)
-            .then(() => dispatch({type: DELETE, botId: bot.id}))
+            .then(() => dispatch(botDelete(bot.id)))
 }

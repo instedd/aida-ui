@@ -8,6 +8,27 @@ export const RECEIVE = 'SKILLS_RECEIVE'
 export const RECEIVE_ERROR = 'SKILLS_RECEIVE_ERROR'
 export const CREATE_SUCCESS = 'SKILLS_CREATE_SUCCESS'
 
+export const skillsFetch = (scope : T.Scope) : T.SkillsAction => ({
+  type: FETCH,
+  scope,
+})
+
+export const skillsReceive = (scope : T.Scope, items : T.ById<T.Skill>) : T.SkillsAction => ({
+  type: RECEIVE,
+  scope,
+  items
+})
+
+export const skillsReceiveError = () : T.SkillsAction => ({
+  type: RECEIVE_ERROR
+})
+
+export const skillsCreateSuccess = (scope : T.Scope, skill : T.Skill) : T.SkillsAction => ({
+  type: CREATE_SUCCESS,
+  scope,
+  skill
+})
+
 export const fetchSkills = (scope : {botId : number}) => (dispatch : T.Dispatch, getState : T.GetState) => {
   const state = getState()
 
@@ -18,35 +39,19 @@ export const fetchSkills = (scope : {botId : number}) => (dispatch : T.Dispatch,
 
   // Don't fetch if loaded Skill match filter
 
-  dispatch(startFetchingSkills(scope))
+  dispatch(skillsFetch(scope))
   return api.fetchSkills(scope.botId)
-    .then(response => dispatch(receiveSkills(scope, response.entities.skills || {})))
+            .then(response => dispatch(skillsReceive(scope, response.entities.skills || {})))
+            .catch(error => dispatch(skillsReceiveError()))
 }
-
-export const startFetchingSkills = (scope : any) : T.SkillsAction => ({
-  type: FETCH,
-  scope,
-})
-
-export const receiveSkills = (scope : any, items : T.ById<T.Skill>) : T.SkillsAction => ({
-  type: RECEIVE,
-  scope,
-  items
-})
 
 export const createSkill = (scope : {botId : number}, {kind, name} : {name: ?string, kind: string}, history : any) => (dispatch : T.Dispatch) => {
   return api.createSkill(scope.botId, kind, name)
             .then(skill => {
-              dispatch(skillCreated(scope, skill))
+              dispatch(skillsCreateSuccess(scope, skill))
               history.push(routes.botSkill(scope.botId, skill.id))
             })
             .catch(error => {
               console.error(error)
             })
 }
-
-const skillCreated = (scope, skill) : T.SkillsAction => ({
-  type: CREATE_SUCCESS,
-  scope,
-  skill
-})

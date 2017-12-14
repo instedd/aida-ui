@@ -9,6 +9,28 @@ export const UPLOAD = 'XLSFORMS_UPLOAD'
 export const UPLOAD_SUCCESS = 'XLSFORMS_UPLOAD_SUCCESS'
 export const UPLOAD_ERROR = 'XLSFORMS_UPLOAD_ERROR'
 
+export const xlsFormsUpload = (surveyId : number) : T.XlsFormsAction => {
+  return {
+    type: UPLOAD,
+    surveyId
+  }
+}
+
+export const xlsFormsUploadSuccess = (surveyId : number, surveyConfig : T.SurveyConfig) : T.XlsFormsAction => {
+  return {
+    type: UPLOAD_SUCCESS,
+    surveyId
+  }
+}
+
+export const xlsFormsUploadError = (surveyId : number, error : string) : T.XlsFormsAction => {
+  return {
+    type: UPLOAD_ERROR,
+    surveyId,
+    error
+  }
+}
+
 export const uploadXlsFormFor = (survey : T.Skill, file : any) => (dispatch : T.Dispatch, getState : T.GetState) => {
   const state = getState()
 
@@ -18,7 +40,7 @@ export const uploadXlsFormFor = (survey : T.Skill, file : any) => (dispatch : T.
     return
   }
 
-  dispatch(startUpload(survey.id))
+  dispatch(xlsFormsUpload(survey.id))
   const emptySurvey = ({
     ...survey,
     config: assign(survey.config, {questions: [], choice_lists: []})
@@ -38,37 +60,15 @@ export const uploadXlsFormFor = (survey : T.Skill, file : any) => (dispatch : T.
                 } : any)
                 dispatch(skillActions.updateSkill((uploadedSurvey : T.Skill)))
               }
-              dispatch(uploadSucceeded(survey.id, form))
+              dispatch(xlsFormsUploadSuccess(survey.id, form))
             })
             .catch(errResponse => {
               if (errResponse.status == 422) {
                 errResponse.json().then(error => {
-                  dispatch(uploadError(survey.id, error))
+                  dispatch(xlsFormsUploadError(survey.id, error.error))
                 })
               } else {
-                dispatch(uploadError(survey.id, errResponse.statusText))
+                dispatch(xlsFormsUploadError(survey.id, errResponse.statusText))
               }
             })
-}
-
-const startUpload = (surveyId) : T.XlsFormsAction => {
-  return {
-    type: UPLOAD,
-    surveyId
-  }
-}
-
-const uploadSucceeded = (surveyId, surveyConfig) : T.XlsFormsAction => {
-  return {
-    type: UPLOAD_SUCCESS,
-    surveyId
-  }
-}
-
-const uploadError = (surveyId, error) : T.XlsFormsAction => {
-  return {
-    type: UPLOAD_ERROR,
-    surveyId,
-    error: error.error
-  }
 }
