@@ -5,13 +5,13 @@ RSpec.describe ParseXlsForm, type: :service do
     it "rejects invalid file types" do
       expect do
         ParseXlsForm.run(file_fixture('invalid_file_type.txt').to_path)
-      end.to raise_error(RuntimeError)
+      end.to raise_error(/invalid file type/)
     end
 
     it "rejects spreadsheets which are not XLS forms" do
       expect do
         ParseXlsForm.run(file_fixture('empty_workbook.xlsx').open)
-      end.to raise_error(RuntimeError)
+      end.to raise_error(/file is not/)
     end
 
     it "returns parsed questions for simple input" do
@@ -100,6 +100,22 @@ RSpec.describe ParseXlsForm, type: :service do
                                        message: 'Any particular requests for your dinner?'
                                      }])
     end
+
+    it "validates uniqueness of question names" do
+      survey = Roo::Spreadsheet.open(file_fixture('duplicate_names.xlsx').open).sheet('survey')
+
+      expect do
+        ParseXlsForm.gather_questions(survey)
+      end.to raise_error(/duplicate question.*'age'/)
+    end
+
+    it "validates question names are well-formed" do
+      survey = Roo::Spreadsheet.open(file_fixture('invalid_question_name.xlsx').open).sheet('survey')
+
+      expect do
+        ParseXlsForm.gather_questions(survey)
+      end.to raise_error(/invalid question name/)
+    end
   end
 
   describe "gather choices" do
@@ -135,6 +151,52 @@ RSpec.describe ParseXlsForm, type: :service do
                                          { name: 'merlot', labels: 'merlot' }
                                        ]
                                      }])
+    end
+
+    it "validates uniqueness of choice in lists" do
+      choices = Roo::Spreadsheet.open(file_fixture('duplicate_names.xlsx').open).sheet('choices')
+
+      expect do
+        ParseXlsForm.gather_choices(choices)
+      end.to raise_error(/duplicate choice name.*'male_female'/)
+    end
+
+    it "validates list names are well-formed" do
+      choices = Roo::Spreadsheet.open(file_fixture('invalid_list_name.xlsx').open).sheet('choices')
+
+      expect do
+        ParseXlsForm.gather_choices(choices)
+      end.to raise_error(/invalid list name/)
+    end
+
+    it "validates choice names are well-formed" do
+      choices = Roo::Spreadsheet.open(file_fixture('invalid_choice_name.xlsx').open).sheet('choices')
+
+      expect do
+        ParseXlsForm.gather_choices(choices)
+      end.to raise_error(/invalid choice name/)
+    end
+  end
+
+  describe "general validations" do
+    it "validates referenced choice lists exist" do
+      expect do
+        ParseXlsForm.run(file_fixture('inexistent_choice_list.xlsx').to_path)
+      end.to raise_error(/choice list.*is not defined/)
+    end
+  end
+
+  describe "name_valid?" do
+    ['foo', 'foo_bar', 'foo-bar', 'Foo', 'name1', 'name_1', '1QUESTION', '32'].each do |name|
+      it "#{name} is accepted" do
+        expect(ParseXlsForm.name_valid?(name)).to be_truthy
+      end
+    end
+
+    [nil, '', ' ', 'foo/bar', 'question?', 'aha!'].each do |name|
+      it "#{name} is rejected" do
+        expect(ParseXlsForm.name_valid?(name)).to be_falsey
+      end
     end
   end
 end
