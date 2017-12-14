@@ -81,5 +81,5 @@ export const uploadXlsForm = (file : any) => {
 }
 
 export const fetchStats = (botId : number, period : string) => {
-  return apiFetchJSON(`bots/${botId}/stats`, null, {period})
+  return apiFetchJSON(`bots/${botId}/stats?period=${period}`, null)
 }
