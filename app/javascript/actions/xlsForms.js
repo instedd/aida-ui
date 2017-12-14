@@ -51,21 +51,21 @@ export const uploadXlsFormFor = (survey : T.Skill, file : any) => (dispatch : T.
             })
 }
 
-const startUpload = (surveyId) => {
+const startUpload = (surveyId) : T.XlsFormsAction => {
   return {
     type: UPLOAD,
     surveyId
   }
 }
 
-const uploadSucceeded = (surveyId, surveyConfig) => {
+const uploadSucceeded = (surveyId, surveyConfig) : T.XlsFormsAction => {
   return {
     type: UPLOAD_SUCCESS,
     surveyId
   }
 }
 
-const uploadError = (surveyId, error) => {
+const uploadError = (surveyId, error) : T.XlsFormsAction => {
   return {
     type: UPLOAD_ERROR,
     surveyId,

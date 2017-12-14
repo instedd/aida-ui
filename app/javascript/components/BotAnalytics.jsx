@@ -92,7 +92,7 @@ class BotAnalyticsComponent extends Component {
 
 const mapStateToProps = (state) => {
   const {fetching, data, period} = state.stats
-  return {fetching, data, period}
+  return {fetching, data: data || {}, period}
 }
 
 const mapDispatchToProps = (dispatch) => ({

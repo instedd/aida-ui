@@ -32,7 +32,7 @@ export const createBot = (history : any) => (dispatch : T.Dispatch) => {
             })
 }
 
-const botCreated = (bot) => ({
+const botCreated = (bot) : T.BotsAction => ({
   type: CREATE_SUCCESS,
   bot
 })

@@ -45,7 +45,7 @@ export const createSkill = (scope : {botId : number}, {kind, name} : {name: ?str
             })
 }
 
-const skillCreated = (scope, skill) => ({
+const skillCreated = (scope, skill) : T.SkillsAction => ({
   type: CREATE_SUCCESS,
   scope,
   skill

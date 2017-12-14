@@ -183,8 +183,6 @@ export type XlsFormsAction = {
   error: string
 };
 
-export type Thunk = (dispatch : Dispatch, getState : ?GetState) => void;
-
 export type Action = AuthAction
                    | BotAction
                    | BotsAction
@@ -196,10 +194,7 @@ export type Action = AuthAction
                    | SkillsAction
                    | StatsAction
                    | TranslationsAction
-                   | XlsFormsAction
-                   | Thunk;
-
-export type Dispatch = (action : Action) => void;
+                   | XlsFormsAction;
 
 export type AuthState = {
   userEmail: ?string,
@@ -266,4 +261,9 @@ export type State = {
   xlsForms: XlsFormsState,
 };
 
+export type Dispatch = (action : Action | ThunkAction | PromiseAction) => any;
 export type GetState = () => State;
+export type ThunkAction = (dispatch : Dispatch, getState? : GetState) => any;
+export type PromiseAction = Promise<Action>;
+
+export type Reducer<T> = (state : T, action : Action) => T;
