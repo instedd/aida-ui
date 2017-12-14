@@ -48,7 +48,7 @@
           "items": {
             "type": "object",
             "properties": {
-              "code": { "type": "string" },
+              "code": { "$ref": "#/definitions/language" },
               "keywords": { "$ref": "#/definitions/keywordList" }
             },
             "required": [ "code", "keywords" ]
@@ -115,6 +115,10 @@
     },
 
     "keywordList": {
+      "type": "string"
+    },
+
+    "language": {
       "type": "string"
     },
 
@@ -237,6 +241,91 @@
           "required": [ "id", "kind", "name", "enabled", "order", "config" ]
         }
       ]
+    },
+
+    "bot_stats": {
+      "type": "object",
+      "properties": {
+        "active_users": { "type": "integer" },
+        "messages_received": { "type": "integer" },
+        "messages_sent": { "type": "integer" },
+        "behaviours": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "oneOf": [
+                  { "enum": [ "front_desk", "language_detector" ] },
+                  { "type": "integer" }
+                ]
+              },
+              "label": { "type": "string" },
+              "kind": { "enum": [
+                "keyword_responder",
+                "survey",
+                "scheduled_messages",
+                "front_desk",
+                "language_detector"
+              ] },
+              "users": { "type": "integer" }
+            },
+            "required": [ "id", "label", "kind", "users" ]
+          }
+        }
+      },
+      "required": [ "active_users", "messages_received", "messages_sent", "behaviours" ]
+    },
+
+    "stats_period": {
+      "enum": [ "today", "this_week", "this_month" ]
+    },
+
+    "translation_behaviours": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "label": { "type": "string" },
+          "keys": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_key": { "type": "string" },
+                "_lang": { "$ref": "#/definitions/language" }
+              },
+              "required": [ "_key", "_lang" ]
+            }
+          }
+        }
+      }
+    },
+
+    "translations_index": {
+      "type": "object",
+      "properties": {
+        "languages": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/language" },
+          "minItems": 1
+        },
+        "default_language": { "$ref": "#/definitions/language" },
+        "behaviours": { "$ref": "#/definitions/translation_behaviours" }
+      },
+      "required": [ "languages", "default_language", "behaviours" ]
+    },
+
+    "translation": {
+      "type": "object",
+      "properties": {
+        "behaviour_id": { "type": "integer" },
+        "key": { "type": "string" },
+        "lang": { "$ref": "#/definitions/language" },
+        "value": { "type": "string" }
+      },
+      "required": [ "behaviour_id", "key", "lang", "value" ]
     }
   },
 

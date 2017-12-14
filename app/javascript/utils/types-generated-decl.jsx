@@ -24,7 +24,7 @@ export type FrontDeskConfig = {
 export type LanguageDetectorConfig = {
   explanation: string;
   languages: Array<{
-    code: string;
+    code: Language;
     keywords: KeywordList;
   }>;
 };
@@ -54,6 +54,8 @@ export type ScheduledMessagesConfig = {
 export type Message = string;
 
 export type KeywordList = string;
+
+export type Language = string;
 
 export type SurveyQuestion = {
   type: "select_one" | "select_many";
@@ -114,5 +116,41 @@ export type Skill = {
   enabled: boolean;
   order: number;
   config: ScheduledMessagesConfig;
+};
+
+export type BotStats = {
+  active_users: number;
+  messages_received: number;
+  messages_sent: number;
+  behaviours: Array<{
+    id: "front_desk" | "language_detector" | number;
+    label: string;
+    kind: "keyword_responder" | "survey" | "scheduled_messages" | "front_desk" | "language_detector";
+    users: number;
+  }>;
+};
+
+export type StatsPeriod = "today" | "this_week" | "this_month";
+
+export type TranslationBehaviours = Array<{
+  id?: number;
+  label?: string;
+  keys?: Array<{
+    _key: string;
+    _lang: Language;
+  }>;
+}>;
+
+export type TranslationsIndex = {
+  languages: Array<Language>;
+  default_language: Language;
+  behaviours: TranslationBehaviours;
+};
+
+export type Translation = {
+  behaviour_id: number;
+  key: string;
+  lang: Language;
+  value: string;
 };
 

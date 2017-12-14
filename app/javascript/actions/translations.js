@@ -43,6 +43,6 @@ export const updateTranslation = (botId : number, translation : T.Translation) =
 }
 
 const updateTranslationDelayed = (botId, translation) =>
-  debounced(`TRANSLATION_UPDATE_${botId}_${translation.behaviourId}_${translation.key}_${translation.lang}`)(dispatch => {
+  debounced(`TRANSLATION_UPDATE_${botId}_${translation.behaviour_id}_${translation.key}_${translation.lang}`)(dispatch => {
     api.updateTranslation(botId, translation)
   })
