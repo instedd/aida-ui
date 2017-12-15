@@ -1,10 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe Api::BotsController, type: :controller do
-  let!(:user) { User.create! email: "user@example.com" }
-  let!(:bot) { Bot.create_prepared!(user) }
-  let!(:other_user) { User.create! email: "other_user@example.com" }
-  let!(:other_bot) { Bot.create_prepared!(other_user) }
+  let!(:user) { create(:user) }
+  let!(:bot) { create(:bot, owner: user) }
+  let!(:published_bot) { create(:bot, :published, owner: user) }
+  let!(:other_user) { create(:user) }
+  let!(:other_bot) { create(:bot, owner: other_user) }
 
   before(:each) { sign_in user }
 
@@ -15,8 +16,12 @@ RSpec.describe Api::BotsController, type: :controller do
       expect(response).to be_success
       expect(json_body).to match_array([{ id: bot.id,
                                           name: bot.name,
-                                          published: bot.published?,
-                                          channel_setup: bot.channels.first.setup? }])
+                                          published: false,
+                                          channel_setup: bot.channels.first.setup? },
+                                        { id: published_bot.id,
+                                          name: published_bot.name,
+                                          published: true,
+                                          channel_setup: published_bot.channels.first.setup? }])
     end
 
     it "lists only the user bots" do
@@ -58,11 +63,9 @@ RSpec.describe Api::BotsController, type: :controller do
     end
 
     it "unpublishes a bot before deleting it" do
-      bot.update_attributes! uuid: 'bot-id'
+      expect(Backend).to receive(:destroy_bot).with(published_bot.uuid).and_return(true)
 
-      expect(Backend).to receive(:destroy_bot).with('bot-id').and_return(true)
-
-      delete :destroy, params: { id: bot.id }
+      delete :destroy, params: { id: published_bot.id }
     end
   end
 
@@ -77,21 +80,19 @@ RSpec.describe Api::BotsController, type: :controller do
     end
 
     it "re-publishes an already published bot" do
-      bot.update_attributes! uuid: 'bot-id'
       expect(Backend).to receive(:update_bot)
 
-      post :publish, params: { id: bot.id }
+      post :publish, params: { id: published_bot.id }
     end
   end
 
   describe "unpublish" do
     it "unpublishes the bot from the backend" do
-      bot.update_attributes! uuid: 'bot-id'
-      expect(Backend).to receive(:destroy_bot).with('bot-id')
+      expect(Backend).to receive(:destroy_bot).with(published_bot.uuid)
 
-      delete :unpublish, params: { id: bot.id }
+      delete :unpublish, params: { id: published_bot.id }
 
-      expect(bot.reload).to_not be_published
+      expect(published_bot.reload).to_not be_published
     end
   end
 
