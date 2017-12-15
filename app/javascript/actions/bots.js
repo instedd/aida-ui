@@ -30,7 +30,7 @@ export const fetchBots = () => (dispatch : T.Dispatch, getState : T.GetState) =>
   const state = getState()
 
   // Don't fetch Bots if they are already being fetched
-  if (state.bots.fetching) {
+  if ((state.bots.fetching : boolean)) {
     return
   }
 

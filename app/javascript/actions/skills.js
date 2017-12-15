@@ -33,7 +33,7 @@ export const fetchSkills = (scope : {botId : number}) => (dispatch : T.Dispatch,
   const state = getState()
 
   // Don't fetch ckills if they are already being fetched
-  if (state.skills.fetching) {
+  if ((state.skills.fetching : boolean)) {
     return
   }
 

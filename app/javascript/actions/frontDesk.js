@@ -31,7 +31,7 @@ export const frontDeskUpdateConfig = (config : T.FrontDeskConfig) : T.FrontDeskA
 export const fetchFrontDesk = (botId : number) => (dispatch : T.Dispatch, getState : T.GetState) => {
   const state = getState()
 
-  if (state.frontDesk.fetching) {
+  if ((state.frontDesk.fetching : boolean)) {
     return
   }
 

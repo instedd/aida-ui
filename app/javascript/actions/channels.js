@@ -25,7 +25,7 @@ export const fetchChannels = (scope : {botId : number}) => (dispatch : T.Dispatc
   const state = getState()
 
   // Don't fetch Channels if they are already being fetched
-  if (state.channels.fetching) {
+  if ((state.channels.fetching : boolean)) {
     return
   }
 

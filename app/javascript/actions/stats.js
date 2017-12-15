@@ -31,7 +31,9 @@ export const statsFetchError = (botId : number, period: T.StatsPeriod, error : s
 export const fetchStats = (botId : number, period : T.StatsPeriod) => (dispatch : T.Dispatch, getState : T.GetState) => {
   const state = getState()
 
-  if (state.stats.fetching && state.stats.botId == botId && state.stats.period == period) {
+  if ((state.stats.fetching : boolean)
+      && state.stats.botId == botId
+      && state.stats.period == period) {
     return
   }
 

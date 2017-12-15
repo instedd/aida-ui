@@ -28,7 +28,7 @@ export const fetchTranslations = (scope : {botId : number}) => (dispatch : T.Dis
   const state = getState()
 
   // Don't fetch translations if they are already being fetched
-  if (state.translations.fetching) {
+  if ((state.translations.fetching : boolean)) {
     return
   }
 
