@@ -4,6 +4,7 @@ class Bot < ApplicationRecord
   has_many :behaviours, dependent: :destroy
   has_many :translations, through: :behaviours
   has_many :variable_assignments, dependent: :destroy
+  has_many :collaborators, dependent: :destroy
 
   validate :has_single_front_desk
 

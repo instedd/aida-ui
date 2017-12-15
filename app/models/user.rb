@@ -5,6 +5,7 @@ class User < ApplicationRecord
 
   has_many :identities, dependent: :destroy
   has_many :bots, foreign_key: :owner_id
+  has_many :collaborations, class_name: 'Collaborator', dependent: :destroy
 
   def display_name
     name || email

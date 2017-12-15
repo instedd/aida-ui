@@ -42,7 +42,8 @@ class Api::TranslationsController < ApplicationApiController
   end
 
   def update_variable
-    bot = current_user.bots.find(params[:bot_id])
+    bot = Bot.find(params[:bot_id])
+    authorize bot, :update_translation?
 
     assignment_params = params.permit(:variable_id, :variable_name, :condition_id, :condition, :lang, :value, :condition_order)
 
@@ -106,7 +107,8 @@ class Api::TranslationsController < ApplicationApiController
   end
 
   def destroy_variable
-    bot = current_user.bots.find(params[:bot_id])
+    bot = Bot.find(params[:bot_id])
+    authorize bot, :update_translation?
 
     assignment_params = params.permit(:variable_id, :condition_id)
 

@@ -46,6 +46,17 @@ ActiveRecord::Schema.define(version: 20171228180737) do
     t.index ["bot_id"], name: "index_channels_on_bot_id"
   end
 
+  create_table "collaborators", force: :cascade do |t|
+    t.bigint "bot_id"
+    t.bigint "user_id"
+    t.string "role"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bot_id", "user_id"], name: "index_collaborators_on_bot_id_and_user_id", unique: true
+    t.index ["bot_id"], name: "index_collaborators_on_bot_id"
+    t.index ["user_id"], name: "index_collaborators_on_user_id"
+  end
+
   create_table "identities", force: :cascade do |t|
     t.integer "user_id"
     t.string "provider"
@@ -95,6 +106,8 @@ ActiveRecord::Schema.define(version: 20171228180737) do
   add_foreign_key "behaviours", "bots"
   add_foreign_key "bots", "users", column: "owner_id"
   add_foreign_key "channels", "bots"
+  add_foreign_key "collaborators", "bots"
+  add_foreign_key "collaborators", "users"
   add_foreign_key "translations", "behaviours"
   add_foreign_key "variable_assignments", "bots"
 end
