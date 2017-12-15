@@ -1,14 +1,18 @@
 class Api::ChannelsController < ApplicationApiController
+  after_action :verify_authorized
+
   def index
-    channels = current_user.bots.find(params[:bot_id]).channels
+    bot = Bot.find(params[:bot_id])
+    authorize bot, :read_channels?
+    channels = bot.channels
 
     render json: channels.map { |c| channel_api_json(c) }
   end
 
   def update
-    channel = Channel.of_bots_owned_by(current_user).find(params[:id])
-    channel_params = params.require(:channel).permit(:name, config: {})
-    channel.update_attributes!(channel_params)
+    channel = Channel.find(params[:id])
+    authorize channel
+    channel.update_attributes!(permitted_attributes(channel))
     render json: channel_api_json(channel)
   end
 

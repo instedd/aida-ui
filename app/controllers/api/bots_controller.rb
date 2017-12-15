@@ -15,8 +15,7 @@ class Api::BotsController < ApplicationApiController
 
   def update
     authorize @bot
-    bot_params = params.require(:bot).permit(:name)
-    @bot.update_attributes!(bot_params)
+    @bot.update_attributes!(permitted_attributes(@bot))
     render json: bot_api_json(@bot)
   end
 

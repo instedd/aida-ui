@@ -17,7 +17,10 @@ describe BotPolicy do
 
       it { is_expected.to permit_actions([:update, :destroy,
                                           :publish, :unpublish,
-                                          :read_session_data, :read_usage_stats]) }
+                                          :read_session_data, :read_usage_stats,
+                                          :read_channels,
+                                          :read_behaviours, :create_skill,
+                                          :read_translations, :update_translation]) }
     end
 
     describe "not being the owner" do
@@ -25,7 +28,10 @@ describe BotPolicy do
 
       it { is_expected.to forbid_actions([:update, :destroy,
                                           :publish, :unpublish,
-                                          :read_session_data, :read_usage_stats]) }
+                                          :read_session_data, :read_usage_stats,
+                                          :read_channels,
+                                          :read_behaviours, :create_skill,
+                                          :read_translations, :update_translation]) }
     end
   end
 end

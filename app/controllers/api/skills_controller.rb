@@ -1,12 +1,18 @@
 class Api::SkillsController < ApplicationApiController
+  after_action :verify_authorized
+
   def index
-    skills = current_user.bots.find(params[:bot_id]).skills
+    bot = Bot.find(params[:bot_id])
+    authorize bot, :read_behaviours?
+    skills = bot.skills
 
     render json: skills.map { |s| skill_api_json(s) }
   end
 
   def create
-    bot = current_user.bots.find(params[:bot_id])
+    bot = Bot.find(params[:bot_id])
+    authorize bot, :create_skill?
+
     new_order = [bot.behaviours.count, bot.behaviours.pluck(:order).compact.max + 1].max
     attrs = { order: new_order }
     if params[:name].present?
@@ -21,14 +27,16 @@ class Api::SkillsController < ApplicationApiController
   end
 
   def update
-    skill = Behaviour.skills.of_bots_owned_by(current_user).find(params[:id])
-    skill_params = params.require(:skill).permit(:name, :enabled, config: {})
+    skill = Behaviour.skills.find(params[:id])
+    authorize skill
+    skill_params = params.require(:skill).permit(policy(skill).permitted_attributes)
     skill.update_attributes!(skill_params)
     render json: skill_api_json(skill)
   end
 
   def destroy
-    skill = Behaviour.skills.of_bots_owned_by(current_user).find(params[:id])
+    skill = Behaviour.skills.find(params[:id])
+    authorize skill
     skill.destroy
     head :ok
   end

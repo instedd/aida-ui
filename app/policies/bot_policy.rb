@@ -35,8 +35,32 @@ class BotPolicy < ApplicationPolicy
     is_owner?
   end
 
+  def read_channels?
+    is_owner?
+  end
+
+  def read_behaviours?
+    is_owner?
+  end
+
+  def create_skill?
+    is_owner?
+  end
+
+  def read_translations?
+    is_owner?
+  end
+
+  def update_translation?
+    is_owner?
+  end
+
   def is_owner?
     record.owner_id == user.id
+  end
+
+  def permitted_attributes
+    [:name]
   end
 
   class Scope < Scope

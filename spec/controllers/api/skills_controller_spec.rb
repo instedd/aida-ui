@@ -53,16 +53,18 @@ RSpec.describe Api::SkillsController, type: :controller do
   end
 
   describe "update" do
-    let!(:skill) { bot.behaviours.create_skill! "language_detector", order: 1 }
+    let!(:skill) { bot.behaviours.create_skill! "keyword_responder", order: 1 }
 
     it "updates valid skills" do
       put :update, params: {
             id: skill.id, skill: {
-              name: "Lang Detector",
+              name: "Food menu",
               enabled: false,
               config: {
-                explanation: "Say 'english'",
-                languages: [{code: 'en', keywords: 'english'}]
+                explanation: "I can give you the menu",
+                keywords: "menu,food",
+                clarification: "To get the menu say 'menu'",
+                response: "The menu"
               }
             }
           }
@@ -70,9 +72,9 @@ RSpec.describe Api::SkillsController, type: :controller do
       expect(response).to be_success
 
       skill.reload
-      expect(skill.name).to eq('Lang Detector')
+      expect(skill.name).to eq('Food menu')
       expect(skill).to_not be_enabled
-      expect(skill.config['explanation']).to eq("Say 'english'")
+      expect(skill.config['explanation']).to eq("I can give you the menu")
     end
 
     it "does not update front desk" do
