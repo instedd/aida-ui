@@ -9,21 +9,21 @@ export const FETCH_SUCCESS = 'FRONT_DESK_FETCH_SUCCESS'
 export const FETCH_ERROR = 'FRONT_DESK_FETCH_ERROR'
 export const UPDATE_CONFIG = 'FRONT_DESK_UPDATE_CONFIG'
 
-export const frontDeskFetch = (botId : number) : T.FrontDeskAction => ({
+export const _frontDeskFetch = (botId : number) : T.FrontDeskAction => ({
   type: FETCH,
   botId
 })
 
-export const frontDeskFetchSuccess = (data : T.FrontDesk) : T.FrontDeskAction => ({
+export const _frontDeskFetchSuccess = (data : T.FrontDesk) : T.FrontDeskAction => ({
   type: FETCH_SUCCESS,
   data
 })
 
-export const frontDeskFetchError = () : T.FrontDeskAction => ({
+export const _frontDeskFetchError = () : T.FrontDeskAction => ({
   type: FETCH_ERROR,
 })
 
-export const frontDeskUpdateConfig = (config : T.FrontDeskConfig) : T.FrontDeskAction => ({
+export const _frontDeskUpdateConfig = (config : T.FrontDeskConfig) : T.FrontDeskAction => ({
   type: UPDATE_CONFIG,
   config
 })
@@ -35,10 +35,10 @@ export const fetchFrontDesk = (botId : number) => (dispatch : T.Dispatch, getSta
     return
   }
 
-  dispatch(frontDeskFetch(botId))
+  dispatch(_frontDeskFetch(botId))
   api.fetchFrontDesk(botId)
-     .then((data) => dispatch(frontDeskFetchSuccess(data)))
-     .catch((error) => dispatch(frontDeskFetchError()))
+     .then((data) => dispatch(_frontDeskFetchSuccess(data)))
+     .catch((error) => dispatch(_frontDeskFetchError()))
 }
 
 export const updateFrontDeskConfig = (key : string, value : any) => (dispatch : T.Dispatch, getState : T.GetState) => {
@@ -48,7 +48,7 @@ export const updateFrontDeskConfig = (key : string, value : any) => (dispatch : 
 
   const config = { ...oldConfig, [key]: value }
 
-  dispatch(frontDeskUpdateConfig(config))
+  dispatch(_frontDeskUpdateConfig(config))
 
   if (frontDesk.botId && data && data.id) {
     dispatch(updateFrontDeskDelayed(frontDesk.botId, {...data, config}))

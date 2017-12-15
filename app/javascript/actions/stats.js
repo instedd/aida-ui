@@ -7,20 +7,20 @@ export const FETCH = 'STATS_FETCH'
 export const FETCH_SUCCESS = 'STATS_FETCH_SUCCESS'
 export const FETCH_ERROR = 'STATS_FETCH_ERROR'
 
-export const statsFetch = (botId : number, period: T.StatsPeriod) : T.StatsAction => ({
+export const _statsFetch = (botId : number, period: T.StatsPeriod) : T.StatsAction => ({
   type: FETCH,
   botId,
   period
 })
 
-export const statsFetchSuccess = (botId : number, period: T.StatsPeriod, data : T.BotStats) : T.StatsAction => ({
+export const _statsFetchSuccess = (botId : number, period: T.StatsPeriod, data : T.BotStats) : T.StatsAction => ({
   type: FETCH_SUCCESS,
   botId,
   period,
   data
 })
 
-export const statsFetchError = (botId : number, period: T.StatsPeriod, error : string) : T.StatsAction => ({
+export const _statsFetchError = (botId : number, period: T.StatsPeriod, error : string) : T.StatsAction => ({
   type: FETCH_ERROR,
   botId,
   period,
@@ -37,8 +37,8 @@ export const fetchStats = (botId : number, period : T.StatsPeriod) => (dispatch 
     return
   }
 
-  dispatch(statsFetch(botId, period))
+  dispatch(_statsFetch(botId, period))
   api.fetchStats(botId, period)
-     .then((data) => dispatch(statsFetchSuccess(botId, period, data)))
-     .catch((error) => dispatch(statsFetchError(botId, period, error)))
+     .then((data) => dispatch(_statsFetchSuccess(botId, period, data)))
+     .catch((error) => dispatch(_statsFetchError(botId, period, error)))
 }

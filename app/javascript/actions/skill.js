@@ -6,18 +6,18 @@ import { debounced } from '../utils'
 export const UPDATE = 'SKILL_UPDATE'
 export const DELETE = 'SKILL_DELETE'
 
-export const skillUpdate = (skill : T.Skill) : T.SkillAction => ({
+export const _skillUpdate = (skill : T.Skill) : T.SkillAction => ({
   type: UPDATE,
   skill
 })
 
-export const skillDelete = (skillId : number) : T.SkillAction => ({
+export const _skillDelete = (skillId : number) : T.SkillAction => ({
   type: DELETE,
   skillId
 })
 
 export const updateSkill = (skill : T.Skill) => (dispatch : T.Dispatch) => {
-  dispatch(skillUpdate(skill))
+  dispatch(_skillUpdate(skill))
   dispatch(updateSkillDelayed(skill))
 }
 
@@ -31,6 +31,6 @@ export const toggleSkill = (skill : T.Skill) => (dispatch : T.Dispatch) => {
 }
 
 export const deleteSkill = (skill : T.Skill) => (dispatch : T.Dispatch) => {
-  dispatch(skillDelete(skill.id))
+  dispatch(_skillDelete(skill.id))
   api.destroySkill(skill)
 }

@@ -9,21 +9,21 @@ export const UPLOAD = 'XLSFORMS_UPLOAD'
 export const UPLOAD_SUCCESS = 'XLSFORMS_UPLOAD_SUCCESS'
 export const UPLOAD_ERROR = 'XLSFORMS_UPLOAD_ERROR'
 
-export const xlsFormsUpload = (surveyId : number) : T.XlsFormsAction => {
+export const _xlsFormsUpload = (surveyId : number) : T.XlsFormsAction => {
   return {
     type: UPLOAD,
     surveyId
   }
 }
 
-export const xlsFormsUploadSuccess = (surveyId : number, surveyConfig : T.SurveyConfig) : T.XlsFormsAction => {
+export const _xlsFormsUploadSuccess = (surveyId : number, surveyConfig : T.SurveyConfig) : T.XlsFormsAction => {
   return {
     type: UPLOAD_SUCCESS,
     surveyId
   }
 }
 
-export const xlsFormsUploadError = (surveyId : number, error : string) : T.XlsFormsAction => {
+export const _xlsFormsUploadError = (surveyId : number, error : string) : T.XlsFormsAction => {
   return {
     type: UPLOAD_ERROR,
     surveyId,
@@ -40,7 +40,7 @@ export const uploadXlsFormFor = (survey : T.Skill, file : any) => (dispatch : T.
     return
   }
 
-  dispatch(xlsFormsUpload(survey.id))
+  dispatch(_xlsFormsUpload(survey.id))
   const emptySurvey = ({
     ...survey,
     config: assign(survey.config, {questions: [], choice_lists: []})
@@ -60,15 +60,15 @@ export const uploadXlsFormFor = (survey : T.Skill, file : any) => (dispatch : T.
                 } : any)
                 dispatch(skillActions.updateSkill((uploadedSurvey : T.Skill)))
               }
-              dispatch(xlsFormsUploadSuccess(survey.id, form))
+              dispatch(_xlsFormsUploadSuccess(survey.id, form))
             })
             .catch(errResponse => {
               if (errResponse.status == 422) {
                 errResponse.json().then(error => {
-                  dispatch(xlsFormsUploadError(survey.id, error.error))
+                  dispatch(_xlsFormsUploadError(survey.id, error.error))
                 })
               } else {
-                dispatch(xlsFormsUploadError(survey.id, errResponse.statusText))
+                dispatch(_xlsFormsUploadError(survey.id, errResponse.statusText))
               }
             })
 }

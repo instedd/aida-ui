@@ -7,18 +7,18 @@ export const FETCH = 'TRANSLATIONS_FETCH'
 export const RECEIVE = 'TRANSLATIONS_RECEIVE'
 export const UPDATE = 'TRANSLATION_UPDATE'
 
-export const translationsFetch = (scope : T.Scope) : T.TranslationsAction => ({
+export const _translationsFetch = (scope : T.Scope) : T.TranslationsAction => ({
   type: FETCH,
   scope,
 })
 
-export const translationsReceive = (scope : T.Scope, data : T.TranslationsIndex) : T.TranslationsAction => ({
+export const _translationsReceive = (scope : T.Scope, data : T.TranslationsIndex) : T.TranslationsAction => ({
   type: RECEIVE,
   scope,
   data
 })
 
-export const translationsUpdate = (botId : number, translation : T.Translation) : T.TranslationsAction => ({
+export const _translationsUpdate = (botId : number, translation : T.Translation) : T.TranslationsAction => ({
   type: UPDATE,
   botId,
   translation
@@ -32,13 +32,13 @@ export const fetchTranslations = (scope : {botId : number}) => (dispatch : T.Dis
     return
   }
 
-  dispatch(translationsFetch(scope))
+  dispatch(_translationsFetch(scope))
   return api.fetchTranslations(scope.botId)
-            .then(response => dispatch(translationsReceive(scope, response)))
+            .then(response => dispatch(_translationsReceive(scope, response)))
 }
 
 export const updateTranslation = (botId : number, translation : T.Translation) => (dispatch : T.Dispatch) => {
-  dispatch(translationsUpdate(botId, translation))
+  dispatch(_translationsUpdate(botId, translation))
   dispatch(updateTranslationDelayed(botId, translation))
 }
 

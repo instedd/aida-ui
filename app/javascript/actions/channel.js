@@ -5,13 +5,13 @@ import { debounced } from '../utils'
 
 export const UPDATE = 'CHANNEL_UPDATE'
 
-export const channelUpdate = (channel : T.Channel) : T.ChannelAction => ({
+export const _channelUpdate = (channel : T.Channel) : T.ChannelAction => ({
   type: UPDATE,
   channel
 })
 
 export const updateChannel = (channel : T.Channel) => (dispatch : T.Dispatch, getState : T.GetState) => {
-  dispatch(channelUpdate(channel))
+  dispatch(_channelUpdate(channel))
   dispatch(updateChannelDelayed(channel))
 }
 
