@@ -1,9 +1,13 @@
 class ApplicationApiController < ActionController::Base
+  include Pundit
+
   before_action :authenticate_user!
   before_action :set_raven_context
 
   rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_response
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
+
+  rescue_from Pundit::NotAuthorizedError, with: :render_forbidden_response
 
   private
 
@@ -13,6 +17,10 @@ class ApplicationApiController < ActionController::Base
 
   def render_not_found_response(exception)
     render json: { error: 'Not found' }, status: :not_found
+  end
+
+  def render_forbidden_response(exception)
+    render json: { error: 'Forbidden' }, status: :forbidden
   end
 
   def set_raven_context
