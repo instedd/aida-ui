@@ -49,7 +49,7 @@ const update = (state, action) => {
   }
 
   const updatedBehaviours = map(state.behaviours, behaviour => {
-    if (behaviour.id == translation.behaviourId) {
+    if (behaviour.id == translation.behaviour_id) {
       const updatedKeys = map(behaviour.keys, key => {
         if (key._key == translation.key) {
           return {

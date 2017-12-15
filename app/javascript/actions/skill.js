@@ -6,23 +6,31 @@ import { debounced } from '../utils'
 export const UPDATE = 'SKILL_UPDATE'
 export const DELETE = 'SKILL_DELETE'
 
+export const _skillUpdate = (skill : T.Skill) : T.SkillAction => ({
+  type: UPDATE,
+  skill
+})
+
+export const _skillDelete = (skillId : number) : T.SkillAction => ({
+  type: DELETE,
+  skillId
+})
+
 export const updateSkill = (skill : T.Skill) => (dispatch : T.Dispatch) => {
-  dispatch({type: UPDATE, skill})
+  dispatch(_skillUpdate(skill))
   dispatch(updateSkillDelayed(skill))
 }
 
 const updateSkillDelayed = (skill) => debounced(`SKILL_UPDATE_${skill.id}`)(dispatch => {
-  console.log('Saving skill configuration')
   api.updateSkill(skill)
 })
 
 export const toggleSkill = (skill : T.Skill) => (dispatch : T.Dispatch) => {
-  console.log(`Toggle skill ${skill.id}`)
   const toggledSkill = ({...skill, enabled: !skill.enabled} : any)
   dispatch(updateSkill((toggledSkill : T.Skill)))
 }
 
 export const deleteSkill = (skill : T.Skill) => (dispatch : T.Dispatch) => {
-  dispatch({type: DELETE, skillId: skill.id})
+  dispatch(_skillDelete(skill.id))
   api.destroySkill(skill)
 }

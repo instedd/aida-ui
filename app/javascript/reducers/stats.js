@@ -6,10 +6,10 @@ const initialState = {
   fetching: false,
   botId: null,
   period: null,
-  data: {}
+  data: null
 }
 
-export default (state : T.StatsState, action : T.StatsAction) => {
+export default (state : T.StatsState, action : T.StatsAction) : T.StatsState => {
   state = state || initialState
   switch (action.type) {
     case actions.FETCH: return fetching(state, action)
@@ -46,7 +46,7 @@ const fetchError = (state, action) => {
     return {
       ...state,
       fetching: false,
-      data: {}
+      data: null
     }
   } else {
     return state

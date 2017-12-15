@@ -40,7 +40,7 @@ const renderRows = ({ behaviours, firstLang, secondLang, defaultLang, onChange }
         return (
           <EditDialogColumn inline inlineIcon={null}
                             value={key[lang]}
-                            onChange={value => onChange({ behaviourId, key: key._key, lang, value })} />
+                            onChange={value => onChange({ behaviour_id: behaviourId, key: key._key, lang, value })} />
         )
       }
     }

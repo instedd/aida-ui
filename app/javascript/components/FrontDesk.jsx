@@ -73,7 +73,7 @@ const mapStateToProps = (state, {bot}) => {
     return {
       loaded: true,
       fetching: frontDesk.fetching,
-      data: frontDesk.data
+      data: frontDesk.data || {}
     }
   } else {
     return {

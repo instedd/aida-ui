@@ -9,48 +9,6 @@ export type Scope = {
   botId: number
 };
 
-export type Translation = {
-  behaviourId: number,
-  key: string,
-  lang: string,
-  value: ?string
-};
-
-export type TranslationKey = {
-  _key: string,
-  _lang: string,
-};
-
-export type BehaviourTranslations = {
-  id: number,
-  label: string,
-  keys: Array<TranslationKey>,
-};
-
-export type TranslationBehaviours = Array<BehaviourTranslations>;
-
-export type TranslationsIndex = {
-  languages: Array<string>,
-  default_language: string,
-  behaviours: TranslationBehaviours
-};
-
-export type BehaviourStats = {
-  id: number|string,
-  label: string,
-  kind: string,
-  users: number
-};
-
-export type BotStats = {
-  active_users: number,
-  messages_received: number,
-  messages_sent: number,
-  behaviours: Array<BehaviourStats>;
-};
-
-export type StatsPeriod = "today" | "this_week" | "this_month";
-
 export type AuthAction = {
   type: 'AUTH_INIT',
   userEmail: string,
@@ -62,10 +20,16 @@ export type BotAction = {
   bot: T.Bot,
 } | {
   type: "BOT_PUBLISH",
-  bot: T.Bot,
+  botId: number,
+} | {
+  type: "BOT_PUBLISH_SUCCESS",
+  botId: number,
 } | {
   type: "BOT_UNPUBLISH",
-  bot: T.Bot,
+  botId: number,
+} | {
+  type: "BOT_UNPUBLISH_SUCCESS",
+  botId: number,
 } | {
   type: "BOT_DELETE",
   botId: number,
@@ -145,16 +109,16 @@ export type SkillsAction = {
 export type StatsAction = {
   type: 'STATS_FETCH',
   botId: number,
-  period: StatsPeriod
+  period: T.StatsPeriod
 } | {
   type: 'STATS_FETCH_SUCCESS',
   botId: number,
-  period: StatsPeriod,
-  data: BotStats
+  period: T.StatsPeriod,
+  data: T.BotStats
 } | {
   type: 'STATS_FETCH_ERROR',
   botId: number,
-  period: StatsPeriod,
+  period: T.StatsPeriod,
   error: string
 };
 
@@ -164,11 +128,11 @@ export type TranslationsAction = {
 } | {
   type: 'TRANSLATIONS_RECEIVE',
   scope: Scope,
-  data: TranslationsIndex
+  data: T.TranslationsIndex
 } | {
   type: 'TRANSLATION_UPDATE',
   botId: number,
-  translation: Translation,
+  translation: T.Translation,
 };
 
 export type XlsFormsAction = {
@@ -183,8 +147,6 @@ export type XlsFormsAction = {
   error: string
 };
 
-export type Thunk = (dispatch : Dispatch, getState : ?GetState) => void;
-
 export type Action = AuthAction
                    | BotAction
                    | BotsAction
@@ -196,10 +158,7 @@ export type Action = AuthAction
                    | SkillsAction
                    | StatsAction
                    | TranslationsAction
-                   | XlsFormsAction
-                   | Thunk;
-
-export type Dispatch = (action : Action) => void;
+                   | XlsFormsAction;
 
 export type AuthState = {
   userEmail: ?string,
@@ -236,8 +195,8 @@ export type SkillsState = {
 export type StatsState = {
   fetching: boolean,
   botId: ?number,
-  period: ?StatsPeriod,
-  data: ?BotStats
+  period: ?T.StatsPeriod,
+  data: ?T.BotStats
 };
 
 export type TranslationsState = {
@@ -245,7 +204,7 @@ export type TranslationsState = {
   scope: ?Scope,
   languages: ?Array<string>,
   defaultLanguage: ?string,
-  behaviours: ?TranslationBehaviours
+  behaviours: ?T.TranslationBehaviours
 };
 
 export type XlsFormsState = {
@@ -266,4 +225,9 @@ export type State = {
   xlsForms: XlsFormsState,
 };
 
+export type Dispatch = (action : Action | ThunkAction | PromiseAction) => any;
 export type GetState = () => State;
+export type ThunkAction = (dispatch : Dispatch, getState? : GetState) => any;
+export type PromiseAction = Promise<Action>;
+
+export type Reducer<T> = (state : T, action : Action) => T;

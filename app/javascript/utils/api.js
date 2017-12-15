@@ -69,9 +69,7 @@ export const fetchTranslations = (botId : number) => {
 }
 
 export const updateTranslation = (botId : number, translation : T.Translation) => {
-  const behaviour_id = translation.behaviourId
-  const { key, lang, value } = translation
-  return apiPutJSON(`bots/${botId}/translations`, null, {behaviour_id, key, lang, value})
+  return apiPutJSON(`bots/${botId}/translations`, null, translation)
 }
 
 export const uploadXlsForm = (file : any) => {

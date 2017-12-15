@@ -5,10 +5,10 @@ import * as actions from '../actions/frontDesk'
 const initialState = {
   fetching: false,
   botId: null,
-  data: {}
+  data: null
 }
 
-export default (state : T.FrontDeskState, action : T.FrontDeskAction) => {
+export default (state : T.FrontDeskState, action : T.Action) : T.FrontDeskState => {
   state = state || initialState
   switch (action.type) {
     case actions.FETCH: return fetching(state, action)
@@ -40,7 +40,7 @@ const fetchError = (state, action) => {
   return {
     ...state,
     fetching: false,
-    data: {}
+    data: null
   }
 }
 

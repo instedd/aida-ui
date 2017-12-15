@@ -7,8 +7,7 @@ const initialState = {
   toasts: []
 }
 
-export default (state : T.NotifState, action : T.Action) : T.NotifState => {
-  state = state || initialState
+export default (state : T.NotifState = initialState, action : T.Action) : T.NotifState => {
   switch (action.type) {
     case actions.PUSH: return push(state, action)
     case actions.DISMISS: return dismiss(state, action)
