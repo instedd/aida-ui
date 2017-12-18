@@ -33,5 +33,20 @@ describe BotPolicy do
                                           :read_behaviours, :create_skill,
                                           :read_translations, :update_translation]) }
     end
+
+    describe "shared with the user" do
+      let(:bot) {
+        create(:bot) do |bot|
+          bot.collaborators.create! role: 'collaborator', user: user
+        end
+      }
+
+      it { is_expected.to permit_actions([:update, :destroy,
+                                          :publish, :unpublish,
+                                          :read_session_data, :read_usage_stats,
+                                          :read_channels,
+                                          :read_behaviours, :create_skill,
+                                          :read_translations, :update_translation]) }
+    end
   end
 end

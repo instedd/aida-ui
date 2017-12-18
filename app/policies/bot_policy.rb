@@ -8,55 +8,59 @@ class BotPolicy < ApplicationPolicy
   end
 
   def update?
-    is_owner?
+    is_owner? or is_collaborator?
   end
 
   def destroy?
-    is_owner?
+    is_owner? or is_collaborator?
   end
 
   def publish?
-    is_owner?
+    is_owner? or is_collaborator?
   end
 
   def unpublish?
-    is_owner?
+    is_owner? or is_collaborator?
   end
 
   def preview?
-    true
+    is_owner? or is_collaborator?
   end
 
   def read_session_data?
-    is_owner?
+    is_owner? or is_collaborator?
   end
 
   def read_usage_stats?
-    is_owner?
+    is_owner? or is_collaborator?
   end
 
   def read_channels?
-    is_owner?
+    is_owner? or is_collaborator?
   end
 
   def read_behaviours?
-    is_owner?
+    is_owner? or is_collaborator?
   end
 
   def create_skill?
-    is_owner?
+    is_owner? or is_collaborator?
   end
 
   def read_translations?
-    is_owner?
+    is_owner? or is_collaborator?
   end
 
   def update_translation?
-    is_owner?
+    is_owner? or is_collaborator?
   end
 
   def is_owner?
     record.owner_id == user.id
+  end
+
+  def is_collaborator?
+    record.collaborators.any? { |c| c.user_id == user.id }
   end
 
   def permitted_attributes
@@ -65,7 +69,8 @@ class BotPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      scope.where(owner_id: user.id)
+      joined_scope = scope.left_outer_joins(:collaborators)
+      joined_scope.where(owner_id: user.id).or(joined_scope.where('collaborators.user_id = ?', user.id))
     end
   end
 end

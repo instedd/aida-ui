@@ -11,4 +11,9 @@ FactoryBot.define do
       sequence(:uuid) { |n| "bot-uuid-#{n}" }
     end
   end
+
+  factory :collaborator do
+    user
+    role "collaborator"
+  end
 end

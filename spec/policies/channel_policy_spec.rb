@@ -16,4 +16,14 @@ describe ChannelPolicy do
 
     it { is_expected.to forbid_actions([:update]) }
   end
+
+  describe "of shared bots" do
+    let(:channel) {
+      create(:bot) do |bot|
+        bot.collaborators.create! role: 'collaborator', user: user
+      end.channels.first
+    }
+
+    it { is_expected.to permit_actions([:update]) }
+  end
 end

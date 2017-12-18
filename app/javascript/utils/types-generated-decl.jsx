@@ -133,11 +133,11 @@ export type BotStats = {
 export type StatsPeriod = "today" | "this_week" | "this_month";
 
 export type TranslationBehaviours = Array<{
-  id?: number;
-  label?: string;
-  keys?: Array<{
+  id: number;
+  label: string;
+  keys: Array<{
     _key: string;
-    _lang: Language;
+    _label: string;
   }>;
 }>;
 

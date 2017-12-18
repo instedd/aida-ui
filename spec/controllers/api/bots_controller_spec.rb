@@ -2,33 +2,32 @@ require 'rails_helper'
 
 RSpec.describe Api::BotsController, type: :controller do
   let!(:user) { create(:user) }
+  let!(:other_user) { create(:user) }
+
   let!(:bot) { create(:bot, owner: user) }
   let!(:published_bot) { create(:bot, :published, owner: user) }
-  let!(:other_user) { create(:user) }
   let!(:other_bot) { create(:bot, owner: other_user) }
+  let!(:shared_bot) {
+    create(:bot, owner: other_user) do |shared_bot|
+      shared_bot.collaborators.create! role: "collaborator", user: user
+    end
+  }
 
   before(:each) { sign_in user }
 
   describe "index" do
-    it "returns the list of bots" do
+    it "returns a list of bots" do
       get :index
 
       expect(response).to be_success
-      expect(json_body).to match_array([{ id: bot.id,
-                                          name: bot.name,
-                                          published: false,
-                                          channel_setup: bot.channels.first.setup? },
-                                        { id: published_bot.id,
-                                          name: published_bot.name,
-                                          published: true,
-                                          channel_setup: published_bot.channels.first.setup? }])
+      expect(json_body).to all(be_a_bot_as_json)
     end
 
-    it "lists only the user bots" do
+    it "lists only the user accessible bots" do
       get :index
 
-      bot_ids = json_body.map { |bot| bot[:id] }
-      expect(bot_ids).to include(bot.id)
+      bot_ids = json_pluck(json_body, :id)
+      expect(bot_ids).to include(bot.id, published_bot.id, shared_bot.id)
       expect(bot_ids).to_not include(other_bot.id)
     end
   end
@@ -40,7 +39,7 @@ RSpec.describe Api::BotsController, type: :controller do
         expect(response).to be_success
       end.to change(Bot, :count).by(1)
 
-      expect(json_body.keys).to match_array(%w(id name published channel_setup))
+      expect(json_body).to be_a_bot_as_json
     end
   end
 
@@ -49,9 +48,20 @@ RSpec.describe Api::BotsController, type: :controller do
       put :update, params: { id: bot.id, bot: { name: "updated" } }
 
       expect(response).to be_success
+      expect(json_body).to be_a_bot_as_json.matching(name: "updated")
 
       bot.reload
       expect(bot.name).to eq("updated")
+    end
+
+    it "can update a shared bot" do
+      put :update, params: { id: shared_bot.id, bot: { name: "updated" } }
+
+      expect(response).to be_success
+      expect(json_body).to be_a_bot_as_json.matching(name: "updated")
+
+      shared_bot.reload
+      expect(shared_bot.name).to eq("updated")
     end
   end
 
@@ -66,6 +76,12 @@ RSpec.describe Api::BotsController, type: :controller do
       expect(Backend).to receive(:destroy_bot).with(published_bot.uuid).and_return(true)
 
       delete :destroy, params: { id: published_bot.id }
+    end
+
+    it "can delete a shared bot" do
+      expect do
+        delete :destroy, params: { id: shared_bot.id }
+      end.to change(Bot, :count).by(-1)
     end
   end
 
@@ -84,6 +100,14 @@ RSpec.describe Api::BotsController, type: :controller do
 
       post :publish, params: { id: published_bot.id }
     end
+
+    it "is allowed for a shared bot" do
+      expect(Backend).to receive(:create_bot).and_return('bot-id')
+
+      post :publish, params: { id: shared_bot.id }
+
+      expect(response).to be_success
+    end
   end
 
   describe "unpublish" do
@@ -94,11 +118,28 @@ RSpec.describe Api::BotsController, type: :controller do
 
       expect(published_bot.reload).to_not be_published
     end
+
+    it "is allowed for a shared bot" do
+      shared_published_bot = create(:bot, :published, owner: other_user) do |bot|
+        bot.collaborators.create! role: "collaborator", user: user
+      end
+      expect(Backend).to receive(:destroy_bot).with(shared_published_bot.uuid)
+
+      delete :unpublish, params: { id: shared_published_bot.id }
+
+      expect(shared_published_bot.reload).to_not be_published
+    end
   end
 
   describe "data" do
     it "returns a CSV file" do
       get :data, params: { id: bot.id }
+
+      expect(response).to be_success
+    end
+
+    it "is allowed for a shared bot" do
+      get :data, params: { id: shared_bot.id }
 
       expect(response).to be_success
     end
@@ -122,24 +163,30 @@ RSpec.describe Api::BotsController, type: :controller do
     end
 
     it "returns the usage stats for the bot" do
-      bot.update_attributes! uuid: 'bot-id'
-      expect(Backend).to receive(:usage_summary).with('bot-id').and_return(sample_summary)
-      expect(Backend).to receive(:users_per_skill).with('bot-id').and_return(sample_users_per_skill)
+      expect(Backend).to receive(:usage_summary).with(published_bot.uuid).and_return(sample_summary)
+      expect(Backend).to receive(:users_per_skill).with(published_bot.uuid).and_return(sample_users_per_skill)
 
-      get :stats, params: { id: bot.id }
+      get :stats, params: { id: published_bot.id }
 
       expect(response).to be_success
-      expect(json_body).to match({ active_users: 10,
-                                   messages_sent: 20,
-                                   messages_received: 30,
-                                   behaviours: [{ id: 'front_desk',
-                                                  kind: 'front_desk',
-                                                  label: 'Front desk',
-                                                  users: 10 },
-                                                { id: 'language_detector',
-                                                  kind: 'language_detector',
-                                                  label: 'Language detector',
-                                                  users: 5 }] })
+      expect(json_body).to be_a_bot_stats_as_json.matching(active_users: 10,
+                                                           messages_sent: 20,
+                                                           messages_received: 30,
+                                                           behaviours: [match_attributes({ id: 'front_desk', users: 10 }),
+                                                                        match_attributes({ id: 'language_detector', users: 5 })])
+    end
+
+    it "is allowed for shared bots" do
+      shared_published_bot = create(:bot, :published, owner: other_user) do |bot|
+        bot.collaborators.create! role: "collaborator", user: user
+      end
+      expect(Backend).to receive(:usage_summary).with(shared_published_bot.uuid).and_return(sample_summary)
+      expect(Backend).to receive(:users_per_skill).with(shared_published_bot.uuid).and_return(sample_users_per_skill)
+
+      get :stats, params: { id: shared_published_bot.id }
+
+      expect(response).to be_success
+      expect(json_body).to be_a_bot_stats_as_json
     end
   end
 end

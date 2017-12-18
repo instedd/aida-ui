@@ -294,12 +294,13 @@
               "type": "object",
               "properties": {
                 "_key": { "type": "string" },
-                "_lang": { "$ref": "#/definitions/language" }
+                "_label": { "type": "string" }
               },
-              "required": [ "_key", "_lang" ]
+              "required": [ "_key", "_label" ]
             }
           }
-        }
+        },
+        "required": [ "id", "label", "keys" ]
       }
     },
 
