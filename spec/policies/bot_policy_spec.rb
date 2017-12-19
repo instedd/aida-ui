@@ -35,11 +35,7 @@ describe BotPolicy do
     end
 
     describe "shared with the user" do
-      let(:bot) {
-        create(:bot) do |bot|
-          bot.collaborators.create! role: 'collaborator', user: user
-        end
-      }
+      let(:bot) { create(:bot, shared_with: user) }
 
       it { is_expected.to permit_actions([:update, :destroy,
                                           :publish, :unpublish,

@@ -18,8 +18,7 @@ RSpec.describe Api::TranslationsController, type: :controller do
     bot.skills.create_skill! 'keyword_responder'
   }
   let!(:shared_bot) {
-    create(:bot) do |bot|
-      bot.collaborators.create! role: 'collaborator', user: user
+    create(:bot, shared_with: user) do |bot|
       bot.skills.create_skill! 'language_detector',
                                config: {
                                  languages: [

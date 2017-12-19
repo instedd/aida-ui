@@ -18,11 +18,7 @@ describe ChannelPolicy do
   end
 
   describe "of shared bots" do
-    let(:channel) {
-      create(:bot) do |bot|
-        bot.collaborators.create! role: 'collaborator', user: user
-      end.channels.first
-    }
+    let(:channel) { create(:bot, shared_with: user).channels.first }
 
     it { is_expected.to permit_actions([:update]) }
   end

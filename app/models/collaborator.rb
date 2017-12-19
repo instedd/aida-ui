@@ -8,6 +8,12 @@ class Collaborator < ApplicationRecord
   validates_inclusion_of :role, in: %w(collaborator)
   validate :user_is_not_bot_owner
 
+  def self.add_collaborator!(user, params = {})
+    default_params = { role: 'collaborator' }
+
+    create! default_params.merge(params).merge(user: user)
+  end
+
   private
 
   def user_is_not_bot_owner
