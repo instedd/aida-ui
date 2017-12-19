@@ -4,9 +4,27 @@
 .md-tab {
   min-width: initial;
 }
-@media screen and (min-width: 320px) {
-  .md-tabs {
-    width: 900px;
+
+@media #{$md-mobile-media} {
+  .mainTabs{
+    .md-tabs {
+      width: 750px;
+      overflow: visible;
+    }
+    .material-icons.md-icon {
+      font-size: 20px;
+    }
+  }
+}
+@media #{$md-desktop-media} {
+  .mainTabs {
+    .md-tabs {
+      width: 900px;
+    }
+    .md-tab-label {
+      font-size: inherit;
+      line-height: inherit;
+    }
   }
 }
 
