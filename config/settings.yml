@@ -2,3 +2,8 @@ version: 0.4.0
 backend:
   url:
   public_socket_url:
+
+mailer:
+  from: 'aida@instedd.org'
+
+base_url:

@@ -14,6 +14,10 @@ class Collaborator < ApplicationRecord
     create! default_params.merge(params).merge(user: user)
   end
 
+  def self.emails
+    joins(:user).pluck('users.email')
+  end
+
   private
 
   def user_is_not_bot_owner

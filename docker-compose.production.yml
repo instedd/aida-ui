@@ -10,6 +10,7 @@ services:
       SECRET_KEY_BASE: secret
       SETTINGS__BACKEND__URL: http://backend/
       SETTINGS__BACKEND__PUBLIC_SOCKET_URL: ws://localhost:3000/socket
+      SETTINGS__BASE_URL: http://localhost:3000
       VIRTUAL_HOST: '*'
 
   backend:

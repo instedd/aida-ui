@@ -1,2 +1,4 @@
 backend:
   url: http://should-be-mocked/
+
+base_url: http://test.host/
