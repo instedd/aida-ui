@@ -1,5 +1,5 @@
 import React, { Component, Children } from 'react';
-import { Tabs, Tab, ListItem, MenuButton, Toolbar, Button } from 'react-md'
+import { Tabs, Tab, ListItem, MenuButton, Toolbar, Button, FontIcon } from 'react-md'
 import { withRouter } from 'react-router'
 import { Link } from 'react-router-dom'
 import UserMenu from './UserMenu'
@@ -46,7 +46,7 @@ export const Header = ({icon, title, sectionNavLinks, headerNav, headerNavExtra,
 class HeaderSubNav extends Component {
   render() {
     const items = [
-      <ListItem key={0} primaryText={<i className='material-icons dummy'>more_vert</i>} />
+      <ListItem key={0} primaryText={""} />
     ]
 
     let selectedTab = 0
@@ -71,22 +71,9 @@ class HeaderSubNav extends Component {
                     // TODO allow HeaderNavAction to be used as headerNav
                     <Tab label={e.props.label} key={index} component={Link} to={e.props.to} />
                   )}
-                </Tabs>
-              )
-            }
-          })()}
 
-          {(() => {
-            if (items.length > 1) {
-              return (
-                <MenuButton
-                  id="more-menu"
-                  className="btn-more"
-                  flat
-                  position={MenuButton.Positions.BELOW}
-                  menuItems={items}>
-                  <i className='material-icons dummy'>more_vert</i>
-                </MenuButton>
+                  <Tab label={<FontIcon>more_vert</FontIcon>} key={"last"} component={MenuButton} menuItems={items} />
+                </Tabs>
               )
             }
           })()}
