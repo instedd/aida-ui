@@ -55,6 +55,14 @@ class BotPolicy < ApplicationPolicy
     is_owner? or is_collaborator?
   end
 
+  def read_collaborators?
+    is_owner? or is_collaborator?
+  end
+
+  def invite_collaborator?
+    is_owner? or is_collaborator?
+  end
+
   def is_owner?
     record.owner_id == user.id
   end

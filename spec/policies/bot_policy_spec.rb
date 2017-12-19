@@ -20,7 +20,8 @@ describe BotPolicy do
                                           :read_session_data, :read_usage_stats,
                                           :read_channels,
                                           :read_behaviours, :create_skill,
-                                          :read_translations, :update_translation]) }
+                                          :read_translations, :update_translation,
+                                          :read_collaborators, :invite_collaborator]) }
     end
 
     describe "not being the owner" do
@@ -31,7 +32,8 @@ describe BotPolicy do
                                           :read_session_data, :read_usage_stats,
                                           :read_channels,
                                           :read_behaviours, :create_skill,
-                                          :read_translations, :update_translation]) }
+                                          :read_translations, :update_translation,
+                                          :read_collaborators, :invite_collaborator]) }
     end
 
     describe "shared with the user" do
@@ -42,7 +44,8 @@ describe BotPolicy do
                                           :read_session_data, :read_usage_stats,
                                           :read_channels,
                                           :read_behaviours, :create_skill,
-                                          :read_translations, :update_translation]) }
+                                          :read_translations, :update_translation,
+                                          :read_collaborators, :invite_collaborator]) }
     end
   end
 end
