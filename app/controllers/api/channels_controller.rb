@@ -4,7 +4,7 @@ class Api::ChannelsController < ApplicationApiController
   def index
     bot = Bot.find(params[:bot_id])
     authorize bot, :read_channels?
-    channels = bot.channels
+    channels = policy_scope(bot.channels)
 
     render json: channels.map { |c| channel_api_json(c) }
   end
