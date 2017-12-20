@@ -41,5 +41,9 @@ services:
     ports:
       - '3000:80'
 
+  jobs:
+    <<: *base
+    command: /bin/sh -c './bin/rake jobs:work'
+
 volumes:
   db:
