@@ -27,6 +27,16 @@ FactoryBot.define do
     role "collaborator"
   end
 
+  factory :invitation do
+    bot
+    email { generate(:email) }
+    role "collaborator"
+
+    trait :anonymous do
+      email nil
+    end
+  end
+
   sequence :email do |n|
     "sample-#{n}@example.com"
   end
