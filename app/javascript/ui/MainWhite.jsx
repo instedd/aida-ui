@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-// import ScrollableAnchor from 'react-scrollable-anchor'
 
 export const MainWhite = ({children, sidebar, wide}) =>
   <div className={sidebar ? 'main-with-sidebar' : (wide ? 'main-fullwidth wide' : 'main-fullwidth')}>
