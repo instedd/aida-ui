@@ -51,23 +51,13 @@ describe InvitationPolicy do
   describe "recipient invitations" do
     let(:invitation) { bot.invitations.create! email: user.email }
 
-    describe "of owned bots" do
-      let(:bot) { create(:bot, owner: user) }
-
-      it { is_expected.to forbid_actions([:retrieve, :accept]) }
-    end
-
     describe "of other bots" do
       let(:bot) { create(:bot) }
 
       it { is_expected.to permit_actions([:retrieve, :accept]) }
     end
 
-    describe "of shared bots" do
-      let(:bot) { create(:bot, shared_with: user) }
-
-      it { is_expected.to forbid_actions([:retrieve, :accept]) }
-    end
+    # invitations to owner and collaborators are not valid
   end
 
   describe "other invitations" do
