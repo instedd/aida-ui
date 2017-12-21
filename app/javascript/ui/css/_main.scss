@@ -20,7 +20,7 @@
   }
 }
 
-@media screen and (max-width: 33.9em) {
+@media screen and (max-width: $md-tablet-min-width) {
   .main-with-sidebar {
     grid-template-columns: 1fr;
     grid-template-areas:
