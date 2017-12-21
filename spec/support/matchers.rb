@@ -3,7 +3,7 @@ require "rspec/expectations"
 module AidaMatchers
   extend RSpec::Matchers::DSL
 
-  %w(bot channel skill bot_stats translations_index).each do |noun|
+  %w(bot channel skill bot_stats translations_index collaborator invitation).each do |noun|
     matcher "be_a_#{noun}_as_json".to_sym do
       define_method :fragment do
         "#/definitions/#{noun}"

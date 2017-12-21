@@ -170,3 +170,18 @@ export type Translation = {
   value: string;
 };
 
+export type Collaborator = {
+  id: number;
+  role: string;
+  user_email: string;
+  last_activity: string | null;
+};
+
+export type Invitation = {
+  id: number;
+  creator?: string;
+  email: string | null;
+  link_url: string | null;
+  created_at: string;
+};
+
