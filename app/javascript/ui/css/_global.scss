@@ -67,7 +67,7 @@
   margin-left: .3ch;
 }
 
-@media screen and (min-width: 1025px) {
+@media #{$md-desktop-media} {
 
   .md-tile-text--primary, .md-tile-text--secondary {
       font-size: 15px;
@@ -117,4 +117,14 @@
       color: red;
     }
   }
+}
+
+//Turn off webkit's number input spinners
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type=number] {
+    -moz-appearance:textfield;
 }
