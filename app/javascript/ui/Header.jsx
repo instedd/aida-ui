@@ -46,7 +46,7 @@ export const Header = ({icon, title, sectionNavLinks, headerNav, headerNavExtra,
 class HeaderSubNav extends Component {
   render() {
     const items = [
-      <ListItem key={0} primaryText={""} />
+      <ListItem key={0} primaryText={<FontIcon>more_vert</FontIcon>} disabled />
     ]
 
     let selectedTab = 0
@@ -72,7 +72,7 @@ class HeaderSubNav extends Component {
                     <Tab label={e.props.label} key={index} component={Link} to={e.props.to} />
                   )}
 
-                  <Tab label={<FontIcon>more_vert</FontIcon>} key={"last"} component={MenuButton} menuItems={items} />
+                  <Tab label={<FontIcon>more_vert</FontIcon>} key={"last"} component={MenuButton} menuItems={items} position={MenuButton.Positions.TOP_LEFT} />
                 </Tabs>
               )
             }
