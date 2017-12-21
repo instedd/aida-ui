@@ -3,10 +3,6 @@ class InvitationPolicy < ApplicationPolicy
     is_bot_owner? or is_collaborator?
   end
 
-  def renew?
-    is_bot_owner? or is_collaborator?
-  end
-
   def destroy?
     is_bot_owner? or is_collaborator?
   end

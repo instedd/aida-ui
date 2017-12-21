@@ -6,6 +6,7 @@ class Bot < ApplicationRecord
   has_many :variable_assignments, dependent: :destroy
   has_many :collaborators, dependent: :destroy
   has_many :invitations, dependent: :destroy
+  has_many :collaborating_users, through: :collaborators, source: :user
 
   validate :has_single_front_desk
 

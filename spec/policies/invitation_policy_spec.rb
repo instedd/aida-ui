@@ -5,29 +5,29 @@ describe InvitationPolicy do
   let(:user) { create(:user) }
 
   describe "admin" do
-    let(:invitation) { bot.invitations.create! email: generate(:email) }
+    let(:invitation) { create(:invitation, bot: bot) }
 
     describe "of owned bot" do
       let(:bot) { create(:bot, owner: user) }
 
-      it { is_expected.to permit_actions([:resend, :renew, :destroy]) }
+      it { is_expected.to permit_actions([:resend, :destroy]) }
     end
 
     describe "of other bots" do
       let(:bot) { create(:bot) }
 
-      it { is_expected.to forbid_actions([:resend, :renew, :destroy]) }
+      it { is_expected.to forbid_actions([:resend, :destroy]) }
     end
 
     describe "of shared bots" do
       let(:bot) { create(:bot, shared_with: user) }
 
-      it { is_expected.to permit_actions([:resend, :renew, :destroy]) }
+      it { is_expected.to permit_actions([:resend, :destroy]) }
     end
   end
 
   describe "anonymous invitations" do
-    let(:invitation) { bot.invitations.create! }
+    let(:invitation) { create(:invitation, :anonymous, bot: bot) }
 
     describe "of owned bots" do
       let(:bot) { create(:bot, owner: user) }
@@ -49,7 +49,7 @@ describe InvitationPolicy do
   end
 
   describe "recipient invitations" do
-    let(:invitation) { bot.invitations.create! email: user.email }
+    let(:invitation) { create(:invitation, bot: bot, email: user.email) }
 
     describe "of other bots" do
       let(:bot) { create(:bot) }
@@ -61,7 +61,7 @@ describe InvitationPolicy do
   end
 
   describe "other invitations" do
-    let(:invitation) { bot.invitations.create! email: generate(:email) }
+    let(:invitation) { create(:invitation, bot: bot) }
 
     describe "of owned bots" do
       let(:bot) { create(:bot, owner: user) }

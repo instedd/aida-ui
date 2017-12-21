@@ -82,6 +82,7 @@ ActiveRecord::Schema.define(version: 20171228180737) do
 
   create_table "invitations", force: :cascade do |t|
     t.bigint "bot_id"
+    t.bigint "creator_id"
     t.string "email"
     t.string "role", null: false
     t.string "token", null: false
@@ -89,6 +90,7 @@ ActiveRecord::Schema.define(version: 20171228180737) do
     t.datetime "updated_at", null: false
     t.index ["bot_id", "email"], name: "index_invitations_on_bot_id_and_email", unique: true
     t.index ["bot_id"], name: "index_invitations_on_bot_id"
+    t.index ["creator_id"], name: "index_invitations_on_creator_id"
     t.index ["token"], name: "index_invitations_on_token", unique: true
   end
 
@@ -136,6 +138,7 @@ ActiveRecord::Schema.define(version: 20171228180737) do
   add_foreign_key "collaborators", "bots"
   add_foreign_key "collaborators", "users"
   add_foreign_key "invitations", "bots"
+  add_foreign_key "invitations", "users", column: "creator_id"
   add_foreign_key "translations", "behaviours"
   add_foreign_key "variable_assignments", "bots"
 end
