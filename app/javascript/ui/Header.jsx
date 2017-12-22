@@ -80,13 +80,15 @@ class HeaderSubNav extends Component {
             }
           })()}
 
-          <Button
-            onClick={this.props.buttonAction}
-            floating
-            secondary
-            className="md-cell--right md-cell--bottom add-button">
-            {this.props.buttonIcon}
-          </Button>
+          {this.props.buttonIcon ? (
+             <Button
+               onClick={this.props.buttonAction}
+               floating
+               secondary
+               className="md-cell--right md-cell--bottom add-button">
+               {this.props.buttonIcon}
+             </Button>
+          ) : null}
         </nav>
     );
   }

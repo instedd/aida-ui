@@ -15,6 +15,7 @@ import { Listing, Column } from '../ui/Listing'
 import EmptyContent from '../ui/EmptyContent'
 
 import * as actions from '../actions/collaborators'
+import * as invitationsActions from '../actions/invitations'
 
 class BotCollaborators extends Component {
   state = {
@@ -27,7 +28,9 @@ class BotCollaborators extends Component {
   }
 
   render() {
-    const { bot, loaded, collaborators, invitations, anonymousLink, actions, dialogVisible, hideDialog, showDialog } = this.props
+    const { bot, loaded, collaborators, invitations, anonymousLink,
+            currentUserEmail, invitationsActions,
+            actions, dialogVisible, hideDialog, showDialog } = this.props
 
     let items = map(collaborators, c => ({
       type: 'collaborator',
@@ -54,7 +57,7 @@ class BotCollaborators extends Component {
         hideDialog()
       }
       const cancelInvitation = (invitation) => {
-        actions.cancelInvitation(invitation)
+        invitationsActions.cancelInvitation(invitation)
       }
       const removeCollaborator = (collaborator) => {
         actions.removeCollaborator(collaborator)
@@ -99,8 +102,10 @@ class BotCollaborators extends Component {
           return (<span className={className}>{content}</span>)
         }
         const lastActivityContent = (item) => {
-          if (item.last_activity) {
+          if (item.type == 'invitation' && item.last_activity) {
             return `Invited ${moment(item.last_activity).fromNow()}`
+          } else if (item.last_activity) {
+            return moment(item.last_activity).fromNow()
           } else {
             return ''
           }
@@ -108,7 +113,7 @@ class BotCollaborators extends Component {
         const renderCollaboratorAction = (item) => {
           if (item.type == 'invitation') {
             return (<Button flat iconChildren="close" className="invitation-row" onClick={() => cancelInvitation(item.data)}>Cancel</Button>)
-          } else {
+          } else if (item.email != currentUserEmail) {
             return (<Button flat iconChildren="close" onClick={() => removeCollaborator(item.data)}>Remove</Button>)
           }
         }
@@ -141,13 +146,15 @@ const mapStateToProps = (state, {bot}) => {
       collaborators: data.collaborators,
       invitations: data.invitations,
       anonymousLink: data.anonymous_invitation.link_url,
-      loaded: true
+      loaded: true,
+      currentUserEmail: state.auth.userEmail
     }
   }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  actions: bindActionCreators(actions, dispatch)
+  actions: bindActionCreators(actions, dispatch),
+  invitationsActions: bindActionCreators(invitationsActions, dispatch)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(BotCollaborators)

@@ -10,10 +10,6 @@ export const INVITE = 'COLLABORATORS_INVITE'
 export const INVITE_SUCCESS = 'COLLABORATORS_INVITE_SUCCESS'
 export const INVITE_ERROR = 'COLLABORATORS_INVITE_ERROR'
 
-export const CANCEL_INVITATION = 'INVITATIONS_CANCEL'
-export const CANCEL_INVITATION_SUCCESS = 'INVITATIONS_CANCEL_SUCCESS'
-export const CANCEL_INVITATION_ERROR = 'INVITATIONS_CANCEL_ERROR'
-
 export const REMOVE = 'COLLABORATORS_REMOVE'
 export const REMOVE_SUCCESS = 'COLLABORATORS_REMOVE_SUCCESS'
 export const REMOVE_ERROR = 'COLLABORATORS_REMOVE_ERROR'
@@ -62,19 +58,6 @@ export const _collaboratorsRemoveError = () : T.CollaboratorsAction => ({
   type: REMOVE_ERROR
 })
 
-export const _invitationsCancel = (invitation : T.Invitation) : T.CollaboratorsAction => ({
-  type: CANCEL_INVITATION,
-  invitation
-})
-
-export const _invitationsCancelSuccess = () : T.CollaboratorsAction => ({
-  type: CANCEL_INVITATION_SUCCESS
-})
-
-export const _invitationsCancelError = () : T.CollaboratorsAction => ({
-  type: CANCEL_INVITATION_ERROR
-})
-
 
 export const fetchCollaborators = (scope : {botId : number}) => (dispatch : T.Dispatch, getState : T.GetState) => {
   const state = getState()
@@ -96,13 +79,6 @@ export const inviteCollaborator = (bot : T.Bot, email : string) => (dispatch : T
   return api.inviteCollaborator(bot.id, email, 'collaborator')
             .then(invitation => dispatch(_collaboratorsInviteSuccess(bot.id, invitation)))
             .catch(error => dispatch(_collaboratorsInviteError(bot.id, error)))
-}
-
-export const cancelInvitation = (invitation : T.Invitation) => (dispatch : T.Dispatch) => {
-  dispatch(_invitationsCancel(invitation))
-  return api.cancelInvitation(invitation.id)
-            .then(response => dispatch(_invitationsCancelSuccess()))
-            .catch(error => dispatch(_invitationsCancelError()))
 }
 
 export const removeCollaborator = (collaborator : T.Collaborator) => (dispatch : T.Dispatch) => {

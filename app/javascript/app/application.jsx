@@ -10,6 +10,7 @@ import reducers from '../reducers'
 
 import { BotIndex } from '../components/BotIndex'
 import { BotLayout } from '../components/BotLayout'
+import InvitationView from '../components/InvitationView'
 
 export const createAppStore = () => {
   return createStore(reducers, applyMiddleware(
@@ -19,13 +20,15 @@ export const createAppStore = () => {
   ))
 }
 
-export const App = ({store}) =>
+export const App = ({store}) => (
   <Provider store={store}>
     <BrowserRouter>
       <div>
         <Route exact path="/" render={() => <Redirect to="/b"/>} />
         <Route exact path="/b" component={BotIndex} />
         <Route path="/b/:id" component={BotLayout} />
+        <Route path="/invitation/:token" render={({match}) => <InvitationView token={match.params.token} />} />
       </div>
     </BrowserRouter>
   </Provider>
+)

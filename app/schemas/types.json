@@ -417,6 +417,16 @@
         "created_at": { "type": "string" }
       },
       "required": [ "id", "email", "link_url", "created_at" ]
+    },
+
+    "invitation_data": {
+      "type": "object",
+      "properties": {
+        "bot_name": { "type": "string" },
+        "inviter": { "type": "string" },
+        "role": { "type": "string" }
+      },
+      "required": [ "bot_name", "inviter", "role" ]
     }
   },
 

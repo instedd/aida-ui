@@ -101,3 +101,11 @@ export const cancelInvitation = (invitationId : number) => {
 export const removeCollaborator = (collaboratorId : number) => {
   return apiDelete(`collaborators/${collaboratorId}`)
 }
+
+export const retrieveInvitation = (token : string) => {
+  return apiFetchJSON(`invitations/retrieve?token=${token}`)
+}
+
+export const acceptInvitation = (token : string) => {
+  return apiPostJSON(`invitations/accept?token=${token}`)
+}

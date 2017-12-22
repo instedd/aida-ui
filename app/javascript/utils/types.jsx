@@ -125,13 +125,31 @@ export type CollaboratorsAction = {
   type: 'COLLABORATORS_REMOVE_SUCCESS',
 } | {
   type: 'COLLABORATORS_REMOVE_ERROR',
-} | {
+};
+
+export type InvitationsAction = {
   type: 'INVITATIONS_CANCEL',
   invitation: T.Invitation,
 } | {
   type: 'INVITATIONS_CANCEL_SUCCESS',
 } | {
   type: 'INVITATIONS_CANCEL_ERROR',
+} | {
+  type: 'INVITATION_RETRIEVE',
+  token: string
+} | {
+  type: 'INVITATION_RETRIEVE_SUCCESS',
+  token: string,
+  invitation: T.InvitationData
+} | {
+  type: 'INVITATION_RETRIEVE_ERROR',
+  token: string
+} | {
+  type: 'INVITATION_ACCEPT',
+} | {
+  type: 'INVITATION_ACCEPT_SUCCESS',
+} | {
+  type: 'INVITATION_ACCEPT_ERROR',
 };
 
 export type FrontDeskAction = {
@@ -225,6 +243,7 @@ export type Action = AuthAction
                    | ChannelsAction
                    | ChatAction
                    | CollaboratorsAction
+                   | InvitationsAction
                    | FrontDeskAction
                    | NotificationsAction
                    | SkillAction
@@ -269,6 +288,12 @@ export type FrontDeskState = {
   data: ?T.FrontDesk
 };
 
+export type InvitationState = {
+  fetching: boolean,
+  token: ?string,
+  invitation: ?T.InvitationData
+};
+
 export type NotifState = {
   toasts: Array<{text: string, action: any}>
 };
@@ -307,6 +332,7 @@ export type State = {
   chat: ChatState,
   collaborators: CollaboratorsState,
   frontDesk: FrontDeskState,
+  invitation: InvitationState,
   notifications: NotifState,
   skills: SkillsState,
   stats: StatsState,

@@ -192,3 +192,9 @@ export type Invitation = {
   created_at: string;
 };
 
+export type InvitationData = {
+  bot_name: string;
+  inviter: string;
+  role: string;
+};
+

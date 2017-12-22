@@ -3,6 +3,7 @@ import * as T from '../utils/types'
 import filter from 'lodash/filter'
 
 import * as actions from '../actions/collaborators'
+import * as invitationsActions from '../actions/invitations'
 
 const initialState = {
   fetching: false,
@@ -16,7 +17,7 @@ export default (state : T.CollaboratorsState, action : T.Action) : T.Collaborato
     case actions.FETCH: return fetch(state, action)
     case actions.FETCH_SUCCESS: return fetchSuccess(state, action)
     case actions.INVITE_SUCCESS: return inviteSuccess(state, action)
-    case actions.CANCEL_INVITATION: return cancelInvitation(state, action)
+    case invitationsActions.CANCEL: return cancelInvitation(state, action)
     case actions.REMOVE: return removeCollaborator(state, action)
     default: return state
   }
