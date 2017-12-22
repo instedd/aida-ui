@@ -17,7 +17,7 @@ export const Listing = ({items, title, children, onItemClick}) => {
       </TableHeader>
       <TableBody>
         {items.map((item, ri) => (
-          <TableRow key={ri} onClick={() => onItemClick(item)}>
+          <TableRow key={ri} onClick={() => onItemClick && onItemClick(item)}>
             {columns.map((col, ci) =>
               <TableColumn key={ci}>{col.props.render(item)}</TableColumn>
             )}

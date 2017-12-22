@@ -2,6 +2,7 @@ import {combineReducers} from 'redux'
 import auth from './auth'
 import bots from './bots'
 import channels from './channels'
+import collaborators from './collaborators'
 import frontDesk from './frontDesk'
 import notifications from './notifications'
 import skills from './skills'
@@ -15,6 +16,7 @@ export default combineReducers({
   bots,
   channels,
   chat,
+  collaborators,
   frontDesk,
   notifications,
   skills,

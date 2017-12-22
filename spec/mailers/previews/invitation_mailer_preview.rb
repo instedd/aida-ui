@@ -2,7 +2,8 @@
 class InvitationMailerPreview < ActionMailer::Preview
   def invite_email
     bot = Bot.new(name: 'My Bot')
-    invitation = Invitation.new email: 'sample@example.com', bot: bot
+    creator = User.new(email: 'user@example.com')
+    invitation = Invitation.new email: 'sample@example.com', bot: bot, creator: creator
     InvitationMailer.invite_email(invitation)
   end
 end
