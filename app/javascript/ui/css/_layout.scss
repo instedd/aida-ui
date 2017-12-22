@@ -31,65 +31,6 @@ footer {
   padding: 17px 20px;
 }
 
-.mainToolbar {
-  flex-direction: column;
-  nav {
-    flex-direction: row;
-    display: flex;
-    border-bottom: 1px solid $md-grey-900;
-    .sections {
-      flex-grow: 1;
-      .md-btn--text {
-        text-transform: none;
-      }
-    }
-    #user-menu {
-      color: $md-grey-400;
-      display: flex;
-      .md-icon-text {
-        text-transform: none;
-      }
-      button {
-        font-size: 1rem;
-      }
-    }
-  }
-  > * {
-    margin: 0;
-    padding-left: 10%;
-    padding-right: 10%;
-  }
-  .add-button {
-    color: $md-white-base;
-    transform: translateY(2rem);
-    &:hover {
-      background-color: $md-secondary-color;
-    }
-  }
-}
-.sub-nav {
-  line-height: 0;
-  padding-top: 1.3rem;
-  padding-bottom: 1.3rem;
-  > * {
-    display: inline-block;
-    vertical-align: middle;
-  }
-  h1 {
-    font-size: 1.5rem;
-    color: white;
-    margin: 0 0 0 1rem;
-    .md-text-field-container {
-      margin: 0.9rem 0 0 0;
-    }
-    .md-text-field {
-      font-size: 1.5rem;
-      color: inherit;
-      margin-top: 0;
-    }
-  }
-}
-
 .date-time-picker {
   display: grid;
   grid-template-columns: 50% 50%;
