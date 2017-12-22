@@ -31,6 +31,18 @@
   }
 }
 
+.main-fullwidth {
+  background: $md-white-base;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas: "main-content";
+  .main-content {
+    grid-area: main-content;
+    padding: 86px 6% 70px;
+  }
+}
+
 .main-single-column {
   background: $md-white-base;
   width: 100%;
@@ -62,28 +74,6 @@
       }
     }
   }
-}
-
-.main-fullwidth {
-  background: $md-white-base;
-  width: 100%;
-  display: grid;
-  grid-template-columns: 1fr 700px 1fr;
-  grid-template-areas:
-    ". main-content .";
-  .main-content {
-    grid-area: main-content;
-    padding: 86px 100px 70px;
-  }
-
-  &.wide {
-    grid-template-columns: 100%;
-    grid-template-areas: "main-content";
-  }
-}
-
-.md-subheader {
-  height: auto;
 }
 
 .main-empty {

@@ -110,7 +110,7 @@ class BotTranslations extends Component {
     const rows = renderRows({ behaviours, firstLang, secondLang, defaultLang, onChange: onTranslationChange })
 
     return (
-      <MainWhite wide>
+      <MainWhite>
         <Title>Translations</Title>
         <DataTable plain id="translations-table">
           <TableHeader>
