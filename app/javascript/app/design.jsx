@@ -6,6 +6,7 @@ import Header, { HeaderNavLink, HeaderNavAction, SectionNavLink } from '../ui/He
 import SideBar, { SidebarItem, SidebarMenuItem } from '../ui/SideBar'
 import { MainWhite } from '../ui/MainWhite'
 import { MainGrey } from '../ui/MainGrey'
+import { SingleColumn } from '../ui/SingleColumn'
 import { EmptyContent } from '../ui/EmptyContent'
 import { EmptyLoader } from '../ui/Loader'
 import Layout from '../ui/Layout'
@@ -88,7 +89,7 @@ const EmptyDemo = () =>
   </EmptyContent>
 
 const MainFullWidthDemo = () =>
-  <MainWhite>
+  <SingleColumn>
     <Title>Setup a Facebook channel</Title>
     <Headline>
       In order to setup this channel you first need to
@@ -99,7 +100,7 @@ const MainFullWidthDemo = () =>
     <Field label="Page ID" />
     <Field label="Verify Token" />
     <Field label="Access Token" />
-  </MainWhite>
+  </SingleColumn>
 
 class MainContentDemo extends Component {
   render() {

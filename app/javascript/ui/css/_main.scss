@@ -31,6 +31,19 @@
   }
 }
 
+.main-single-column {
+  background: $md-white-base;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 570px 1fr;
+  grid-template-areas:
+    ". main-content .";
+  .main-content {
+    grid-area: main-content;
+    padding: 86px 0 70px;
+  }
+}
+
 .main-grey {
   background: $md-grey-200;
   width: 100%;
