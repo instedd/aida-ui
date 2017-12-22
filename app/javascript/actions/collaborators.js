@@ -33,45 +33,45 @@ export const _collaboratorsFetchError = () : T.CollaboratorsAction => ({
   type: FETCH_ERROR
 })
 
-export const _collaboratorsInvite = (botId) => ({
+export const _collaboratorsInvite = (botId : number) : T.CollaboratorsAction => ({
   type: INVITE,
 })
 
-export const _collaboratorsInviteSuccess = (botId, invitation) => ({
+export const _collaboratorsInviteSuccess = (botId : number, invitation : T.Invitation) : T.CollaboratorsAction => ({
   type: INVITE_SUCCESS,
   botId,
   invitation
 })
 
-export const _collaboratorsInviteError = (botId, error) => ({
+export const _collaboratorsInviteError = (botId : number, error : any) : T.CollaboratorsAction => ({
   type: INVITE_ERROR,
   botId,
   error
 })
 
-export const _collaboratorsRemove = (collaborator) => ({
+export const _collaboratorsRemove = (collaborator : T.Collaborator) : T.CollaboratorsAction => ({
   type: REMOVE,
   collaborator
 })
 
-export const _collaboratorsRemoveSuccess = () => ({
+export const _collaboratorsRemoveSuccess = () : T.CollaboratorsAction => ({
   type: REMOVE_SUCCESS
 })
 
-export const _collaboratorsRemoveError = () => ({
+export const _collaboratorsRemoveError = () : T.CollaboratorsAction => ({
   type: REMOVE_ERROR
 })
 
-export const _invitationsCancel = (invitation) => ({
+export const _invitationsCancel = (invitation : T.Invitation) : T.CollaboratorsAction => ({
   type: CANCEL_INVITATION,
   invitation
 })
 
-export const _invitationsCancelSuccess = () => ({
+export const _invitationsCancelSuccess = () : T.CollaboratorsAction => ({
   type: CANCEL_INVITATION_SUCCESS
 })
 
-export const _invitationsCancelError = () => ({
+export const _invitationsCancelError = () : T.CollaboratorsAction => ({
   type: CANCEL_INVITATION_ERROR
 })
 
@@ -79,7 +79,9 @@ export const _invitationsCancelError = () => ({
 export const fetchCollaborators = (scope : {botId : number}) => (dispatch : T.Dispatch, getState : T.GetState) => {
   const state = getState()
 
-  if ((state.collaborators.fetching : boolean) && state.collaborators.scope.botId == scope.botId) {
+  if ((state.collaborators.fetching : boolean)
+      && state.collaborators.scope
+      && state.collaborators.scope.botId == scope.botId) {
     return
   }
 
@@ -89,21 +91,21 @@ export const fetchCollaborators = (scope : {botId : number}) => (dispatch : T.Di
             .catch(error => dispatch(_collaboratorsFetchError()))
 }
 
-export const inviteCollaborator = (bot, email) => (dispatch) => {
+export const inviteCollaborator = (bot : T.Bot, email : string) => (dispatch : T.Dispatch) => {
   dispatch(_collaboratorsInvite(bot.id))
   return api.inviteCollaborator(bot.id, email, 'collaborator')
             .then(invitation => dispatch(_collaboratorsInviteSuccess(bot.id, invitation)))
             .catch(error => dispatch(_collaboratorsInviteError(bot.id, error)))
 }
 
-export const cancelInvitation = (invitation) => (dispatch) => {
+export const cancelInvitation = (invitation : T.Invitation) => (dispatch : T.Dispatch) => {
   dispatch(_invitationsCancel(invitation))
   return api.cancelInvitation(invitation.id)
             .then(response => dispatch(_invitationsCancelSuccess()))
             .catch(error => dispatch(_invitationsCancelError()))
 }
 
-export const removeCollaborator = (collaborator) => (dispatch) => {
+export const removeCollaborator = (collaborator : T.Collaborator) => (dispatch : T.Dispatch) => {
   dispatch(_collaboratorsRemove(collaborator))
   return api.removeCollaborator(collaborator.id)
             .then(response => dispatch(_collaboratorsRemoveSuccess()))

@@ -34,7 +34,7 @@ const fetch = (state, action) => {
 
 const fetchSuccess = (state, action) => {
   const {scope, data} = action
-  if (state.scope.botId != scope.botId) {
+  if (!state.scope || state.scope.botId != scope.botId) {
     return state
   } else {
     return {
@@ -49,7 +49,7 @@ const fetchSuccess = (state, action) => {
 const inviteSuccess = (state, action) => {
   const {botId, invitation} = action
   const {data} = state
-  if (state.scope.botId != botId) {
+  if (!state.scope || state.scope.botId != botId || !data) {
     return state
   } else {
     return {
@@ -65,25 +65,31 @@ const inviteSuccess = (state, action) => {
 const cancelInvitation = (state, action) => {
   const {invitation} = action
   const {data} = state
-  return {
-    ...state,
-    data: {
-      ...data,
-      invitations: filter(data.invitations, i => i.id != invitation.id)
+  if (data) {
+    return {
+      ...state,
+      data: {
+        ...data,
+        invitations: filter(data.invitations, i => i.id != invitation.id)
+      }
     }
+  } else {
+    return state
   }
-  return state
 }
 
 const removeCollaborator = (state, action) => {
   const {collaborator} = action
   const {data} = state
-  return {
-    ...state,
-    data: {
-      ...data,
-      collaborators: filter(data.collaborators, c => c.id != collaborator.id)
+  if (data) {
+    return {
+      ...state,
+      data: {
+        ...data,
+        collaborators: filter(data.collaborators, c => c.id != collaborator.id)
+      }
     }
+  } else {
+    return state
   }
-  return state
 }

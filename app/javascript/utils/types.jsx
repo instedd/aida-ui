@@ -99,6 +99,39 @@ export type ChatAction = {
   type: 'NEW_SESSION',
   botId: number,
   sessionId: string,
+}
+
+export type CollaboratorsAction = {
+  type: 'COLLABORATORS_FETCH',
+  scope: Scope,
+} | {
+  type: 'COLLABORATORS_FETCH_SUCCESS',
+  scope: Scope,
+  data: T.CollaboratorsIndex,
+} | {
+  type: 'COLLABORATORS_FETCH_ERROR',
+} | {
+  type: 'COLLABORATORS_INVITE',
+} | {
+  type: 'COLLABORATORS_INVITE_SUCCESS',
+  botId: number,
+  invitation: T.Invitation,
+} | {
+  type: 'COLLABORATORS_INVITE_ERROR',
+} | {
+  type: 'COLLABORATORS_REMOVE',
+  collaborator: T.Collaborator,
+} | {
+  type: 'COLLABORATORS_REMOVE_SUCCESS',
+} | {
+  type: 'COLLABORATORS_REMOVE_ERROR',
+} | {
+  type: 'INVITATIONS_CANCEL',
+  invitation: T.Invitation,
+} | {
+  type: 'INVITATIONS_CANCEL_SUCCESS',
+} | {
+  type: 'INVITATIONS_CANCEL_ERROR',
 };
 
 export type FrontDeskAction = {
@@ -191,6 +224,7 @@ export type Action = AuthAction
                    | ChannelAction
                    | ChannelsAction
                    | ChatAction
+                   | CollaboratorsAction
                    | FrontDeskAction
                    | NotificationsAction
                    | SkillAction
@@ -222,6 +256,12 @@ export type ChatState = {
   accessToken: string,
   sessionId: ?string,
 }
+
+export type CollaboratorsState = {
+  fetching: boolean,
+  scope: ?Scope,
+  data: ?T.CollaboratorsIndex,
+};
 
 export type FrontDeskState = {
   fetching: boolean,
@@ -265,6 +305,7 @@ export type State = {
   bots: BotsState,
   channels: ChannelsState,
   chat: ChatState,
+  collaborators: CollaboratorsState,
   frontDesk: FrontDeskState,
   notifications: NotifState,
   skills: SkillsState,
