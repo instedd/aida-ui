@@ -117,8 +117,12 @@ class MainContentDemo extends Component {
       <SidebarItem id="abc" icon="assignment_turned_in" label="Food survey" enabled={false} menuItems={skillActions} />
     </SideBar>)
 
+    const buttons = ([
+      <Button icon >chat</Button>,
+      <Button icon >flag</Button>])
+
     return (
-      <MainWhite sidebar={sidebar}>
+      <MainWhite sidebar={sidebar} buttons={buttons}>
         <Title>Front desk</Title>
         <Headline>This are the basic messages your boot needs to handle. The front desk will assign other messages to the skill that will be better suited to respond</Headline>
 
