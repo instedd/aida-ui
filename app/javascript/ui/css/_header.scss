@@ -30,6 +30,13 @@
     color: $md-white-base;
     transform: translateY(2rem);
     z-index: -1;
+    &.md-btn--floating {
+      height: 56px;
+      width: 56px;
+    }
+    &.material-icons.md-icon {
+      font-size: 27px;
+    }
     &:hover {
       background-color: $md-secondary-color;
     }
