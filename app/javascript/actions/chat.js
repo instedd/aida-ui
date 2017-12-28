@@ -1,6 +1,3 @@
-// @flow
-import * as T from '../utils/types'
-
 export const START_PREVIEW = 'START_PREVIEW'
 export const SEND_MESSAGE = 'SEND_MESSAGE'
 export const RECEIVE_MESSAGE = 'RECEIVE_MESSAGE'

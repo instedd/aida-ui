@@ -1,5 +1,3 @@
-// @flow
-import * as T from '../utils/types'
 import * as actions from '../actions/chat'
 
 const initialState = {
