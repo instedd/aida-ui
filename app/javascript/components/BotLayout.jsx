@@ -46,7 +46,7 @@ export class BotLayoutComponent extends Component {
       history.replace(r.botIndex())
       hideDialog()
     }
-    const toggleTestChatWindow = () => { 
+    const toggleChatWindow = () => { 
       this.setState({ chatWindowVisible: !this.state.chatWindowVisible }) 
       chatActions.startPreview(bot.id)
     }
@@ -103,7 +103,6 @@ export class BotLayoutComponent extends Component {
             // <HeaderNavAction label="Rename" />,
             <HeaderNavAction label="Unpublish" onClick={() => botActions.unpublishBot(bot)}/>,
             <HeaderNavAction label="Delete" onClick={showDialog} />,
-            <HeaderNavAction label="Test Chat Window" onClick={toggleTestChatWindow} />,
           ]}
           buttonAction={() => botActions.publishBot(bot)} buttonIcon="publish"
         >
@@ -111,7 +110,7 @@ export class BotLayoutComponent extends Component {
           <Route exact path="/b/:id/data" render={() => <BotData bot={bot} />} />
           <Route exact path="/b/:id/analytics" render={() => <BotAnalytics bot={bot} />} />
           <Route exact path="/b/:id/channel" render={() => <BotChannel bot={bot} />} />
-          <Route path="/b/:id/behaviour" render={() => <BotBehaviour bot={bot} />} />
+          <Route path="/b/:id/behaviour" render={() => <BotBehaviour bot={bot} onToggleChatWindow={toggleChatWindow}/>} />
           <Route exact path="/b/:id/translations" render={() => <BotTranslations bot={bot} />} />
 
           {/* Children.map(children, c => cloneElement(c, {bot})) */}

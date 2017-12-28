@@ -113,10 +113,9 @@ class InputMessage extends Component {
         </div>
         <div className="chat-button">
           <Button 
-            flat 
-            primary
+            icon
             onClick={() => sendMessageAndClearInput()}>
-            <FontIcon>send</FontIcon>
+            send
           </Button>
         </div>
       </div>
