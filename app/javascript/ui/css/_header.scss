@@ -68,6 +68,9 @@
   .md-tab-indicator {
     height: 3px !important;
   }
+  .md-btn--text {
+      margin: 0;
+    }
   ul .md-list {
     @extend .rounded;
     min-width: 150px;
