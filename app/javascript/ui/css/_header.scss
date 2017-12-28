@@ -29,6 +29,7 @@
   .add-button {
     color: $md-white-base;
     transform: translateY(2rem);
+    z-index: -1;
     &:hover {
       background-color: $md-secondary-color;
     }
@@ -59,6 +60,7 @@
 }
 
 .mainTabs {
+  z-index: 1;
   .md-tabs {
     transform: translateX(-56px);
   }
