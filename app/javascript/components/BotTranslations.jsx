@@ -12,7 +12,7 @@ import { connect } from 'react-redux'
 import flatten from 'lodash/flatten'
 import map from 'lodash/map'
 
-import MainContent from '../ui/MainContent'
+import MainWhite from '../ui/MainWhite'
 import Title from '../ui/Title'
 import { EmptyLoader } from '../ui/Loader'
 
@@ -110,7 +110,7 @@ class BotTranslations extends Component {
     const rows = renderRows({ behaviours, firstLang, secondLang, defaultLang, onChange: onTranslationChange })
 
     return (
-      <MainContent wide>
+      <MainWhite>
         <Title>Translations</Title>
         <DataTable plain id="translations-table">
           <TableHeader>
@@ -138,7 +138,7 @@ class BotTranslations extends Component {
             {rows}
           </TableBody>
         </DataTable>
-      </MainContent>
+      </MainWhite>
     )
   }
 }

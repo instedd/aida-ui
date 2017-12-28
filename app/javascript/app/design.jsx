@@ -4,8 +4,9 @@ import { SelectField, Divider, Button, TextField, Checkbox } from 'react-md'
 
 import Header, { HeaderNavLink, HeaderNavAction, SectionNavLink } from '../ui/Header'
 import SideBar, { SidebarItem, SidebarMenuItem } from '../ui/SideBar'
-import { MainContent } from '../ui/MainContent'
+import { MainWhite } from '../ui/MainWhite'
 import { MainGrey } from '../ui/MainGrey'
+import { SingleColumn } from '../ui/SingleColumn'
 import { EmptyContent } from '../ui/EmptyContent'
 import { EmptyLoader } from '../ui/Loader'
 import Layout from '../ui/Layout'
@@ -88,7 +89,7 @@ const EmptyDemo = () =>
   </EmptyContent>
 
 const MainFullWidthDemo = () =>
-  <MainContent>
+  <SingleColumn>
     <Title>Setup a Facebook channel</Title>
     <Headline>
       In order to setup this channel you first need to
@@ -99,7 +100,7 @@ const MainFullWidthDemo = () =>
     <Field label="Page ID" />
     <Field label="Verify Token" />
     <Field label="Access Token" />
-  </MainContent>
+  </SingleColumn>
 
 class MainContentDemo extends Component {
   render() {
@@ -117,7 +118,7 @@ class MainContentDemo extends Component {
     </SideBar>)
 
     return (
-      <MainContent sidebar={sidebar}>
+      <MainWhite sidebar={sidebar}>
         <Title>Front desk</Title>
         <Headline>This are the basic messages your boot needs to handle. The front desk will assign other messages to the skill that will be better suited to respond</Headline>
 
@@ -169,7 +170,7 @@ class MainContentDemo extends Component {
           name="simple-checkboxes[]"
           label="Ask for clarification when several skills claim a high confidence"
         />
-      </MainContent>
+      </MainWhite>
     );
   }
 }
