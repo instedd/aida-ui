@@ -65,14 +65,16 @@ class HeaderSubNav extends Component {
         <nav className="mainTabs">
           {(() => {
             if (this.props.headerNav) {
-              return (
-                <Tabs id="mainTabs" tabId="mainTabs" activeTabIndex={selectedTab} onTabChange={() => null} overflowMenu={true}>
-                  { Children.map(this.props.headerNav, (e, index) =>
+              let tabs = Children.map(this.props.headerNav, (e, index) =>
                     // TODO allow HeaderNavAction to be used as headerNav
                     <Tab label={e.props.label} key={index} component={Link} to={e.props.to} />
-                  )}
+                  )
 
-                  <Tab label={<FontIcon>more_vert</FontIcon>} key={"last"} component={MenuButton} menuItems={items} position={MenuButton.Positions.TOP_LEFT} />
+              tabs.push(<Tab label={<FontIcon>more_vert</FontIcon>} key={"last"} flat component={MenuButton} menuItems={items} position={MenuButton.Positions.TOP_LEFT} />)
+
+              return (
+                <Tabs id="mainTabs" tabId="mainTabs" activeTabIndex={selectedTab} onTabChange={() => null} overflowMenu={true}>
+                  {tabs}
                 </Tabs>
               )
             }
