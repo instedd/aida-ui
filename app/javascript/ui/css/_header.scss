@@ -1,0 +1,113 @@
+.mainToolbar {
+  flex-direction: column;
+  > * {
+    margin: 0;
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+  nav {
+    flex-direction: row;
+    display: flex;
+    border-bottom: 1px solid $md-grey-900;
+    .sections {
+      flex-grow: 1;
+      .md-btn--text {
+        text-transform: none;
+      }
+    }
+    #user-menu {
+      color: $md-grey-400;
+      display: flex;
+      .md-icon-text {
+        text-transform: none;
+      }
+      button {
+        font-size: 1rem;
+      }
+    }
+  }
+  .add-button {
+    color: $md-white-base;
+    transform: translateY(2rem);
+    z-index: -1;
+    &.md-btn--floating {
+      height: 56px;
+      width: 56px;
+    }
+    &.material-icons.md-icon {
+      font-size: 27px;
+    }
+    &:hover {
+      background-color: $md-secondary-color;
+    }
+  }
+}
+
+.sub-nav {
+  line-height: 0;
+  padding-top: 1.3rem;
+  padding-bottom: 1.3rem;
+  > * {
+    display: inline-block;
+    vertical-align: middle;
+  }
+  h1 {
+    font-size: 1.5rem;
+    color: white;
+    margin: 0 0 0 1rem;
+    .md-text-field-container {
+      margin: 0.9rem 0 0 0;
+    }
+    .md-text-field {
+      font-size: 1.5rem;
+      color: inherit;
+      margin-top: 0;
+    }
+  }
+}
+
+.mainTabs {
+  z-index: 1;
+  .md-tabs {
+    transform: translateX(-56px);
+  }
+  .md-tab {
+    min-width: initial;
+  }
+  .md-tab-indicator {
+    height: 3px !important;
+  }
+  .md-btn--text {
+      margin: 0;
+    }
+  ul .md-list {
+    @extend .rounded;
+    min-width: 150px;
+    .md-text--disabled {
+      color: $md-black-base;
+    }
+  }
+}
+
+@media #{$md-mobile-media} {
+  .mainTabs{
+    .md-tabs {
+      overflow: visible;
+    }
+    .material-icons.md-icon {
+      font-size: 20px;
+    }
+  }
+}
+
+@media #{$md-desktop-media} {
+  .mainTabs {
+    .md-tabs {
+      width: 900px;
+    }
+    .md-tab-label {
+      font-size: inherit;
+      line-height: inherit;
+    }
+  }
+}

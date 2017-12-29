@@ -1,5 +1,5 @@
 import React, { Component, Children } from 'react';
-import { Tabs, Tab, ListItem, MenuButton, Toolbar, Button } from 'react-md'
+import { Tabs, Tab, ListItem, MenuButton, Toolbar, Button, FontIcon } from 'react-md'
 import { withRouter } from 'react-router'
 import { Link } from 'react-router-dom'
 import UserMenu from './UserMenu'
@@ -46,7 +46,7 @@ export const Header = ({icon, title, sectionNavLinks, headerNav, headerNavExtra,
 class HeaderSubNav extends Component {
   render() {
     const items = [
-      <ListItem key={0} primaryText={<i className='material-icons dummy'>more_vert</i>} />
+      <ListItem key={0} primaryText={<FontIcon>more_vert</FontIcon>} disabled />
     ]
 
     let selectedTab = 0
@@ -65,28 +65,17 @@ class HeaderSubNav extends Component {
         <nav className="mainTabs">
           {(() => {
             if (this.props.headerNav) {
-              return (
-                <Tabs id="mainTabs" tabId="mainTabs" activeTabIndex={selectedTab} onTabChange={() => null} overflowMenu={true}>
-                  { Children.map(this.props.headerNav, (e, index) =>
+              let tabs = Children.map(this.props.headerNav, (e, index) =>
                     // TODO allow HeaderNavAction to be used as headerNav
                     <Tab label={e.props.label} key={index} component={Link} to={e.props.to} />
-                  )}
-                </Tabs>
-              )
-            }
-          })()}
+                  )
 
-          {(() => {
-            if (items.length > 1) {
+              tabs.push(<Tab label={<FontIcon>more_vert</FontIcon>} key={"last"} flat component={MenuButton} menuItems={items} position={MenuButton.Positions.TOP_LEFT} listZDepth={4} />)
+
               return (
-                <MenuButton
-                  id="more-menu"
-                  className="btn-more"
-                  flat
-                  position={MenuButton.Positions.BELOW}
-                  menuItems={items}>
-                  <i className='material-icons dummy'>more_vert</i>
-                </MenuButton>
+                <Tabs id="mainTabs" tabId="mainTabs" activeTabIndex={selectedTab} onTabChange={() => null} overflowMenu={true}>
+                  {tabs}
+                </Tabs>
               )
             }
           })()}

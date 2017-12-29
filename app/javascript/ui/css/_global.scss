@@ -1,6 +1,6 @@
 
 #Logos {
-  margin-left: -60px;
+  margin-left: -4%;
   enable-background:new 0 0 60 60;
   .st0{fill:#ffffff;opacity:0.1}
   .st1{fill:#00BCD4}
@@ -19,21 +19,6 @@
 
 .ui-field {
   margin-top: 3rem;
-}
-
-#more-menu {
-  transform: translateX(-56px) translateY(-7px);
-  z-index: 999;
-  ul {
-    @extend .rounded;
-    min-width: 150px;
-    margin-top: -42px;
-    margin-left: -6px;
-    i.dummy {
-      margin-left: -10px;
-    }
-  }
-
 }
 
 .btn-more {
