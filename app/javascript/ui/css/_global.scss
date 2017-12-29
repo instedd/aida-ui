@@ -9,11 +9,13 @@
   .st4{opacity:0.2}
 }
 
-.md-headline a {
-  color: $md-lime-500;
-  text-decoration: none;
-  &:hover {
-    text-decoration: underline;
+main {
+  a {
+    color: $md-lime-500;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
 
