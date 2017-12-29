@@ -8,7 +8,6 @@
   nav {
     flex-direction: row;
     display: flex;
-    border-bottom: 1px solid $md-grey-900;
     .sections {
       flex-grow: 1;
       .md-btn--text {
@@ -47,6 +46,7 @@
   line-height: 0;
   padding-top: 1.3rem;
   padding-bottom: 1.3rem;
+  border-top: 1px solid $md-grey-900;
   > * {
     display: inline-block;
     vertical-align: middle;
