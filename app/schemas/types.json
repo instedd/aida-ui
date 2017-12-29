@@ -303,6 +303,40 @@
       }
     },
 
+    "string_by_language": {
+      "type": "object",
+      "properties": {},
+      "additionalProperties": { "type": "string" }
+    },
+
+    "variable_assignments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "default_value": { "$ref": "#/definitions/string_by_language" },
+          "conditional_values": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": { "type": "string" },
+                "condition": { "type": "string" },
+                "value": { "$ref": "#/definitions/string_by_language" },
+                "order": { "type": "integer" }
+              },
+              "additionalProperties": false,
+              "required" : [ "id", "condition", "value", "order" ]
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [ "id", "name", "default_value", "conditional_values" ]
+      }
+    },
+
     "translations_index": {
       "type": "object",
       "properties": {
@@ -312,9 +346,10 @@
           "minItems": 1
         },
         "default_language": { "$ref": "#/definitions/language" },
-        "behaviours": { "$ref": "#/definitions/translation_behaviours" }
+        "behaviours": { "$ref": "#/definitions/translation_behaviours" },
+        "variables": { "$ref": "#/definitions/variable_assignments" }
       },
-      "required": [ "languages", "default_language", "behaviours" ]
+      "required": [ "languages", "default_language", "behaviours", "variables" ]
     },
 
     "translation": {
