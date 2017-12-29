@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171204175114) do
+ActiveRecord::Schema.define(version: 20171228180737) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -78,8 +78,23 @@ ActiveRecord::Schema.define(version: 20171204175114) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  create_table "variable_assignments", force: :cascade do |t|
+    t.bigint "bot_id"
+    t.string "variable_id", null: false
+    t.string "variable_name"
+    t.string "condition_id"
+    t.string "condition", limit: 1024
+    t.integer "condition_order"
+    t.string "value", limit: 1024
+    t.string "lang"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bot_id"], name: "index_variable_assignments_on_bot_id"
+  end
+
   add_foreign_key "behaviours", "bots"
   add_foreign_key "bots", "users", column: "owner_id"
   add_foreign_key "channels", "bots"
   add_foreign_key "translations", "behaviours"
+  add_foreign_key "variable_assignments", "bots"
 end

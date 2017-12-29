@@ -3,6 +3,7 @@ class Bot < ApplicationRecord
   has_many :channels, dependent: :destroy
   has_many :behaviours, dependent: :destroy
   has_many :translations, through: :behaviours
+  has_many :variable_assignments, dependent: :destroy
 
   validate :has_single_front_desk
 
@@ -74,6 +75,14 @@ class Bot < ApplicationRecord
     else
       ['en']
     end
+  end
+
+  def default_language
+    available_languages.first
+  end
+
+  def other_languages
+    available_languages.drop(1)
   end
 
   def translation_keys
