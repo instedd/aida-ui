@@ -9,6 +9,13 @@ export type Scope = {
   botId: number
 };
 
+export type ChatMessage = {
+  id: number,
+  text: string,
+  sent: boolean,
+  timestamp: Date
+}
+
 export type AuthAction = {
   type: 'AUTH_INIT',
   userEmail: string,
@@ -193,6 +200,11 @@ export type ChannelsState = {
   scope: ?any,
   items: ?ById<T.Channel>
 };
+
+export type ChatState = {
+  scope: Scope,
+  messages: Array<ChatMessage>
+}
 
 export type FrontDeskState = {
   fetching: boolean,

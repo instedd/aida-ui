@@ -1,3 +1,6 @@
+// @flow
+import * as T from '../utils/types'
+
 import * as actions from '../actions/chat'
 
 const initialState = {
@@ -5,12 +8,12 @@ const initialState = {
   messages: []
 }
 
-export default (state, action) => {
+export default (state : T.ChatState, action : T.ChatAction) : T.ChatState => {
   state = state || initialState
   switch (action.type) {
     case actions.START_PREVIEW: return startPreview(state, action)
     case actions.SEND_MESSAGE: return sendMessage(state, action)
-    case actions.SEND_MESSAGE: return receiveMessage(state, action)
+    case actions.RECEIVE_MESSAGE: return receiveMessage(state, action)
     default:
       return state;
   }
@@ -48,7 +51,7 @@ const addMessage = (state, action) => {
 const createMessageWith = ({ id, text, sent, timestamp }) => ({ id, text, sent, timestamp})
 const createTestResponse = ({ id, text, sent, timestamp }) => ({ 
     id: (-1) * id, 
-    text: text.split("").reverse().join(""), 
+    text: [...text].reverse().join(""), 
     sent: !sent, 
     timestamp 
 })
