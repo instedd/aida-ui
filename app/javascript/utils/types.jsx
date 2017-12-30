@@ -63,6 +63,23 @@ export type ChannelsAction = {
   scope: ?any,
 };
 
+export type ChatAction = {
+  type: 'SEND_MESSAGE',
+  id: number,
+  text: string,
+  sent: boolean,
+  timestamp: Date
+} | {
+  type: 'RECEIVE_MESSAGE',
+  id: number,
+  text: string,
+  sent: boolean,
+  timestamp: Date  
+} | {
+  type: 'START_PREVIEW',
+  botId: number
+};
+
 export type FrontDeskAction = {
   type: 'FRONT_DESK_FETCH',
   botId: number
@@ -152,6 +169,7 @@ export type Action = AuthAction
                    | BotsAction
                    | ChannelAction
                    | ChannelsAction
+                   | ChatAction
                    | FrontDeskAction
                    | NotificationsAction
                    | SkillAction
