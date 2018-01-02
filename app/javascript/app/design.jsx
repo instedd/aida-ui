@@ -117,9 +117,10 @@ class MainContentDemo extends Component {
       <SidebarItem id="abc" icon="assignment_turned_in" label="Food survey" enabled={false} menuItems={skillActions} />
     </SideBar>)
 
-    const buttons = ([
-      <Button icon >chat</Button>,
-      <Button icon >flag</Button>])
+    const buttons = (<div className="buttons">
+      <Button icon >chat</Button>
+      <Button icon >flag</Button>
+      </div>)
 
     return (
       <MainWhite sidebar={sidebar} buttons={buttons}>
