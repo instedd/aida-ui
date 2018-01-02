@@ -42,6 +42,8 @@ gem 'devise', '~> 4.3.0'
 gem 'alto_guisso', github: 'instedd/alto_guisso', branch: 'master'
 gem 'alto_guisso_rails', github: 'instedd/alto_guisso_rails', branch: 'rails-5.1'
 
+gem 'sentry-raven'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

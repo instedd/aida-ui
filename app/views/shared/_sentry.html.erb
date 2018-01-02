@@ -1,0 +1,6 @@
+<script src="https://cdn.ravenjs.com/3.21.0/raven.min.js" crossorigin="anonymous"></script>
+<% if Rails.configuration.sentry_public_dsn.present? %>
+  <script type="application/javascript">
+    Raven.config("<%= j Rails.configuration.sentry_public_dsn %>").install();
+  </script>
+<% end %>

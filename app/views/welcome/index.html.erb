@@ -1,7 +1,14 @@
 <div id="root"></div>
 <%= javascript_tag do -%>
+  var userId = <%= current_user.id %>;
   var userEmail = '<%=j current_user.email %>';
   var userName = '<%=j current_user.display_name %>';
   var version = '<%=j VersionHelper.version_name %>';
+  Raven.setUserContext({
+    id: userId,
+    email: userEmail,
+    username: userName
+  });
+  Raven.setExtraContext({version: version})
 <% end -%>
 <%= javascript_pack_tag 'application' %>
