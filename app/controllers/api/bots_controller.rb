@@ -75,6 +75,13 @@ class Api::BotsController < ApplicationApiController
     render json: {error: e.message}, status: :bad_request
   end
 
+  def manifest
+    bot = current_user.bots.find(params[:id])
+    send_data JSON.pretty_generate(bot.manifest), 
+      type: "javascript/json; charset=UTF-8;",
+      disposition: "attachment; filename= manifest-#{bot.id}.json"
+  end
+
   private
 
   def bot_api_json(bot)

@@ -74,3 +74,7 @@ export const deleteBot = (bot : T.Bot) => (dispatch : T.Dispatch) => {
   return api.deleteBot(bot)
             .then(() => dispatch(_botDelete(bot.id)))
 }
+
+export const downloadManifestBot = (bot : T.Bot) => (dispatch : T.Dispatch) => {
+  return api.downloadManifestBot(bot.id)
+}

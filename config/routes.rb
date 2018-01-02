@@ -10,6 +10,7 @@ Rails.application.routes.draw do
         delete :publish, action: :unpublish
         get :stats
         get :data
+        get :manifest
       end
       resource :front_desk, only: [:show, :update]
       resources :skills, only: [:index, :create]
