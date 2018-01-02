@@ -79,7 +79,7 @@ class Api::BotsController < ApplicationApiController
     bot = current_user.bots.find(params[:id])
     send_data JSON.pretty_generate(bot.manifest), 
       type: "javascript/json; charset=UTF-8;",
-      disposition: "attachment; filename= manifest-#{bot.id}.json"
+      disposition: "attachment; filename= manifest-#{bot.id}-#{DateTime.now.utc}.json"
   end
 
   private
