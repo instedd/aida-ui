@@ -247,6 +247,7 @@ export type State = {
   auth: AuthState,
   bots: BotsState,
   channels: ChannelsState,
+  chat: ChatState,
   frontDesk: FrontDeskState,
   notifications: NotifState,
   skills: SkillsState,
