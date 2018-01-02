@@ -90,6 +90,7 @@ export class BotLayoutComponent extends Component {
             // <HeaderNavAction label="Rename" />,
             <HeaderNavAction label="Unpublish" onClick={() => botActions.unpublishBot(bot)}/>,
             <HeaderNavAction label="Delete" onClick={showDialog} />,
+            <HeaderNavAction label="Download Manifest" onClick={() => window.location = `/api/v1/bots/${bot.id}/manifest.json`} />
           ]}
           buttonAction={() => botActions.publishBot(bot)} buttonIcon="publish"
         >
