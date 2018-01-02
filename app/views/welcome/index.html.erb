@@ -2,6 +2,6 @@
 <%= javascript_tag do -%>
   var userEmail = '<%=j current_user.email %>';
   var userName = '<%=j current_user.display_name %>';
-  var version = '<%=j "ui: #{Rails.application.config.version_name} - engine: #{Backend.version}" %>';
+  var version = '<%=j VersionHelper.version_name %>';
 <% end -%>
 <%= javascript_pack_tag 'application' %>
