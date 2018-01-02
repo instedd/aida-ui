@@ -1,4 +1,14 @@
 .sidebar {
+  .sidebar-item-active {
+    .md-list-tile {
+     @extend .active;
+    }
+  }
+  .sidebar-item-disabled {
+    .md-text, .md-icon {
+      color: $md-grey-500;
+    }
+  }
   .sidebar-item-append {
     display: flex;
     align-items: center;
@@ -25,7 +35,6 @@
       }
     }
   }
-
   .md-subheader {
     color: $md-black-base;
     font-size: 1.14em;
@@ -36,7 +45,7 @@
     height: 60px;
     padding-right: 0;
     &--active {
-      background: $md-grey-100;
+      @extend .hover;
       button {
         visibility: visible;
       }
@@ -67,14 +76,6 @@
       padding: 0 6em 0 1.1em;
     }
   }
-  .sidebar-item-active {
-    background: $md-grey-300;
-  }
-  .sidebar-item-disabled {
-    .md-text, .md-icon {
-      color: $md-grey-500;
-    }
-  }
 }
 
 .button-area {
@@ -85,11 +86,16 @@
     bottom: 0;
     position: -webkit-sticky;
     position: sticky;
-    .md-btn--icon {
-      border-radius: 3%;
-      height: 48px;
-      width: 48px;
-      margin-bottom: 12px;
+    .md-btn {
+      &--icon {
+        border-radius: 3%;
+        height: 48px;
+        width: 48px;
+        margin-bottom: 12px;
+      }
+      &--hover {
+        @extend .hover;
+      }
     }
     .md-icon {
       font-size: 24px;
