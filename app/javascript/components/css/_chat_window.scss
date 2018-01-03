@@ -1,10 +1,10 @@
 .chat-window {
-  bottom: 0px;
-  // height: 300px;
-  position: absolute;
-  right: 50px;
+  bottom: 13px;
+  position: fixed;
+  right: 78px;
   width: 450px;
   background: $md-grey-200;
+  z-index: 1;
 }
 
 .chat-window-header {
@@ -30,7 +30,7 @@
   padding: 0 10px 15px;
   position: relative;
   z-index: 1;
-  
+
   ul {
     list-style-type: none;
     margin: 0;
@@ -109,7 +109,7 @@
 .chat-window-input {
   background: #FFF;
   padding: 0 10px 7px 25px;
-  
+
   .chat-input {
     display: inline-block;
     width: 87%;
