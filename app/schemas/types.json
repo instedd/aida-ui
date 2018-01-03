@@ -131,7 +131,8 @@
             "type": { "enum": [ "select_one", "select_many" ]},
             "name": { "type": "string" },
             "choices": { "type": "string" },
-            "message": { "$ref": "#/definitions/message" }
+            "message": { "$ref": "#/definitions/message" },
+            "relevant": { "type": "string" }
           }
         },
         {
@@ -140,7 +141,8 @@
           "properties": {
             "type": { "enum": [ "integer", "decimal", "text" ]},
             "name": { "type": "string" },
-            "message": { "$ref": "#/definitions/message" }
+            "message": { "$ref": "#/definitions/message" },
+            "relevant": { "type": "string" }
           }
         }
       ]

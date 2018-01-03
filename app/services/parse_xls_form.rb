@@ -22,6 +22,7 @@ class ParseXlsForm
     type_col = header.find_index 'type'
     name_col = header.find_index 'name'
     label_col = header.find_index 'label'
+    relevant_col = header.find_index 'relevant'
     seen_names = Set.new
 
     fail "missing 'type' column in survey sheet" unless type_col.present?
@@ -34,6 +35,7 @@ class ParseXlsForm
         type, choices = question_type.split(/\s+/)
         name = row[name_col].try(&:strip)
         label = row[label_col]
+        relevant = row[relevant_col].presence if relevant_col.present?
 
         fail "invalid question name at row #{row_number}" unless name_valid?(name)
         if seen_names.include?(name)
@@ -42,23 +44,30 @@ class ParseXlsForm
           seen_names << name
         end
 
-        case type
-        when 'integer', 'decimal', 'text'
-          {
-            type: type,
-            name: name,
-            message: label
-          }
-        when 'select_one', 'select_multiple'
-          {
-            type: type == 'select_multiple' ? 'select_many' : type,
-            name: name,
-            choices: choices,
-            message: label
-          }
-        else
-          fail "unsupported question type '#{type}' at row #{row_number}"
-        end
+        elem =
+          case type
+          when 'integer', 'decimal', 'text'
+            {
+              type: type,
+              name: name,
+              message: label
+            }
+          when 'select_one', 'select_multiple'
+            {
+              type: type == 'select_multiple' ? 'select_many' : type,
+              name: name,
+              choices: choices,
+              message: label
+            }
+          else
+            fail "unsupported question type '#{type}' at row #{row_number}"
+          end
+
+        # relevant is never "" (empty string) because of line:
+        # relevant = row[relevant_col].presence if relevant_col.present?
+        elem[:relevant] = relevant if relevant
+
+        elem
       else
         # ignore empty row
         nil

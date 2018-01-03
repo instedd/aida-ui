@@ -62,10 +62,12 @@ export type SurveyQuestion = {
   name: string;
   choices: string;
   message: Message;
+  relevant?: string;
 } | {
   type: "integer" | "decimal" | "text";
   name: string;
   message: Message;
+  relevant?: string;
 };
 
 export type SurveyChoiceList = {
