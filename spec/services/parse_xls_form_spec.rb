@@ -136,7 +136,7 @@ RSpec.describe ParseXlsForm, type: :service do
     end
 
     it "add relevant (only) to questions which relevant cell is not empty" do
-      survey = Roo::Spreadsheet.open(file_fixture('relevant_one_question.xlsx').open).sheet('survey')
+      survey = Roo::Spreadsheet.open(file_fixture('relevant_questions.xlsx').open).sheet('survey')
       result = ParseXlsForm.gather_questions(survey)
 
       expect(result).to match_array([{
@@ -150,7 +150,13 @@ RSpec.describe ParseXlsForm, type: :service do
                                     name: 'favorite_topping',
                                     choices: 'pizza_toppings',
                                     message: 'Favorite toppings',
-                                    relevant: '${likes_pizza} = ‘yes’'
+                                    relevant: "${likes_pizza} = 'yes'"
+                                  },
+                                  {
+                                    type: 'text',
+                                    name: 'why_not',
+                                    message: 'Why not?!',
+                                    relevant: "${likes_pizza} = 'no'"
                                   }])
     end
   end
