@@ -232,10 +232,19 @@ class ChatWindow extends Component {
 }
 
 const mapStateToProps = (state) => {
-  if (state.chat.scope) {
-    state.chat.bot = state.bots.items[state.chat.scope.botId] || null
+  let props = {
+    messages: state.chat.messages,
+    previewUuid: state.chat.previewUuid,
+    accessToken: state.chat.accessToken,
+    publishing: state.chat.publishing,
+    sessionId: state.chat.sessionId,
   }
-  return state.chat
+
+  if (state.chat.scope) {
+    props.bot = state.bots.items[state.chat.scope.botId] || null
+  }
+
+  return props
 }
 const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(actions, dispatch),
