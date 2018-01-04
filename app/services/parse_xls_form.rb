@@ -58,8 +58,11 @@ class ParseXlsForm
           fail "unsupported question type '#{type}' at row #{row_number}"
         end
 
-        #
+        # relevant is never "" (empty string) because of line: 
+        # relevant = row[relevant_col].presence if relevant_col.present?
         elem[:relevant] = relevant if relevant
+        
+        elem
       else
         # ignore empty row
         nil
