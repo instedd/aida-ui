@@ -43,15 +43,8 @@ const addMessage = (state, action) => {
     messages: [
       ...state.messages,
       createMessageWith(action),
-      createTestResponse(action)
     ]
-  } 
+  }
 }
 
 const createMessageWith = ({ id, text, sent, timestamp }) => ({ id, text, sent, timestamp})
-const createTestResponse = ({ id, text, sent, timestamp }) => ({ 
-    id: (-1) * id, 
-    text: [...text].reverse().join(""), 
-    sent: !sent, 
-    timestamp 
-})
