@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   namespace :api, path: "/api/v1" do
     resources :bots, only: [:index, :create, :update, :destroy] do
       resources :channels, only: [:index]
+      resources :collaborators, only: [:index]
+      resources :invitations, only: [:create]
       member do
         post :publish
         delete :publish, action: :unpublish
@@ -27,6 +29,16 @@ Rails.application.routes.draw do
 
     resources :channels, only: [:update]
     resources :skills, only: [:update, :destroy]
+    resources :collaborators, only: [:destroy]
+    resources :invitations, only: [:destroy] do
+      member do
+        post :resend
+      end
+      collection do
+        get :retrieve
+        post :accept
+      end
+    end
 
     post :xls_form, to: 'xls_form#upload'
   end
@@ -37,6 +49,7 @@ Rails.application.routes.draw do
 
   root to: 'welcome#index'
   get "/b(/*path)", to: 'welcome#index'
+  get "/invitation/:token", to: 'welcome#index', as: 'invitation'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

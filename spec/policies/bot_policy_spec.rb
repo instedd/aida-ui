@@ -20,7 +20,8 @@ describe BotPolicy do
                                           :read_session_data, :read_usage_stats,
                                           :read_channels,
                                           :read_behaviours, :create_skill,
-                                          :read_translations, :update_translation]) }
+                                          :read_translations, :update_translation,
+                                          :read_collaborators, :invite_collaborator]) }
     end
 
     describe "not being the owner" do
@@ -31,22 +32,20 @@ describe BotPolicy do
                                           :read_session_data, :read_usage_stats,
                                           :read_channels,
                                           :read_behaviours, :create_skill,
-                                          :read_translations, :update_translation]) }
+                                          :read_translations, :update_translation,
+                                          :read_collaborators, :invite_collaborator]) }
     end
 
     describe "shared with the user" do
-      let(:bot) {
-        create(:bot) do |bot|
-          bot.collaborators.create! role: 'collaborator', user: user
-        end
-      }
+      let(:bot) { create(:bot, shared_with: user) }
 
       it { is_expected.to permit_actions([:update, :destroy,
                                           :publish, :unpublish,
                                           :read_session_data, :read_usage_stats,
                                           :read_channels,
                                           :read_behaviours, :create_skill,
-                                          :read_translations, :update_translation]) }
+                                          :read_translations, :update_translation,
+                                          :read_collaborators, :invite_collaborator]) }
     end
   end
 end

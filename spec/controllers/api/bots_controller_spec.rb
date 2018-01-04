@@ -7,11 +7,7 @@ RSpec.describe Api::BotsController, type: :controller do
   let!(:bot) { create(:bot, owner: user) }
   let!(:published_bot) { create(:bot, :published, owner: user) }
   let!(:other_bot) { create(:bot, owner: other_user) }
-  let!(:shared_bot) {
-    create(:bot, owner: other_user) do |shared_bot|
-      shared_bot.collaborators.create! role: "collaborator", user: user
-    end
-  }
+  let!(:shared_bot) { create(:bot, owner: other_user, shared_with: user) }
 
   before(:each) { sign_in user }
 
@@ -120,9 +116,7 @@ RSpec.describe Api::BotsController, type: :controller do
     end
 
     it "is allowed for a shared bot" do
-      shared_published_bot = create(:bot, :published, owner: other_user) do |bot|
-        bot.collaborators.create! role: "collaborator", user: user
-      end
+      shared_published_bot = create(:bot, :published, owner: other_user, shared_with: user)
       expect(Backend).to receive(:destroy_bot).with(shared_published_bot.uuid)
 
       delete :unpublish, params: { id: shared_published_bot.id }
@@ -177,9 +171,7 @@ RSpec.describe Api::BotsController, type: :controller do
     end
 
     it "is allowed for shared bots" do
-      shared_published_bot = create(:bot, :published, owner: other_user) do |bot|
-        bot.collaborators.create! role: "collaborator", user: user
-      end
+      shared_published_bot = create(:bot, :published, owner: other_user, shared_with: user)
       expect(Backend).to receive(:usage_summary).with(shared_published_bot.uuid).and_return(sample_summary)
       expect(Backend).to receive(:users_per_skill).with(shared_published_bot.uuid).and_return(sample_users_per_skill)
 

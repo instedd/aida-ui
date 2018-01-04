@@ -4,7 +4,7 @@ class Api::SkillsController < ApplicationApiController
   def index
     bot = Bot.find(params[:bot_id])
     authorize bot, :read_behaviours?
-    skills = bot.skills
+    skills = policy_scope(bot.skills)
 
     render json: skills.map { |s| skill_api_json(s) }
   end

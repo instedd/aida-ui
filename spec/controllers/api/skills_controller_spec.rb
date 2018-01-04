@@ -5,14 +5,8 @@ RSpec.describe Api::SkillsController, type: :controller do
   before(:each) { sign_in user }
   let!(:bot) { create(:bot, owner: user) }
 
-  let!(:shared_bot) {
-    create(:bot) do |bot|
-      bot.collaborators.create! role: 'collaborator', user: user
-    end
-  }
-  let!(:shared_skill) {
-    shared_bot.skills.create_skill! "keyword_responder", order: 1
-  }
+  let!(:shared_bot) { create(:bot, shared_with: user) }
+  let!(:shared_skill) { shared_bot.skills.create_skill! "keyword_responder", order: 1 }
 
   describe "index" do
     it "fetches all the behaviours except front_desk" do

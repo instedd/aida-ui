@@ -362,6 +362,44 @@
         "value": { "type": "string" }
       },
       "required": [ "behaviour_id", "key", "lang", "value" ]
+    },
+
+    "collaborator": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "role": { "type": "string" },
+        "user_email": { "type": "string" },
+        "last_activity": {
+          "oneOf": [
+            { "type": "string" },
+            { "type": "null" }
+          ]
+        }
+      },
+      "required": [ "id", "role", "user_email", "last_activity" ]
+    },
+
+    "invitation": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "creator": { "type": "string" },
+        "email": {
+          "oneOf": [
+            { "type": "string" },
+            { "type": "null" }
+          ]
+        },
+        "link_url": {
+          "oneOf": [
+            { "type": "string" },
+            { "type": "null" }
+          ]
+        },
+        "created_at": { "type": "string" }
+      },
+      "required": [ "id", "email", "link_url", "created_at" ]
     }
   },
 

@@ -5,7 +5,16 @@ FactoryBot.define do
 
   factory :bot do
     owner
-    initialize_with { Bot.create_prepared!(owner) }
+
+    transient {
+      shared_with nil
+    }
+
+    initialize_with {
+      Bot.create_prepared!(owner).tap do |bot|
+        bot.collaborators.add_collaborator!(shared_with) if shared_with.present?
+      end
+    }
 
     trait :published do
       sequence(:uuid) { |n| "bot-uuid-#{n}" }
@@ -13,7 +22,23 @@ FactoryBot.define do
   end
 
   factory :collaborator do
+    bot
     user
     role "collaborator"
+  end
+
+  factory :invitation do
+    bot
+    creator { bot.owner }
+    email { generate(:email) }
+    role "collaborator"
+
+    trait :anonymous do
+      email nil
+    end
+  end
+
+  sequence :email do |n|
+    "sample-#{n}@example.com"
   end
 end
