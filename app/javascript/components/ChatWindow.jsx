@@ -48,7 +48,9 @@ const Message = ({
 class MessageList extends Component {
 
   scrollToBottom = () => {
-    this._messagesBottomDiv.scrollIntoView({behavior:"smooth"});
+    window.setTimeout(() =>
+      this._messagesBottomDiv.scrollIntoView({behavior:"smooth"})
+    , 0)
   }
 
   componentDidMount() {
