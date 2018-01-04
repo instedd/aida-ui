@@ -18,6 +18,9 @@ Rails.application.routes.draw do
       resources :translations, only: [:index] do
         collection do
           put :update
+
+          put :variable, to: 'translations#update_variable'
+          delete :variable, to: 'translations#destroy_variable'
         end
       end
     end

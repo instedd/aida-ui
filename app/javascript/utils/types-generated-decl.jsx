@@ -141,10 +141,26 @@ export type TranslationBehaviours = Array<{
   }>;
 }>;
 
+export type StringByLanguage = { [key: string]: string;
+};
+
+export type VariableAssignments = Array<{
+  id: string;
+  name: string;
+  default_value: StringByLanguage;
+  conditional_values: Array<{
+    id: string;
+    condition: string;
+    value: StringByLanguage;
+    order: number;
+  }>;
+}>;
+
 export type TranslationsIndex = {
   languages: Array<Language>;
   default_language: Language;
   behaviours: TranslationBehaviours;
+  variables: VariableAssignments;
 };
 
 export type Translation = {
