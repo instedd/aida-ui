@@ -25,7 +25,7 @@ ADD . /app
 
 RUN if [ -d .git ]; then git describe --always > VERSION; fi
 
-RUN bundle exec rake assets:precompile RAILS_ENV=production SECRET_KEY_BASE=secret
+RUN bundle exec rake assets:precompile RAILS_ENV=production SECRET_KEY_BASE=secret SETTINGS__BASE_URL=http://test.host/
 
 ENV RAILS_ENV production
 ENV RAILS_SERVE_STATIC_FILES true
