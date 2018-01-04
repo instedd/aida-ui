@@ -112,7 +112,7 @@ class InputMessage extends Component {
             value={this.state.messageText}
             onChange={(text) => this.setState({messageText: text})}
             onKeyPress={(ev) => (sendMessageIfEnterPressed(ev)) }
-            ref={node => { _textfield = node }} disabled={disabled} />
+            ref={node => { _textfield = node; if (node) { node.focus() } }} disabled={disabled} />
         </div>
         <div className="chat-button">
           <Button
