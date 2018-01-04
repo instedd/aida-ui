@@ -9,6 +9,7 @@ import {  Card,
           FontIcon,
           Paper } from 'react-md'
 import * as actions from '../actions/chat'
+import * as notificationsActions from '../actions/notifications'
 import { Loader } from '../ui/Loader'
 import socket from '../utils/socket'
 
@@ -175,7 +176,6 @@ class ChatWindow extends Component {
 
       channel.join()
         .receive('ok', resp => {
-          console.log('Joined successfully', resp)
           this.setState({ channel: channel, previewUuid: previewUuid}, () => {
             if (startSession) {
               this.getNewSession()
@@ -183,8 +183,7 @@ class ChatWindow extends Component {
           })
         })
         .receive('error', resp => {
-          // TODO handle error in UI
-          console.log('Unable to join', resp)
+          this.props.notificationsActions.pushNotification("Unable to join preview channel")
           this.setState({ channel: null, previewUuid: null })
         })
 
@@ -202,12 +201,10 @@ class ChatWindow extends Component {
     channel
       .push('new_session', {})
       .receive('ok', resp => {
-        console.log('New Session', resp)
         this.props.actions.newSession(this.props.bot, resp.session)
       })
       .receive('error', resp => {
-        // TODO handle error in UI
-        console.log('Unable to start session', resp)
+        this.props.notificationsActions.pushNotification("Unable to start session")
       })
   }
 
@@ -241,6 +238,7 @@ const mapStateToProps = (state) => {
   return state.chat
 }
 const mapDispatchToProps = (dispatch) => ({
-  actions: bindActionCreators(actions, dispatch)
+  actions: bindActionCreators(actions, dispatch),
+  notificationsActions: bindActionCreators(notificationsActions, dispatch)
 })
 export default connect(mapStateToProps, mapDispatchToProps)(ChatWindow)

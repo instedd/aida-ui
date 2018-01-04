@@ -70,7 +70,6 @@ const startPreviewSuccess = (state, action) => {
 }
 
 const pausePreview = (state, action) => {
-  console.log("pausePreview")
   const {botId} = action
 
   if (state.scope.botId == botId) {

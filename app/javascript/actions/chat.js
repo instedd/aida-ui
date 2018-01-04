@@ -50,7 +50,6 @@ export const updatePreviewIfActive = () => (dispatch : T.Dispatch, getState : T.
   if (state.chat.scope && state.chat.scope.botId && !state.chat.pausePreview && state.bots.items) {
     const bot = state.bots.items[state.chat.scope.botId.toString()]
     if (bot) {
-      console.log("updating preview...")
       dispatch(startPreview(bot))
     }
   }
