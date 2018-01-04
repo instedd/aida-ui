@@ -116,7 +116,7 @@ export class BotLayoutComponent extends Component {
 
           {confirmationDialog}
 
-          {chatWindow}
+          <Route path="/b/:id/behaviour" render={() => chatWindow} />
         </AppLayout>
       )
     } else if (botsLoaded == true && bot == null) {
