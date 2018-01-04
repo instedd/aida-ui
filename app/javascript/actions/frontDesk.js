@@ -1,6 +1,7 @@
 // @flow
 import * as T from '../utils/types'
 import { debounced } from '../utils'
+import { botBehaviourUpdated } from './bot'
 
 import * as api from '../utils/api'
 
@@ -56,5 +57,7 @@ export const updateFrontDeskConfig = (key : string, value : any) => (dispatch : 
 }
 
 const updateFrontDeskDelayed = (botId, frontDesk) => debounced(`FRONT_DESK_UPDATE_${botId}`)(dispatch => {
-  api.updateFrontDesk(botId, frontDesk)
+  api.updateFrontDesk(botId, frontDesk).then(() =>
+    dispatch(botBehaviourUpdated())
+  )
 })

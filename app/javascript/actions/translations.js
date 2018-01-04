@@ -2,6 +2,7 @@
 import * as T from '../utils/types'
 import * as api from '../utils/api'
 import { debounced } from '../utils'
+import { botBehaviourUpdated } from './bot'
 
 export const FETCH = 'TRANSLATIONS_FETCH'
 export const RECEIVE = 'TRANSLATIONS_RECEIVE'
@@ -44,5 +45,7 @@ export const updateTranslation = (botId : number, translation : T.Translation) =
 
 const updateTranslationDelayed = (botId, translation) =>
   debounced(`TRANSLATION_UPDATE_${botId}_${translation.behaviour_id}_${translation.key}_${translation.lang}`)(dispatch => {
-    api.updateTranslation(botId, translation)
+    api.updateTranslation(botId, translation).then(() =>
+      dispatch(botBehaviourUpdated())
+    )
   })

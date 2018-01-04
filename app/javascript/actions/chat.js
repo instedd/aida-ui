@@ -43,6 +43,17 @@ export const _startPreviewSuccess = (botId: number, previewUuid: string, accessT
   accessToken,
 })
 
+export const updatePreviewIfActive = () => (dispatch : T.Dispatch, getState : T.GetState) => {
+  const state = getState()
+  if (state.chat.scope && state.chat.scope.botId && state.bots.items) {
+    const bot = state.bots.items[state.chat.scope.botId.toString()]
+    if (bot) {
+      console.log("updating preview...")
+      dispatch(startPreview(bot))
+    }
+  }
+}
+
 export const startPreview = (bot: T.Bot) => (dispatch : T.Dispatch, getState : T.GetState) => {
   const state = getState()
 

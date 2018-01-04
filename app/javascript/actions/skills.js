@@ -2,6 +2,7 @@
 import * as T from '../utils/types'
 import * as api from '../utils/api'
 import * as routes from '../utils/routes'
+import { botBehaviourUpdated } from './bot'
 
 export const FETCH = 'SKILLS_FETCH'
 export const RECEIVE = 'SKILLS_RECEIVE'
@@ -50,6 +51,7 @@ export const createSkill = (scope : {botId : number}, {kind, name} : {name: ?str
             .then(skill => {
               dispatch(_skillsCreateSuccess(scope, skill))
               history.push(routes.botSkill(scope.botId, skill.id))
+              dispatch(botBehaviourUpdated())
             })
             .catch(error => {
               console.error(error)
