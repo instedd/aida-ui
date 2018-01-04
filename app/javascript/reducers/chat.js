@@ -9,6 +9,7 @@ const initialState = {
   previewUuid: null,
   accessToken: "",
   publishing: false,
+  previewPaused: false,
 }
 
 export default (state : T.ChatState, action : T.ChatAction) : T.ChatState => {
@@ -18,6 +19,7 @@ export default (state : T.ChatState, action : T.ChatAction) : T.ChatState => {
     case actions.START_PREVIEW_SUCCESS: return startPreviewSuccess(state, action)
     case actions.SEND_MESSAGE: return sendMessage(state, action)
     case actions.RECEIVE_MESSAGE: return receiveMessage(state, action)
+    case actions.PAUSE_PREVIEW: return pausePreview(state, action)
     default:
       return state;
   }
@@ -31,11 +33,12 @@ const startPreview = (state, action) => {
       scope: { botId },
       messages:[],
       publishing: true,
+      pausePreview: false,
       previewUuid,
       accessToken
     }
   } else {
-    state = {...state, publishing: true, previewUuid, accessToken}
+    state = {...state, publishing: true, pausePreview: false, previewUuid, accessToken}
   }
 
   return state
@@ -49,13 +52,25 @@ const startPreviewSuccess = (state, action) => {
       scope: { botId },
       messages:[],
       publishing: false,
+      pausePreview: false,
       previewUuid,
       accessToken
     }
   } else {
     // if the bot to preview is the same as before,
     // better keep the messages
-    state = {...state, publishing: false, previewUuid, accessToken}
+    state = {...state, publishing: false, pausePreview: false, previewUuid, accessToken}
+  }
+
+  return state
+}
+
+const pausePreview = (state, action) => {
+  console.log("pausePreview")
+  const {botId} = action
+
+  if (state.scope.botId == botId) {
+    state = {...state, pausePreview: true}
   }
 
   return state

@@ -92,6 +92,9 @@ export type ChatAction = {
   botId: number,
   previewUuid: string,
   accessToken: string
+} | {
+  type: 'PAUSE_PREVIEW',
+  botId: number,
 };
 
 export type FrontDeskAction = {

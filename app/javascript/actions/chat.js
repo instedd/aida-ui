@@ -10,6 +10,7 @@ export const START_PREVIEW = 'START_PREVIEW'
 export const START_PREVIEW_SUCCESS = 'START_PREVIEW_SUCCESS'
 export const SEND_MESSAGE = 'SEND_MESSAGE'
 export const RECEIVE_MESSAGE = 'RECEIVE_MESSAGE'
+export const PAUSE_PREVIEW = 'PAUSE_PREVIEW'
 
 // Action Creator
 let nextMessageId = 1;
@@ -45,7 +46,7 @@ export const _startPreviewSuccess = (botId: number, previewUuid: string, accessT
 
 export const updatePreviewIfActive = () => (dispatch : T.Dispatch, getState : T.GetState) => {
   const state = getState()
-  if (state.chat.scope && state.chat.scope.botId && state.bots.items) {
+  if (state.chat.scope && state.chat.scope.botId && !state.chat.pausePreview && state.bots.items) {
     const bot = state.bots.items[state.chat.scope.botId.toString()]
     if (bot) {
       console.log("updating preview...")
@@ -81,3 +82,8 @@ export const startPreview = (bot: T.Bot) => (dispatch : T.Dispatch, getState : T
     })
     .catch(() => dispatch(pushNotification('Bot preview failed')))
 }
+
+export const pausePreview = (bot : T.Bot) : T.ChatAction => ({
+  type: PAUSE_PREVIEW,
+  botId: bot.id,
+})
