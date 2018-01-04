@@ -152,46 +152,47 @@ class ChatWindow extends Component {
   state = {
     channel: null,
     previewUuid: null,
-    sessionId: null
   }
 
   componentWillMount() {
     if (this.props.visible == true && this.props.previewUuid != null) {
-      this.join(this.props.previewUuid, this.props.accessToken)
+      this.join(this.props.previewUuid, this.props.accessToken, this.props.sessionId == null)
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.publishing == false && nextProps.previewUuid != null &&
         this.state.previewUuid != nextProps.previewUuid) {
-      this.join(nextProps.previewUuid, nextProps.accessToken)
+      this.join(nextProps.previewUuid, nextProps.accessToken, nextProps.sessionId == null)
     }
   }
 
-  join(previewUuid, accessToken) {
+  join(previewUuid, accessToken, startSession) {
     let { channel } = this.state
     if (channel) { channel.leave() }
-    this.setState({ previewUuid })
+    this.setState({ previewUuid }, () => {
+      channel = socket.channel(`bot:${previewUuid}`, {"access_token": accessToken})
 
-    channel = socket.channel(`bot:${previewUuid}`, {"access_token": accessToken})
-
-    channel.join()
-      .receive('ok', resp => {
-        console.log('Joined successfully', resp)
-        this.setState({ channel: channel, previewUuid: previewUuid, sessionId: null }, () => {
-          this.getNewSession()
+      channel.join()
+        .receive('ok', resp => {
+          console.log('Joined successfully', resp)
+          this.setState({ channel: channel, previewUuid: previewUuid}, () => {
+            if (startSession) {
+              this.getNewSession()
+            }
+          })
         })
-      })
-      .receive('error', resp => {
-        // TODO handle error in UI
-        console.log('Unable to join', resp)
-        this.setState({ channel: null, previewUuid: null, sessionId: null })
-      })
+        .receive('error', resp => {
+          // TODO handle error in UI
+          console.log('Unable to join', resp)
+          this.setState({ channel: null, previewUuid: null })
+        })
 
-    channel.on('btu_msg', payload => {
-      if (payload.session == this.state.sessionId) {
-        this.props.actions.receiveMessage(payload.text)
-      }
+      channel.on('btu_msg', payload => {
+        if (payload.session == this.props.sessionId) {
+          this.props.actions.receiveMessage(payload.text)
+        }
+      })
     })
   }
 
@@ -202,32 +203,30 @@ class ChatWindow extends Component {
       .push('new_session', {})
       .receive('ok', resp => {
         console.log('New Session', resp)
-        this.setState({ sessionId: resp.session })
-        this.props.actions.newSession(this.props.bot)
+        this.props.actions.newSession(this.props.bot, resp.session)
       })
       .receive('error', resp => {
         // TODO handle error in UI
         console.log('Unable to start session', resp)
-        this.setState({ sessionId: null })
       })
   }
 
   sendMessage(text) {
-    const {actions} = this.props
-    const {channel, sessionId} = this.state
+    const {actions, sessionId} = this.props
+    const {channel} = this.state
     actions.sendMessage(text)
     channel.push('utb_msg', {session: sessionId, text: text})
   }
 
   render() {
-    const {actions, bot, messages, publishing, visible} = this.props
+    const {actions, bot, messages, publishing, visible, sessionId} = this.props
 
     if (visible) {
       return (
         <ChatWindowComponent bot={bot} messages={messages}
         sendMessage={(text) => this.sendMessage(text)}
         newSession={() => this.getNewSession()}
-        publishing={publishing} disabled={publishing || this.state.sessionId == null} />
+        publishing={publishing} disabled={publishing || sessionId == null} />
       )
     } else {
       return null

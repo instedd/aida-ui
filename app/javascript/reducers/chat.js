@@ -10,6 +10,7 @@ const initialState = {
   accessToken: "",
   publishing: false,
   previewPaused: false,
+  sessionId: null,
 }
 
 export default (state : T.ChatState, action : T.ChatAction) : T.ChatState => {
@@ -36,7 +37,8 @@ const startPreview = (state, action) => {
       publishing: true,
       pausePreview: false,
       previewUuid,
-      accessToken
+      accessToken,
+      sessionId: null,
     }
   } else {
     state = {...state, publishing: true, pausePreview: false, previewUuid, accessToken}
@@ -55,7 +57,8 @@ const startPreviewSuccess = (state, action) => {
       publishing: false,
       pausePreview: false,
       previewUuid,
-      accessToken
+      accessToken,
+      sessionId: null,
     }
   } else {
     // if the bot to preview is the same as before,
@@ -78,10 +81,10 @@ const pausePreview = (state, action) => {
 }
 
 const newSession = (state, action) => {
-  const {botId} = action
+  const {botId, sessionId} = action
 
   if (state.scope.botId == botId) {
-    state = {...state, messages: []}
+    state = {...state, sessionId, messages: []}
   }
 
   return state

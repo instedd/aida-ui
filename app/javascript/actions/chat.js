@@ -89,7 +89,8 @@ export const pausePreview = (bot : T.Bot) : T.ChatAction => ({
   botId: bot.id,
 })
 
-export const newSession = (bot : T.Bot) : T.ChatAction => ({
+export const newSession = (bot : T.Bot, sessionId: string) : T.ChatAction => ({
   type: NEW_SESSION,
   botId: bot.id,
+  sessionId,
 })

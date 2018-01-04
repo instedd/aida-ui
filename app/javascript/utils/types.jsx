@@ -98,6 +98,7 @@ export type ChatAction = {
 } | {
   type: 'NEW_SESSION',
   botId: number,
+  sessionId: string,
 };
 
 export type FrontDeskAction = {
@@ -218,7 +219,8 @@ export type ChatState = {
   scope: Scope,
   messages: Array<ChatMessage>,
   previewUuid: ?string,
-  accessToken: string
+  accessToken: string,
+  sessionId: ?string,
 }
 
 export type FrontDeskState = {
