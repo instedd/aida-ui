@@ -133,11 +133,11 @@ export type BotStats = {
 export type StatsPeriod = "today" | "this_week" | "this_month";
 
 export type TranslationBehaviours = Array<{
-  id?: number;
-  label?: string;
-  keys?: Array<{
+  id: number;
+  label: string;
+  keys: Array<{
     _key: string;
-    _lang: Language;
+    _label: string;
   }>;
 }>;
 
@@ -168,5 +168,33 @@ export type Translation = {
   key: string;
   lang: Language;
   value: string;
+};
+
+export type Collaborator = {
+  id: number;
+  role: string;
+  user_email: string;
+  last_activity: string | null;
+};
+
+export type CollaboratorsIndex = {
+  collaborators: Array<Collaborator>;
+  invitations: Array<Invitation>;
+  anonymous_invitation: Invitation;
+};
+
+export type Invitation = {
+  id: number;
+  creator?: string;
+  email: string | null;
+  role?: string;
+  link_url: string | null;
+  created_at: string;
+};
+
+export type InvitationData = {
+  bot_name: string;
+  inviter: string;
+  role: string;
 };
 

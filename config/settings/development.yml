@@ -1,2 +1,4 @@
 backend:
   url: http://backend/
+
+base_url: http://localhost:3000/

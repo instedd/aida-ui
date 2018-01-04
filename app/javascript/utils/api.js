@@ -85,3 +85,27 @@ export const uploadXlsForm = (file : any) => {
 export const fetchStats = (botId : number, period : string) => {
   return apiFetchJSON(`bots/${botId}/stats?period=${period}`, null)
 }
+
+export const fetchCollaborators = (botId : number) => {
+  return apiFetchJSON(`bots/${botId}/collaborators`)
+}
+
+export const inviteCollaborator = (botId : number, email : string, role : string) => {
+  return apiPostJSON(`bots/${botId}/invitations`, null, {email, role})
+}
+
+export const cancelInvitation = (invitationId : number) => {
+  return apiDelete(`invitations/${invitationId}`)
+}
+
+export const removeCollaborator = (collaboratorId : number) => {
+  return apiDelete(`collaborators/${collaboratorId}`)
+}
+
+export const retrieveInvitation = (token : string) => {
+  return apiFetchJSON(`invitations/retrieve?token=${token}`)
+}
+
+export const acceptInvitation = (token : string) => {
+  return apiPostJSON(`invitations/accept?token=${token}`)
+}

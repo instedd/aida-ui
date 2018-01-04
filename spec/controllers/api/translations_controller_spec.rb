@@ -2,8 +2,8 @@
 require 'rails_helper'
 
 RSpec.describe Api::TranslationsController, type: :controller do
-  let!(:user) { User.create! email: "user@example.com" }
-  let!(:bot) { Bot.create_prepared!(user) }
+  let!(:user) { create(:user) }
+  let!(:bot) { create(:bot, owner: user) }
   let!(:language_detector) {
     bot.skills.create_skill! 'language_detector',
                              config: {
@@ -17,26 +17,40 @@ RSpec.describe Api::TranslationsController, type: :controller do
   let!(:other_skill) {
     bot.skills.create_skill! 'keyword_responder'
   }
+  let!(:shared_bot) {
+    create(:bot, shared_with: user) do |bot|
+      bot.skills.create_skill! 'language_detector',
+                               config: {
+                                 languages: [
+                                   {code: 'en', keywords: 'english'},
+                                   {code: 'es', keywords: 'español'}
+                                 ]
+                               }
+    end
+  }
+  let!(:other_shared_skill) {
+    shared_bot.skills.create_skill! 'keyword_responder'
+  }
   before(:each) { sign_in user }
 
   describe "index" do
     it "fetches all translations for the bot" do
       get :index, params: { bot_id: bot.id }
       expect(response).to be_success
-      expect(json_body).to be_a(Hash)
-      expect(json_body['default_language']).to eq('en')
-      expect(json_body['languages']).to eq(['en', 'es', 'de'])
-      expect(json_body['behaviours']).to be_an(Array)
+      expect(json_body).to be_a_translations_index_as_json.matching(languages: ['en', 'es', 'de'],
+                                                                    default_language: 'en')
       expect(json_body['behaviours'].size).to eq(2)
       json_body['behaviours'].each do |behaviour|
-        expect(behaviour).to be_a(Hash)
-        expect(behaviour.keys).to match_array(%w(id label keys))
-        expect(behaviour["keys"]).to be_an(Array)
         behaviour["keys"].each do |key|
-          expect(key).to be_a(Hash)
-          expect(key.keys).to match_array(%w(_key _label en es de))
+          expect(key.keys).to include('en', 'es', 'de')
         end
       end
+    end
+
+    it "is allowed on a shared bot" do
+      get :index, params: { bot_id: shared_bot.id }
+      expect(response).to be_success
+      expect(json_body).to be_a_translations_index_as_json
     end
   end
 
@@ -92,6 +106,22 @@ RSpec.describe Api::TranslationsController, type: :controller do
                              lang: 'en',
                              value: 'Hello!' }
       expect(response.status).to eq(400)
+    end
+
+    it "is allowed on shared bots" do
+      put :update, params: { bot_id: shared_bot.id,
+                             behaviour_id: shared_bot.front_desk.id,
+                             key: 'greeting',
+                             lang: 'es',
+                             value: 'Hola, soy un bot' }
+
+      expect(response.status).to eq(204)
+
+      translation = shared_bot.translations.where(behaviour_id: shared_bot.front_desk.id,
+                                                  key: 'greeting',
+                                                  lang: 'es').first
+      expect(translation).to_not be_nil
+      expect(translation.value).to eq('Hola, soy un bot')
     end
   end
 

@@ -37,6 +37,8 @@ gem 'config'
 gem 'httparty'
 gem 'roo', '~> 2.7.0'
 gem 'roo-xls'
+gem 'pundit', '~> 1.1.0'
+gem 'delayed_job_active_record', '~> 4.1.2'
 
 gem 'devise', '~> 4.3.0'
 gem 'alto_guisso', github: 'instedd/alto_guisso', branch: 'master'
@@ -52,6 +54,8 @@ group :development, :test do
   gem 'selenium-webdriver'
 
   gem 'rspec-rails', '~> 3.6'
+  gem 'pundit-matchers', '~> 1.4.1'
+  gem 'factory_bot_rails', '~> 4.8'
 end
 
 group :development do

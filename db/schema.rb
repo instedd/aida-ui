@@ -46,12 +46,52 @@ ActiveRecord::Schema.define(version: 20171228180737) do
     t.index ["bot_id"], name: "index_channels_on_bot_id"
   end
 
+  create_table "collaborators", force: :cascade do |t|
+    t.bigint "bot_id"
+    t.bigint "user_id"
+    t.string "role"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bot_id", "user_id"], name: "index_collaborators_on_bot_id_and_user_id", unique: true
+    t.index ["bot_id"], name: "index_collaborators_on_bot_id"
+    t.index ["user_id"], name: "index_collaborators_on_user_id"
+  end
+
+  create_table "delayed_jobs", force: :cascade do |t|
+    t.integer "priority", default: 0, null: false
+    t.integer "attempts", default: 0, null: false
+    t.text "handler", null: false
+    t.text "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string "locked_by"
+    t.string "queue"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+  end
+
   create_table "identities", force: :cascade do |t|
     t.integer "user_id"
     t.string "provider"
     t.string "token"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "invitations", force: :cascade do |t|
+    t.bigint "bot_id"
+    t.bigint "creator_id"
+    t.string "email"
+    t.string "role", null: false
+    t.string "token", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bot_id", "email"], name: "index_invitations_on_bot_id_and_email", unique: true
+    t.index ["bot_id"], name: "index_invitations_on_bot_id"
+    t.index ["creator_id"], name: "index_invitations_on_creator_id"
+    t.index ["token"], name: "index_invitations_on_token", unique: true
   end
 
   create_table "translations", force: :cascade do |t|
@@ -95,6 +135,10 @@ ActiveRecord::Schema.define(version: 20171228180737) do
   add_foreign_key "behaviours", "bots"
   add_foreign_key "bots", "users", column: "owner_id"
   add_foreign_key "channels", "bots"
+  add_foreign_key "collaborators", "bots"
+  add_foreign_key "collaborators", "users"
+  add_foreign_key "invitations", "bots"
+  add_foreign_key "invitations", "users", column: "creator_id"
   add_foreign_key "translations", "behaviours"
   add_foreign_key "variable_assignments", "bots"
 end

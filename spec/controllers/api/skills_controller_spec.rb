@@ -1,9 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe Api::SkillsController, type: :controller do
-  let!(:user) { User.create! email: "user@example.com" }
+  let!(:user) { create(:user) }
   before(:each) { sign_in user }
-  let!(:bot) { Bot.create_prepared!(user) }
+  let!(:bot) { create(:bot, owner: user) }
+
+  let!(:shared_bot) { create(:bot, shared_with: user) }
+  let!(:shared_skill) { shared_bot.skills.create_skill! "keyword_responder", order: 1 }
 
   describe "index" do
     it "fetches all the behaviours except front_desk" do
@@ -24,6 +27,12 @@ RSpec.describe Api::SkillsController, type: :controller do
                                           order: skill.order
                                         }])
     end
+
+    it "is allowed for shared bots" do
+      get :index, params: { bot_id: shared_bot.id }
+      expect(response).to be_success
+      expect(json_body).to all(be_a_skill_as_json)
+    end
   end
 
   describe "create" do
@@ -33,6 +42,7 @@ RSpec.describe Api::SkillsController, type: :controller do
       end.to change(bot.skills, :count).by(1)
 
       expect(response.status).to eq(201)
+      expect(json_body).to be_a_skill_as_json
       expect(json_body['kind']).to eq("language_detector")
     end
 
@@ -50,29 +60,39 @@ RSpec.describe Api::SkillsController, type: :controller do
 
       expect(bot.skills.count).to be_zero
     end
+
+    it "is allowed for shared bots" do
+      post :create, params: { bot_id: shared_bot.id, kind: "keyword_responder", name: "skill" }
+
+      expect(response.status).to eq(201)
+      expect(json_body).to be_a_skill_as_json.matching(kind: 'keyword_responder', name: 'skill')
+    end
   end
 
   describe "update" do
-    let!(:skill) { bot.behaviours.create_skill! "language_detector", order: 1 }
+    let!(:skill) { bot.behaviours.create_skill! "keyword_responder", order: 1 }
+    let(:valid_skill_config) {
+      {
+        name: "Food menu",
+        enabled: false,
+        config: {
+          explanation: "I can give you the menu",
+          keywords: "menu,food",
+          clarification: "To get the menu say 'menu'",
+          response: "The menu"
+        }
+      }
+    }
 
     it "updates valid skills" do
-      put :update, params: {
-            id: skill.id, skill: {
-              name: "Lang Detector",
-              enabled: false,
-              config: {
-                explanation: "Say 'english'",
-                languages: [{code: 'en', keywords: 'english'}]
-              }
-            }
-          }
+      put :update, params: { id: skill.id, skill: valid_skill_config }
 
       expect(response).to be_success
 
       skill.reload
-      expect(skill.name).to eq('Lang Detector')
+      expect(skill.name).to eq('Food menu')
       expect(skill).to_not be_enabled
-      expect(skill.config['explanation']).to eq("Say 'english'")
+      expect(skill.config['explanation']).to eq("I can give you the menu")
     end
 
     it "does not update front desk" do
@@ -86,6 +106,14 @@ RSpec.describe Api::SkillsController, type: :controller do
 
       bot.reload
       expect(bot.front_desk.name).to_not eq('Test')
+    end
+
+    it "is allowed for shared bots" do
+      put :update, params: { id: shared_skill.id, skill: valid_skill_config }
+
+      expect(response).to be_success
+      shared_skill.reload
+      expect(shared_skill.name).to eq('Food menu')
     end
   end
 
@@ -102,6 +130,12 @@ RSpec.describe Api::SkillsController, type: :controller do
     it "does not destroy front desk" do
       delete :destroy, params: { id: bot.front_desk.id }
       expect(response.status).to eq(404)
+    end
+
+    it "is allowed for shared bots" do
+      expect do
+        delete :destroy, params: { id: shared_skill.id }
+      end.to change(shared_bot.skills, :count).by(-1)
     end
   end
 end

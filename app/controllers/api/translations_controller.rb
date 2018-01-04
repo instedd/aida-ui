@@ -1,6 +1,10 @@
 class Api::TranslationsController < ApplicationApiController
+  after_action :verify_authorized
+
   def index
-    bot = current_user.bots.find(params[:bot_id])
+    bot = Bot.find(params[:bot_id])
+    authorize bot, :read_translations?
+
     languages = bot.available_languages
     translations = bot.translations.where(lang: languages)
     keys = bot.translation_keys
@@ -10,7 +14,9 @@ class Api::TranslationsController < ApplicationApiController
   end
 
   def update
-    bot = current_user.bots.find(params[:bot_id])
+    bot = Bot.find(params[:bot_id])
+    authorize bot, :update_translation?
+
     behaviour = bot.behaviours.find(params[:behaviour_id])
     valid_keys = behaviour.translation_keys.map do |key|
       key[:key]
@@ -36,7 +42,8 @@ class Api::TranslationsController < ApplicationApiController
   end
 
   def update_variable
-    bot = current_user.bots.find(params[:bot_id])
+    bot = Bot.find(params[:bot_id])
+    authorize bot, :update_translation?
 
     assignment_params = params.permit(:variable_id, :variable_name, :condition_id, :condition, :lang, :value, :condition_order)
 
@@ -100,7 +107,8 @@ class Api::TranslationsController < ApplicationApiController
   end
 
   def destroy_variable
-    bot = current_user.bots.find(params[:bot_id])
+    bot = Bot.find(params[:bot_id])
+    authorize bot, :update_translation?
 
     assignment_params = params.permit(:variable_id, :condition_id)
 
