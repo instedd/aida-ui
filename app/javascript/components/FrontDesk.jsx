@@ -53,7 +53,7 @@ class FrontDesk extends Component {
           <TextField id="fd-threshold"
                      type="number"
                      value={Math.round(config.threshold * 100) || 0}
-                     min={0} max={100}
+                     min={0} max={50}
                      style={{width: "4em"}}
                      onChange={(value) => { updateConfig('threshold')(parseFloat(value) / 100) }}
                      fullWidth={false} inlineIndicator={<p>%</p>} />

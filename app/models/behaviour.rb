@@ -32,7 +32,7 @@ class Behaviour < ApplicationRecord
         "introduction" => "",
         "not_understood" => "",
         "clarification" => "",
-        "threshold" => 0.7
+        "threshold" => 0.5
       }
     }
     create! default_params.merge(params)

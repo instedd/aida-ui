@@ -48,7 +48,7 @@ RSpec.describe Bot, type: :model do
                                             "introduction" => "I'm a bot",
                                             "not_understood" => "I don't understand",
                                             "clarification" => "Please repeat",
-                                            "threshold" => 0.7
+                                            "threshold" => 0.5
                                           }
         bot.front_desk.translations.create! key: 'greeting', lang: 'es', value: 'Hola'
 

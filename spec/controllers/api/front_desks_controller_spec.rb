@@ -24,7 +24,7 @@ RSpec.describe Api::FrontDesksController, type: :controller do
                 introduction: "i'm a bot",
                 not_understood: "i didn't understand",
                 clarification: "what do you mean?",
-                threshold: 0.7
+                threshold: 0.5
               }
             }
           }, as: :json
