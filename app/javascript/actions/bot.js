@@ -1,7 +1,7 @@
 // @flow
 import * as T from '../utils/types'
 import * as api from '../utils/api'
-
+import { updatePreviewIfActive } from './chat'
 import { pushNotification } from './notifications'
 
 export const UPDATE = 'BOT_UPDATE'
@@ -73,4 +73,8 @@ export const unpublishBot = (bot : T.Bot) => (dispatch : T.Dispatch) => {
 export const deleteBot = (bot : T.Bot) => (dispatch : T.Dispatch) => {
   return api.deleteBot(bot)
             .then(() => dispatch(_botDelete(bot.id)))
+}
+
+export const botBehaviourUpdated = () => (dispatch : T.Dispatch) => {
+  dispatch(updatePreviewIfActive())
 }

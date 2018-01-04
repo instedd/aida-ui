@@ -9,8 +9,8 @@ export const MainWhite = ({children, sidebar, buttons}) => {
           {children}
         </div>
         <div className='button-area'>
-          {buttons}
-        </div> 
+          <div className="buttons">{buttons}</div>
+        </div>
       </div>)
   } else {
     return(
@@ -19,7 +19,7 @@ export const MainWhite = ({children, sidebar, buttons}) => {
           {children}
         </div>
       </div>)
-  } 
+  }
 }
 
 export default MainWhite

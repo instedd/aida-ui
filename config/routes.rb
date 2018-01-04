@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       member do
         post :publish
         delete :publish, action: :unpublish
+        post :preview
         get :stats
         get :data
         get :manifest

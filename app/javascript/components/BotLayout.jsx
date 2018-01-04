@@ -19,9 +19,13 @@ import BotTranslations from '../components/BotTranslations'
 import BotAnalytics from '../components/BotAnalytics'
 import BotData from '../components/BotData'
 
+import ChatWindow from './ChatWindow'
+import * as chatActions from '../actions/chat'
+
 export class BotLayoutComponent extends Component {
   state = {
-    dialogVisible: false
+    dialogVisible: false,
+    chatWindowVisible: false
   }
 
   componentDidMount() {
@@ -32,8 +36,8 @@ export class BotLayoutComponent extends Component {
   }
 
   render() {
-    const { botsLoaded, bot, children, botActions, history } = this.props
-    const { dialogVisible } = this.state
+    const { botsLoaded, bot, children, botActions, history, chatActions } = this.props
+    const { dialogVisible, chatWindowVisible } = this.state
 
     const showDialog = () => this.setState({ dialogVisible: true })
     const hideDialog = () => this.setState({ dialogVisible: false })
@@ -41,6 +45,15 @@ export class BotLayoutComponent extends Component {
       botActions.deleteBot(bot)
       history.replace(r.botIndex())
       hideDialog()
+    }
+    const toggleChatWindow = () => {
+      if (!this.state.chatWindowVisible) {
+        this.setState({ chatWindowVisible: true })
+        chatActions.startPreview(bot)
+      } else {
+        this.setState({ chatWindowVisible: false })
+        chatActions.pausePreview(bot)
+      }
     }
 
     const dialogActions = [
@@ -57,6 +70,10 @@ export class BotLayoutComponent extends Component {
         <h4>This will destroy the bot and all its associated data. Are you sure?</h4>
         <b>This action cannot be undone.</b>
       </DialogContainer>
+    )
+
+    const chatWindow =  (
+      <ChatWindow visible={chatWindowVisible} />
     )
 
     if (botsLoaded == true && bot != null) {
@@ -98,12 +115,14 @@ export class BotLayoutComponent extends Component {
           <Route exact path="/b/:id/data" render={() => <BotData bot={bot} />} />
           <Route exact path="/b/:id/analytics" render={() => <BotAnalytics bot={bot} />} />
           <Route exact path="/b/:id/channel" render={() => <BotChannel bot={bot} />} />
-          <Route path="/b/:id/behaviour" render={() => <BotBehaviour bot={bot} />} />
+          <Route path="/b/:id/behaviour" render={() => <BotBehaviour bot={bot} onToggleChatWindow={toggleChatWindow}/>} />
           <Route exact path="/b/:id/translations" render={() => <BotTranslations bot={bot} />} />
 
           {/* Children.map(children, c => cloneElement(c, {bot})) */}
 
           {confirmationDialog}
+
+          <Route path="/b/:id/behaviour" render={() => chatWindow} />
         </AppLayout>
       )
     } else if (botsLoaded == true && bot == null) {
@@ -131,6 +150,7 @@ const mapStateToProps = (state, {match}) => {
 const mapDispatchToProps = (dispatch) => ({
   botActions: bindActionCreators(botActions, dispatch),
   botsActions: bindActionCreators(botsActions, dispatch),
+  chatActions: bindActionCreators(chatActions, dispatch)
 })
 
 export const BotLayout = withRouter(connect(mapStateToProps, mapDispatchToProps)(BotLayoutComponent))

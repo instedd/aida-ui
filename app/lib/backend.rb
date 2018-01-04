@@ -1,6 +1,7 @@
 class Backend
   include HTTParty
   base_uri Settings.backend.url
+  # debug_output $stdout
 
   class << self
     def version
@@ -11,8 +12,8 @@ class Backend
       handle_response { get("/api/bots") }.group_by { |bot| bot['id'] }
     end
 
-    def create_bot(manifest)
-      body = {bot: {manifest: manifest}}.to_json
+    def create_bot(manifest, temp: false)
+      body = {bot: {manifest: manifest, temp: temp}}.to_json
       headers = {"Content-Type" => "application/json"}
       handle_response { post("/api/bots", body: body, headers: headers) }['id']
     end

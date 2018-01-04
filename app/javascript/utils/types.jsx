@@ -9,6 +9,13 @@ export type Scope = {
   botId: number
 };
 
+export type ChatMessage = {
+  id: number,
+  text: string,
+  sent: boolean,
+  timestamp: Date
+}
+
 export type AuthAction = {
   type: 'AUTH_INIT',
   userEmail: string,
@@ -61,6 +68,37 @@ export type ChannelsAction = {
 } | {
   type: 'CHANNELS_FETCH',
   scope: ?any,
+};
+
+export type ChatAction = {
+  type: 'SEND_MESSAGE',
+  id: number,
+  text: string,
+  sent: boolean,
+  timestamp: Date
+} | {
+  type: 'RECEIVE_MESSAGE',
+  id: number,
+  text: string,
+  sent: boolean,
+  timestamp: Date
+} | {
+  type: 'START_PREVIEW',
+  botId: number,
+  previewUuid: ?string,
+  accessToken: string
+} | {
+  type: 'START_PREVIEW_SUCCESS',
+  botId: number,
+  previewUuid: string,
+  accessToken: string
+} | {
+  type: 'PAUSE_PREVIEW',
+  botId: number,
+} | {
+  type: 'NEW_SESSION',
+  botId: number,
+  sessionId: string,
 };
 
 export type FrontDeskAction = {
@@ -152,6 +190,7 @@ export type Action = AuthAction
                    | BotsAction
                    | ChannelAction
                    | ChannelsAction
+                   | ChatAction
                    | FrontDeskAction
                    | NotificationsAction
                    | SkillAction
@@ -175,6 +214,14 @@ export type ChannelsState = {
   scope: ?any,
   items: ?ById<T.Channel>
 };
+
+export type ChatState = {
+  scope: Scope,
+  messages: Array<ChatMessage>,
+  previewUuid: ?string,
+  accessToken: string,
+  sessionId: ?string,
+}
 
 export type FrontDeskState = {
   fetching: boolean,
@@ -217,6 +264,7 @@ export type State = {
   auth: AuthState,
   bots: BotsState,
   channels: ChannelsState,
+  chat: ChatState,
   frontDesk: FrontDeskState,
   notifications: NotifState,
   skills: SkillsState,
@@ -227,7 +275,7 @@ export type State = {
 
 export type Dispatch = (action : Action | ThunkAction | PromiseAction) => any;
 export type GetState = () => State;
-export type ThunkAction = (dispatch : Dispatch, getState? : GetState) => any;
+export type ThunkAction = (dispatch : Dispatch, getState : GetState) => any;
 export type PromiseAction = Promise<Action>;
 
 export type Reducer<T> = (state : T, action : Action) => T;

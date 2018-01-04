@@ -8,11 +8,13 @@ import skills from './skills'
 import stats from './stats'
 import translations from './translations'
 import xlsForms from './xlsForms'
+import chat from './chat'
 
 export default combineReducers({
   auth,
   bots,
   channels,
+  chat,
   frontDesk,
   notifications,
   skills,

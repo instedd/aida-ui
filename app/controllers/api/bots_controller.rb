@@ -30,6 +30,15 @@ class Api::BotsController < ApplicationApiController
     end
   end
 
+  def preview
+    bot = current_user.bots.find(params[:id])
+    if preview_uuid = PublishBot.preview(bot, params[:preview_uuid], params[:access_token])
+      render json: {result: :ok, preview_uuid: preview_uuid}
+    else
+      render json: {result: :error}, status: :bad_request
+    end
+  end
+
   def data
     bot = current_user.bots.find(params[:id])
     cols = []

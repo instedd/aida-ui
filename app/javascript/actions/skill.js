@@ -2,6 +2,7 @@
 import * as T from '../utils/types'
 import * as api from '../utils/api'
 import { debounced } from '../utils'
+import { botBehaviourUpdated } from './bot'
 
 export const UPDATE = 'SKILL_UPDATE'
 export const DELETE = 'SKILL_DELETE'
@@ -22,7 +23,9 @@ export const updateSkill = (skill : T.Skill) => (dispatch : T.Dispatch) => {
 }
 
 const updateSkillDelayed = (skill) => debounced(`SKILL_UPDATE_${skill.id}`)(dispatch => {
-  api.updateSkill(skill)
+  api.updateSkill(skill).then(() =>
+    dispatch(botBehaviourUpdated())
+  )
 })
 
 export const toggleSkill = (skill : T.Skill) => (dispatch : T.Dispatch) => {
@@ -32,5 +35,7 @@ export const toggleSkill = (skill : T.Skill) => (dispatch : T.Dispatch) => {
 
 export const deleteSkill = (skill : T.Skill) => (dispatch : T.Dispatch) => {
   dispatch(_skillDelete(skill.id))
-  api.destroySkill(skill)
+  api.destroySkill(skill).then(() =>
+    dispatch(botBehaviourUpdated())
+  )
 }
