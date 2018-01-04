@@ -4,7 +4,7 @@
   display: grid;
   grid-template-columns: 1fr minmax(min-content, 320px) 1fr;
   grid-template-areas: ". main-content .";
-  .main-content {
+  > .main-content {
     grid-area: main-content;
     height: 100%;
     align-self: center;
@@ -23,7 +23,7 @@
       line-height: 2;
       text-align: center;
     }
-    .md-icon {
+    > .md-icon {
       color: inherit;
       font-size: 162px;
       display: block;
@@ -41,7 +41,7 @@
     .empty-divider {
       margin: 50px 0;
     }
-    .md-btn {
+    > .md-btn {
       width: max-content;
       margin: 40px auto;
       border-radius: 3px;
