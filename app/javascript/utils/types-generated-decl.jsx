@@ -177,11 +177,24 @@ export type Collaborator = {
   last_activity: string | null;
 };
 
+export type CollaboratorsIndex = {
+  collaborators: Array<Collaborator>;
+  invitations: Array<Invitation>;
+  anonymous_invitation: Invitation;
+};
+
 export type Invitation = {
   id: number;
   creator?: string;
   email: string | null;
+  role?: string;
   link_url: string | null;
   created_at: string;
+};
+
+export type InvitationData = {
+  bot_name: string;
+  inviter: string;
+  role: string;
 };
 

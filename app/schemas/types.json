@@ -380,6 +380,22 @@
       "required": [ "id", "role", "user_email", "last_activity" ]
     },
 
+    "collaborators_index": {
+      "type": "object",
+      "properties": {
+        "collaborators": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/collaborator" }
+        },
+        "invitations": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/invitation" }
+        },
+        "anonymous_invitation": { "$ref": "#/definitions/invitation" }
+      },
+      "required": [ "collaborators", "invitations", "anonymous_invitation" ]
+    },
+
     "invitation": {
       "type": "object",
       "properties": {
@@ -391,6 +407,7 @@
             { "type": "null" }
           ]
         },
+        "role": { "type": "string" },
         "link_url": {
           "oneOf": [
             { "type": "string" },
@@ -400,6 +417,16 @@
         "created_at": { "type": "string" }
       },
       "required": [ "id", "email", "link_url", "created_at" ]
+    },
+
+    "invitation_data": {
+      "type": "object",
+      "properties": {
+        "bot_name": { "type": "string" },
+        "inviter": { "type": "string" },
+        "role": { "type": "string" }
+      },
+      "required": [ "bot_name", "inviter", "role" ]
     }
   },
 

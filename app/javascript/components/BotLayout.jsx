@@ -18,6 +18,7 @@ import { BotBehaviour } from '../components/BotBehaviour'
 import BotTranslations from '../components/BotTranslations'
 import BotAnalytics from '../components/BotAnalytics'
 import BotData from '../components/BotData'
+import BotCollaborators from '../components/BotCollaborators'
 
 import ChatWindow from './ChatWindow'
 import * as chatActions from '../actions/chat'
@@ -25,7 +26,8 @@ import * as chatActions from '../actions/chat'
 export class BotLayoutComponent extends Component {
   state = {
     dialogVisible: false,
-    chatWindowVisible: false
+    chatWindowVisible: false,
+    collaborators: false
   }
 
   componentDidMount() {
@@ -36,7 +38,7 @@ export class BotLayoutComponent extends Component {
   }
 
   render() {
-    const { botsLoaded, bot, children, botActions, history, chatActions } = this.props
+    const { botsLoaded, bot, children, botActions, history, chatActions, location } = this.props
     const { dialogVisible, chatWindowVisible } = this.state
 
     const showDialog = () => this.setState({ dialogVisible: true })
@@ -87,6 +89,17 @@ export class BotLayoutComponent extends Component {
         }
       }
 
+      const showCollaborators = () => this.setState({ collaborators: true })
+      const hideCollaborators = () => this.setState({ collaborators: false })
+
+      const [buttonIcon, buttonAction] = (() => {
+        if (location.pathname == r.botCollaborators(bot.id)) {
+          return ["email", showCollaborators]
+        } else {
+          return ["publish", () => botActions.publishBot(bot)]
+        }
+      })()
+
       return (
         <AppLayout
           title={
@@ -101,7 +114,7 @@ export class BotLayoutComponent extends Component {
             <HeaderNavLink label="Channel" to={r.botChannel(bot.id)} />,
             <HeaderNavLink label="Behaviour" to={r.botBehaviour(bot.id)} />,
             <HeaderNavLink label="Translations" to={r.botTranslations(bot.id)} />,
-            // <HeaderNavLink label="Collaborators" to="#" />,
+            <HeaderNavLink label="Collaborators" to={r.botCollaborators(bot.id)} />,
           ]}
           headerNavExtra={[
             // <HeaderNavAction label="Rename" />,
@@ -109,7 +122,7 @@ export class BotLayoutComponent extends Component {
             <HeaderNavAction label="Delete" onClick={showDialog} />,
             <HeaderNavAction label="Download Manifest" onClick={() => window.location = `/api/v1/bots/${bot.id}/manifest.json`} />
           ]}
-          buttonAction={() => botActions.publishBot(bot)} buttonIcon="publish"
+          buttonAction={buttonAction} buttonIcon={buttonIcon}
         >
           <Route exact path="/b/:id" render={() => <Redirect to={defaultTab(bot)} />} />
           <Route exact path="/b/:id/data" render={() => <BotData bot={bot} />} />
@@ -117,9 +130,10 @@ export class BotLayoutComponent extends Component {
           <Route exact path="/b/:id/channel" render={() => <BotChannel bot={bot} />} />
           <Route path="/b/:id/behaviour" render={() => <BotBehaviour bot={bot} onToggleChatWindow={toggleChatWindow}/>} />
           <Route exact path="/b/:id/translations" render={() => <BotTranslations bot={bot} />} />
-
-          {/* Children.map(children, c => cloneElement(c, {bot})) */}
-
+          <Route exact path="/b/:id/collaborators" render={() => <BotCollaborators bot={bot}
+                                                                                   dialogVisible={this.state.collaborators}
+                                                                                   showDialog={showCollaborators}
+                                                                                   hideDialog={hideCollaborators} />} />
           {confirmationDialog}
 
           <Route path="/b/:id/behaviour" render={() => chatWindow} />

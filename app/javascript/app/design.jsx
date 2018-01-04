@@ -82,7 +82,7 @@ const EmptyDemo = () =>
     <Headline>You have no data collected on this proyect
     <span><a href="#" target="_blank">Create One</a></span>
     </Headline>
-    <Divider />
+    <Divider className="empty-divider"/>
     <p>You’ll be able to manage behaviour, translations and access data.</p>
     <Button flat secondary swapTheming>Accept Invitation</Button>
     <Button flat>Back to Channels</Button>

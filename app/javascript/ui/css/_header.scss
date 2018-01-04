@@ -69,6 +69,7 @@
 
 .mainTabs {
   z-index: 1;
+  min-height: 56px;
   .md-tabs {
     transform: translateX(-56px);
   }

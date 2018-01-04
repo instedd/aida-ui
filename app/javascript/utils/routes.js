@@ -15,3 +15,5 @@ export const botFrontDesk = botBehaviour
 export const botSkill = (botId, skillId) => `/b/${botId}/behaviour/${skillId}`
 
 export const botTranslations = (botId) => `/b/${botId}/translations`
+
+export const botCollaborators = (botId) => `/b/${botId}/collaborators`
