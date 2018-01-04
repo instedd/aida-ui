@@ -1,4 +1,7 @@
 backend:
   url: http://should-be-mocked/
 
+mailer:
+  delivery_method: test
+
 base_url: http://test.host/
