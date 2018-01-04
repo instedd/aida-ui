@@ -46,9 +46,9 @@ export class BotLayoutComponent extends Component {
       history.replace(r.botIndex())
       hideDialog()
     }
-    const toggleChatWindow = () => { 
-      this.setState({ chatWindowVisible: !this.state.chatWindowVisible }) 
-      chatActions.startPreview(bot.id)
+    const toggleChatWindow = () => {
+      this.setState({ chatWindowVisible: !this.state.chatWindowVisible })
+      chatActions.startPreview(bot)
     }
 
     const dialogActions = [
@@ -68,8 +68,7 @@ export class BotLayoutComponent extends Component {
     )
 
     const chatWindow =  (
-      <ChatWindow 
-        visible={chatWindowVisible} />
+      <ChatWindow visible={chatWindowVisible} />
     )
 
     if (botsLoaded == true && bot != null) {

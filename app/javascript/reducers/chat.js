@@ -5,13 +5,17 @@ import * as actions from '../actions/chat'
 
 const initialState = {
   scope: {},
-  messages: []
+  messages: [],
+  previewUuid: null,
+  accessToken: "",
+  publishing: false,
 }
 
 export default (state : T.ChatState, action : T.ChatAction) : T.ChatState => {
   state = state || initialState
   switch (action.type) {
     case actions.START_PREVIEW: return startPreview(state, action)
+    case actions.START_PREVIEW_SUCCESS: return startPreviewSuccess(state, action)
     case actions.SEND_MESSAGE: return sendMessage(state, action)
     case actions.RECEIVE_MESSAGE: return receiveMessage(state, action)
     default:
@@ -20,12 +24,40 @@ export default (state : T.ChatState, action : T.ChatAction) : T.ChatState => {
 }
 
 const startPreview = (state, action) => {
-  if (state.scope.botId != action.botId) {
+  const {botId, previewUuid, accessToken} = action
+
+  if (state.scope.botId != botId || state.previewUuid != previewUuid) {
     state = {
-      scope: { botId: action.botId },
-      messages:[]
+      scope: { botId },
+      messages:[],
+      publishing: true,
+      previewUuid,
+      accessToken
     }
+  } else {
+    state = {...state, publishing: true, previewUuid, accessToken}
   }
+
+  return state
+}
+
+const startPreviewSuccess = (state, action) => {
+  const {botId, previewUuid, accessToken} = action
+
+  if (state.scope.botId != botId || state.previewUuid != previewUuid) {
+    state = {
+      scope: { botId },
+      messages:[],
+      publishing: false,
+      previewUuid,
+      accessToken
+    }
+  } else {
+    // if the bot to preview is the same as before,
+    // better keep the messages
+    state = {...state, publishing: false, previewUuid, accessToken}
+  }
+
   return state
 }
 

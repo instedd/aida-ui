@@ -81,10 +81,17 @@ export type ChatAction = {
   id: number,
   text: string,
   sent: boolean,
-  timestamp: Date  
+  timestamp: Date
 } | {
   type: 'START_PREVIEW',
-  botId: number
+  botId: number,
+  previewUuid: ?string,
+  accessToken: string
+} | {
+  type: 'START_PREVIEW_SUCCESS',
+  botId: number,
+  previewUuid: string,
+  accessToken: string
 };
 
 export type FrontDeskAction = {
@@ -203,7 +210,9 @@ export type ChannelsState = {
 
 export type ChatState = {
   scope: Scope,
-  messages: Array<ChatMessage>
+  messages: Array<ChatMessage>,
+  previewUuid: ?string,
+  accessToken: string
 }
 
 export type FrontDeskState = {

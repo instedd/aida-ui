@@ -23,6 +23,12 @@
   .help-text {
     color: $md-grey-500;
   }
+  .status {
+    position: absolute;
+    right: 20px;
+    top: 5px;
+    width: 50px;
+  }
 }
 .chat-window-body {
   height: 250px;
