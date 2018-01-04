@@ -20,6 +20,7 @@ export default (state : T.ChatState, action : T.ChatAction) : T.ChatState => {
     case actions.SEND_MESSAGE: return sendMessage(state, action)
     case actions.RECEIVE_MESSAGE: return receiveMessage(state, action)
     case actions.PAUSE_PREVIEW: return pausePreview(state, action)
+    case actions.NEW_SESSION: return newSession(state, action)
     default:
       return state;
   }
@@ -71,6 +72,16 @@ const pausePreview = (state, action) => {
 
   if (state.scope.botId == botId) {
     state = {...state, pausePreview: true}
+  }
+
+  return state
+}
+
+const newSession = (state, action) => {
+  const {botId} = action
+
+  if (state.scope.botId == botId) {
+    state = {...state, messages: []}
   }
 
   return state

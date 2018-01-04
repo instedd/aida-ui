@@ -114,23 +114,19 @@
 
 .chat-window-input {
   background: #FFF;
-  padding: 0 10px 7px 25px;
+  padding: 10px 10px 10px 25px;
+  display: grid;
+  grid-template-columns: auto 80px;
+  grid-template-rows: auto;
+  grid-template-areas: "input button";
 
   .chat-input {
-    display: inline-block;
-    width: 87%;
+    grid-area: input;
   }
   .chat-button {
-    display: inline-block;
-    position: relative;
-    bottom: -10px;
-    width: 10%;
-  }
-  .chat-button button {
-    min-width: 24px;
-    height: 42px;
-  }
-  .chat-button button:hover {
-    background: transparent;
+    grid-area: button;
+    button:hover {
+      background: transparent;
+    }
   }
 }

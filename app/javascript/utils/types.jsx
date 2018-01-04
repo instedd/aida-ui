@@ -95,6 +95,9 @@ export type ChatAction = {
 } | {
   type: 'PAUSE_PREVIEW',
   botId: number,
+} | {
+  type: 'NEW_SESSION',
+  botId: number,
 };
 
 export type FrontDeskAction = {

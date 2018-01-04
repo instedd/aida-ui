@@ -85,7 +85,7 @@ class InputMessage extends Component {
   }
 
   render() {
-    const { onSend, disabled } = this.props
+    const { onSend, disabled, newSession } = this.props
 
     const sendMessageAndClearInput = () => {
       const text = _textfield.value.trim()
@@ -108,7 +108,7 @@ class InputMessage extends Component {
         <div className="chat-input">
           <TextField
             id="chat-input"
-            label="Write your message here"
+            placeholder="Write your message here"
             value={this.state.messageText}
             onChange={(text) => this.setState({messageText: text})}
             onKeyPress={(ev) => (sendMessageIfEnterPressed(ev)) }
@@ -121,13 +121,19 @@ class InputMessage extends Component {
             disabled={disabled}>
             send
           </Button>
+          <Button
+            icon
+            onClick={() => { newSession(); _textfield.focus() }}
+            disabled={disabled}>
+            replay
+          </Button>
         </div>
       </div>
     )
   }
 }
 
-const ChatWindowComponent = ({sendMessage, bot, messages, publishing, disabled}) => (
+const ChatWindowComponent = ({sendMessage, newSession, bot, messages, publishing, disabled}) => (
   <Paper
     zDepth={4}
     className={"chat-window"}>
@@ -136,7 +142,7 @@ const ChatWindowComponent = ({sendMessage, bot, messages, publishing, disabled})
       <MessageList
         messages={messages}  />
       <InputMessage
-        onSend={(text) => sendMessage(text)} disabled={disabled} />
+        onSend={(text) => sendMessage(text)} newSession={newSession} disabled={disabled} />
   </Paper>
 )
 
@@ -195,6 +201,7 @@ class ChatWindow extends Component {
       .receive('ok', resp => {
         console.log('New Session', resp)
         this.setState({ sessionId: resp.session })
+        this.props.actions.newSession(this.props.bot)
       })
       .receive('error', resp => {
         // TODO handle error in UI
@@ -217,6 +224,7 @@ class ChatWindow extends Component {
       return (
         <ChatWindowComponent bot={bot} messages={messages}
         sendMessage={(text) => this.sendMessage(text)}
+        newSession={() => this.getNewSession()}
         publishing={publishing} disabled={publishing || this.state.sessionId == null} />
       )
     } else {

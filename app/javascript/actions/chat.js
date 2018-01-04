@@ -11,6 +11,7 @@ export const START_PREVIEW_SUCCESS = 'START_PREVIEW_SUCCESS'
 export const SEND_MESSAGE = 'SEND_MESSAGE'
 export const RECEIVE_MESSAGE = 'RECEIVE_MESSAGE'
 export const PAUSE_PREVIEW = 'PAUSE_PREVIEW'
+export const NEW_SESSION = 'NEW_SESSION'
 
 // Action Creator
 let nextMessageId = 1;
@@ -85,5 +86,10 @@ export const startPreview = (bot: T.Bot) => (dispatch : T.Dispatch, getState : T
 
 export const pausePreview = (bot : T.Bot) : T.ChatAction => ({
   type: PAUSE_PREVIEW,
+  botId: bot.id,
+})
+
+export const newSession = (bot : T.Bot) : T.ChatAction => ({
+  type: NEW_SESSION,
   botId: bot.id,
 })
