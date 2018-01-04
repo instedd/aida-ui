@@ -41,6 +41,19 @@ class Bot < ApplicationRecord
     }
   end
 
+  def preview_manifest(access_token)
+    {
+      version: "1",
+      languages: available_languages,
+      front_desk: front_desk.manifest_fragment,
+      skills: skills.enabled.map do |skill|
+        skill.manifest_fragment
+      end,
+      variables: [],
+      channels: [{type: "websocket", access_token: access_token}]
+    }
+  end
+
   def front_desk
     behaviours.find_by(kind: "front_desk")
   end
