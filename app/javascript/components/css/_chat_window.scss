@@ -116,7 +116,7 @@
   background: #FFF;
   padding: 10px 10px 10px 25px;
   display: grid;
-  grid-template-columns: auto 80px;
+  grid-template-columns: auto max-content;
   grid-template-rows: auto;
   grid-template-areas: "input button";
 
