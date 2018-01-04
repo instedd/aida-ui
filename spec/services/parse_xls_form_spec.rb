@@ -22,12 +22,12 @@ RSpec.describe ParseXlsForm, type: :service do
                                     type: 'select_one',
                                     name: 'gender',
                                     choices: 'male_female',
-                                    message: 'Respondent gender?'
+                                    label: 'Respondent gender?'
                                   },
                                   {
                                     type: 'integer',
                                     name: 'age',
-                                    message: 'Respondent age?'
+                                    label: 'Respondent age?'
                                   }
                                 ],
                                 choice_lists: [
@@ -52,7 +52,7 @@ RSpec.describe ParseXlsForm, type: :service do
                                        type: 'select_one',
                                        name: 'fruit',
                                        choices: 'fruits',
-                                       message: 'Your favourite fruit?'
+                                       label: 'Your favourite fruit?'
                                      }])
     end
 
@@ -64,7 +64,7 @@ RSpec.describe ParseXlsForm, type: :service do
                                        type: 'select_many',
                                        name: 'fruits',
                                        choices: 'fruits',
-                                       message: 'What fruits do you like in your fruit salad?'
+                                       label: 'What fruits do you like in your fruit salad?'
                                      }])
     end
 
@@ -75,7 +75,7 @@ RSpec.describe ParseXlsForm, type: :service do
       expect(result).to match_array([{
                                        type: 'integer',
                                        name: 'age',
-                                       message: 'How old are you?'
+                                       label: 'How old are you?'
                                      }])
     end
 
@@ -86,7 +86,7 @@ RSpec.describe ParseXlsForm, type: :service do
       expect(result).to match_array([{
                                        type: 'decimal',
                                        name: 'wine_temp',
-                                       message: 'At what temperature do you like your red wine?'
+                                       label: 'At what temperature do you like your red wine?'
                                      }])
     end
 
@@ -97,7 +97,7 @@ RSpec.describe ParseXlsForm, type: :service do
       expect(result).to match_array([{
                                        type: 'text',
                                        name: 'request',
-                                       message: 'Any particular requests for your dinner?'
+                                       label: 'Any particular requests for your dinner?'
                                      }])
     end
 
