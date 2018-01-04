@@ -147,6 +147,12 @@ class ChatWindow extends Component {
     sessionId: null
   }
 
+  componentWillMount() {
+    if (this.props.visible == true && this.props.previewUuid != null) {
+      this.join(this.props.previewUuid, this.props.accessToken)
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.publishing == false && nextProps.previewUuid != null &&
         this.state.previewUuid != nextProps.previewUuid) {
