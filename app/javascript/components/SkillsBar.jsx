@@ -105,8 +105,8 @@ class SkillNameDialog extends Component {
     const kind = skill && skill.kind
 
     const actions = [
-      { secondary: true, children: 'Cancel', onClick: onClose },
-      (<Button flat primary onClick={() => onSubmit(this.state.name)}>{isNewSkill ? 'Add' : 'Rename'}</Button>)
+      { primary: true, children: 'Cancel', onClick: onClose },
+      (<Button flat secondary onClick={() => onSubmit(this.state.name)}>{isNewSkill ? 'Add' : 'Rename'}</Button>)
     ]
     const dialogTitle = isNewSkill ? (defaultSkillName(kind) || 'Add skill') : 'Rename skill'
     const dialogDescription = isNewSkill ? skillDescription(kind) : ''
