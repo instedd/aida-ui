@@ -21,19 +21,19 @@ class ParseXlsForm
     header = sheet.row(sheet.first_row)
     type_col = header.find_index 'type'
     name_col = header.find_index 'name'
-    message_col = header.find_index 'message'
+    label_col = header.find_index 'label'
     seen_names = Set.new
 
     fail "missing 'type' column in survey sheet" unless type_col.present?
     fail "missing 'name' column in survey sheet" unless name_col.present?
-    fail "missing 'message' column in survey sheet" unless message_col.present?
+    fail "missing 'label' column in survey sheet" unless label_col.present?
 
     ((sheet.first_row + 1)..sheet.last_row).map do |row_number|
       row = sheet.row(row_number)
       if question_type = row[type_col].presence
         type, choices = question_type.split(/\s+/)
         name = row[name_col].try(&:strip)
-        message = row[message_col]
+        label = row[label_col]
 
         fail "invalid question name at row #{row_number}" unless name_valid?(name)
         if seen_names.include?(name)
@@ -47,14 +47,14 @@ class ParseXlsForm
           {
             type: type,
             name: name,
-            message: message
+            message: label
           }
         when 'select_one', 'select_many'
           {
             type: type,
             name: name,
             choices: choices,
-            message: message
+            message: label
           }
         else
           fail "unsupported question type '#{type}' at row #{row_number}"
