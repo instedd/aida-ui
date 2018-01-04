@@ -9,6 +9,7 @@ services:
       DATABASE_URL: postgres://root:@db/aida-ui
       SECRET_KEY_BASE: secret
       SETTINGS__BACKEND__URL: http://backend/
+      SETTINGS__BACKEND__PUBLIC_SOCKET_URL: ws://localhost:3000/socket
       VIRTUAL_HOST: '*'
 
   backend:
@@ -17,7 +18,7 @@ services:
       - db
     environment:
       DATABASE_URL: ecto://root:@db/aida-backend
-      VIRTUAL_HOST: '*/callback, */callback/*'
+      VIRTUAL_HOST: '*/callback, */callback/*, */socket, */socket/*'
       VIRTUAL_HOST_WEIGHT: 1
     command: /bin/sh -c 'mix ecto.migrate && mix phx.server'
 

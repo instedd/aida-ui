@@ -1,5 +1,6 @@
 <div id="root"></div>
 <%= javascript_tag do -%>
+  var previewSocketUrl = '<%= j Settings.backend.public_socket_url %>';
   var userId = <%= current_user.id %>;
   var userEmail = '<%=j current_user.email %>';
   var userName = '<%=j current_user.display_name %>';
