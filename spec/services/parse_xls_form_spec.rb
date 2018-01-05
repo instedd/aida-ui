@@ -132,6 +132,19 @@ RSpec.describe ParseXlsForm, type: :service do
                                      }])
     end
 
+    it "parses single choice list list_name column" do
+      choices = Roo::Spreadsheet.open(file_fixture('single_choices_list_underscore.xlsx').open).sheet('choices')
+      result = ParseXlsForm.gather_choices(choices)
+
+      expect(result).to match_array([{
+                                       name: 'yes_no',
+                                       choices: [
+                                         { name: 'yes', labels: 'yes,ok' },
+                                         { name: 'no', labels: 'no,never' },
+                                       ]
+                                     }])
+    end
+
     it "parses multiple choice lists" do
       choices = Roo::Spreadsheet.open(file_fixture('multiple_choice_lists.xlsx').open).sheet('choices')
       result = ParseXlsForm.gather_choices(choices)
