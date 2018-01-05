@@ -40,6 +40,20 @@ RSpec.describe ParseXlsForm, type: :service do
                                   }
                                 ]
                               })
+
+    end
+
+    %w(decimal.xlsx integer.xlsx multiple_choice_lists.xlsx
+    select_many.xlsx select_one.xlsx simple.xlsx single_choices_list_underscore.xlsx
+    single_choices_list.xlsx text.xlsx).each do |file|
+      it "returns valid survey for #{file}" do
+        result = ParseXlsForm.run(file_fixture('simple.xlsx').open)
+
+        # since the result of the parser is used directly as survey skill config
+        # let's better check here that all the expected parsed xlsforms validate with the config
+        schema_file = Rails.root.join("app", "schemas", "types.json").read
+        expect(JSON::Validator.validate(schema_file, result, fragment: "#/definitions/surveyConfig")).to eq(true)
+      end
     end
   end
 
