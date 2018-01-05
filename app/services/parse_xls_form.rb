@@ -68,7 +68,7 @@ class ParseXlsForm
 
   def self.gather_choices(sheet)
     header = sheet.row(sheet.first_row)
-    list_name_col = header.find_index 'list name'
+    list_name_col = header.find_index('list name') || header.find_index('list_name')
     name_col = header.find_index 'name'
     label_col = header.find_index 'label'
     seen_names = {}
