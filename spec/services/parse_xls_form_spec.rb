@@ -47,7 +47,7 @@ RSpec.describe ParseXlsForm, type: :service do
     select_many.xlsx select_one.xlsx simple.xlsx single_choices_list_underscore.xlsx
     single_choices_list.xlsx text.xlsx).each do |file|
       it "returns valid survey for #{file}" do
-        result = ParseXlsForm.run(file_fixture('simple.xlsx').open)
+        result = ParseXlsForm.run(file_fixture(file).open)
 
         # since the result of the parser is used directly as survey skill config
         # let's better check here that all the expected parsed xlsforms validate with the config
