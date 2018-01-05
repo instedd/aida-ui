@@ -47,14 +47,14 @@ class ParseXlsForm
           {
             type: type,
             name: name,
-            label: label
+            message: label
           }
         when 'select_one', 'select_many'
           {
             type: type,
             name: name,
             choices: choices,
-            label: label
+            message: label
           }
         else
           fail "unsupported question type '#{type}' at row #{row_number}"
