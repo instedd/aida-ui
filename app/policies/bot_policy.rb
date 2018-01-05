@@ -27,6 +27,10 @@ class BotPolicy < ApplicationPolicy
     is_owner? or is_collaborator?
   end
 
+  def download_manifest?
+    is_owner? or is_collaborator?
+  end
+
   def read_session_data?
     is_owner? or is_collaborator?
   end

@@ -90,10 +90,10 @@ class Api::BotsController < ApplicationApiController
   end
 
   def manifest
-    bot = current_user.bots.find(params[:id])
-    send_data JSON.pretty_generate(bot.manifest),
+    authorize @bot, :download_manifest?
+    send_data JSON.pretty_generate(@bot.manifest),
       type: "javascript/json; charset=UTF-8;",
-      disposition: "attachment; filename= manifest-#{bot.id}-#{DateTime.now.utc}.json"
+      disposition: "attachment; filename= manifest-#{@bot.id}-#{DateTime.now.utc.to_s(:iso8601)}.json"
   end
 
   private
