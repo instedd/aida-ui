@@ -49,9 +49,9 @@ class ParseXlsForm
             name: name,
             message: label
           }
-        when 'select_one', 'select_many'
+        when 'select_one', 'select_multiple'
           {
-            type: type,
+            type: type == 'select_multiple' ? 'select_many' : type,
             name: name,
             choices: choices,
             message: label
