@@ -57,6 +57,7 @@ class ScheduledMessages extends Component {
 
         <SelectField
           id="schedule_type"
+          className="ui-field"
           menuItems={[{label: "Schedule outgoing messages after last message received", value: "since_last_incoming_message"}]}
           defaultValue={config.schedule_type}
         />

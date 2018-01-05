@@ -31,7 +31,7 @@ export class KeyValueListField extends Component {
       )
     })
 
-    return (<div>
+    return (<div className="ui-field">
         <h4>{label}</h4>
 
         <DataTable plain className="ui-key-value-list">

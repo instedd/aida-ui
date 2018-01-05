@@ -56,7 +56,7 @@ class Survey extends Component {
           Ask and discover users needs and interests.
         </Headline>
 
-        <div className="date-time-picker">
+        <div className="date-time-picker ui-field">
           <DatePicker id="survey-date"
                       label="Schedule this survey for"
                       inline
