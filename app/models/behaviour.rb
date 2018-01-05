@@ -130,6 +130,7 @@ class Behaviour < ApplicationRecord
             message: localized_value("questions/[name=#{question['name']}]/message")
           }.tap do |question_fragment|
             question_fragment[:choices] = question["choices"] if question["choices"].present?
+            question_fragment[:relevant] = question["relevant"] if question["relevant"].present?
           end
         end,
         choice_lists: config["choice_lists"].map.with_index do |choice_list, i|

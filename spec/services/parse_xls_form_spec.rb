@@ -116,6 +116,49 @@ RSpec.describe ParseXlsForm, type: :service do
         ParseXlsForm.gather_questions(survey)
       end.to raise_error(/invalid question name/)
     end
+
+    it "doesn't add relevant if the column doesn't exist" do
+      survey = Roo::Spreadsheet.open(file_fixture('relevant_no_column.xlsx').open).sheet('survey')
+      result = ParseXlsForm.gather_questions(survey)
+
+      expect(result).to match_array([{
+                                    type: 'select_one',
+                                    name: 'likes_pizza',
+                                    choices: 'yes_no',
+                                    message: 'Do you like pizza?'
+                                  },
+                                  {
+                                    type: 'select_many',
+                                    name: 'favorite_topping',
+                                    choices: 'pizza_toppings',
+                                    message: 'Favorite toppings'
+                                  }])
+    end
+
+    it "add relevant (only) to questions which relevant cell is not empty" do
+      survey = Roo::Spreadsheet.open(file_fixture('relevant_questions.xlsx').open).sheet('survey')
+      result = ParseXlsForm.gather_questions(survey)
+
+      expect(result).to match_array([{
+                                    type: 'select_one',
+                                    name: 'likes_pizza',
+                                    choices: 'yes_no',
+                                    message: 'Do you like pizza?'
+                                  },
+                                  {
+                                    type: 'select_many',
+                                    name: 'favorite_topping',
+                                    choices: 'pizza_toppings',
+                                    message: 'Favorite toppings',
+                                    relevant: "${likes_pizza} = 'yes'"
+                                  },
+                                  {
+                                    type: 'text',
+                                    name: 'why_not',
+                                    message: 'Why not?!',
+                                    relevant: "${likes_pizza} = 'no'"
+                                  }])
+    end
   end
 
   describe "gather choices" do
