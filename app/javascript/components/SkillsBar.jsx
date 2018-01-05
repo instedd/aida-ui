@@ -16,6 +16,7 @@ import sortBy from 'lodash/sortBy'
 import includes from 'lodash/includes'
 
 import * as routes from '../utils/routes'
+import { blank } from '../utils/string'
 import * as actions from '../actions/skills'
 import * as skillActions from '../actions/skill'
 
@@ -81,9 +82,12 @@ const SkillListItem = ({skill, active, onClick, onToggleSkill, onDeleteSkill, on
                              label="Delete"
                              onClick={() => onDeleteSkill(skill)}/>)
 
+  const relevant = skill.config.relevant && !blank(skill.config.relevant)
+
   return (<SidebarItem id={`skill-${skill.id}`}
     icon={skillIcon(skill.kind)} label={skill.name}
     enabled={skill.enabled} active={active}
+    className={`skill-item ${relevant ? "skill-item-relevant" : ""}`}
     onClick={onClick} onToggle={onToggleSkill} menuItems={actionItems} />)
 }
 

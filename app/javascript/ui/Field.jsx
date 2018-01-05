@@ -3,16 +3,19 @@ import { TextField } from 'react-md';
 
 export class Field extends Component {
   render() {
-    const {label, value, onChange, id, helpText} = this.props
+    const {label, value, onChange, id, helpText, leftIcon, placeholder, style, className} = this.props
 
     return <TextField
       label={label}
-      className="ui-field"
+      className={`ui-field ${className || ""}`}
       id={id || label}
       lineDirection="center"
       value={value}
       onChange={onChange}
       helpText={helpText}
+      leftIcon={leftIcon}
+      placeholder={placeholder}
+      style={style}
     />
   }
 }

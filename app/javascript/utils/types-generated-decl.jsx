@@ -30,6 +30,7 @@ export type LanguageDetectorConfig = {
 };
 
 export type KeywordResponderConfig = {
+  relevant?: string;
   explanation: Message;
   clarification: Message;
   keywords: KeywordList;
@@ -37,12 +38,14 @@ export type KeywordResponderConfig = {
 };
 
 export type SurveyConfig = {
+  relevant?: string;
   schedule?: string;
   questions?: Array<SurveyQuestion>;
   choice_lists?: Array<SurveyChoiceList>;
 };
 
 export type ScheduledMessagesConfig = {
+  relevant?: string;
   schedule_type: "since_last_incoming_message";
   messages: Array<{
     id: string;

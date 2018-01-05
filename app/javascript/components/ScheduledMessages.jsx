@@ -7,6 +7,8 @@ import Headline from '../ui/Headline'
 import Field from '../ui/Field'
 import KeyValueListField from '../ui/KeyValueListField'
 
+import RelevanceField from './RelevanceField'
+
 class ScheduledMessages extends Component {
   render() {
     const { skill, actions } = this.props
@@ -54,6 +56,8 @@ class ScheduledMessages extends Component {
         <Headline>
           Setup messages to be sent automatically on a schedule.
         </Headline>
+
+        <RelevanceField value={config.relevant} onChange={updateConfig('relevant')} />
 
         <SelectField
           id="schedule_type"

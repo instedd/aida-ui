@@ -108,7 +108,9 @@ class Behaviour < ApplicationRecord
         keywords: localized_value(:keywords) do |keywords|
           keywords.split(/,\s*/)
         end
-      }
+      }.tap do |manifest_fragment|
+        manifest_fragment[:relevant] = config["relevant"] if config["relevant"].present?
+      end
     when "language_detector"
       {
         type: kind,
@@ -146,7 +148,9 @@ class Behaviour < ApplicationRecord
             end
           }
         end
-      }
+      }.tap do |manifest_fragment|
+        manifest_fragment[:relevant] = config["relevant"] if config["relevant"].present?
+      end
     when "scheduled_messages"
       {
         type: kind,
@@ -159,7 +163,9 @@ class Behaviour < ApplicationRecord
             message: localized_value("messages/[id=#{message['id']}]/message")
           }
         end
-      }
+      }.tap do |manifest_fragment|
+        manifest_fragment[:relevant] = config["relevant"] if config["relevant"].present?
+      end
     else
       raise NotImplementedError
     end

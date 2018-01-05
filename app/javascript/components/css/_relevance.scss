@@ -1,0 +1,13 @@
+.relevance-field {
+  width: 65%;
+  border-radius: 20px;
+  padding-left: 10px;
+  padding-right: 20px;
+  background: $md-grey-200;
+  border: 1px solid $md-grey-200;
+
+  &.blank {
+    background: inherit;
+    border: 1px dashed $md-grey-200;
+  }
+}

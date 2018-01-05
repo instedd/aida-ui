@@ -4,6 +4,8 @@ import Title from '../ui/Title'
 import Headline from '../ui/Headline'
 import Field from '../ui/Field'
 
+import RelevanceField from './RelevanceField'
+
 export default class KeywordResponder extends Component {
   render() {
     const { skill, actions } = this.props
@@ -28,6 +30,8 @@ export default class KeywordResponder extends Component {
           When a message sent by the user contains one of the keywords this
           skill responds with the predefined message
         </Headline>
+
+        <RelevanceField value={config.relevant} onChange={updateConfig('relevant')} />
 
         <Field id="kr-explanation" label="Skill explanation"
                value={config.explanation} onChange={updateConfig('explanation')} />

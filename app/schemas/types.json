@@ -62,6 +62,7 @@
     "keywordResponderConfig": {
       "type": "object",
       "properties": {
+        "relevant": { "type": "string" },
         "explanation": { "$ref": "#/definitions/message" },
         "clarification": { "$ref": "#/definitions/message" },
         "keywords": { "$ref": "#/definitions/keywordList" },
@@ -74,6 +75,7 @@
     "surveyConfig": {
       "type": "object",
       "properties": {
+        "relevant": { "type": "string" },
         "schedule": { "type": "string" },
         "questions": {
           "type": "array",
@@ -91,6 +93,7 @@
     "scheduledMessagesConfig": {
       "type": "object",
       "properties": {
+        "relevant": { "type": "string" },
         "schedule_type": { "type": "string", "enum": ["since_last_incoming_message"] },
         "messages": {
           "type": "array",

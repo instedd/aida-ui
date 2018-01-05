@@ -1,0 +1,8 @@
+.skill-item > div > .md-tile-addon--icon > i {
+  border: 2px dotted transparent;
+  border-radius: 50%;
+}
+
+.skill-item-relevant > div > .md-tile-addon--icon > i {
+  border: 2px dotted $md-grey-400;
+}

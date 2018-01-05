@@ -8,6 +8,8 @@ import * as xlsFormsActions from '../actions/xlsForms'
 import Title from '../ui/Title'
 import Headline from '../ui/Headline'
 
+import RelevanceField from './RelevanceField'
+
 class Survey extends Component {
   render() {
     const { uploadStatus, skill, actions, xlsFormsActions } = this.props
@@ -55,6 +57,8 @@ class Survey extends Component {
         <Headline>
           Ask and discover users needs and interests.
         </Headline>
+
+        <RelevanceField value={config.relevant} onChange={updateConfig('relevant')} />
 
         <div className="date-time-picker ui-field">
           <DatePicker id="survey-date"
