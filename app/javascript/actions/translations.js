@@ -7,6 +7,8 @@ import { botBehaviourUpdated } from './bot'
 export const FETCH = 'TRANSLATIONS_FETCH'
 export const RECEIVE = 'TRANSLATIONS_RECEIVE'
 export const UPDATE = 'TRANSLATION_UPDATE'
+export const ADD_VARIABLE = 'ADD_VARIABLE'
+export const UPDATE_VARIABLE = 'UPDATE_VARIABLE'
 
 export const _translationsFetch = (scope : T.Scope) : T.TranslationsAction => ({
   type: FETCH,
@@ -49,3 +51,13 @@ const updateTranslationDelayed = (botId, translation) =>
       dispatch(botBehaviourUpdated())
     )
   })
+
+export const addVariable = () => ({
+  type: ADD_VARIABLE
+})
+
+export const updateVariableName = (botId, variable) => ({
+  type: UPDATE_VARIABLE,
+  botId,
+  variable
+})

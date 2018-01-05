@@ -1,6 +1,7 @@
 /* @flow */
 import * as T from '../utils/types'
 import map from 'lodash/map'
+import uuidv4 from 'uuid/v4'
 
 import * as actions from '../actions/translations'
 
@@ -9,7 +10,8 @@ const initialState = {
   scope: null,
   languages: null,
   defaultLang: null,
-  behaviours: null
+  behaviours: null,
+  variables: null
 }
 
 export default (state : T.TranslationsState, action : T.Action) : T.TranslationsState => {
@@ -18,6 +20,8 @@ export default (state : T.TranslationsState, action : T.Action) : T.Translations
     case actions.FETCH: return fetch(state, action)
     case actions.RECEIVE: return receive(state, action)
     case actions.UPDATE: return update(state, action)
+    case actions.ADD_VARIABLE: return addVariable(state, action)
+    case actions.UPDATE_VARIABLE: return updateVariable(state, action)
     default: return state
   }
 }
@@ -29,7 +33,8 @@ const receive = (state, action) => {
     fetching: false,
     languages: data.languages,
     defaultLang: data.default_language,
-    behaviours: data.behaviours
+    behaviours: data.behaviours,
+    variables: data.variables
   }
 }
 
@@ -73,4 +78,27 @@ const update = (state, action) => {
     ...state,
     behaviours: updatedBehaviours
   }
+}
+
+const addVariable = (state, action) => {
+  return {
+    ...state,
+    variables: [
+      ...state.variables, 
+      { id: uuidv4(),
+        name: "" }
+    ]
+  }
+}
+
+const updateVariable = (state, action) => {
+  const index = state.variables.findIndex((variable) => variable.id == action.variable.id)
+  return {
+    ...state,
+    variables: [
+      ...state.variables.slice(0, index),
+      action.variable,
+      ...state.variables.slice(index + 1)
+    ]
+  } 
 }
