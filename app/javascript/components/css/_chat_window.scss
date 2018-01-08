@@ -2,7 +2,7 @@
   bottom: 13px;
   position: fixed;
   right: 78px;
-  width: 450px;
+  width: 570px;
   background: $md-grey-200;
   z-index: 1;
 }
@@ -33,7 +33,7 @@
 .chat-window-body {
   height: 250px;
   overflow: auto;
-  padding: 0 10px 15px;
+  padding: 15px 10px;
   position: relative;
   z-index: 1;
 
@@ -42,22 +42,28 @@
     margin: 0;
     li {
       .message-bubble {
-        border-radius: 5px;
-        margin: 5px 8px 25px;
-        padding: 15px 10px 15px 20px;
+        border-radius: 4px;
+        margin: 5px 18px 24px;
+        padding: 24px 10px 24px 27px;
         position: relative;
-        width: 350px;
+        width: 420px;
 
         .content-text {
           display: inline-block;
-          width: 250px;
+          -ms-word-break: break-all;
+              word-break: break-all;
+          -webkit-hyphens: auto;
+             -moz-hyphens: auto;
+                  hyphens: auto;
+          font-size: 1.14rem;
+          width: 315px;
         }
 
         .content-timestamp {
           color: $md-grey-500;
           display: inline-block;
           text-align: right;
-          width: 70px;
+          margin-left: 25px;
         }
       }
       .message-sent {
