@@ -1,6 +1,6 @@
 .sidebar {
   .sidebar-item-active {
-    .md-list-tile {
+    > .md-list-tile {
      @extend .active;
     }
   }
