@@ -127,14 +127,17 @@ RSpec.describe Api::BotsController, type: :controller do
 
   describe "data" do
     it "returns a CSV file" do
-      get :data, params: { id: bot.id }
+      get :data, params: { id: bot.id }, format: 'csv'
+      expect(response).to be_success
+    end
 
+    it "returns a JSON file" do
+      get :data, params: { id: bot.id }, format: 'json'
       expect(response).to be_success
     end
 
     it "is allowed for a shared bot" do
-      get :data, params: { id: shared_bot.id }
-
+      get :data, params: { id: shared_bot.id }, format: 'csv'
       expect(response).to be_success
     end
   end
