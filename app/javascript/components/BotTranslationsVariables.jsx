@@ -22,50 +22,112 @@ import * as actions from '../actions/translations'
 import { languageNameByCode } from '../utils/lang'
 import BotTranslationsMenu from './BotTranslationsMenu'
 
-const renderRows = ({ variables, firstLang, secondLang, defaultLang, onChange, onRemove }) => {
-  return map(variables, (variable) => (
-    <TableRow key={`variable-${variable.id}`}>
-      <TableColumn>
-        <Button
-          icon
-          onClick={() => onRemove(variable.id)}>
-          close
-        </Button>
-      </TableColumn>
+const renderRows = ({ variables, firstLang, secondLang, defaultLang, onChange, onRemove, onAddCondition }) => {
+  return flatten(map(variables, (variable) => {
+    const variableRow = (
+      <TableRow key={`variable-${variable.id}`}>
+        <TableColumn>
+          <Button
+            icon
+            onClick={() => onRemove(variable.id)}>
+            close
+          </Button>
+          <Button
+            icon
+            onClick={() => onAddCondition(variable.id)}>
+            add
+          </Button>
+        </TableColumn>
 
-      <EditDialogColumn
-        inline inlineIcon={null}
-        value={variable.name}
-        onChange={(value) => onChange({
-          id: variable.id,
-          name: value,
-          lang: firstLang,
-          value: variable.default_value[firstLang] || ""
-        })} />
+        <EditDialogColumn
+          inline inlineIcon={null}
+          value={variable.name}
+          onChange={(value) => onChange({
+            id: variable.id,
+            name: value,
+            lang: firstLang,
+            value: variable.default_value[firstLang] || ""
+          })} />
 
-      <EditDialogColumn
-        inline inlineIcon={null}
-        value={variable.default_value[firstLang]}
-        onChange={(value) => onChange({
-          id: variable.id,
-          name: variable.name,
-          lang: firstLang,
-          value: value
-        })} />
+        <EditDialogColumn
+          inline inlineIcon={null}
+          value={variable.default_value[firstLang]}
+          onChange={(value) => onChange({
+            id: variable.id,
+            name: variable.name,
+            lang: firstLang,
+            value: value
+          })} />
 
 
-      <EditDialogColumn
-        inline inlineIcon={null}
-        value={variable.default_value[secondLang]}
-        onChange={(value) => onChange({
-          id: variable.id,
-          name: variable.name,
-          lang: secondLang,
-          value: value
-        })} />
+        <EditDialogColumn
+          inline inlineIcon={null}
+          value={variable.default_value[secondLang]}
+          onChange={(value) => onChange({
+            id: variable.id,
+            name: variable.name,
+            lang: secondLang,
+            value: value
+          })} />
 
-    </TableRow>
-  ))
+      </TableRow>
+    )
+
+    const conditionalRows = map(variable.conditional_values, cv => {
+      return (
+        <TableRow key={`condition-${cv.id}`}>
+          <TableColumn>
+            <Button
+              icon
+              onClick={() => onRemove(variable.id, cv.id)}>
+              close
+            </Button>
+          </TableColumn>
+          <EditDialogColumn
+            inline inlineIcon={null}
+            value={cv.condition}
+            onChange={(value) => onChange({
+              id: variable.id,
+              name: variable.name,
+              conditionId: cv.id,
+              condition: value,
+              conditionOrder: cv.order,
+              lang: firstLang,
+              value: cv.value[firstLang] || "",
+            })}
+          />
+          <EditDialogColumn
+            inline inlineIcon={null}
+            value={cv.value[firstLang]}
+            onChange={(value) => onChange({
+              id: variable.id,
+              name: variable.name,
+              conditionId: cv.id,
+              condition: cv.condition,
+              conditionOrder: cv.order,
+              lang: firstLang,
+              value
+            })}
+          />
+          <EditDialogColumn
+            inline inlineIcon={null}
+            value={cv.value[secondLang]}
+            onChange={(value) => onChange({
+              id: variable.id,
+              name: variable.name,
+              conditionId: cv.id,
+              condition: cv.condition,
+              conditionOrder: cv.order,
+              lang: secondLang,
+              value
+            })}
+          />
+        </TableRow>
+      )
+    })
+
+    return [variableRow, ...conditionalRows]
+  }))
 }
 
 class BotTranslationsVariables extends Component {
@@ -111,7 +173,8 @@ class BotTranslationsVariables extends Component {
 
     const rows = renderRows({ variables, firstLang, secondLang, defaultLang,
       onChange: (updatedAttrs) => (actions.updateVariable(bot.id, updatedAttrs)),
-      onRemove: (variableId) => (actions.removeVariable(bot.id, variableId)) })
+      onRemove: (variableId, conditionId) => (actions.removeVariable(bot.id, variableId, conditionId)),
+      onAddCondition: (variableId) => (actions.addVariableCondition(bot.id, variableId)) })
 
     return (
       <MainWhite>

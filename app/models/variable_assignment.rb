@@ -3,6 +3,8 @@ class VariableAssignment < ApplicationRecord
 
   validate :non_zero_condition_order
 
+  default_scope { order(:variable_name, :condition_order) }
+
   def self.api_json(variable_assignments, default_language, other_languages)
     variable_assignments.group_by(&:variable_id).map do |_, assignments|
       default_value_assignments = assignments.select { |a| a.condition_id.blank? }

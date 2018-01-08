@@ -2,6 +2,7 @@
 import * as T from '../utils/types'
 import map from 'lodash/map'
 import uuidv4 from 'uuid/v4'
+import maxBy from 'lodash/maxBy'
 
 import * as actions from '../actions/translations'
 
@@ -23,6 +24,7 @@ export default (state : T.TranslationsState, action : T.Action) : T.Translations
     case actions.ADD_VARIABLE: return addVariable(state, action)
     case actions.REMOVE_VARIABLE : return removeVariable(state, action)
     case actions.UPDATE_VARIABLE: return updateVariable(state, action)
+    case actions.ADD_CONDITION: return addCondition(state, action)
     default: return state
   }
 }
@@ -97,19 +99,43 @@ const addVariable = (state, action) => {
 }
 
 const removeVariable = (state, action) => {
-  console.log(action)
   const { variables } = state
   if (!variables) return state
 
   const index = variables.findIndex((variable) => variable.id == action.variableId)
   if (index < 0) return state
 
-  return {
-    ...state,
-    variables: [
-      ...variables.slice(0, index),
-      ...variables.slice(index + 1)
-    ]
+  if (action.conditionId) {
+    const oldVariable = variables[index]
+    if (!oldVariable) return state
+    const oldCVs = oldVariable.conditional_values
+    const cvIx = oldCVs.findIndex(cv => cv.id == action.conditionId)
+    if (cvIx < 0) return state
+
+    const variable = {
+      ...oldVariable,
+      conditional_values: [
+        ...oldCVs.slice(0, cvIx),
+        ...oldCVs.slice(cvIx + 1)
+      ]
+    }
+    return {
+      ...state,
+      variables: [
+        ...variables.slice(0, index),
+        variable,
+        ...variables.slice(index + 1)
+      ]
+    }
+
+  } else {
+    return {
+      ...state,
+      variables: [
+        ...variables.slice(0, index),
+        ...variables.slice(index + 1)
+      ]
+    }
   }
 }
 
@@ -122,13 +148,75 @@ const updateVariable = (state, action) => {
   const oldVariable = variables[index]
   if (!oldVariable) return state
 
+  let variable
+
+  if (action.updatedAttrs.conditionId) {
+    const cvIx = oldVariable.conditional_values.findIndex((cv) => cv.id == action.updatedAttrs.conditionId)
+    if (cvIx < 0) return state
+
+    const oldCV = oldVariable.conditional_values[cvIx]
+    variable = {
+      ...oldVariable,
+      conditional_values: [
+        ...oldVariable.conditional_values.slice(0, cvIx),
+        {
+          ...oldCV,
+          condition: action.updatedAttrs.condition,
+          value: {
+            ...oldCV.value,
+            [action.updatedAttrs.lang]: action.updatedAttrs.value
+          }
+        },
+        ...oldVariable.conditional_values.slice(cvIx+1)
+      ]
+    }
+  } else {
+    variable = {
+      ...oldVariable,
+      name: action.updatedAttrs.name,
+      default_value: {
+        ...oldVariable.default_value,
+        [action.updatedAttrs.lang]: action.updatedAttrs.value
+      }
+    }
+  }
+
+  return {
+    ...state,
+    variables: [
+      ...variables.slice(0, index),
+      variable,
+      ...variables.slice(index + 1)
+    ]
+  }
+}
+
+const addCondition = (state, action) => {
+  const { variables } = state
+  if (!variables) return state
+
+  const index = variables.findIndex((variable) => variable.id == action.variableId)
+  if (index < 0) return state
+  const oldVariable = variables[index]
+  if (!oldVariable) return state
+
+  const lastCV = maxBy(oldVariable.conditional_values, 'order')
+  const newOrder = lastCV ? lastCV.order + 1 : 1
+  const someLang = Object.keys(oldVariable.default_value)[0]
+
   const variable = {
     ...oldVariable,
-    name: action.updatedAttrs.name,
-    default_value: {
-      ...oldVariable.default_value,
-      [action.updatedAttrs.lang]: action.updatedAttrs.value
-    }
+    conditional_values: [
+      ...(oldVariable.conditional_values || []),
+      {
+        id: uuidv4(),
+        condition: "",
+        order: newOrder,
+        value: {
+          [someLang]: ""
+        }
+      }
+    ]
   }
 
   return {

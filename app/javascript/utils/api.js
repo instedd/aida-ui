@@ -84,12 +84,15 @@ export const removeTranslationVariable = (botId : number, variableId : string, c
   return apiDelete(`bots/${botId}/translations/variable?${query.join('&')}`)
 }
 
-export const updateTranslationVariable = (botId : number, {id, name, lang, value} : T.UpdatedVariableAttributes) => {
+export const updateTranslationVariable = (botId : number, {id, name, lang, value, conditionId, condition, conditionOrder} : T.UpdatedVariableAttributes) => {
   const updatedAttrs = {
     variable_id: id,
     variable_name: name,
     lang: lang,
-    value: value
+    value: value,
+    condition_id: conditionId,
+    condition: condition,
+    condition_order: conditionOrder
   }
   return apiPutJSON(`bots/${botId}/translations/variable`, null, updatedAttrs)
 }
