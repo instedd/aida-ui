@@ -132,6 +132,9 @@
 
   .chat-input {
     grid-area: input;
+    .md-text-field {
+      font-size: 1.14rem;
+    }
   }
   .chat-button {
     grid-area: button;
