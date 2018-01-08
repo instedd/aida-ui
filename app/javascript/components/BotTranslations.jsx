@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { 
+import {
   Button,
   DataTable,
   TableHeader,
@@ -14,15 +14,13 @@ import { connect } from 'react-redux'
 import flatten from 'lodash/flatten'
 import map from 'lodash/map'
 
-import * as r from '../utils/routes'
-import { Link } from 'react-router-dom'
-
 import MainWhite from '../ui/MainWhite'
 import Title from '../ui/Title'
 import { EmptyLoader } from '../ui/Loader'
 
 import * as actions from '../actions/translations'
 import { languageNameByCode } from '../utils/lang'
+import BotTranslationsMenu from './BotTranslationsMenu'
 
 const renderRows = ({ behaviours, firstLang, secondLang, defaultLang, onChange }) => {
   return flatten(map(behaviours, behaviour => {
@@ -120,22 +118,7 @@ class BotTranslations extends Component {
           <div className="translations-tittle">
             <Title>Translations</Title>
           </div>
-          <div className="translations-menu">
-            <Button
-              flat
-              iconChildren="format_align_left"
-              to={r.botTranslationsContent(bot.id)}
-              component={Link}>
-              Content
-            </Button>
-            <Button
-              flat
-              iconChildren="code"
-              to={r.botTranslationsVariables(bot.id)}
-              component={Link}>
-              Variables
-            </Button>
-          </div>
+          <BotTranslationsMenu bot={bot} />
         </div>
         <DataTable plain id="translations-table">
           <TableHeader>
