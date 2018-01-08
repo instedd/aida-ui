@@ -89,7 +89,7 @@ export const updateVariable = (botId : number, updatedAttrs : T.UpdatedVariableA
 }
 
 const _updateVariableDelayed = (botId, updatedAttrs) => {
-  const key = `TRANSLATION_UPDATE_VARIABLE_${botId}_${updatedAttrs.id}_${updatedAttrs.conditionId}_${updatedAttrs.lang}`
+  const key = `TRANSLATION_UPDATE_VARIABLE_${botId}_${updatedAttrs.id}_${updatedAttrs.conditionId || ''}_${updatedAttrs.lang}`
 
   return debounced(key)(dispatch => {
     api.updateTranslationVariable(botId, updatedAttrs)

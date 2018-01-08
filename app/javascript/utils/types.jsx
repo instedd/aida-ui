@@ -9,6 +9,16 @@ export type Scope = {
   botId: number
 };
 
+export type UpdatedVariableAttributes = {
+  id: string,
+  name: string,
+  value: string,
+  conditionId?: string,
+  condition?: string,
+  conditionOrder?: number,
+  lang: T.Language
+};
+
 export type ChatMessage = {
   id: number,
   text: string,
@@ -235,8 +245,12 @@ export type VariablesAction = {
 } | {
   type: 'VARIABLE_UPDATE',
   botId: number,
-  updatedAttrs: T.UpdatedVariableAttributes
-}
+  updatedAttrs: UpdatedVariableAttributes
+} | {
+  type: 'VARIABLE_ADD_CONDITION',
+  botId: number,
+  variableId: string
+};
 
 export type XlsFormsAction = {
   type: 'XLSFORMS_UPLOAD',

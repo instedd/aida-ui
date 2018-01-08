@@ -74,11 +74,14 @@ export type SurveyQuestion = {
   choices: string;
   message: Message;
   relevant?: string;
+  constraint_message?: Message;
 } | {
   type: "integer" | "decimal" | "text";
   name: string;
   message: Message;
   relevant?: string;
+  constraint?: string;
+  constraint_message?: Message;
 };
 
 export type SurveyChoiceList = {
@@ -183,11 +186,14 @@ export type Translation = {
   value: string;
 };
 
-export type UpdatedVariableAttributes = {
+export type UpdateVariable = {
   id: string;
-  name: string;
+  variable_name?: string;
   lang: Language;
   value: string;
+  condition_id?: string;
+  condition?: string;
+  condition_order?: number;
 };
 
 export type Collaborator = {

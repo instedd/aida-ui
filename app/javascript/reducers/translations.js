@@ -108,7 +108,7 @@ const removeVariable = (state, action) => {
   if (action.conditionId) {
     const oldVariable = variables[index]
     if (!oldVariable) return state
-    const oldCVs = oldVariable.conditional_values
+    const oldCVs = oldVariable.conditional_values || []
     const cvIx = oldCVs.findIndex(cv => cv.id == action.conditionId)
     if (cvIx < 0) return state
 
@@ -151,14 +151,15 @@ const updateVariable = (state, action) => {
   let variable
 
   if (action.updatedAttrs.conditionId) {
-    const cvIx = oldVariable.conditional_values.findIndex((cv) => cv.id == action.updatedAttrs.conditionId)
+    const oldCVs = oldVariable.conditional_values || []
+    const cvIx = oldCVs.findIndex((cv) => cv.id == action.updatedAttrs.conditionId)
     if (cvIx < 0) return state
 
-    const oldCV = oldVariable.conditional_values[cvIx]
+    const oldCV = oldCVs[cvIx]
     variable = {
       ...oldVariable,
       conditional_values: [
-        ...oldVariable.conditional_values.slice(0, cvIx),
+        ...oldCVs.slice(0, cvIx),
         {
           ...oldCV,
           condition: action.updatedAttrs.condition,
@@ -167,7 +168,7 @@ const updateVariable = (state, action) => {
             [action.updatedAttrs.lang]: action.updatedAttrs.value
           }
         },
-        ...oldVariable.conditional_values.slice(cvIx+1)
+        ...oldCVs.slice(cvIx+1)
       ]
     }
   } else {
