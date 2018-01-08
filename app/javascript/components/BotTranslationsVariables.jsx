@@ -34,10 +34,17 @@ const renderRows = ({ variables, firstLang, secondLang, defaultLang, onChange })
           value: variable.default_value[firstLang] || ""
         })} />
 
-      {/* <EditDialogColumn inline inlineIcon={null}
-        value={key[lang]}
-        onChange={value => onChange({ variable_id: variableId, key: key._key, lang, value })} />
+      <EditDialogColumn
+        inline inlineIcon={null}
+        value={variable.default_value[firstLang]}
+        onChange={(value) => onChange({
+          id: variable.id,
+          name: variable.name,
+          lang: firstLang,
+          value: value
+        })} />
 
+      {/*
       <EditDialogColumn inline inlineIcon={null}
         value={key[lang]}
         onChange={value => onChange({ variable_id: variableId, key: key._key, lang, value })} /> */}
