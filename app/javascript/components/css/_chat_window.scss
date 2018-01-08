@@ -9,8 +9,8 @@
 
 .chat-window-header {
   background: #FFF;
-  height: 90px;
-  padding: 15px 20px;
+  height: 96px;
+  padding: 24px 22px 17px 22px;
   position: relative;
   z-index: 2;
 
@@ -19,6 +19,10 @@
 
   .bot-name {
     margin-bottom: 7px;
+    width: 450px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .help-text {
     color: $md-grey-500;
