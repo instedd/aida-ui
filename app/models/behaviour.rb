@@ -133,6 +133,8 @@ class Behaviour < ApplicationRecord
           }.tap do |question_fragment|
             question_fragment[:choices] = question["choices"] if question["choices"].present?
             question_fragment[:relevant] = question["relevant"] if question["relevant"].present?
+            question_fragment[:constraint] = question["constraint"] if question["constraint"].present?
+            question_fragment[:constraint_message] = localized_value("questions/[name=#{question['name']}]/constraint_message") if question["constraint_message"].present?
           end
         end,
         choice_lists: config["choice_lists"].map.with_index do |choice_list, i|
@@ -192,8 +194,13 @@ class Behaviour < ApplicationRecord
     when "survey"
       [
         config["questions"].map do |question|
-          translation_key("questions/[name=#{question['name']}]/message",
-                          "Question #{question['name']}")
+          keys = [translation_key("questions/[name=#{question['name']}]/message",
+                                  "Question #{question['name']}")]
+          if question['constraint_message'].present?
+            keys << translation_key("questions/[name=#{question['name']}]/constraint_message",
+                                    "Constraint message for #{question['name']}")
+          end
+          keys
         end,
         config["choice_lists"].map do |choice_list|
           choice_list["choices"].map do |choice|

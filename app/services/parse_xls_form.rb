@@ -23,6 +23,8 @@ class ParseXlsForm
     name_col = header.find_index 'name'
     label_col = header.find_index 'label'
     relevant_col = header.find_index 'relevant'
+    constraint_col = header.find_index 'constraint'
+    constraint_message_col = header.find_index('constraint_message') || header.find_index('constraint message')
     seen_names = Set.new
 
     fail "missing 'type' column in survey sheet" unless type_col.present?
@@ -36,6 +38,9 @@ class ParseXlsForm
         name = row[name_col].try(&:strip)
         label = row[label_col]
         relevant = row[relevant_col].presence if relevant_col.present?
+        constraint = row[constraint_col].presence if constraint_col.present?
+        implicit_constraint = false
+        constraint_message = row[constraint_message_col].presence if constraint_message_col.present?
 
         fail "invalid question name at row #{row_number}" unless name_valid?(name)
         if seen_names.include?(name)
@@ -53,6 +58,9 @@ class ParseXlsForm
               message: label
             }
           when 'select_one', 'select_multiple'
+            fail "constraint must be blank for '#{type}' question at row #{row_number}" if constraint
+            implicit_constraint = true
+
             {
               type: type == 'select_multiple' ? 'select_many' : type,
               name: name,
@@ -66,6 +74,8 @@ class ParseXlsForm
         # relevant is never "" (empty string) because of line:
         # relevant = row[relevant_col].presence if relevant_col.present?
         elem[:relevant] = relevant if relevant
+        elem[:constraint] = constraint if constraint
+        elem[:constraint_message] = constraint_message if constraint_message and (constraint or implicit_constraint)
 
         elem
       else

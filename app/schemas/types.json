@@ -135,7 +135,8 @@
             "name": { "type": "string" },
             "choices": { "type": "string" },
             "message": { "$ref": "#/definitions/message" },
-            "relevant": { "type": "string" }
+            "relevant": { "type": "string" },
+            "constraint_message": { "$ref": "#/definitions/message" }
           }
         },
         {
@@ -145,7 +146,9 @@
             "type": { "enum": [ "integer", "decimal", "text" ]},
             "name": { "type": "string" },
             "message": { "$ref": "#/definitions/message" },
-            "relevant": { "type": "string" }
+            "relevant": { "type": "string" },
+            "constraint": { "type": "string" },
+            "constraint_message": { "$ref": "#/definitions/message" }
           }
         }
       ]
