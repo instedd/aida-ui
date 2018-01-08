@@ -103,7 +103,7 @@ const updateVariable = (state, action) => {
     ...state.variables[index],
     name: action.updatedAttrs.name,
     default_value: {
-      ...action.updatedAttrs.default_value,
+      ...state.variables[index].default_value,
       [action.updatedAttrs.lang]: action.updatedAttrs.value
     }
   }

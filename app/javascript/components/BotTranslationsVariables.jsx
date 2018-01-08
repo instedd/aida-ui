@@ -44,10 +44,16 @@ const renderRows = ({ variables, firstLang, secondLang, defaultLang, onChange })
           value: value
         })} />
 
-      {/*
-      <EditDialogColumn inline inlineIcon={null}
-        value={key[lang]}
-        onChange={value => onChange({ variable_id: variableId, key: key._key, lang, value })} /> */}
+      
+      <EditDialogColumn 
+        inline inlineIcon={null}
+        value={variable.default_value[secondLang]}
+        onChange={(value) => onChange({
+          id: variable.id,
+          name: variable.name,
+          lang: secondLang,
+          value: value
+        })} />
 
     </TableRow>
   ))
