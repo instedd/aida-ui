@@ -112,7 +112,9 @@ RSpec.describe Behaviour, type: :model do
                                      message: 'Can I ask you a question?' },
                                    { type: 'integer',
                                      name: 'age',
-                                     message: 'How old are you?' }
+                                     message: 'How old are you?',
+                                     constraint: '. <= 150',
+                                     constraint_message: 'No way you are that old' }
                                  ],
                                  choice_lists: [
                                    { name: 'yes_no',
@@ -144,6 +146,10 @@ RSpec.describe Behaviour, type: :model do
                                                  name: 'age',
                                                  message: {
                                                    'en' => 'How old are you?'
+                                                 },
+                                                 constraint: '. <= 150',
+                                                 constraint_message: {
+                                                   'en' => 'No way you are that old'
                                                  }})
       expect(fragment[:choice_lists].size).to eq(1)
       expect(fragment[:choice_lists][0]).to match({ name: 'yes_no',
@@ -166,6 +172,7 @@ RSpec.describe Behaviour, type: :model do
       add_languages 'en', 'es'
       survey.translations.create! key: 'questions/[name=opt_in]/message', lang: 'es', value: 'Puedo preguntarte algo?'
       survey.translations.create! key: 'questions/[name=age]/message', lang: 'es', value: 'Qué edad tenés?'
+      survey.translations.create! key: 'questions/[name=age]/constraint_message', lang: 'es', value: 'No podés tener esa edad'
       survey.translations.create! key: 'choice_lists/[name=yes_no]/choices/[name=yes]/labels', lang: 'es', value: 'si,sep,claro'
       survey.translations.create! key: 'choice_lists/[name=yes_no]/choices/[name=no]/labels', lang: 'es', value: 'no,luego'
 
@@ -174,6 +181,8 @@ RSpec.describe Behaviour, type: :model do
                                                            'es' => 'Puedo preguntarte algo?' })
       expect(fragment[:questions][1][:message]).to match({ 'en' => 'How old are you?',
                                                            'es' => 'Qué edad tenés?' })
+      expect(fragment[:questions][1][:constraint_message]).to match({ 'en' => 'No way you are that old',
+                                                                      'es' => 'No podés tener esa edad' })
       expect(fragment[:choice_lists][0][:choices][0][:labels]).to match({ 'en' => ['yes', 'yep', 'sure', 'ok'],
                                                                           'es' => ['si', 'sep', 'claro'] })
       expect(fragment[:choice_lists][0][:choices][1][:labels]).to match({ 'en' => ['no', 'nope', 'later'],
@@ -185,10 +194,12 @@ RSpec.describe Behaviour, type: :model do
       expect(keys).to be_an(Array)
       expect(keys.map { |key| key[:key] }).to match_array(['questions/[name=opt_in]/message',
                                                            'questions/[name=age]/message',
+                                                           'questions/[name=age]/constraint_message',
                                                            'choice_lists/[name=yes_no]/choices/[name=yes]/labels',
                                                            'choice_lists/[name=yes_no]/choices/[name=no]/labels'])
       expect(keys.map { |key| key[:default_translation] }).to match_array(['Can I ask you a question?',
                                                                            'How old are you?',
+                                                                           'No way you are that old',
                                                                            'yes,yep,sure,ok',
                                                                            'no,nope,later'])
     end

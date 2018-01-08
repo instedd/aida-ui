@@ -45,7 +45,7 @@ RSpec.describe ParseXlsForm, type: :service do
 
     %w(decimal.xlsx integer.xlsx multiple_choice_lists.xlsx
     select_many.xlsx select_one.xlsx simple.xlsx single_choices_list_underscore.xlsx
-    single_choices_list.xlsx relevant_questions.xlsx text.xlsx).each do |file|
+    single_choices_list.xlsx relevant_questions.xlsx constraint_basic.xlsx text.xlsx).each do |file|
       it "returns valid survey for #{file}" do
         result = ParseXlsForm.run(file_fixture(file).open)
 
@@ -172,6 +172,60 @@ RSpec.describe ParseXlsForm, type: :service do
                                     message: 'Why not?!',
                                     relevant: "${likes_pizza} = 'no'"
                                   }])
+    end
+
+    it "parses constraint and constraint_message columns" do
+      survey = Roo::Spreadsheet.open(file_fixture('constraint_basic.xlsx').open).sheet('survey')
+      result = ParseXlsForm.gather_questions(survey)
+
+      expect(result).to match_array([{
+                                       type: 'integer',
+                                       name: 'age',
+                                       message: 'How old are you?',
+                                       constraint: '. <= 150',
+                                       constraint_message: 'No way!'
+                                     },
+                                     {
+                                       type: 'decimal',
+                                       name: 'temperature',
+                                       message: 'What is the current temperature?',
+                                       constraint: '. >= -20 and . <= 50',
+                                       constraint_message: 'No way!'
+                                     },
+                                     {
+                                       type: 'text',
+                                       name: 'foo',
+                                       message: 'Say \'foo\'',
+                                       constraint: '. = \'foo\'',
+                                       constraint_message: 'Wrong!'
+                                     },
+                                     {
+                                       type: 'select_one',
+                                       name: 'ok',
+                                       choices: 'yes_no',
+                                       message: 'Are you ok?',
+                                       constraint_message: 'Answer yes or no'
+                                     }
+                                    ])
+    end
+
+    it "rejects constraints given for select_one and select_multiple questions" do
+      survey = Roo::Spreadsheet.open(file_fixture('constraint_select.xlsx').open).sheet('survey')
+
+      expect do
+        ParseXlsForm.gather_questions(survey)
+      end.to raise_error(/constraint must be blank for/)
+    end
+
+    it "does not add constraint_message if constraint is missing in non-select questions" do
+      survey = Roo::Spreadsheet.open(file_fixture('constraint_message_without_constraint.xlsx').open).sheet('survey')
+      result = ParseXlsForm.gather_questions(survey)
+
+      expect(result).to match_array([{
+                                       type: 'integer',
+                                       name: 'age',
+                                       message: 'How old are you?'
+                                     }])
     end
   end
 
