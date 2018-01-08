@@ -139,7 +139,7 @@ class InputMessage extends Component {
 
 const ChatWindowComponent = ({sendMessage, newSession, bot, messages, publishing, disabled}) => (
   <Paper
-    zDepth={4}
+    zDepth={5}
     className={"chat-window"}>
       <ChatHeader
         title={bot.name} publishing={publishing}/>
