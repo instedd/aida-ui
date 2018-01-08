@@ -161,7 +161,7 @@ export type VariableAssignments = Array<{
   id: string;
   name: string;
   default_value: StringByLanguage;
-  conditional_values: Array<{
+  conditional_values?: Array<{
     id: string;
     condition: string;
     value: StringByLanguage;
@@ -179,6 +179,13 @@ export type TranslationsIndex = {
 export type Translation = {
   behaviour_id: number;
   key: string;
+  lang: Language;
+  value: string;
+};
+
+export type UpdatedVariableAttributes = {
+  id: string;
+  name: string;
   lang: Language;
   value: string;
 };

@@ -84,11 +84,11 @@ const addVariable = (state, action) => {
   return {
     ...state,
     variables: [
-      ...state.variables, 
+      ...(state.variables || []), 
       { id: uuidv4(),
         name: "",
         default_value: {
-          [action.default_language]: ""
+          [action.defaultLang]: ""
         }
       }
     ]
@@ -96,14 +96,19 @@ const addVariable = (state, action) => {
 }
 
 const updateVariable = (state, action) => {
-  const index = state.variables.findIndex((variable) => variable.id == action.updatedAttrs.id)
+  const { variables } = state
+  if (!variables) return state
+
+  const index = variables.findIndex((variable) => variable.id == action.updatedAttrs.id)
   if (index < 0) return state
+  const oldVariable = variables[index]
+  if (!oldVariable) return state
   
   const variable = {
-    ...state.variables[index],
+    ...oldVariable,
     name: action.updatedAttrs.name,
     default_value: {
-      ...state.variables[index].default_value,
+      ...oldVariable.default_value,
       [action.updatedAttrs.lang]: action.updatedAttrs.value
     }
   }
@@ -111,9 +116,9 @@ const updateVariable = (state, action) => {
   return {
     ...state,
     variables: [
-      ...state.variables.slice(0, index),
+      ...variables.slice(0, index),
       variable,
-      ...state.variables.slice(index + 1)
+      ...variables.slice(index + 1)
     ]
   } 
 }

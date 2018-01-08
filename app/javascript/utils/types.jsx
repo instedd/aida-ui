@@ -224,6 +224,15 @@ export type TranslationsAction = {
   translation: T.Translation,
 };
 
+export type VariablesAction = {
+  type: 'VARIABLE_ADD',
+  defaultLang: string
+} | {
+  type: 'VARIABLE_UPDATE',
+  botId: number,
+  updatedAttrs: T.UpdatedVariableAttributes
+}
+
 export type XlsFormsAction = {
   type: 'XLSFORMS_UPLOAD',
   surveyId: number,
@@ -250,6 +259,7 @@ export type Action = AuthAction
                    | SkillsAction
                    | StatsAction
                    | TranslationsAction
+                   | VariablesAction
                    | XlsFormsAction;
 
 export type AuthState = {
@@ -316,6 +326,7 @@ export type TranslationsState = {
   scope: ?Scope,
   languages: ?Array<string>,
   defaultLanguage: ?string,
+  variables: ?T.VariableAssignments,
   behaviours: ?T.TranslationBehaviours
 };
 

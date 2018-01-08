@@ -76,7 +76,7 @@ export const updateTranslation = (botId : number, translation : T.Translation) =
   return apiPutJSON(`bots/${botId}/translations`, null, translation)
 }
 
-export const updateTranslationVariable = (botId, {id, name, lang, value}) => {
+export const updateTranslationVariable = (botId: number, {id, name, lang, value} : T.UpdatedVariableAttributes) => {
   const updatedAttrs = {
     variable_id: id,
     variable_name: name,
