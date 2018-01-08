@@ -21,13 +21,18 @@ import { EmptyLoader } from '../ui/Loader'
 import * as actions from '../actions/translations'
 import { languageNameByCode } from '../utils/lang'
 
-const renderRows = ({ variables, firstLang, secondLang, defaultLang, onChange, onChangeName }) => (
-  map(variables, (variable) => (
+const renderRows = ({ variables, firstLang, secondLang, defaultLang, onChange }) => {
+  return map(variables, (variable) => (
     <TableRow key={`variable-${variable.id}`}>
       <EditDialogColumn
         inline inlineIcon={null}
-        value={variable.name}
-        onChange={(value) => onChangeName({id: variable.id, name: value})} />
+        value={variable.name || "invalid name"}
+        onChange={(value) => onChange({
+          id: variable.id, 
+          name: value, 
+          lang: firstLang,
+          value: variable.default_value[firstLang] || ""
+        })} />
 
       {/* <EditDialogColumn inline inlineIcon={null}
         value={key[lang]}
@@ -39,7 +44,7 @@ const renderRows = ({ variables, firstLang, secondLang, defaultLang, onChange, o
 
     </TableRow>
   ))
-)
+}
 
 class BotTranslationsVariables extends Component {
   state = {
@@ -82,13 +87,8 @@ class BotTranslationsVariables extends Component {
       return { label, value }
     })
 
-    const onTranslationChange = (translation) => {
-      actions.updateTranslation(bot.id, translation)
-    }
-    const onChangeName = (variable) => {
-      actions.updateVariableName(bot.id, variable)
-    }
-    const rows = renderRows({ variables, firstLang, secondLang, defaultLang, onChange: onTranslationChange, onChangeName: onChangeName })
+    const rows = renderRows({ variables, firstLang, secondLang, defaultLang, 
+      onChange: (updatedAttrs) => (actions.updateVariable(bot.id, updatedAttrs)) })
 
     return (
       <MainWhite>
@@ -123,7 +123,7 @@ class BotTranslationsVariables extends Component {
         <Button
           flat
           iconChildren="add"
-          onClick={() => actions.addVariable()}>
+          onClick={() => actions.addVariable(defaultLang)}>
           Add variable
         </Button>
       </MainWhite>

@@ -52,12 +52,27 @@ const updateTranslationDelayed = (botId, translation) =>
     )
   })
 
-export const addVariable = () => ({
-  type: ADD_VARIABLE
+export const addVariable = (defaultLang) => ({
+  type: ADD_VARIABLE,
+  defaultLang: defaultLang
 })
 
-export const updateVariableName = (botId, variable) => ({
+export const updateVariable = (botId, updatedAttrs) => (dispatch) => {
+  dispatch(_updateVariable(botId, updatedAttrs))
+  dispatch(_updateVariableDelayed(botId, updatedAttrs)) // server call
+}
+
+const _updateVariable = (botId, updatedAttrs) => ({
   type: UPDATE_VARIABLE,
   botId,
-  variable
+  updatedAttrs
 })
+
+const _updateVariableDelayed = (botId, updatedAttrs) => {
+  const key = `TRANSLATION_UPDATE_VARIABLE_${botId}_${updatedAttrs.id}`
+
+  return debounced(key)(dispatch => {
+    api.updateTranslationVariable(botId, updatedAttrs)
+       .then(() => console.log('ready variable'))
+  })
+}
