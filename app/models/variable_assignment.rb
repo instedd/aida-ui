@@ -24,6 +24,18 @@ class VariableAssignment < ApplicationRecord
     end
   end
 
+  def self.manifest(variable_assignments, default_language, other_languages)
+    variable_assignments.group_by(&:variable_id).map do |_, assignments|
+      default_value_assignments = assignments.select { |a| a.condition_id.blank? }
+      conditional_values_assignments = assignments.select { |a| a.condition_id.present? }.group_by(&:condition_id)
+
+      {
+        name: assignments.first.variable_name,
+        values: build_translated_values(default_value_assignments, default_language, other_languages),
+      }
+    end
+  end
+
   private
 
   def self.build_translated_values(condition_assignments, default_language, other_languages)
