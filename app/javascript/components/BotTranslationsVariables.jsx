@@ -22,9 +22,17 @@ import * as actions from '../actions/translations'
 import { languageNameByCode } from '../utils/lang'
 import BotTranslationsMenu from './BotTranslationsMenu'
 
-const renderRows = ({ variables, firstLang, secondLang, defaultLang, onChange }) => {
+const renderRows = ({ variables, firstLang, secondLang, defaultLang, onChange, onRemove }) => {
   return map(variables, (variable) => (
     <TableRow key={`variable-${variable.id}`}>
+      <TableColumn>
+        <Button
+          icon
+          onClick={() => onRemove(variable.id)}>
+          close
+        </Button>
+      </TableColumn>
+
       <EditDialogColumn
         inline inlineIcon={null}
         value={variable.name}
@@ -102,7 +110,8 @@ class BotTranslationsVariables extends Component {
     })
 
     const rows = renderRows({ variables, firstLang, secondLang, defaultLang,
-      onChange: (updatedAttrs) => (actions.updateVariable(bot.id, updatedAttrs)) })
+      onChange: (updatedAttrs) => (actions.updateVariable(bot.id, updatedAttrs)),
+      onRemove: (variableId) => (actions.removeVariable(bot.id, variableId)) })
 
     return (
       <MainWhite>
@@ -115,6 +124,7 @@ class BotTranslationsVariables extends Component {
         <DataTable plain id="translations-table">
           <TableHeader>
             <TableRow>
+              <TableColumn />
               <TableColumn />
               <TableColumn>
                 <SelectField id="first-lang-selector"

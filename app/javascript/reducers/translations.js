@@ -21,6 +21,7 @@ export default (state : T.TranslationsState, action : T.Action) : T.Translations
     case actions.RECEIVE: return receive(state, action)
     case actions.UPDATE: return update(state, action)
     case actions.ADD_VARIABLE: return addVariable(state, action)
+    case actions.REMOVE_VARIABLE : return removeVariable(state, action)
     case actions.UPDATE_VARIABLE: return updateVariable(state, action)
     default: return state
   }
@@ -84,13 +85,30 @@ const addVariable = (state, action) => {
   return {
     ...state,
     variables: [
-      ...(state.variables || []), 
+      ...(state.variables || []),
       { id: uuidv4(),
         name: "",
         default_value: {
           [action.defaultLang]: ""
         }
       }
+    ]
+  }
+}
+
+const removeVariable = (state, action) => {
+  console.log(action)
+  const { variables } = state
+  if (!variables) return state
+
+  const index = variables.findIndex((variable) => variable.id == action.variableId)
+  if (index < 0) return state
+
+  return {
+    ...state,
+    variables: [
+      ...variables.slice(0, index),
+      ...variables.slice(index + 1)
     ]
   }
 }
@@ -103,7 +121,7 @@ const updateVariable = (state, action) => {
   if (index < 0) return state
   const oldVariable = variables[index]
   if (!oldVariable) return state
-  
+
   const variable = {
     ...oldVariable,
     name: action.updatedAttrs.name,
@@ -120,5 +138,5 @@ const updateVariable = (state, action) => {
       variable,
       ...variables.slice(index + 1)
     ]
-  } 
+  }
 }
