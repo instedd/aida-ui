@@ -1,0 +1,25 @@
+.main-content{
+  .translations-header {
+    display: grid;
+    grid-template-columns: auto -webkit-max-content;
+    grid-template-columns: auto max-content;
+    grid-template-rows: auto;
+    grid-template-areas: "tittle menu";
+
+    .translations-tittle {
+      grid-area: tittle;
+    }
+
+    .translations-menu {
+      grid-area: menu;
+
+      a {
+        color: $md-grey-500;
+      }
+
+      a:link {
+        text-decoration: none;
+      }
+    }
+  }
+}

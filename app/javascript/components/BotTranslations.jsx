@@ -1,16 +1,21 @@
 import React, { Component } from 'react'
-import { DataTable,
-         TableHeader,
-         TableBody,
-         TableRow,
-         TableColumn,
-         EditDialogColumn,
-         SelectField,
+import { 
+  Button,
+  DataTable,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableColumn,
+  EditDialogColumn,
+  SelectField,
 } from 'react-md'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import flatten from 'lodash/flatten'
 import map from 'lodash/map'
+
+import * as r from '../utils/routes'
+import { Link } from 'react-router-dom'
 
 import MainWhite from '../ui/MainWhite'
 import Title from '../ui/Title'
@@ -111,7 +116,27 @@ class BotTranslations extends Component {
 
     return (
       <MainWhite>
-        <Title>Translations</Title>
+        <div className="translations-header">
+          <div className="translations-tittle">
+            <Title>Translations</Title>
+          </div>
+          <div className="translations-menu">
+            <Button
+              flat
+              iconChildren="format_align_left"
+              to={r.botTranslationsContent(bot.id)}
+              component={Link}>
+              Content
+            </Button>
+            <Button
+              flat
+              iconChildren="code"
+              to={r.botTranslationsVariables(bot.id)}
+              component={Link}>
+              Variables
+            </Button>
+          </div>
+        </div>
         <DataTable plain id="translations-table">
           <TableHeader>
             <TableRow>

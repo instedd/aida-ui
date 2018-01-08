@@ -14,6 +14,9 @@ import { connect } from 'react-redux'
 import flatten from 'lodash/flatten'
 import map from 'lodash/map'
 
+import * as r from '../utils/routes'
+import { Link } from 'react-router-dom'
+
 import MainWhite from '../ui/MainWhite'
 import Title from '../ui/Title'
 import { EmptyLoader } from '../ui/Loader'
@@ -26,7 +29,7 @@ const renderRows = ({ variables, firstLang, secondLang, defaultLang, onChange })
     <TableRow key={`variable-${variable.id}`}>
       <EditDialogColumn
         inline inlineIcon={null}
-        value={variable.name || "invalid name"}
+        value={variable.name}
         onChange={(value) => onChange({
           id: variable.id, 
           name: value, 
@@ -105,7 +108,27 @@ class BotTranslationsVariables extends Component {
 
     return (
       <MainWhite>
-        <Title>Translations</Title>
+        <div className="translations-header">
+          <div className="translations-tittle">
+            <Title>Translations</Title>
+          </div>
+          <div className="translations-menu">
+            <Button
+              flat
+              iconChildren="format_align_left"
+              to={r.botTranslationsContent(bot.id)}
+              component={Link}>
+              Content
+            </Button>
+            <Button
+              flat
+              iconChildren="code"
+              to={r.botTranslationsVariables(bot.id)}
+              component={Link}>
+              Variables
+            </Button>
+          </div>
+        </div>
         <DataTable plain id="translations-table">
           <TableHeader>
             <TableRow>
