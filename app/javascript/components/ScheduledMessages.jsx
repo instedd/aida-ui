@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { TextField, SelectField, TableColumn, EditDialogColumn, SelectFieldColumn } from 'react-md'
+import { DatePicker, TimePicker, TextField, SelectField, TableColumn, EditDialogColumn, SelectFieldColumn } from 'react-md'
 import uuidv4 from 'uuid/v4'
 
 import Title from '../ui/Title'
@@ -23,6 +23,32 @@ class ScheduledMessages extends Component {
             [key]: value
           }
         })
+      }
+    }
+
+    const changeScheduleType = (schedule_type) => {
+      if (schedule_type == "since_last_incoming_message") {
+        actions.updateSkill({
+          ...skill,
+          config: {
+            ...skill.config,
+            schedule_type,
+            messages: []
+          }
+        })
+      } else if (schedule_type == "fixed_time") {
+        actions.updateSkill({
+          ...skill,
+          config: {
+            ...skill.config,
+            schedule_type,
+            messages: [
+              {id: uuidv4(), schedule: '', message: ''}
+            ]
+          }
+        })
+      } else {
+        throw "Not implemented"
       }
     }
 
@@ -62,18 +88,50 @@ class ScheduledMessages extends Component {
         <SelectField
           id="schedule_type"
           className="ui-field"
-          menuItems={[{label: "Schedule outgoing messages after last message received", value: "since_last_incoming_message"}]}
-          defaultValue={config.schedule_type}
+          menuItems={[
+            {label: "Schedule outgoing messages after last message received", value: "since_last_incoming_message"},
+            {label: "Schedule an outgoing message at specific schedule", value: "fixed_time"},
+          ]}
+          value={config.schedule_type}
+          onChange={value => changeScheduleType(value)}
         />
 
-        <KeyValueListField
-          label="Messages"
-          items={config.messages}
-          createItemLabel="Add message" onCreateItem={addMessage}
-          canRemoveItem={item => true} onRemoveItem={(item, index) => removeMessage(index)}
-          renderKey={(item, index) => <SelectFieldColumn menuItems={delayOptions} value={item.delay} onChange={updateMessage(index, 'delay')} stripActiveItem={false} />}
-          renderValue={(item, index) => <EditDialogColumn inline inlineIcon={null} value={item.message} onChange={updateMessage(index, 'message')}/>}
-        />
+        {(() => {
+          if (config.schedule_type != "since_last_incoming_message") return null;
+
+          return (<KeyValueListField
+            label="Messages"
+            items={config.messages}
+            createItemLabel="Add message" onCreateItem={addMessage}
+            canRemoveItem={item => true} onRemoveItem={(item, index) => removeMessage(index)}
+            renderKey={(item, index) => <SelectFieldColumn menuItems={delayOptions} value={item.delay} onChange={updateMessage(index, 'delay')} stripActiveItem={false} />}
+            renderValue={(item, index) => <EditDialogColumn inline inlineIcon={null} value={item.message} onChange={updateMessage(index, 'message')}/>}
+          />)
+        })()}
+
+        {(() => {
+          if (config.schedule_type != "fixed_time") return null;
+
+          const date = config.messages[0].schedule ? new Date(config.messages[0].schedule) : undefined
+
+          return (<div>
+            <div className="date-time-picker ui-field">
+              <DatePicker id="schedule-date"
+                          label="Schedule this message for"
+                          inline
+                          fullwidth={false}
+                          value={date}
+                          onChange={(_, value) => updateMessage(0, 'schedule')(value)} />
+              <TimePicker id="schedule-time"
+                          label="at"
+                          inline
+                          value={date}
+                          onChange={(_, value) => updateMessage(0, 'schedule')(value)} />
+            </div>
+
+            <Field id="message" label="Message" value={config.messages[0].message} onChange={updateMessage(0, 'message')} />
+          </div>)
+        })()}
       </div>
     )
 

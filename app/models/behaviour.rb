@@ -158,10 +158,20 @@ class Behaviour < ApplicationRecord
         name: name,
         schedule_type: config["schedule_type"],
         messages: config["messages"].map do |message|
-          {
-            delay: message["delay"].to_s,
-            message: localized_value("messages/[id=#{message['id']}]/message")
-          }
+          case config["schedule_type"]
+          when "since_last_incoming_message"
+            {
+              delay: message["delay"].to_s,
+              message: localized_value("messages/[id=#{message['id']}]/message")
+            }
+          when "fixed_time"
+            {
+              schedule: message["schedule"],
+              message: localized_value("messages/[id=#{message['id']}]/message")
+            }
+          else
+            raise NotImplementedError
+          end
         end
       }.tap do |manifest_fragment|
         manifest_fragment[:relevant] = config["relevant"] if config["relevant"].present?
@@ -203,8 +213,17 @@ class Behaviour < ApplicationRecord
         end
       ].flatten
     when "scheduled_messages"
-      config["messages"].map.with_index do |message, i|
-        translation_key("messages/[id=#{message['id']}]/message", DELAY_OPTIONS[message['delay']])
+      case config["schedule_type"]
+      when "since_last_incoming_message"
+        config["messages"].map.with_index do |message, i|
+          translation_key("messages/[id=#{message['id']}]/message", DELAY_OPTIONS[message['delay']])
+        end
+      when "fixed_time"
+        config["messages"].map.with_index do |message, i|
+          translation_key("messages/[id=#{message['id']}]/message", "Message")
+        end
+      else
+        raise NotImplementedError
       end
     else
       raise NotImplementedError

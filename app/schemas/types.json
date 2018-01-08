@@ -91,26 +91,53 @@
     },
 
     "scheduledMessagesConfig": {
-      "type": "object",
-      "properties": {
-        "relevant": { "type": "string" },
-        "schedule_type": { "type": "string", "enum": ["since_last_incoming_message"] },
-        "messages": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": { "type": "string" },
-              "delay": { "type": "number" },
-              "message": { "$ref": "#/definitions/message" }
-            },
-            "additionalProperties": false,
-            "required": [ "id", "delay", "message" ]
-          }
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "relevant": { "type": "string" },
+            "schedule_type": { "type": "string", "enum": ["since_last_incoming_message"] },
+            "messages": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": { "type": "string" },
+                  "delay": { "type": "number" },
+                  "message": { "$ref": "#/definitions/message" }
+                },
+                "additionalProperties": false,
+                "required": [ "id", "delay", "message" ]
+              }
+            }
+          },
+          "additionalProperties": false,
+          "required": [ "schedule_type", "messages" ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "relevant": { "type": "string" },
+            "schedule_type": { "type": "string", "enum": ["fixed_time"] },
+            "messages": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": { "type": "string" },
+                  "schedule": { "type": ["string"] },
+                  "message": { "$ref": "#/definitions/message" }
+                },
+                "additionalProperties": false,
+                "required": [ "id", "schedule", "message" ]
+              }
+            }
+          },
+          "additionalProperties": false,
+          "required": [ "schedule_type", "messages" ]
         }
-      },
-      "additionalProperties": false,
-      "required": [ "schedule_type", "messages" ]
+      ]
     },
 
     "message": {

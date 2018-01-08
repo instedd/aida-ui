@@ -52,6 +52,14 @@ export type ScheduledMessagesConfig = {
     delay: number;
     message: Message;
   }>;
+} | {
+  relevant?: string;
+  schedule_type: "fixed_time";
+  messages: Array<{
+    id: string;
+    schedule: string;
+    message: Message;
+  }>;
 };
 
 export type Message = string;
