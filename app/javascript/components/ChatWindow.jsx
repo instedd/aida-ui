@@ -8,6 +8,7 @@ import {  Card,
           Button,
           FontIcon,
           Paper } from 'react-md'
+import moment from 'moment'
 import * as actions from '../actions/chat'
 import * as notificationsActions from '../actions/notifications'
 import { Loader } from '../ui/Loader'
@@ -40,7 +41,7 @@ const Message = ({
         {text}
       </div>
       <div className="content-timestamp">
-        {timestamp.getHours() + ":" + timestamp.getMinutes()}
+        {moment(timestamp).format("HH:mm")}
       </div>
     </Paper>
   </li>
