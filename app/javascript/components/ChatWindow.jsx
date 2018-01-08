@@ -199,7 +199,7 @@ class ChatWindow extends Component {
     const { channel } = this.state
 
     channel
-      .push('new_session', {})
+      .push('new_session', {data: {first_name: 'John', last_name: 'Doe', gender: 'male'}})
       .receive('ok', resp => {
         this.props.actions.newSession(this.props.bot, resp.session)
       })
