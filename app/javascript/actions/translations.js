@@ -34,7 +34,7 @@ export const _variableUpdate = (botId: number, updatedAttrs: T.UpdatedVariableAt
   updatedAttrs
 })
 
-export const _variableRemove = (botId : number, variableId : string, conditionId : string) :T.VariablesAction => ({
+export const _variableRemove = (botId : number, variableId : string, conditionId : ?string) :T.VariablesAction => ({
   type: REMOVE_VARIABLE,
   botId,
   variableId,

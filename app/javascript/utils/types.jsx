@@ -228,6 +228,11 @@ export type VariablesAction = {
   type: 'VARIABLE_ADD',
   defaultLang: string
 } | {
+  type: 'VARIABLE_REMOVE',
+  botId: number,
+  variableId: string,
+  conditionId: ?string
+} | {
   type: 'VARIABLE_UPDATE',
   botId: number,
   updatedAttrs: T.UpdatedVariableAttributes

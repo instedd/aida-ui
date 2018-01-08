@@ -76,7 +76,7 @@ export const updateTranslation = (botId : number, translation : T.Translation) =
   return apiPutJSON(`bots/${botId}/translations`, null, translation)
 }
 
-export const removeTranslationVariable = (botId : number, variableId : string, conditionId : string) => {
+export const removeTranslationVariable = (botId : number, variableId : string, conditionId : ?string) => {
   let query = [`variable_id=${variableId}`]
   if (conditionId) {
     query.push(`condition_id=${conditionId}`)
