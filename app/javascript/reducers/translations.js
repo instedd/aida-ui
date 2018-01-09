@@ -108,17 +108,10 @@ const removeVariable = (state, action) => {
   if (action.conditionId) {
     const oldVariable = variables[index]
     if (!oldVariable) return state
-    const oldCVs = oldVariable.conditional_values || []
-    const cvIx = oldCVs.findIndex(cv => cv.id == action.conditionId)
-    if (cvIx < 0) return state
 
-    const variable = {
-      ...oldVariable,
-      conditional_values: [
-        ...oldCVs.slice(0, cvIx),
-        ...oldCVs.slice(cvIx + 1)
-      ]
-    }
+    const variable = removeCondition(oldVariable, action.conditionId)
+    if (!variable) return state
+
     return {
       ...state,
       variables: [
@@ -127,7 +120,6 @@ const removeVariable = (state, action) => {
         ...variables.slice(index + 1)
       ]
     }
-
   } else {
     return {
       ...state,
@@ -151,26 +143,7 @@ const updateVariable = (state, action) => {
   let variable
 
   if (action.updatedAttrs.conditionId) {
-    const oldCVs = oldVariable.conditional_values || []
-    const cvIx = oldCVs.findIndex((cv) => cv.id == action.updatedAttrs.conditionId)
-    if (cvIx < 0) return state
-
-    const oldCV = oldCVs[cvIx]
-    variable = {
-      ...oldVariable,
-      conditional_values: [
-        ...oldCVs.slice(0, cvIx),
-        {
-          ...oldCV,
-          condition: action.updatedAttrs.condition,
-          value: {
-            ...oldCV.value,
-            [action.updatedAttrs.lang]: action.updatedAttrs.value
-          }
-        },
-        ...oldCVs.slice(cvIx+1)
-      ]
-    }
+    variable = updateCondition(oldVariable, action.updatedAttrs)
   } else {
     variable = {
       ...oldVariable,
@@ -181,6 +154,8 @@ const updateVariable = (state, action) => {
       }
     }
   }
+
+  if (!variable) return state
 
   return {
     ...state,
@@ -226,6 +201,43 @@ const addCondition = (state, action) => {
       ...variables.slice(0, index),
       variable,
       ...variables.slice(index + 1)
+    ]
+  }
+}
+
+const removeCondition = (variable, conditionId) => {
+  const oldCVs = variable.conditional_values || []
+  const cvIx = oldCVs.findIndex(cv => cv.id == conditionId)
+  if (cvIx < 0) return null
+
+  return {
+    ...variable,
+    conditional_values: [
+      ...oldCVs.slice(0, cvIx),
+      ...oldCVs.slice(cvIx + 1)
+    ]
+  }
+}
+
+const updateCondition = (variable, updatedAttrs) => {
+  const oldCVs = variable.conditional_values || []
+  const cvIx = oldCVs.findIndex((cv) => cv.id == updatedAttrs.conditionId)
+  if (cvIx < 0) return null
+
+  const oldCV = oldCVs[cvIx]
+  return {
+    ...variable,
+    conditional_values: [
+      ...oldCVs.slice(0, cvIx),
+      {
+        ...oldCV,
+        condition: updatedAttrs.condition,
+        value: {
+          ...oldCV.value,
+          [updatedAttrs.lang]: updatedAttrs.value
+        }
+      },
+      ...oldCVs.slice(cvIx + 1)
     ]
   }
 }
