@@ -23,3 +23,24 @@
     }
   }
 }
+
+.row-variable-condition {
+  &:hover {
+    .btn-remove-variable {
+      visibility: visible;
+    }
+  }
+  &:hover {
+    .btn-remove-condition {
+      visibility: visible;
+    }
+  }
+}
+
+.btn-remove-variable {
+  visibility: hidden;
+}
+
+.btn-remove-condition {
+  visibility: hidden;
+}

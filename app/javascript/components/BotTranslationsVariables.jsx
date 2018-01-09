@@ -25,15 +25,20 @@ import BotTranslationsMenu from './BotTranslationsMenu'
 const renderRows = ({ variables, firstLang, secondLang, defaultLang, onChange, onRemove, onAddCondition }) => {
   return flatten(map(variables, (variable) => {
     const variableRow = (
-      <TableRow key={`variable-${variable.id}`}>
+      <TableRow key={`variable-${variable.id}`} className="row-variable-condition">
         <TableColumn>
           <Button
             icon
+            className="btn-remove-variable"
+            tooltipLabel="Remove variable"
+            tooltipPosition="top"
             onClick={() => onRemove(variable.id)}>
             close
           </Button>
           <Button
             icon
+            tooltipLabel="Add condition"
+            tooltipPosition="top"
             onClick={() => onAddCondition(variable.id)}>
             add
           </Button>
@@ -75,10 +80,13 @@ const renderRows = ({ variables, firstLang, secondLang, defaultLang, onChange, o
 
     const conditionalRows = map(variable.conditional_values, cv => {
       return (
-        <TableRow key={`condition-${cv.id}`}>
+        <TableRow key={`condition-${cv.id}`} className="row-variable-condition">
           <TableColumn>
             <Button
               icon
+              className="btn-remove-condition"
+              tooltipLabel="Remove condition"
+              tooltipPosition="top"
               onClick={() => onRemove(variable.id, cv.id)}>
               close
             </Button>
