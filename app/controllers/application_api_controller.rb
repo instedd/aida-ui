@@ -1,7 +1,7 @@
 class ApplicationApiController < ActionController::Base
   include Pundit
 
-  before_action :authenticate_user!
+  before_action :authenticate_api_user!
   before_action :set_raven_context
 
   rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_response
