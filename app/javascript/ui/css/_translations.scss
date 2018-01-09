@@ -38,12 +38,21 @@
   .condition-name-column {
     padding-left: 25px;
   }
+
+  ::-webkit-input-placeholder {
+    font-style: italic;
+  }
+  :-moz-placeholder {
+    font-style: italic;
+  }
+  ::-moz-placeholder {
+    font-style: italic;
+  }
+  :-ms-input-placeholder {
+    font-style: italic;
+  }
 }
 
-.btn-remove-variable {
-  visibility: hidden;
-}
-
-.btn-remove-condition {
+.btn-remove-variable, .btn-remove-condition {
   visibility: hidden;
 }
