@@ -58,7 +58,7 @@ const renderRows = ({ variables, firstLang, secondLang, defaultLang, onChange, o
         <EditDialogColumn
           inline inlineIcon={null}
           value={variable.default_value[firstLang]}
-          placeholder="variable value"
+          placeholder="value"
           onChange={(value) => onChange({
             id: variable.id,
             name: variable.name,
@@ -70,7 +70,7 @@ const renderRows = ({ variables, firstLang, secondLang, defaultLang, onChange, o
         <EditDialogColumn
           inline inlineIcon={null}
           value={variable.default_value[secondLang]}
-          placeholder="variable value"
+          placeholder="value"
           onChange={(value) => onChange({
             id: variable.id,
             name: variable.name,
@@ -97,7 +97,7 @@ const renderRows = ({ variables, firstLang, secondLang, defaultLang, onChange, o
           <EditDialogColumn
             inline inlineIcon={null}
             value={cv.condition}
-            placeholder="condition name"
+            placeholder="condition"
             className="condition-name-column"
             onChange={(value) => onChange({
               id: variable.id,
@@ -112,7 +112,7 @@ const renderRows = ({ variables, firstLang, secondLang, defaultLang, onChange, o
           <EditDialogColumn
             inline inlineIcon={null}
             value={cv.value[firstLang]}
-            placeholder="condition value"
+            placeholder="value"
             onChange={(value) => onChange({
               id: variable.id,
               name: variable.name,
@@ -126,7 +126,7 @@ const renderRows = ({ variables, firstLang, secondLang, defaultLang, onChange, o
           <EditDialogColumn
             inline inlineIcon={null}
             value={cv.value[secondLang]}
-            placeholder="condition value"
+            placeholder="value"
             onChange={(value) => onChange({
               id: variable.id,
               name: variable.name,
