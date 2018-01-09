@@ -6,8 +6,13 @@
     grid-template-rows: auto;
     grid-template-areas: "tittle menu";
 
+    h1 {
+      margin: 0
+    }
+
     .translations-tittle {
       grid-area: tittle;
+      padding: 10px 0;
     }
 
     .translations-menu {
@@ -15,6 +20,10 @@
 
       a {
         color: $md-grey-500;
+        font-size: 18px;
+        font-weight: normal;
+        padding: 25px 20px;
+        text-transform: none;
       }
 
       a:link {
@@ -42,4 +51,10 @@
 
 .btn-remove-variable, .btn-remove-condition {
   visibility: hidden;
+}
+
+.btn-add-variable {
+  color:$md-cyan-500;
+  font-size: 16px;
+  text-transform: none;
 }

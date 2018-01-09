@@ -230,6 +230,7 @@ class BotTranslationsVariables extends Component {
         <Button
           flat
           iconChildren="add"
+          className="btn-add-variable"
           onClick={() => actions.addVariable(defaultLang)}>
           Add variable
         </Button>
