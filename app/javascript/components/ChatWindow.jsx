@@ -89,7 +89,7 @@ class InputMessage extends Component {
   }
 
   render() {
-    const { onSend, disabled, newSession } = this.props
+    const { onSend, disabled, newSession, inputRef } = this.props
 
     const sendMessageAndClearInput = () => {
       const text = _textfield.value.trim()
@@ -116,7 +116,7 @@ class InputMessage extends Component {
             value={this.state.messageText}
             onChange={(text) => this.setState({messageText: text})}
             onKeyPress={(ev) => (sendMessageIfEnterPressed(ev)) }
-            ref={node => { _textfield = node; if (node) { node.focus() } }} disabled={disabled} />
+            ref={node => { _textfield = node; inputRef(node) }} disabled={disabled} />
         </div>
         <div className="chat-button">
           <Button
@@ -137,7 +137,7 @@ class InputMessage extends Component {
   }
 }
 
-const ChatWindowComponent = ({sendMessage, newSession, bot, messages, publishing, disabled}) => (
+const ChatWindowComponent = ({sendMessage, newSession, bot, messages, publishing, disabled, inputRef}) => (
   <Paper
     zDepth={5}
     className={"chat-window"}>
@@ -146,7 +146,7 @@ const ChatWindowComponent = ({sendMessage, newSession, bot, messages, publishing
       <MessageList
         messages={messages}  />
       <InputMessage
-        onSend={(text) => sendMessage(text)} newSession={newSession} disabled={disabled} />
+        onSend={(text) => sendMessage(text)} newSession={newSession} disabled={disabled} inputRef={inputRef} />
   </Paper>
 )
 
@@ -203,6 +203,7 @@ class ChatWindow extends Component {
       .push('new_session', {data: {first_name: 'John', last_name: 'Doe', gender: 'male'}})
       .receive('ok', resp => {
         this.props.actions.newSession(this.props.bot, resp.session)
+        this.input.focus()
       })
       .receive('error', resp => {
         this.props.notificationsActions.pushNotification("Unable to start session")
@@ -224,7 +225,8 @@ class ChatWindow extends Component {
         <ChatWindowComponent bot={bot} messages={messages}
         sendMessage={(text) => this.sendMessage(text)}
         newSession={() => this.getNewSession()}
-        publishing={publishing} disabled={publishing || sessionId == null} />
+        publishing={publishing} disabled={publishing || sessionId == null}
+        inputRef={(node) => this.input = node} />
       )
     } else {
       return null
