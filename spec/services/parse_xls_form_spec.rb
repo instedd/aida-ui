@@ -55,6 +55,13 @@ RSpec.describe ParseXlsForm, type: :service do
         expect(JSON::Validator.validate(schema_file, result, fragment: "#/definitions/surveyConfig")).to eq(true)
       end
     end
+
+    it "accepts forms exported from Kobo toolbox" do
+      result = ParseXlsForm.run(file_fixture("kobo_sample.xls").open)
+
+      expect(result[:questions].size).to eq(3)
+      expect(result[:choice_lists].size).to eq(1)
+    end
   end
 
   describe "gather questions" do

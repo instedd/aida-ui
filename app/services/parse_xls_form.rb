@@ -68,14 +68,21 @@ class ParseXlsForm
               message: label
             }
           else
-            fail "unsupported question type '#{type}' at row #{row_number}"
+            if ignore_question?(type, name)
+              # special treatment for Kobo toolbox exported forms
+              nil
+            else
+              fail "unsupported question type '#{type}' at row #{row_number}"
+            end
           end
 
-        # relevant is never "" (empty string) because of line:
-        # relevant = row[relevant_col].presence if relevant_col.present?
-        elem[:relevant] = relevant if relevant
-        elem[:constraint] = constraint if constraint
-        elem[:constraint_message] = constraint_message if constraint_message and (constraint or implicit_constraint)
+        if elem.present?
+          # relevant is never "" (empty string) because of line:
+          # relevant = row[relevant_col].presence if relevant_col.present?
+          elem[:relevant] = relevant if relevant
+          elem[:constraint] = constraint if constraint
+          elem[:constraint_message] = constraint_message if constraint_message and (constraint or implicit_constraint)
+        end
 
         elem
       else
@@ -83,6 +90,12 @@ class ParseXlsForm
         nil
       end
     end.compact
+  end
+
+  def self.ignore_question?(type, name)
+    return (type == 'start' && name == 'start') ||
+      (type == 'end' && name == 'end') ||
+      (type == 'calculate' && name == '__version__')
   end
 
   def self.gather_choices(sheet)
