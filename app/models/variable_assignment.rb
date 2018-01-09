@@ -34,6 +34,12 @@ class VariableAssignment < ApplicationRecord
       {
         name: assignments.first.variable_name,
         values: build_translated_values(default_value_assignments, default_language, other_languages),
+        overrides: conditional_values_assignments.map do |_, condition_assignments|
+          {
+            relevant: condition_assignments.first.condition,
+            values: build_translated_values(condition_assignments, default_language, other_languages),
+          }
+        end
       }
     end
   end
