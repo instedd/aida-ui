@@ -94,6 +94,7 @@ const renderRows = ({ variables, firstLang, secondLang, defaultLang, onChange, o
           <EditDialogColumn
             inline inlineIcon={null}
             value={cv.condition}
+            className="condition-name-column"
             onChange={(value) => onChange({
               id: variable.id,
               name: variable.name,
