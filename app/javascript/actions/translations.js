@@ -29,6 +29,11 @@ export const _translationsUpdate = (botId : number, translation : T.Translation)
   translation
 })
 
+export const _variableAdd = (defaultLang: string): T.VariablesAction => ({
+  type: ADD_VARIABLE,
+  defaultLang: defaultLang
+})
+
 export const _variableUpdate = (botId: number, updatedAttrs: T.UpdatedVariableAttributes) : T.VariablesAction => ({
   type: UPDATE_VARIABLE,
   botId,
@@ -73,19 +78,17 @@ const updateTranslationDelayed = (botId, translation) =>
     )
   })
 
-export const addVariable = (defaultLang: string) : T.VariablesAction => ({
-  type: ADD_VARIABLE,
-  defaultLang: defaultLang
-})
+export const addVariable = _variableAdd
 
 export const removeVariable = (botId : number, variableId : string, conditionId : ?string) => (dispatch : T.Dispatch) => {
   dispatch(_variableRemove(botId, variableId, conditionId))
   api.removeTranslationVariable(botId, variableId, conditionId)
+     .then(() => dispatch(botBehaviourUpdated()))
 }
 
 export const updateVariable = (botId : number, updatedAttrs : T.UpdatedVariableAttributes) => (dispatch : T.Dispatch) => {
   dispatch(_variableUpdate(botId, updatedAttrs))
-  dispatch(_updateVariableDelayed(botId, updatedAttrs)) // server call
+  dispatch(_updateVariableDelayed(botId, updatedAttrs))
 }
 
 const _updateVariableDelayed = (botId, updatedAttrs) => {
@@ -93,6 +96,7 @@ const _updateVariableDelayed = (botId, updatedAttrs) => {
 
   return debounced(key)(dispatch => {
     api.updateTranslationVariable(botId, updatedAttrs)
+       .then(() => dispatch(botBehaviourUpdated()))
   })
 }
 
