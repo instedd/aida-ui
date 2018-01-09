@@ -1,0 +1,45 @@
+.main-content{
+  .translations-header {
+    display: grid;
+    grid-template-columns: auto -webkit-max-content;
+    grid-template-columns: auto max-content;
+    grid-template-rows: auto;
+    grid-template-areas: "tittle menu";
+
+    .translations-tittle {
+      grid-area: tittle;
+    }
+
+    .translations-menu {
+      grid-area: menu;
+
+      a {
+        color: $md-grey-500;
+      }
+
+      a:link {
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+.row-variable-condition {
+  &:hover {
+    .btn-remove-variable {
+      visibility: visible;
+    }
+  }
+  &:hover {
+    .btn-remove-condition {
+      visibility: visible;
+    }
+  }
+  .condition-name-column {
+    padding-left: 25px;
+  }
+}
+
+.btn-remove-variable, .btn-remove-condition {
+  visibility: hidden;
+}

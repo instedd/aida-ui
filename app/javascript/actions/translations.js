@@ -7,6 +7,10 @@ import { botBehaviourUpdated } from './bot'
 export const FETCH = 'TRANSLATIONS_FETCH'
 export const RECEIVE = 'TRANSLATIONS_RECEIVE'
 export const UPDATE = 'TRANSLATION_UPDATE'
+export const ADD_VARIABLE = 'VARIABLE_ADD'
+export const UPDATE_VARIABLE = 'VARIABLE_UPDATE'
+export const REMOVE_VARIABLE = 'VARIABLE_REMOVE'
+export const ADD_CONDITION = 'VARIABLE_ADD_CONDITION'
 
 export const _translationsFetch = (scope : T.Scope) : T.TranslationsAction => ({
   type: FETCH,
@@ -23,6 +27,25 @@ export const _translationsUpdate = (botId : number, translation : T.Translation)
   type: UPDATE,
   botId,
   translation
+})
+
+export const _variableUpdate = (botId: number, updatedAttrs: T.UpdatedVariableAttributes) : T.VariablesAction => ({
+  type: UPDATE_VARIABLE,
+  botId,
+  updatedAttrs
+})
+
+export const _variableRemove = (botId : number, variableId : string, conditionId : ?string) : T.VariablesAction => ({
+  type: REMOVE_VARIABLE,
+  botId,
+  variableId,
+  conditionId
+})
+
+export const _variableAddCondition = (botId : number, variableId : string) : T.VariablesAction => ({
+  type: ADD_CONDITION,
+  botId,
+  variableId
 })
 
 export const fetchTranslations = (scope : {botId : number}) => (dispatch : T.Dispatch, getState : T.GetState) => {
@@ -49,3 +72,28 @@ const updateTranslationDelayed = (botId, translation) =>
       dispatch(botBehaviourUpdated())
     )
   })
+
+export const addVariable = (defaultLang: string) : T.VariablesAction => ({
+  type: ADD_VARIABLE,
+  defaultLang: defaultLang
+})
+
+export const removeVariable = (botId : number, variableId : string, conditionId : ?string) => (dispatch : T.Dispatch) => {
+  dispatch(_variableRemove(botId, variableId, conditionId))
+  api.removeTranslationVariable(botId, variableId, conditionId)
+}
+
+export const updateVariable = (botId : number, updatedAttrs : T.UpdatedVariableAttributes) => (dispatch : T.Dispatch) => {
+  dispatch(_variableUpdate(botId, updatedAttrs))
+  dispatch(_updateVariableDelayed(botId, updatedAttrs)) // server call
+}
+
+const _updateVariableDelayed = (botId, updatedAttrs) => {
+  const key = `TRANSLATION_UPDATE_VARIABLE_${botId}_${updatedAttrs.id}_${updatedAttrs.conditionId || ''}_${updatedAttrs.lang}`
+
+  return debounced(key)(dispatch => {
+    api.updateTranslationVariable(botId, updatedAttrs)
+  })
+}
+
+export const addVariableCondition = _variableAddCondition

@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
-import { DataTable,
-         TableHeader,
-         TableBody,
-         TableRow,
-         TableColumn,
-         EditDialogColumn,
-         SelectField,
+import {
+  Button,
+  DataTable,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableColumn,
+  EditDialogColumn,
+  SelectField,
 } from 'react-md'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -18,6 +20,7 @@ import { EmptyLoader } from '../ui/Loader'
 
 import * as actions from '../actions/translations'
 import { languageNameByCode } from '../utils/lang'
+import BotTranslationsMenu from './BotTranslationsMenu'
 
 const renderRows = ({ behaviours, firstLang, secondLang, defaultLang, onChange }) => {
   return flatten(map(behaviours, behaviour => {
@@ -111,7 +114,12 @@ class BotTranslations extends Component {
 
     return (
       <MainWhite>
-        <Title>Translations</Title>
+        <div className="translations-header">
+          <div className="translations-tittle">
+            <Title>Translations</Title>
+          </div>
+          <BotTranslationsMenu bot={bot} />
+        </div>
         <DataTable plain id="translations-table">
           <TableHeader>
             <TableRow>

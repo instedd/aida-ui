@@ -369,7 +369,7 @@
           }
         },
         "additionalProperties": false,
-        "required": [ "id", "name", "default_value", "conditional_values" ]
+        "required": [ "id", "name", "default_value" ]
       }
     },
 
@@ -397,6 +397,25 @@
         "value": { "type": "string" }
       },
       "required": [ "behaviour_id", "key", "lang", "value" ]
+    },
+
+    "update_variable": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "variable_name": { "type": "string" },
+        "lang": { "$ref": "#/definitions/language" },
+        "value": { "type": "string" },
+        "condition_id": { "type": "string" },
+        "condition": { "type": "string" },
+        "condition_order": { "type": "number" }
+      },
+      "required": [
+        "id",
+        "name",
+        "lang",
+        "value"
+      ]
     },
 
     "collaborator": {

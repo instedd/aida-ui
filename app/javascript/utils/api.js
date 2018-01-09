@@ -76,6 +76,27 @@ export const updateTranslation = (botId : number, translation : T.Translation) =
   return apiPutJSON(`bots/${botId}/translations`, null, translation)
 }
 
+export const removeTranslationVariable = (botId : number, variableId : string, conditionId : ?string) => {
+  let query = [`variable_id=${variableId}`]
+  if (conditionId) {
+    query.push(`condition_id=${conditionId}`)
+  }
+  return apiDelete(`bots/${botId}/translations/variable?${query.join('&')}`)
+}
+
+export const updateTranslationVariable = (botId : number, {id, name, lang, value, conditionId, condition, conditionOrder} : T.UpdatedVariableAttributes) => {
+  const updatedAttrs = {
+    variable_id: id,
+    variable_name: name,
+    lang: lang,
+    value: value,
+    condition_id: conditionId,
+    condition: condition,
+    condition_order: conditionOrder
+  }
+  return apiPutJSON(`bots/${botId}/translations/variable`, null, updatedAttrs)
+}
+
 export const uploadXlsForm = (file : any) => {
   const formData = new FormData()
   formData.append('file', file)

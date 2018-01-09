@@ -9,6 +9,16 @@ export type Scope = {
   botId: number
 };
 
+export type UpdatedVariableAttributes = {
+  id: string,
+  name: string,
+  value: string,
+  conditionId?: string,
+  condition?: string,
+  conditionOrder?: number,
+  lang: T.Language
+};
+
 export type ChatMessage = {
   id: number,
   text: string,
@@ -224,6 +234,24 @@ export type TranslationsAction = {
   translation: T.Translation,
 };
 
+export type VariablesAction = {
+  type: 'VARIABLE_ADD',
+  defaultLang: string
+} | {
+  type: 'VARIABLE_REMOVE',
+  botId: number,
+  variableId: string,
+  conditionId: ?string
+} | {
+  type: 'VARIABLE_UPDATE',
+  botId: number,
+  updatedAttrs: UpdatedVariableAttributes
+} | {
+  type: 'VARIABLE_ADD_CONDITION',
+  botId: number,
+  variableId: string
+};
+
 export type XlsFormsAction = {
   type: 'XLSFORMS_UPLOAD',
   surveyId: number,
@@ -250,6 +278,7 @@ export type Action = AuthAction
                    | SkillsAction
                    | StatsAction
                    | TranslationsAction
+                   | VariablesAction
                    | XlsFormsAction;
 
 export type AuthState = {
@@ -316,6 +345,7 @@ export type TranslationsState = {
   scope: ?Scope,
   languages: ?Array<string>,
   defaultLanguage: ?string,
+  variables: ?T.VariableAssignments,
   behaviours: ?T.TranslationBehaviours
 };
 

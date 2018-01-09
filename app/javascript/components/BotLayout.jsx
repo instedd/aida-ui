@@ -16,6 +16,7 @@ import AppLayout from './AppLayout'
 import { BotChannel } from '../components/BotChannel'
 import { BotBehaviour } from '../components/BotBehaviour'
 import BotTranslations from '../components/BotTranslations'
+import BotTranslationsVariables from '../components/BotTranslationsVariables'
 import BotAnalytics from '../components/BotAnalytics'
 import BotData from '../components/BotData'
 import BotCollaborators from '../components/BotCollaborators'
@@ -129,7 +130,9 @@ export class BotLayoutComponent extends Component {
           <Route exact path="/b/:id/analytics" render={() => <BotAnalytics bot={bot} />} />
           <Route exact path="/b/:id/channel" render={() => <BotChannel bot={bot} />} />
           <Route path="/b/:id/behaviour" render={() => <BotBehaviour bot={bot} onToggleChatWindow={toggleChatWindow}/>} />
-          <Route exact path="/b/:id/translations" render={() => <BotTranslations bot={bot} />} />
+          <Route exact path="/b/:id/translations" render={() => <Redirect to={r.botTranslationsContent(bot.id)}/>} />
+          <Route exact path="/b/:id/translations/content" render={() => <BotTranslations bot={bot} />} />
+          <Route exact path="/b/:id/translations/variables" render={() => <BotTranslationsVariables bot={bot} />} />
           <Route exact path="/b/:id/collaborators" render={() => <BotCollaborators bot={bot}
                                                                                    dialogVisible={this.state.collaborators}
                                                                                    showDialog={showCollaborators}

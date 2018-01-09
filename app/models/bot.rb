@@ -38,7 +38,7 @@ class Bot < ApplicationRecord
       skills: skills.enabled.map do |skill|
         skill.manifest_fragment
       end,
-      variables: [],
+      variables: VariableAssignment.manifest(self.variable_assignments, self.default_language, self.other_languages),
       channels: channels.map do |channel|
         channel.config.merge(type: channel.kind)
       end
@@ -53,7 +53,7 @@ class Bot < ApplicationRecord
       skills: skills.enabled.map do |skill|
         skill.manifest_fragment
       end,
-      variables: [],
+      variables: VariableAssignment.manifest(self.variable_assignments, self.default_language, self.other_languages),
       channels: [{type: "websocket", access_token: access_token}]
     }
   end

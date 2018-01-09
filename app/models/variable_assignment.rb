@@ -3,6 +3,8 @@ class VariableAssignment < ApplicationRecord
 
   validate :non_zero_condition_order
 
+  default_scope { order(:variable_name, :condition_order) }
+
   def self.api_json(variable_assignments, default_language, other_languages)
     variable_assignments.group_by(&:variable_id).map do |_, assignments|
       default_value_assignments = assignments.select { |a| a.condition_id.blank? }
@@ -18,6 +20,24 @@ class VariableAssignment < ApplicationRecord
             condition: condition_assignments.first.condition,
             order: condition_assignments.first.condition_order,
             value: build_translated_values(condition_assignments, default_language, other_languages),
+          }
+        end
+      }
+    end
+  end
+
+  def self.manifest(variable_assignments, default_language, other_languages)
+    variable_assignments.group_by(&:variable_id).map do |_, assignments|
+      default_value_assignments = assignments.select { |a| a.condition_id.blank? }
+      conditional_values_assignments = assignments.select { |a| a.condition_id.present? }.group_by(&:condition_id)
+
+      {
+        name: assignments.first.variable_name,
+        values: build_translated_values(default_value_assignments, default_language, other_languages),
+        overrides: conditional_values_assignments.map do |_, condition_assignments|
+          {
+            relevant: condition_assignments.first.condition,
+            values: build_translated_values(condition_assignments, default_language, other_languages),
           }
         end
       }
