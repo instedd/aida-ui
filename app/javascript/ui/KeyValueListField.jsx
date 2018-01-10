@@ -5,6 +5,7 @@ import { Button,
          TableBody,
          TableFooter,
          TableColumn,
+         TableHeader,
          TableRow
 } from 'react-md'
 import map from 'lodash/map'
@@ -34,7 +35,14 @@ export class KeyValueListField extends Component {
     return (<div className="ui-field">
         <h4>{label}</h4>
 
-        <DataTable plain className="ui-key-value-list" responsive={false}>
+        <DataTable plain className="ui-key-value-list" responsive={false} >
+          <TableHeader>
+            <TableRow>
+              <TableColumn colSpan={3}></TableColumn>
+              <TableColumn grow></TableColumn>
+            </TableRow>
+          </TableHeader>
+
           <TableBody>
             {itemRows}
           </TableBody>
