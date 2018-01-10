@@ -48,8 +48,12 @@ Rails.application.routes.draw do
   get "/login", to: 'welcome#login'
   get "/logout", to: 'welcome#logout'
 
+  # generate_token is in other controller to restrict interactive users only
+  put "/api/v1/generate_token", to: 'welcome#generate_token'
+
   root to: 'welcome#index'
   get "/b(/*path)", to: 'welcome#index'
+  get "/settings(/*path)", to: 'welcome#index'
   get "/invitation/:token", to: 'welcome#index', as: 'invitation'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

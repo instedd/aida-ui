@@ -9,6 +9,7 @@ import Header, { SectionNavLink, UserMenuLink, UserMenuAnchor } from '../ui/Head
 import Icon from './Icon'
 
 import * as notifActions from '../actions/notifications'
+import * as r from '../utils/routes'
 
 export const AppLayout = ({title, headerNav, headerNavExtra, userName, children, buttonAction, buttonIcon, toasts, notifActions}) => {
   const header = (
@@ -18,7 +19,10 @@ export const AppLayout = ({title, headerNav, headerNavExtra, userName, children,
             userMenuItems={[
               <UserMenuAnchor key={0} label="Sign out" href="/logout" />,
             ]}
-            sectionNavLinks={[<SectionNavLink label="Bots" to="/b" />]}
+            sectionNavLinks={[
+              <SectionNavLink key={0} label="Bots" to="/b" />,
+              <SectionNavLink key={1} label="API" to={r.settingsApi()} />
+            ]}
             headerNav={headerNav}
             headerNavExtra={headerNavExtra}
             buttonAction={buttonAction} buttonIcon={buttonIcon} />
