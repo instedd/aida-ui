@@ -33,19 +33,44 @@ const Message = ({
   sent,
   timestamp
 }) => (
-  <li className={sent ? "message-sent" : "message-received"}>
+  // <li className={sent ? "message-sent" : "message-received"}>
     <Paper
       zDepth={2}
       className={"message-bubble " + (sent ? "message-sent" : "message-received")} >
-      <div className="content-text">
-        {text}
-      </div>
-      <div className="content-timestamp">
-        {moment(timestamp).format("HH:mm")}
-      </div>
+      <li>
+        <div className="content-text">
+          {text}
+        </div>
+        <div className="content-timestamp">
+          {moment(timestamp).format("HH:mm")}
+        </div>
+      </li>
     </Paper>
-  </li>
+  // </li>
 )
+
+const MessageBulk = ({
+  messages
+}) => {
+  console.log(messages)
+  const sentMessages = messages[0].sent
+  return (
+    <Paper
+      zDepth={2}
+      className={"message-bubble " + (sentMessages ? "message-sent" : "message-received")} >
+      {messages.map(message =>
+        (<li key={message.id}>
+          <div className="content-text">
+            {message.text}
+          </div>
+          <div className="content-timestamp">
+            {moment(message.timestamp).format("HH:mm")}
+          </div>
+        </li>)
+      )}
+    </Paper>
+  )
+}
 
 class MessageList extends Component {
 
@@ -64,14 +89,38 @@ class MessageList extends Component {
   }
 
   render() {
+
+    const groupBy = (elems, attr) => {
+      let groupedElems = []
+      let lastGroup = []
+      let lastGroupAttr = null
+      elems.forEach((elem) => {
+        if (elem[attr] == lastGroupAttr) {
+          lastGroup.push(elem)
+        } else {
+          lastGroup = [elem]
+          lastGroupAttr = elem[attr]
+          groupedElems.push(lastGroup)
+        }
+      })
+      return groupedElems
+    }
+
     const { messages } = this.props
+    const groupedMessages = groupBy(messages, "sent")
+
     return (
       <div className="chat-window-body">
         <ul>
-          {messages.map(message =>
+          {/* {messages.map(message =>
             <Message
               key={message.id}
               {...message}
+            />
+          )} */}
+          {groupedMessages.map(messages =>
+            <MessageBulk
+              messages={messages}
             />
           )}
         </ul>
