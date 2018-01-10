@@ -6,6 +6,23 @@ This repository contains the ui for the [AIDA engine](https://github.com/instedd
 
 * Install Docker
 
+* Setup guisso
+
+Some features requires the app to be registered in https://login.instedd.org .
+During development, you can register the app at either https://login.instedd.org or https://login-stg.instedd.org
+and create a `config/settings.local.yml` as follows to setup the SSO account.
+
+```
+# config/settings.local.yml
+guisso:
+  enabled: true
+  url: https://login.instedd.org   (or https://login-stg.instedd.org)
+  client_id: ...your guisso client id...
+  client_secret: ...your guisso client secret...
+```
+
+If you skip this step you will be able to use the app but access to the api via bearer tokens will not work.
+
 * First time
 
 ```
