@@ -5,7 +5,7 @@ import { Snackbar } from 'react-md'
 
 import Layout from '../ui/Layout'
 import Footer from '../ui/Footer'
-import Header, { SectionNavLink } from '../ui/Header'
+import Header, { SectionNavLink, UserMenuLink, UserMenuAnchor } from '../ui/Header'
 import Icon from './Icon'
 
 import * as notifActions from '../actions/notifications'
@@ -15,7 +15,9 @@ export const AppLayout = ({title, headerNav, headerNavExtra, userName, children,
     <Header icon={<Icon/>}
             title={title}
             userName={userName}
-            logoutUrl="/logout"
+            userMenuItems={[
+              <UserMenuAnchor key={0} label="Sign out" href="/logout" />,
+            ]}
             sectionNavLinks={[<SectionNavLink label="Bots" to="/b" />]}
             headerNav={headerNav}
             headerNavExtra={headerNavExtra}

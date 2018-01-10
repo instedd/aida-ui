@@ -2,13 +2,13 @@ import React, { Component, Children } from 'react';
 import { Tabs, Tab, ListItem, MenuButton, Toolbar, Button, FontIcon } from 'react-md'
 import { withRouter } from 'react-router'
 import { Link } from 'react-router-dom'
-import UserMenu from './UserMenu'
+import * as u from './UserMenu'
 
-const nav = ({sectionNavLinks, userName, logoutUrl}) => {
+const nav = ({sectionNavLinks, userName, userMenuItems}) => {
   return (
     <nav>
       <SectionNavWithRouter sectionNavLinks={sectionNavLinks} />
-      <UserMenu userName={userName} logoutUrl={logoutUrl}/>
+      <u.UserMenu userName={userName} items={userMenuItems} />
     </nav>
   )
 }
@@ -25,12 +25,12 @@ const SectionNav = ({sectionNavLinks}) => {
 
 const SectionNavWithRouter = withRouter(SectionNav)
 
-export const Header = ({icon, title, sectionNavLinks, headerNav, headerNavExtra, userName, logoutUrl, buttonAction, buttonIcon}) => {
+export const Header = ({icon, title, sectionNavLinks, headerNav, headerNavExtra, userName, userMenuItems, buttonAction, buttonIcon}) => {
   return (
     <Toolbar
       className='mainToolbar'
       colored
-      nav={nav({sectionNavLinks, userName, logoutUrl})}
+      nav={nav({sectionNavLinks, userName, userMenuItems})}
       title={
         <div className='sub-nav'>
           {icon}
@@ -118,5 +118,9 @@ export class SectionNavLink extends Component {
     return null
   }
 }
+
+export const UserMenuLink = u.UserMenuLink
+
+export const UserMenuAnchor = u.UserMenuAnchor
 
 export default Header

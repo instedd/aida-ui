@@ -1,19 +1,15 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { ListItem, MenuButton, FontIcon, IconSeparator } from 'react-md'
+import { Link } from 'react-router-dom'
 
-export default class UserMenu extends Component {
+export class UserMenu extends Component {
   static propTypes = {
     userName: PropTypes.string.isRequired,
-    logoutUrl: PropTypes.string.isRequired
   }
 
   render() {
-    const {userName, logoutUrl} = this.props
-
-    const items = [
-      <ListItem key={0} component="a" primaryText="Sign out" href={logoutUrl} />,
-    ]
+    const {userName, items} = this.props
 
     return (
       <MenuButton
@@ -28,3 +24,9 @@ export default class UserMenu extends Component {
     );
   }
 }
+
+export default UserMenu
+
+export const UserMenuLink = ({label, to}) => <ListItem component={Link} primaryText={label} to={to} />
+
+export const UserMenuAnchor = ({label, href}) => <ListItem component="a" primaryText={label} href={href} />
