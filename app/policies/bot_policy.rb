@@ -23,6 +23,10 @@ class BotPolicy < ApplicationPolicy
     is_owner? or is_collaborator?
   end
 
+  def duplicate?
+    is_owner? or is_collaborator?
+  end
+
   def preview?
     is_owner? or is_collaborator?
   end

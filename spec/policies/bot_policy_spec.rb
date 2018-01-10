@@ -17,6 +17,7 @@ describe BotPolicy do
 
       it { is_expected.to permit_actions([:update, :destroy,
                                           :publish, :unpublish,
+                                          :duplicate,
                                           :read_session_data, :read_usage_stats,
                                           :read_channels,
                                           :read_behaviours, :create_skill,
@@ -29,6 +30,7 @@ describe BotPolicy do
 
       it { is_expected.to forbid_actions([:update, :destroy,
                                           :publish, :unpublish,
+                                          :duplicate,
                                           :read_session_data, :read_usage_stats,
                                           :read_channels,
                                           :read_behaviours, :create_skill,
@@ -41,6 +43,7 @@ describe BotPolicy do
 
       it { is_expected.to permit_actions([:update, :destroy,
                                           :publish, :unpublish,
+                                          :duplicate,
                                           :read_session_data, :read_usage_stats,
                                           :read_channels,
                                           :read_behaviours, :create_skill,
