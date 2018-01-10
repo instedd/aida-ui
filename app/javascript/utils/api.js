@@ -16,6 +16,10 @@ export const createBot = () => {
   return apiPostJSON(`bots`)
 }
 
+export const duplicateBot = (botId : number) => {
+  return apiPostJSON(`bots/${botId}/duplicate`)
+}
+
 export const updateBot = (bot : T.Bot) => {
   return apiPutJSON(`bots/${bot.id}`, botSchema, {bot})
 }

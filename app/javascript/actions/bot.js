@@ -3,6 +3,8 @@ import * as T from '../utils/types'
 import * as api from '../utils/api'
 import { updatePreviewIfActive } from './chat'
 import { pushNotification } from './notifications'
+import { _botsCreateSuccess } from './bots'
+import * as routes from '../utils/routes'
 
 export const UPDATE = 'BOT_UPDATE'
 export const PUBLISH = 'BOT_PUBLISH'
@@ -75,6 +77,16 @@ export const deleteBot = (bot : T.Bot) => (dispatch : T.Dispatch) => {
             .then(() => dispatch(_botDelete(bot.id)))
 }
 
+export const duplicateBot = (bot : T.Bot, history : any) => (dispatch : T.Dispatch) => {
+  return api.duplicateBot(bot.id)
+            .then(duplicate => {
+              dispatch(_botsCreateSuccess(duplicate))
+              history.push(routes.bot(duplicate.id))
+            })
+            .catch(error => {
+              console.error(error)
+            })
+}
 export const botBehaviourUpdated = () => (dispatch : T.Dispatch) => {
   dispatch(updatePreviewIfActive())
 }
