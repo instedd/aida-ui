@@ -28,7 +28,7 @@ class Api::CollaboratorsController < ApplicationApiController
   def collaborator_api_json(collaborator)
     {
       id: collaborator.id,
-      role: collaborator.role,
+      roles: collaborator.roles,
       user_email: collaborator.user.email,
       last_activity: (collaborator.user.updated_at.to_s(:iso8601) rescue nil)
     }

@@ -24,14 +24,14 @@ FactoryBot.define do
   factory :collaborator do
     bot
     user
-    role "collaborator"
+    roles []
   end
 
   factory :invitation do
     bot
     creator { bot.owner }
     email { generate(:email) }
-    role "collaborator"
+    roles []
 
     trait :anonymous do
       email nil

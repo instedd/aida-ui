@@ -431,7 +431,7 @@
       "type": "object",
       "properties": {
         "id": { "type": "integer" },
-        "role": { "type": "string" },
+        "roles": { "$ref": "#/definitions/role_list" },
         "user_email": { "type": "string" },
         "last_activity": {
           "oneOf": [
@@ -440,7 +440,7 @@
           ]
         }
       },
-      "required": [ "id", "role", "user_email", "last_activity" ]
+      "required": [ "id", "roles", "user_email", "last_activity" ]
     },
 
     "collaborators_index": {
@@ -470,7 +470,7 @@
             { "type": "null" }
           ]
         },
-        "role": { "type": "string" },
+        "roles": { "$ref": "#/definitions/role_list" },
         "link_url": {
           "oneOf": [
             { "type": "string" },
@@ -482,14 +482,23 @@
       "required": [ "id", "email", "link_url", "created_at" ]
     },
 
+    "role": {
+      "enum": [ "publish", "behaviour", "content", "variables", "results" ]
+    },
+
+    "role_list": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/role" }
+    },
+
     "invitation_data": {
       "type": "object",
       "properties": {
         "bot_name": { "type": "string" },
         "inviter": { "type": "string" },
-        "role": { "type": "string" }
+        "roles": { "$ref": "#/definitions/role_list" }
       },
-      "required": [ "bot_name", "inviter", "role" ]
+      "required": [ "bot_name", "inviter", "roles" ]
     }
   },
 

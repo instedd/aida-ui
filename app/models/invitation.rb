@@ -6,9 +6,9 @@ class Invitation < ApplicationRecord
   validates_presence_of :creator
   validates_presence_of :token
   validates_uniqueness_of :email, scope: :bot
-  validates_inclusion_of :role, in: %w(collaborator)
   validate :email_is_not_already_collaborating
   validate :creator_is_at_least_collaborator
+  validate :roles_are_valid
 
   after_initialize :init
 
@@ -26,18 +26,17 @@ class Invitation < ApplicationRecord
     where(email: nil).first
   end
 
-  def self.create_anonymous!(role)
+  def self.create_anonymous!(roles)
     # this will work if called from the bot's invitations relation
     bot_id = scope_attributes['bot_id']
     creator = Bot.find(bot_id).owner if bot_id.present?
-    create! role: role, creator: creator
+    create! roles: roles, creator: creator
   end
 
   private
 
   def init
     self.token ||= Invitation.generate_token
-    self.role ||= "collaborator"
   end
 
   def email_is_not_already_collaborating
@@ -55,6 +54,12 @@ class Invitation < ApplicationRecord
       if creator != bot.owner and !bot.collaborating_users.include?(creator)
         errors[:creator] << "is not a collaborator"
       end
+    end
+  end
+
+  def roles_are_valid
+    unless roles.blank? || roles.all? { |role| Collaborator::ROLES.include?(role) }
+      errors[:roles] << "contains an invalid value"
     end
   end
 end

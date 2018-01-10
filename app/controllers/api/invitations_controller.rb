@@ -5,7 +5,7 @@ class Api::InvitationsController < ApplicationApiController
   def create
     bot = Bot.find(params[:bot_id])
     authorize bot, :invite_collaborator?
-    invitation = InviteCollaborator.run(bot, params[:email], params[:role], current_user)
+    invitation = InviteCollaborator.run(bot, params[:email], params[:roles], current_user)
     if invitation.valid?
       render json: invitation_api_json(invitation)
     else
@@ -34,7 +34,7 @@ class Api::InvitationsController < ApplicationApiController
     authorize invitation
     render json: { bot_name: invitation.bot.name,
                    inviter: invitation.creator.email,
-                   role: invitation.role }
+                   roles: invitation.roles }
   rescue Pundit::NotAuthorizedError => e
     # render as 404 to avoid leaking security information
     render_not_found_response(e)
