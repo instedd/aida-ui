@@ -219,7 +219,7 @@ export type Invitation = {
   email: string | null;
   roles?: RoleList;
   link_url: string | null;
-  created_at: string;
+  sent_at?: string;
 };
 
 export type Role = "publish" | "behaviour" | "content" | "variables" | "results";

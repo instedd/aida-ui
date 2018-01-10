@@ -121,6 +121,16 @@ input[type=number]:invalid {
   color: $md-grey-500;
 }
 
+.invitation-activity {
+  white-space: nowrap;
+  position: relative;
+  top: -10px;
+  a {
+    position: relative;
+    top: 10px;
+  }
+}
+
 /* ========== Helper classes ============ */
 
 .rounded {

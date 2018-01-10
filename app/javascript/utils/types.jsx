@@ -160,6 +160,9 @@ export type InvitationsAction = {
   type: 'INVITATION_ACCEPT_SUCCESS',
 } | {
   type: 'INVITATION_ACCEPT_ERROR',
+} | {
+  type: 'INVITATION_RESEND_SUCCESS',
+  invitation: T.Invitation
 };
 
 export type FrontDeskAction = {

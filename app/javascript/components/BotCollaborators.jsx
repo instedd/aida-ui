@@ -42,7 +42,7 @@ class BotCollaborators extends Component {
       type: 'invitation',
       email: i.email,
       role: i.role,
-      last_activity: i.created_at,
+      last_activity: i.sent_at,
       data: i
     })))
 
@@ -61,6 +61,9 @@ class BotCollaborators extends Component {
       }
       const removeCollaborator = (collaborator) => {
         actions.removeCollaborator(collaborator)
+      }
+      const resendInvitation = (invitation) => {
+        invitationsActions.resendInvitation(invitation)
       }
 
       const inviteDialog = (
@@ -103,7 +106,14 @@ class BotCollaborators extends Component {
         }
         const lastActivityContent = (item) => {
           if (item.type == 'invitation' && item.last_activity) {
-            return `Invited ${moment(item.last_activity).fromNow()}`
+            return (<span className="invitation-activity">
+              {`Invited ${moment(item.last_activity).fromNow()}`}
+              <Button icon iconChildren="refresh"
+                      onClick={() => resendInvitation(item.data)}
+                      tooltipLabel="Resend invitation"
+                      tooltipPosition="left"
+                      component="a" />
+            </span>)
           } else if (item.last_activity) {
             return moment(item.last_activity).fromNow()
           } else {
@@ -112,9 +122,16 @@ class BotCollaborators extends Component {
         }
         const renderCollaboratorAction = (item) => {
           if (item.type == 'invitation') {
-            return (<Button flat iconChildren="close" className="invitation-row" onClick={() => cancelInvitation(item.data)}>Cancel</Button>)
+            return (<Button icon iconChildren="close"
+                            className="invitation-row"
+                            onClick={() => cancelInvitation(item.data)}
+                            tooltipLabel="Cancel invitation"
+                            tooltipPosition="left" />)
           } else if (item.email != currentUserEmail) {
-            return (<Button flat iconChildren="close" onClick={() => removeCollaborator(item.data)}>Remove</Button>)
+            return (<Button icon iconChildren="close"
+                            onClick={() => removeCollaborator(item.data)}
+                            tooltipLabel="Remove collaborator"
+                            tooltipPosition="left" />)
           }
         }
         return (

@@ -477,9 +477,9 @@
             { "type": "null" }
           ]
         },
-        "created_at": { "type": "string" }
+        "sent_at": { "type": "string" }
       },
-      "required": [ "id", "email", "link_url", "created_at" ]
+      "required": [ "id", "email", "link_url", "sent_at" ]
     },
 
     "role": {

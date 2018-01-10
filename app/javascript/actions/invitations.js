@@ -4,6 +4,8 @@ import * as api from '../utils/api'
 
 import * as routes from '../utils/routes'
 
+import { pushNotification } from './notifications'
+
 export const CANCEL = 'INVITATIONS_CANCEL'
 export const CANCEL_SUCCESS = 'INVITATIONS_CANCEL_SUCCESS'
 export const CANCEL_ERROR = 'INVITATIONS_CANCEL_ERROR'
@@ -15,6 +17,10 @@ export const RETRIEVE_ERROR = 'INVITATION_RETRIEVE_ERROR'
 export const ACCEPT = 'INVITATION_ACCEPT'
 export const ACCEPT_SUCCESS = 'INVITATION_ACCEPT_SUCCESS'
 export const ACCEPT_ERROR = 'INVITATION_ACCEPT_ERROR'
+
+export const RESEND = 'INVITATION_RESEND'
+export const RESEND_SUCCESS = 'INVITATION_RESEND_SUCCESS'
+export const RESEND_ERROR = 'INVITATION_RESEND_ERROR'
 
 export const _invitationsCancel = (invitation : T.Invitation) : T.InvitationsAction => ({
   type: CANCEL,
@@ -58,6 +64,11 @@ export const _invitationAcceptError = () : T.InvitationsAction => ({
   type: ACCEPT_ERROR
 })
 
+export const _invitationResendSuccess = (invitation : T.Invitation) => ({
+  type: RESEND_SUCCESS,
+  invitation
+})
+
 
 export const cancelInvitation = (invitation : T.Invitation) => (dispatch : T.Dispatch) => {
   dispatch(_invitationsCancel(invitation))
@@ -81,4 +92,12 @@ export const acceptInvitation = (token : string, history : any) => (dispatch : T
               history.replace(routes.bot(response.bot_id))
             })
             .catch(error => dispatch(_invitationAcceptError()))
+}
+
+export const resendInvitation = (invitation : T.Invitation) => (dispatch : T.Dispatch) => {
+  api.resendInvitation(invitation.id)
+     .then(invitation => {
+       dispatch(pushNotification("The invitation email was resent"))
+       dispatch(_invitationResendSuccess(invitation))
+     })
 }

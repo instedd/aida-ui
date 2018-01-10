@@ -10,7 +10,7 @@ module InvitationHelper
       email: invitation.email,
       roles: invitation.roles,
       link_url: (invitation_link_url(invitation) if invitation.anonymous?),
-      created_at: invitation.created_at.to_s(:iso8601)
+      sent_at: invitation.updated_at.to_s(:iso8601)
     }
   end
 end

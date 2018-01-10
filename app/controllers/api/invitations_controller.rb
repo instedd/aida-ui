@@ -19,7 +19,7 @@ class Api::InvitationsController < ApplicationApiController
     invitation = Invitation.find(params[:id])
     authorize invitation
     ResendInvitation.run(invitation)
-    render json: { result: :ok }
+    render json: invitation_api_json(invitation)
   end
 
   def destroy

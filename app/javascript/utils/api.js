@@ -123,6 +123,10 @@ export const cancelInvitation = (invitationId : number) => {
   return apiDelete(`invitations/${invitationId}`)
 }
 
+export const resendInvitation = (invitationId : number) => {
+  return apiPostJSON(`invitations/${invitationId}/resend`)
+}
+
 export const removeCollaborator = (collaboratorId : number) => {
   return apiDelete(`collaborators/${collaboratorId}`)
 }
