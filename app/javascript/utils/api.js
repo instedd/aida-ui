@@ -134,3 +134,7 @@ export const retrieveInvitation = (token : string) => {
 export const acceptInvitation = (token : string) => {
   return apiPostJSON(`invitations/accept?token=${token}`)
 }
+
+export const generateToken = () => {
+  return apiPutJSON(`generate_token`, null)
+}

@@ -5,18 +5,24 @@ import { Snackbar } from 'react-md'
 
 import Layout from '../ui/Layout'
 import Footer from '../ui/Footer'
-import Header, { SectionNavLink } from '../ui/Header'
+import Header, { SectionNavLink, UserMenuLink, UserMenuAnchor } from '../ui/Header'
 import Icon from './Icon'
 
 import * as notifActions from '../actions/notifications'
+import * as r from '../utils/routes'
 
 export const AppLayout = ({title, headerNav, headerNavExtra, userName, children, buttonAction, buttonIcon, toasts, notifActions}) => {
   const header = (
     <Header icon={<Icon/>}
             title={title}
             userName={userName}
-            logoutUrl="/logout"
-            sectionNavLinks={[<SectionNavLink label="Bots" to="/b" />]}
+            userMenuItems={[
+              <UserMenuAnchor key={0} label="Sign out" href="/logout" />,
+            ]}
+            sectionNavLinks={[
+              <SectionNavLink key={0} label="Bots" to="/b" />,
+              <SectionNavLink key={1} label="API" to={r.settingsApi()} />
+            ]}
             headerNav={headerNav}
             headerNavExtra={headerNavExtra}
             buttonAction={buttonAction} buttonIcon={buttonIcon} />

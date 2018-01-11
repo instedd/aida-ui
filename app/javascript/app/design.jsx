@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { BrowserRouter, Route, Redirect } from 'react-router-dom'
 import { SelectField, Divider, Button, TextField, Checkbox } from 'react-md'
 
-import Header, { HeaderNavLink, HeaderNavAction, SectionNavLink } from '../ui/Header'
+import Header, { HeaderNavLink, HeaderNavAction, SectionNavLink, UserMenuAnchor } from '../ui/Header'
 import SideBar, { SidebarItem, SidebarMenuItem } from '../ui/SideBar'
 import { MainWhite } from '../ui/MainWhite'
 import { MainGrey } from '../ui/MainGrey'
@@ -22,7 +22,10 @@ export const App = () =>
   <BrowserRouter>
     <Layout
       header={
-        <Header userName="johndoe" logoutUrl="#"
+        <Header userName="johndoe"
+          userMenuItems={[
+            <UserMenuAnchor key={0} label="Sign out" href="#" />
+          ]}
           icon={<Icon/>}
           title="WFP chat bot"
           sectionNavLinks={[
