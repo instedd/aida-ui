@@ -53,7 +53,7 @@ class SettingsApiComponent extends Component {
           <br/>
 
           <SelectField id="select-bot" className="md-cell"
-            label="Bot" menuItems={botOptions}
+            label="Bot" menuItems={botOptions} disabled={botOptions.length == 0}
             value={botId || 0} onChange={botId => this.setState({botId}) } />
           <br/>
 
