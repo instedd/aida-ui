@@ -2,7 +2,10 @@ class DuplicateBot
   def self.run(bot, owner)
     Bot.transaction do
       duplicate = Bot.create_prepared! owner
-      duplicate.update_attributes! name: duplicate_name(bot.name)
+
+      name, copy_number = find_last_accessible_copy(bot.name, owner)
+      duplicate.update_attributes! name: build_duplicate_name(name, copy_number + 1)
+
       duplicate.front_desk.update_attributes! config: bot.front_desk.config
       duplicate_translations(bot.front_desk, duplicate.front_desk)
       bot.skills.each do |skill|
@@ -27,17 +30,40 @@ class DuplicateBot
     end
   end
 
-  private
+  def self.find_last_accessible_copy(bot_name, owner)
+    name, last_copy = extract_name_and_copy_number(bot_name)
+    accessible_names = Pundit.policy_scope(owner, Bot).pluck(:name)
+    names_and_copies = accessible_names.map { |x| extract_name_and_copy_number(x) }
+    names_and_copies.each do |x|
+      if x.first == name && x.second > last_copy
+        last_copy = x.second
+      end
+    end
+    [name, last_copy]
+  end
 
-  def self.duplicate_name(name)
-    if name.ends_with?('copy')
-      "#{name} 2"
-    elsif name =~ /\A(.*) copy (\d+)\Z/
-      "#{$1} copy #{$2.to_i + 1}"
+  def self.extract_name_and_copy_number(name)
+    if match_data = /\A(?<name>.*)( copy( (?<copy>\d+))?)\Z/.match(name)
+      copy = if match_data[:copy].nil?
+               1
+             else
+               match_data[:copy].to_i
+             end
+      [match_data[:name], copy]
     else
-      "#{name} copy"
+      [name, 0]
     end
   end
+
+  def self.build_duplicate_name(name, copy)
+    if copy == 1
+      "#{name} copy"
+    else
+      "#{name} copy #{copy}"
+    end
+  end
+
+  private
 
   def self.duplicate_translations(behaviour, dup_behaviour)
     behaviour.translations.each do |translation|

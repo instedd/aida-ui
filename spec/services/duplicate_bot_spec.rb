@@ -96,5 +96,24 @@ RSpec.describe DuplicateBot, type: :service do
 
       expect(duplicate.name).to eq("Bot copy 3")
     end
+
+    it "considers all accessible bots by the user when deciding the suffix" do
+      create(:bot, name: "#{bot.name} copy", shared_with: user)
+
+      expect(duplicate.name).to eq("#{bot.name} copy 2")
+    end
+
+    it "uses the greatest accessible copy suffix to increment" do
+      create(:bot, name: "#{bot.name} copy 7", shared_with: user)
+      create(:bot, name: "#{bot.name} copy 10", shared_with: user)
+
+      expect(duplicate.name).to eq("#{bot.name} copy 11")
+    end
+
+    it "ignores inaccessible bots" do
+      create(:bot, name: "#{bot.name} copy")
+
+      expect(duplicate.name).to eq("#{bot.name} copy")
+    end
   end
 end
