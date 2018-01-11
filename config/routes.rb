@@ -30,7 +30,7 @@ Rails.application.routes.draw do
 
     resources :channels, only: [:update]
     resources :skills, only: [:update, :destroy]
-    resources :collaborators, only: [:destroy]
+    resources :collaborators, only: [:update, :destroy]
     resources :invitations, only: [:destroy] do
       member do
         post :resend

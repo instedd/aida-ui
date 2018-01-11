@@ -9,18 +9,19 @@ describe CollaboratorPolicy do
   describe "of owned bot" do
     let(:bot) { create(:bot, owner: user) }
 
-    it { is_expected.to permit_actions([:destroy]) }
+    it { is_expected.to permit_actions([:update, :destroy]) }
   end
 
   describe "of other bots" do
     let(:bot) { create(:bot) }
 
-    it { is_expected.to forbid_actions([:destroy]) }
+    it { is_expected.to forbid_actions([:update, :destroy]) }
   end
 
   describe "of shared bots" do
     let(:bot) { create(:bot, shared_with: user) }
 
     it { is_expected.to permit_actions([:destroy]) }
+    it { is_expected.to forbid_actions([:update]) }
   end
 end

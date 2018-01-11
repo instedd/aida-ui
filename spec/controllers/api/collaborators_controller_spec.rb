@@ -66,4 +66,16 @@ RSpec.describe Api::CollaboratorsController, type: :controller do
       end.to change(shared_bot.collaborators, :count).by(-1)
     end
   end
+
+  describe "update" do
+    it "updates a collaborator roles" do
+      put :update, params: { id: collaborator.id, collaborator: { roles: ['content', 'variables'] }}
+      expect(response).to be_success
+      expect(json_body).to be_a_collaborator_as_json
+
+      collaborator.reload
+
+      expect(collaborator.roles).to match_array(%w(content variables))
+    end
+  end
 end

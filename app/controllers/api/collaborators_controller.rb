@@ -16,6 +16,13 @@ class Api::CollaboratorsController < ApplicationApiController
                  }
   end
 
+  def update
+    collaborator = Collaborator.find(params[:id])
+    authorize collaborator
+    collaborator.update_attributes!(permitted_attributes(collaborator))
+    render json: collaborator_api_json(collaborator)
+  end
+
   def destroy
     collaborator = Collaborator.find(params[:id])
     authorize collaborator
