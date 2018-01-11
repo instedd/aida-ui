@@ -45,7 +45,7 @@ RSpec.describe ParseXlsForm, type: :service do
 
     %w(decimal.xlsx integer.xlsx multiple_choice_lists.xlsx
     select_many.xlsx select_one.xlsx simple.xlsx single_choices_list_underscore.xlsx
-    single_choices_list.xlsx relevant_questions.xlsx constraint_basic.xlsx text.xlsx).each do |file|
+    single_choices_list.xlsx no_choices.xlsx relevant_questions.xlsx constraint_basic.xlsx text.xlsx).each do |file|
       it "returns valid survey for #{file}" do
         result = ParseXlsForm.run(file_fixture(file).open)
 

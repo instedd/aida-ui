@@ -5,7 +5,12 @@ class ParseXlsForm
     wb = Roo::Spreadsheet.open(file)
 
     questions = gather_questions(wb.sheet('survey'))
-    choice_lists = gather_choices(wb.sheet('choices'))
+    choice_lists =
+      if wb.sheets.include?('choices')
+        gather_choices(wb.sheet('choices'))
+      else
+        []
+      end
 
     validate!(questions, choice_lists)
 
