@@ -28,31 +28,9 @@ let ChatHeader = ({title, publishing}) => (
   </div>
 )
 
-const Message = ({
-  text,
-  sent,
-  timestamp
-}) => (
-  // <li className={sent ? "message-sent" : "message-received"}>
-    <Paper
-      zDepth={2}
-      className={"message-bubble " + (sent ? "message-sent" : "message-received")} >
-      <li>
-        <div className="content-text">
-          {text}
-        </div>
-        <div className="content-timestamp">
-          {moment(timestamp).format("HH:mm")}
-        </div>
-      </li>
-    </Paper>
-  // </li>
-)
-
 const MessageBulk = ({
   messages
 }) => {
-  console.log(messages)
   const sentMessages = messages[0].sent
   return (
     <Paper
@@ -90,36 +68,29 @@ class MessageList extends Component {
 
   render() {
 
-    const groupBy = (elems, attr) => {
-      let groupedElems = []
-      let lastGroup = []
-      let lastGroupAttr = null
-      elems.forEach((elem) => {
-        if (elem[attr] == lastGroupAttr) {
-          lastGroup.push(elem)
+    const groupBy = (elems, func) => {
+      const lastElem = (collection) => (collection[collection.length - 1])
+
+      return elems.reduce(function(groups, elem) {
+        const lastGroup = lastElem(groups)
+        if (groups.length == 0 || func(lastElem(lastGroup)) != func(elem)) {
+          groups.push([elem])
         } else {
-          lastGroup = [elem]
-          lastGroupAttr = elem[attr]
-          groupedElems.push(lastGroup)
+          lastGroup.push(elem)
         }
-      })
-      return groupedElems
+        return groups
+      }, [])
     }
 
     const { messages } = this.props
-    const groupedMessages = groupBy(messages, "sent")
+    const groupedMessages = groupBy(messages, (message) => (message.sent))
 
     return (
       <div className="chat-window-body">
         <ul>
-          {/* {messages.map(message =>
-            <Message
-              key={message.id}
-              {...message}
-            />
-          )} */}
-          {groupedMessages.map(messages =>
+          {groupedMessages.map((messages, ix) =>
             <MessageBulk
+              key={`msg-bulk-${ix}`}
               messages={messages}
             />
           )}
