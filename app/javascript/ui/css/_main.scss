@@ -1,7 +1,7 @@
 .main-with-sidebar {
   width: 100%;
   display: grid;
-  grid-template-columns: minmax(min-content, 320px) auto 90px;
+  grid-template-columns: minmax(min-content, 320px) minmax(615px, auto) 90px;
   grid-template-areas:
     "sidebar main-content button-area";
   .sidebar {

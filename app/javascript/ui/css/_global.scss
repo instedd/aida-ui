@@ -65,11 +65,21 @@ main {
   }
 }
 
-.ui-key-value-list, {
-  overflow: unset;
-
+.ui-key-value-list {
+  thead .md-table-row {
+    border-bottom: none;
+    .md-table-column--header {
+      height: 0;
+    }
+  }
   tbody .md-table-row {
     border-bottom: none;
+    td {
+      padding: 0 12px 0 0;
+    }
+  }
+  .md-edit-dialog__blocked-field {
+    width: auto;
   }
 
   .addlink .md-text,
