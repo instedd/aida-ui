@@ -1,4 +1,4 @@
-version: 0.4.0
+version: 0.5.0
 backend:
   url:
   public_socket_url:
