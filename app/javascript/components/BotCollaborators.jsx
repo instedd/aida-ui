@@ -20,7 +20,8 @@ import * as invitationsActions from '../actions/invitations'
 
 class BotCollaborators extends Component {
   state = {
-    email: ''
+    email: '',
+    roles: []
   }
 
   componentDidMount() {
@@ -50,11 +51,16 @@ class BotCollaborators extends Component {
     if (!loaded) {
       return (<EmptyLoader>Loading collaborators for {bot.name}</EmptyLoader>)
     } else {
-      const { email } = this.state
+      const { email, roles } = this.state
+
+      const toggleRole = (roles, role) => {
+        const hasRole = roles.indexOf(role) >= 0
+        return hasRole ? without(roles, role) : roles.concat([role])
+      }
 
       const inviteCollaborator = () => {
-        actions.inviteCollaborator(bot, this.state.email)
-        this.setState({ email: ''})
+        actions.inviteCollaborator(bot, this.state.email, this.state.roles)
+        this.setState({ email: '', roles: [] })
         hideDialog()
       }
       const cancelInvitation = (invitation) => {
@@ -67,24 +73,49 @@ class BotCollaborators extends Component {
         invitationsActions.resendInvitation(invitation)
       }
       const toggleCollaboratorRole = (collaborator, role) => {
-        const hasRole = collaborator.roles.indexOf(role) >= 0
-        const roles = hasRole ? without(collaborator.roles, role) : collaborator.roles.concat([role])
+        const roles = toggleRole(collaborator.roles, role)
         actions.updateCollaborator({...collaborator, roles})
       }
+      const toggleInvitationRole = (role) => {
+        this.setState({ roles: toggleRole(this.state.roles, role) })
+      }
+
+      const invitationRoleCheckbox = (role, label, description) => (
+        <Checkbox id={`role-invitation-${role}`}
+                  key={role}
+                  name={`role-invitation-${role}`}
+                  className="role-toggle-control"
+                  onChange={() => toggleInvitationRole(role)}
+                  label={<span className="role-description">
+                    {label}
+                    <span className="hint">{description}</span>
+                  </span>} />
+      )
 
       const inviteDialog = (
         <DialogContainer
           id="invite-collaborator-dialog"
           visible={dialogVisible}
           onHide={hideDialog}
-          title="Invite collaborators">
-          <h4>The access of project collaborators will be managed through roles</h4>
+          title={<span>
+            Invite collaborators
+            <span className="subtitle">The access of project collaborators will be managed through roles</span>
+          </span>}>
           <TextField id="invite-email"
                      label="Enter collaborator's email"
                      value={email}
                      onChange={email => this.setState({ email })}/>
           <div>
-            <Button flat primary id="invite-send-button" onClick={inviteCollaborator}>Send</Button>
+            {[
+               invitationRoleCheckbox('publish',   'Publish',   'Can publish the bot and change the channel configuration'),
+               invitationRoleCheckbox('behaviour', 'Behaviour', 'Can change skills configuration'),
+               invitationRoleCheckbox('content',   'Content',   'Can edit messages and translations'),
+               invitationRoleCheckbox('variables', 'Variables', 'Can modify variable values'),
+               invitationRoleCheckbox('results',   'Results',   'Can view stats, conversation logs, survey results and feedback'),
+            ]}
+          </div>
+          <div className="action-buttons">
+            <Button flat secondary swapTheming id="invite-send-button" onClick={inviteCollaborator}>Send</Button>
             <Button flat id="invite-cancel-button" onClick={hideDialog}>Cancel</Button>
           </div>
           <footer>

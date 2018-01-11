@@ -115,8 +115,8 @@ export const fetchCollaborators = (botId : number) => {
   return apiFetchJSON(`bots/${botId}/collaborators`)
 }
 
-export const inviteCollaborator = (botId : number, email : string, role : string) => {
-  return apiPostJSON(`bots/${botId}/invitations`, null, {email, role})
+export const inviteCollaborator = (botId : number, email : string, roles : T.RoleList) => {
+  return apiPostJSON(`bots/${botId}/invitations`, null, {email, roles})
 }
 
 export const cancelInvitation = (invitationId : number) => {

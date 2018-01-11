@@ -131,6 +131,64 @@ input[type=number]:invalid {
   }
 }
 
+#invite-collaborator-dialog {
+  min-width: 500px;
+
+  h2 {
+    background-color: $md-grey-300;
+
+    .subtitle {
+      margin-top: 10px;
+      color: $md-grey-600;
+      display: block;
+      font-weight: normal;
+      font-size: 70%;
+      line-height: 1.1;
+    }
+  }
+
+  section {
+    padding-top: 10px;
+  }
+
+  .role-toggle-control {
+    margin-top: 10px;
+  }
+
+  .role-description {
+    font-weight: bold;
+    font-size: 15px;
+    margin-top: 15px;
+    display: inline-block;
+
+    .hint {
+      display: block;
+      font-weight: normal;
+      color: $md-grey-600;
+      font-size: 12px;
+    }
+  }
+
+  .action-buttons {
+    padding-top: 40px;
+
+    button {
+      margin-right: 20px;
+    }
+  }
+
+  footer {
+    margin: 24px -24px -24px -24px;
+    border-top: 1px solid $md-grey-200;
+
+    i {
+      position: relative;
+      top: 5px;
+      margin-right: 10px;
+    }
+  }
+}
+
 /* ========== Helper classes ============ */
 
 .rounded {

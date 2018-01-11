@@ -91,9 +91,9 @@ export const fetchCollaborators = (scope : {botId : number}) => (dispatch : T.Di
             .catch(error => dispatch(_collaboratorsFetchError()))
 }
 
-export const inviteCollaborator = (bot : T.Bot, email : string) => (dispatch : T.Dispatch) => {
+export const inviteCollaborator = (bot : T.Bot, email : string, roles : T.RoleList) => (dispatch : T.Dispatch) => {
   dispatch(_collaboratorsInvite(bot.id))
-  return api.inviteCollaborator(bot.id, email, 'collaborator')
+  return api.inviteCollaborator(bot.id, email, roles)
             .then(invitation => dispatch(_collaboratorsInviteSuccess(bot.id, invitation)))
             .catch(error => dispatch(_collaboratorsInviteError(bot.id, error)))
 }
