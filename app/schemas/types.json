@@ -181,6 +181,12 @@
       ]
     },
 
+    "attributes_dict": {
+      "type": "object",
+      "properties": {},
+      "additionalProperties": { "type": ["string", "integer"] }
+    },
+
     "surveyChoiceList": {
       "type": "object",
       "required": [ "name", "choices" ],
@@ -193,8 +199,11 @@
             "required": [ "name", "labels" ],
             "properties": {
               "name": { "type": "string" },
-              "labels": { "$ref": "#/definitions/keywordList" }
-            }
+              "labels": { "$ref": "#/definitions/keywordList" },
+              "attributes": {"$ref": "#/definitions/attributes_dict"}
+            },
+            "additionalProperties": false,
+            "required": [ "name", "labels" ]
           }
         }
       }

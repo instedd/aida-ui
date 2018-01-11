@@ -43,7 +43,7 @@ RSpec.describe ParseXlsForm, type: :service do
 
     end
 
-    %w(decimal.xlsx integer.xlsx multiple_choice_lists.xlsx
+    %w(decimal.xlsx cascading_select.xlsx cascading_select_integer.xlsx integer.xlsx multiple_choice_lists.xlsx
     select_many.xlsx select_one.xlsx simple.xlsx single_choices_list_underscore.xlsx
     single_choices_list.xlsx no_choices.xlsx relevant_questions.xlsx constraint_basic.xlsx text.xlsx).each do |file|
       it "returns valid survey for #{file}" do
@@ -234,6 +234,32 @@ RSpec.describe ParseXlsForm, type: :service do
                                        message: 'How old are you?'
                                      }])
     end
+
+    it "parses choice_filter if present" do
+      survey = Roo::Spreadsheet.open(file_fixture('cascading_select.xlsx').open).sheet('survey')
+      result = ParseXlsForm.gather_questions(survey)
+
+      expect(result).to match_array([{
+                                       type: 'select_one',
+                                       choices: 'states',
+                                       name: 'state',
+                                       message: 'state'
+                                     },
+                                     {
+                                       type: 'select_one',
+                                       choices: 'counties',
+                                       name: 'county',
+                                       message: 'county',
+                                       choice_filter: 'state=${state}'
+                                     },
+                                     {
+                                       type: 'select_one',
+                                       choices: 'cities',
+                                       name: 'city',
+                                       message: 'city',
+                                       choice_filter: 'state=${state} and county=${county}'
+                                     }])
+    end
   end
 
   describe "gather choices" do
@@ -284,12 +310,72 @@ RSpec.describe ParseXlsForm, type: :service do
                                      }])
     end
 
+    it "parses choices with extra attributes if present" do
+      choices = Roo::Spreadsheet.open(file_fixture('cascading_select.xlsx').open).sheet('choices')
+      result = ParseXlsForm.gather_choices(choices)
+
+      expect(result).to match_array([{
+                                       name: 'states',
+                                       choices: [
+                                         { name: 'texas', labels: 'Texas' },
+                                         { name: 'washington', labels: 'Washington' },
+                                       ]
+                                     },
+                                     {
+                                       name: 'counties',
+                                       choices: [
+                                         { name: 'king', labels: 'King', attributes: { state: 'washington' } },
+                                         { name: 'pierce', labels: 'Pierce', attributes: { state: 'washington' } },
+                                         { name: 'king', labels: 'King', attributes: { state: 'texas' } },
+                                         { name: 'cameron', labels: 'Cameron', attributes: { state: 'texas' } },
+                                       ]
+                                     },
+                                     {
+                                       name: 'cities',
+                                       choices: [
+                                         { name: 'dumont', labels: 'Dumont', attributes: { state: 'texas', county: 'king' } },
+                                         { name: 'finney', labels: 'Finney', attributes: { state: 'texas', county: 'king' } },
+                                         { name: 'brownsville', labels: 'Brownsville', attributes: { state: 'texas', county: 'cameron' } },
+                                         { name: 'harlingen', labels: 'Harlingen', attributes: { state: 'texas', county: 'cameron' } },
+                                         { name: 'seattle', labels: 'Seattle', attributes: { state: 'washington', county: 'king' } },
+                                         { name: 'redmond', labels: 'Redmond', attributes: { state: 'washington', county: 'king' } },
+                                         { name: 'tacoma', labels: 'Tacoma', attributes: { state: 'washington', county: 'pierce' } },
+                                         { name: 'puyallup', labels: 'Puyallup', attributes: { state: 'washington', county: 'pierce' } },
+                                       ]
+                                     }])
+    end
+
+    it "parses choices with extra integer attributes" do
+      choices = Roo::Spreadsheet.open(file_fixture('cascading_select_integer.xlsx').open).sheet('choices')
+      result = ParseXlsForm.gather_choices(choices)
+
+      expect(result).to match_array([{
+                                       name: 'flavour',
+                                       choices: [
+                                         { name: 'strawberry', labels: 'strawberry', attributes: { min_age: 0, max_age: 40} },
+                                         { name: 'blue_moon', labels: 'blue moon', attributes: { min_age: 0, max_age: 12} },
+                                         { name: 'tutti_frutti', labels: 'tutti frutti', attributes: { min_age: 0, max_age: 12} },
+                                         { name: 'mint_chocolate_chip', labels: 'mint chocolate chip', attributes: { min_age: 10, max_age: 999} },
+                                         { name: 'coffee', labels: 'coffee', attributes: { min_age: 30, max_age: 999} },
+                                         { name: 'green_tea', labels: 'green tea', attributes: { min_age: 40, max_age: 999} },
+                                       ]
+                                     }])
+    end
+
     it "validates uniqueness of choice in lists" do
       choices = Roo::Spreadsheet.open(file_fixture('duplicate_names.xlsx').open).sheet('choices')
 
       expect do
         ParseXlsForm.gather_choices(choices)
       end.to raise_error(/duplicate choice name.*'male_female'/)
+    end
+
+    it "validates uniqueness of choice with attributes in lists" do
+      choices = Roo::Spreadsheet.open(file_fixture('cascading_select_duplicate_choice_names.xlsx').open).sheet('choices')
+
+      expect do
+        ParseXlsForm.gather_choices(choices)
+      end.to raise_error(/duplicate choice name.*'brownsville'/)
     end
 
     it "validates list names are well-formed" do

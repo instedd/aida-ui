@@ -84,11 +84,15 @@ export type SurveyQuestion = {
   constraint_message?: Message;
 };
 
+export type AttributesDict = { [key: string]: string | number;
+};
+
 export type SurveyChoiceList = {
   name: string;
   choices: Array<{
     name: string;
     labels: KeywordList;
+    attributes?: AttributesDict;
   }>;
 };
 

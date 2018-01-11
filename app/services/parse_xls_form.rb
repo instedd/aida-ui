@@ -30,6 +30,7 @@ class ParseXlsForm
     relevant_col = header.find_index 'relevant'
     constraint_col = header.find_index 'constraint'
     constraint_message_col = header.find_index('constraint_message') || header.find_index('constraint message')
+    choice_filter_col = header.find_index('choice_filter')
     seen_names = Set.new
 
     fail "missing 'type' column in survey sheet" unless type_col.present?
@@ -46,6 +47,7 @@ class ParseXlsForm
         constraint = row[constraint_col].presence if constraint_col.present?
         implicit_constraint = false
         constraint_message = row[constraint_message_col].presence if constraint_message_col.present?
+        choice_filter = row[choice_filter_col].presence if choice_filter_col.present?
 
         fail "invalid question name at row #{row_number}" unless name_valid?(name)
         if seen_names.include?(name)
@@ -87,6 +89,7 @@ class ParseXlsForm
           elem[:relevant] = relevant if relevant
           elem[:constraint] = constraint if constraint
           elem[:constraint_message] = constraint_message if constraint_message and (constraint or implicit_constraint)
+          elem[:choice_filter] = choice_filter if choice_filter
         end
 
         elem
@@ -108,7 +111,15 @@ class ParseXlsForm
     list_name_col = header.find_index('list name') || header.find_index('list_name')
     name_col = header.find_index 'name'
     label_col = header.find_index 'label'
-    seen_names = {}
+    seen_names = Hash.new do |hash, choice_list|
+      hash[choice_list] = Hash.new do |hash, attributes|
+        hash[attributes] = Set.new
+      end
+    end
+
+    attributes_names = header - ['list name', 'list_name', 'name', 'label']
+    attributes_col = attributes_names.map { |n| header.find_index(n) }
+    attributes_names_and_col = attributes_names.zip(attributes_col)
 
     fail "missing 'list name' column in choices sheet" unless list_name_col.present?
     fail "missing 'name' column in choices sheet" unless name_col.present?
@@ -121,20 +132,28 @@ class ParseXlsForm
         choice_name = row[name_col].try(&:strip)
         fail "invalid choice name at row #{row_number}" unless name_valid?(choice_name)
 
-        if seen_names.include?(choice_list)
-          if seen_names[choice_list].include?(choice_name)
-            fail "duplicate choice name '#{choice_name}' for list '#{choice_list}' at row #{row_number}"
-          else
-            seen_names[choice_list] << choice_name
-          end
+        unless attributes_names_and_col.empty?
+          attributes = attributes_names_and_col.inject(nil) { |h, name_col|
+            value = row[name_col[1]].try { |v| v.is_a?(String) ? v.strip : v.to_i }
+            if value.present?
+              h ||= {}
+              h[name_col[0].to_sym] = value
+            end
+            h
+          }
+        end
+
+        if (bucket = seen_names[choice_list][attributes]).include?(choice_name)
+          fail "duplicate choice name '#{choice_name}' for list '#{choice_list}' at row #{row_number}"
         else
-          seen_names[choice_list] = Set.new [choice_name]
+          bucket << choice_name
         end
 
         {
           list_name: choice_list,
           name: choice_name,
-          label: row[label_col]
+          label: row[label_col],
+          attributes: attributes
         }
       else
         # skip empty row
@@ -151,7 +170,9 @@ class ParseXlsForm
           {
             name: choice[:name],
             labels: choice[:label]
-          }
+          }.tap do |res|
+            res[:attributes] = choice[:attributes] if choice[:attributes]
+          end
         end
       }
     end

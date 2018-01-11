@@ -135,6 +135,7 @@ class Behaviour < ApplicationRecord
             question_fragment[:relevant] = question["relevant"] if question["relevant"].present?
             question_fragment[:constraint] = question["constraint"] if question["constraint"].present?
             question_fragment[:constraint_message] = localized_value("questions/[name=#{question['name']}]/constraint_message") if question["constraint_message"].present?
+            question_fragment[:choice_filter] = question["choice_filter"] if question["choice_filter"].present?
           end
         end,
         choice_lists: config["choice_lists"].map.with_index do |choice_list, i|
@@ -146,7 +147,9 @@ class Behaviour < ApplicationRecord
                 labels: localized_value("choice_lists/[name=#{choice_list['name']}]/choices/[name=#{choice['name']}]/labels") do |labels|
                   labels.split(/,\s*/)
                 end
-              }
+              }.tap do |choice_fragment|
+                choice_fragment[:attributes] = choice["attributes"] if choice["attributes"].present?
+              end
             end
           }
         end
