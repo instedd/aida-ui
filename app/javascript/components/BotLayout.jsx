@@ -49,6 +49,9 @@ export class BotLayoutComponent extends Component {
       history.replace(r.botIndex())
       hideDialog()
     }
+    const duplicateBot = () => {
+      botActions.duplicateBot(bot, history)
+    }
     const toggleChatWindow = () => {
       if (!this.state.chatWindowVisible) {
         this.setState({ chatWindowVisible: true })
@@ -120,8 +123,9 @@ export class BotLayoutComponent extends Component {
           headerNavExtra={[
             // <HeaderNavAction label="Rename" />,
             <HeaderNavAction label="Unpublish" onClick={() => botActions.unpublishBot(bot)}/>,
+            <HeaderNavAction label="Duplicate" onClick={duplicateBot} />,
             <HeaderNavAction label="Delete" onClick={showDialog} />,
-            <HeaderNavAction label="Download Manifest" onClick={() => window.location = `/api/v1/bots/${bot.id}/manifest.json`} />
+            <HeaderNavAction label="Download Manifest" onClick={() => window.location = `/api/v1/bots/${bot.id}/manifest.json`} />,
           ]}
           buttonAction={buttonAction} buttonIcon={buttonIcon}
         >

@@ -44,6 +44,12 @@ class Api::BotsController < ApplicationApiController
     end
   end
 
+  def duplicate
+    authorize @bot
+    duplicate = DuplicateBot.run(@bot, current_user)
+    render json: bot_api_json(duplicate)
+  end
+
   def preview
     authorize @bot
     if preview_uuid = PublishBot.preview(@bot, params[:preview_uuid], params[:access_token])

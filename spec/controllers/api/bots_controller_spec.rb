@@ -125,6 +125,16 @@ RSpec.describe Api::BotsController, type: :controller do
     end
   end
 
+  describe "duplicate" do
+    it "duplicates the bot" do
+      expect do
+        post :duplicate, params: { id: bot.id }
+      end.to change(Bot, :count).by(1)
+
+      expect(json_body).to be_a_bot_as_json
+    end
+  end
+
   describe "data" do
     it "returns a CSV file" do
       get :data, params: { id: bot.id }, format: 'csv'
