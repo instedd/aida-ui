@@ -131,6 +131,10 @@ export const removeCollaborator = (collaboratorId : number) => {
   return apiDelete(`collaborators/${collaboratorId}`)
 }
 
+export const updateCollaborator = (collaborator : T.Collaborator) => {
+  return apiPutJSON(`collaborators/${collaborator.id}`, null, {collaborator})
+}
+
 export const retrieveInvitation = (token : string) => {
   return apiFetchJSON(`invitations/retrieve?token=${token}`)
 }

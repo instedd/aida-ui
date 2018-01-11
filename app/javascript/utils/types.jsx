@@ -135,6 +135,13 @@ export type CollaboratorsAction = {
   type: 'COLLABORATORS_REMOVE_SUCCESS',
 } | {
   type: 'COLLABORATORS_REMOVE_ERROR',
+} | {
+  type: 'COLLABORATORS_UPDATE',
+  collaborator: T.Collaborator,
+} | {
+  type: 'COLLABORATORS_UPDATE_SUCCESS',
+} | {
+  type: 'COLLABORATORS_UPDATE_ERROR',
 };
 
 export type InvitationsAction = {

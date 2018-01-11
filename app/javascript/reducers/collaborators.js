@@ -21,6 +21,7 @@ export default (state : T.CollaboratorsState, action : T.Action) : T.Collaborato
     case invitationsActions.CANCEL: return cancelInvitation(state, action)
     case invitationsActions.RESEND_SUCCESS: return resendSuccess(state, action)
     case actions.REMOVE: return removeCollaborator(state, action)
+    case actions.UPDATE: return updateCollaborator(state, action)
     default: return state
   }
 }
@@ -106,6 +107,22 @@ const removeCollaborator = (state, action) => {
       data: {
         ...data,
         collaborators: filter(data.collaborators, c => c.id != collaborator.id)
+      }
+    }
+  } else {
+    return state
+  }
+}
+
+const updateCollaborator = (state, action) => {
+  const {collaborator} = action
+  const {data} = state
+  if (data) {
+    return {
+      ...state,
+      data: {
+        ...data,
+        collaborators: map(data.collaborators, c => c.id != collaborator.id ? c : collaborator)
       }
     }
   } else {

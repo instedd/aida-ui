@@ -14,6 +14,10 @@ export const REMOVE = 'COLLABORATORS_REMOVE'
 export const REMOVE_SUCCESS = 'COLLABORATORS_REMOVE_SUCCESS'
 export const REMOVE_ERROR = 'COLLABORATORS_REMOVE_ERROR'
 
+export const UPDATE = 'COLLABORATORS_UPDATE'
+export const UPDATE_SUCCESS = 'COLLABORATORS_UPDATE_SUCCESS'
+export const UPDATE_ERROR = 'COLLABORATORS_UPDATE_ERROR'
+
 export const _collaboratorsFetch = (scope : T.Scope) : T.CollaboratorsAction => ({
   type: FETCH,
   scope,
@@ -58,6 +62,19 @@ export const _collaboratorsRemoveError = () : T.CollaboratorsAction => ({
   type: REMOVE_ERROR
 })
 
+export const _collaboratorsUpdate = (collaborator : T.Collaborator) : T.CollaboratorsAction => ({
+  type: UPDATE,
+  collaborator
+})
+
+export const _collaboratorsUpdateSuccess = () : T.CollaboratorsAction => ({
+  type: UPDATE_SUCCESS
+})
+
+export const _collaboratorsUpdateError = () : T.CollaboratorsAction => ({
+  type: UPDATE_ERROR
+})
+
 
 export const fetchCollaborators = (scope : {botId : number}) => (dispatch : T.Dispatch, getState : T.GetState) => {
   const state = getState()
@@ -86,4 +103,11 @@ export const removeCollaborator = (collaborator : T.Collaborator) => (dispatch :
   return api.removeCollaborator(collaborator.id)
             .then(response => dispatch(_collaboratorsRemoveSuccess()))
             .catch(error => dispatch(_collaboratorsRemoveError()))
+}
+
+export const updateCollaborator = (collaborator : T.Collaborator) => (dispatch : T.Dispatch) => {
+  dispatch(_collaboratorsUpdate(collaborator))
+  return api.updateCollaborator(collaborator)
+            .then(response => dispatch(_collaboratorsUpdateSuccess()))
+            .catch(error => dispatch(_collaboratorsUpdateError()))
 }

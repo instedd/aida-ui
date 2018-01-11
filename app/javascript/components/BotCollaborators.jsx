@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { Button, DialogContainer, FontIcon, TextField } from 'react-md'
+import { Button, Checkbox, DialogContainer, FontIcon, TextField } from 'react-md'
 
 import map from 'lodash/map'
 import isFunction from 'lodash/isFunction'
+import without from 'lodash/without'
 import moment from 'moment'
 
 import { MainGrey } from '../ui/MainGrey'
@@ -35,13 +36,13 @@ class BotCollaborators extends Component {
     let items = map(collaborators, c => ({
       type: 'collaborator',
       email: c.user_email,
-      role: c.role,
+      roles: c.roles,
       last_activity: c.last_activity,
       data: c
     })).concat(map(invitations, i => ({
       type: 'invitation',
       email: i.email,
-      role: i.role,
+      roles: i.roles,
       last_activity: i.sent_at,
       data: i
     })))
@@ -64,6 +65,11 @@ class BotCollaborators extends Component {
       }
       const resendInvitation = (invitation) => {
         invitationsActions.resendInvitation(invitation)
+      }
+      const toggleCollaboratorRole = (collaborator, role) => {
+        const hasRole = collaborator.roles.indexOf(role) >= 0
+        const roles = hasRole ? without(collaborator.roles, role) : collaborator.roles.concat([role])
+        actions.updateCollaborator({...collaborator, roles})
       }
 
       const inviteDialog = (
@@ -120,6 +126,24 @@ class BotCollaborators extends Component {
             return ''
           }
         }
+        const toggleRole = (item, role) => {
+          if (item.type == 'collaborator') {
+            toggleCollaboratorRole(item.data, role)
+          }
+        }
+        const roleContent = role => item => {
+          const isChecked = item.roles && item.roles.indexOf(role) >= 0
+          return (
+            <Checkbox id={`role-${role}-${item.type}-${item.id}`}
+                      name={`role-${role}-${item.type}-${item.id}`}
+                      aria-label={`Toggle ${role} role`}
+                      onChange={() => toggleRole(item, role)}
+                      checked={isChecked}
+                      disabled={item.type == 'invitation'}
+                      checkedCheckboxIcon={<FontIcon>check</FontIcon>}
+                      uncheckedCheckboxIcon={null} />
+          )
+        }
         const renderCollaboratorAction = (item) => {
           if (item.type == 'invitation') {
             return (<Button icon iconChildren="close"
@@ -138,7 +162,11 @@ class BotCollaborators extends Component {
           <MainGrey>
             <Listing items={items} title={title}>
               <Column title="Email" render={renderCollaboratorColumn('email')} />
-              <Column title="Role" render={renderCollaboratorColumn('role')} />
+              <Column title="Publish" render={renderCollaboratorColumn(roleContent('publish'))} />
+              <Column title="Behaviour" render={renderCollaboratorColumn(roleContent('behaviour'))} />
+              <Column title="Content" render={renderCollaboratorColumn(roleContent('content'))} />
+              <Column title="Variables" render={renderCollaboratorColumn(roleContent('variables'))} />
+              <Column title="Results" render={renderCollaboratorColumn(roleContent('results'))} />
               <Column title="Last activity" render={renderCollaboratorColumn(lastActivityContent)} />
               <Column title="" render={renderCollaboratorAction} />
             </Listing>
