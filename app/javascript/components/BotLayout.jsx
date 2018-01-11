@@ -63,8 +63,8 @@ export class BotLayoutComponent extends Component {
     }
 
     const dialogActions = [
-      { secondary: true, children: 'Cancel', onClick: hideDialog },
-      (<Button flat primary onClick={deleteBot}>Delete</Button>)
+      { primary: true, children: 'Cancel', onClick: hideDialog },
+      (<Button flat secondary onClick={deleteBot}>Delete</Button>)
     ]
     const confirmationDialog = (
       <DialogContainer
