@@ -7,12 +7,10 @@ class Api::CollaboratorsController < ApplicationApiController
     authorize bot, :read_collaborators?
 
     collaborators = policy_scope(bot.collaborators.includes(:user))
-    invitations = policy_scope(bot.invitations).non_anonymous
-    anonymous_invitation = bot.invitations.anonymous || bot.invitations.create_anonymous!('collaborator')
+    invitations = policy_scope(bot.invitations)
 
     render json: { collaborators: collaborators.map { |c| collaborator_api_json(c) },
-                   invitations: invitations.map { |i| invitation_api_json(i) },
-                   anonymous_invitation: invitation_api_json(anonymous_invitation)
+                   invitations: invitations.map { |i| invitation_api_json(i) }
                  }
   end
 

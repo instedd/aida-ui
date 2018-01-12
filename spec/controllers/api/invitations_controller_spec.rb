@@ -38,6 +38,29 @@ RSpec.describe Api::InvitationsController, type: :controller do
       expect(response).to be_success
       expect(json_body).to be_a_invitation_as_json
     end
+
+    it "creates anonymous invitations provided a token" do
+      token = Invitation.generate_token
+      post :create, params: { bot_id: bot.id, token: token, roles: ['publish'] }
+
+      expect(response).to be_success
+      expect(json_body).to be_a_invitation_as_json
+      expect(json_body[:link_url]).to include(token)
+    end
+
+    it "anonymous invitations don't send emails" do
+      token = Invitation.generate_token
+      post :create, params: { bot_id: bot.id, token: token, roles: ['publish'] }
+
+      expect(response).to be_success
+      expect(all_mail_deliveries.size).to eq(0)
+    end
+
+    it "validates that either an email or token are given" do
+      post :create, params: { bot_id: bot.id, roles: ['publish'] }
+
+      expect(response.status).to eq(400)
+    end
   end
 
   describe "resend" do
@@ -159,7 +182,6 @@ RSpec.describe Api::InvitationsController, type: :controller do
 
         other_bot.reload
         expect(other_bot.collaborators.emails).to include(user.email)
-        expect(other_bot.invitations.anonymous).to be_nil
       end
     end
   end

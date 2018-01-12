@@ -5,7 +5,7 @@ class Invitation < ApplicationRecord
   validates_presence_of :bot
   validates_presence_of :creator
   validates_presence_of :token
-  validates_uniqueness_of :email, scope: :bot
+  validates_uniqueness_of :email, scope: :bot, unless: Proc.new { |i| i.email.blank? }
   validate :email_is_not_already_collaborating
   validate :creator_is_at_least_collaborator
   validate :roles_are_valid
@@ -13,6 +13,7 @@ class Invitation < ApplicationRecord
   after_initialize :init
 
   scope :non_anonymous, ->{ where.not(email: nil) }
+  scope :anonymous, ->{ where(email: nil) }
 
   def anonymous?
     !email.present?
@@ -22,15 +23,13 @@ class Invitation < ApplicationRecord
     SecureRandom.urlsafe_base64(20).tr('lIO0', 'sxyz')
   end
 
-  def self.anonymous
-    where(email: nil).first
-  end
-
-  def self.create_anonymous!(roles)
-    # this will work if called from the bot's invitations relation
-    bot_id = scope_attributes['bot_id']
-    creator = Bot.find(bot_id).owner if bot_id.present?
-    create! roles: roles, creator: creator
+  def self.create_anonymous!(token, roles, creator = nil)
+    if creator.nil?
+      # this will work if called from the bot's invitations relation
+      bot_id = scope_attributes['bot_id']
+      creator = Bot.find(bot_id).owner if bot_id.present?
+    end
+    create! token: token, roles: roles, creator: creator
   end
 
   private

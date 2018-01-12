@@ -5,6 +5,7 @@ RSpec.describe Api::CollaboratorsController, type: :controller do
   let!(:bot) { create(:bot, owner: user) }
   let!(:collaborator) { create(:collaborator, bot: bot) }
   let!(:invitation) { create(:invitation, bot: bot) }
+  let!(:anonymous_invitation) { create(:invitation, :anonymous, bot: bot)}
 
   before(:each) { sign_in user }
 
@@ -20,24 +21,8 @@ RSpec.describe Api::CollaboratorsController, type: :controller do
       get :index, params: { bot_id: bot.id }
       expect(response).to be_success
       expect(json_body['invitations']).to all(be_a_invitation_as_json)
-      expect(json_pluck(json_body['invitations'], :id)).to include(invitation.id)
-      expect(json_pluck(json_body['invitations'], :email)).to_not include(nil)
-    end
-
-    it "creates and returns an anonymous invitation" do
-      get :index, params: { bot_id: bot.id }
-      expect(response).to be_success
-      anonymous = json_body['anonymous_invitation']
-      expect(anonymous).to_not be_nil
-      expect(anonymous).to be_a_invitation_as_json
-      expect(anonymous['email']).to be_nil
-    end
-
-    it "reuses an existing anonymous invitation" do
-      anonymous_invitation = create(:invitation, :anonymous, bot: bot)
-      get :index, params: { bot_id: bot.id }
-      anonymous = json_body['anonymous_invitation']
-      expect(anonymous['id']).to eq(anonymous_invitation.id)
+      expect(json_pluck(json_body['invitations'], :id)).to include(invitation.id, anonymous_invitation.id)
+      expect(json_pluck(json_body['invitations'], :email)).to include(invitation.email)
     end
 
     it "is allowed on shared bots" do
@@ -45,7 +30,7 @@ RSpec.describe Api::CollaboratorsController, type: :controller do
 
       get :index, params: { bot_id: shared_bot.id }
       expect(response).to be_success
-      expect(json_body.keys).to include('collaborators', 'invitations', 'anonymous_invitation')
+      expect(json_body.keys).to include('collaborators', 'invitations')
     end
   end
 
