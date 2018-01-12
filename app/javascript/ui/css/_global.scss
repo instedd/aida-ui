@@ -36,23 +36,6 @@ main {
   }
 }
 
-/* ========== Helper classes ============ */
-
-.rounded {
-  border-radius: 5px;
-}
-.grey {
-  color: $md-grey-500;
-}
-.black {
-  color: $md-black-base;
-}
-.active {
-  background: rgba(0, 0, 0, .10);
-}
-.hover {
-  background: rgba(0, 0, 0, .05);
-}
 
 .ui-editable-title-label i {
   margin-left: .3ch;
@@ -136,4 +119,22 @@ input[type=number]:invalid {
 
 .invitation-row {
   color: $md-grey-500;
+}
+
+/* ========== Helper classes ============ */
+
+.rounded {
+  border-radius: 5px;
+}
+.grey {
+  color: $md-grey-500;
+}
+.black {
+  color: $md-black-base;
+}
+.active {
+  background: rgba(0, 0, 0, .10);
+}
+.hover {
+  background: rgba(0, 0, 0, .05);
 }
