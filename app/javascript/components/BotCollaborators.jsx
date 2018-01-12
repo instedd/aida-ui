@@ -2,12 +2,13 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { Button, Checkbox, DialogContainer, FontIcon, TextField } from 'react-md'
+import { Button, Checkbox, DialogContainer, FontIcon, TextField, Tooltipped } from 'react-md'
 
 import map from 'lodash/map'
 import isFunction from 'lodash/isFunction'
 import without from 'lodash/without'
 import moment from 'moment'
+import copy from 'clipboard-copy'
 
 import { MainGrey } from '../ui/MainGrey'
 import Title from '../ui/Title'
@@ -18,6 +19,7 @@ import EmptyContent from '../ui/EmptyContent'
 
 import * as actions from '../actions/collaborators'
 import * as invitationsActions from '../actions/invitations'
+import { generateToken } from '../utils'
 
 const hasRole = (roles, role) => {
   return roles.indexOf(role) >= 0
@@ -30,8 +32,9 @@ const toggleRole = (roles, role) => {
 class CollaboratorsList extends Component {
   static propTypes = {
     items: PropTypes.arrayOf(PropTypes.shape({
-      type: PropTypes.oneOf(['invitation', 'collaborator']),
+      type: PropTypes.oneOf(['anonymous-invitation', 'invitation', 'collaborator']),
       email: PropTypes.string,
+      link: PropTypes.string,
       roles: PropTypes.arrayOf(PropTypes.string),
       lastActivity: PropTypes.string,
       data: PropTypes.any
@@ -64,10 +67,34 @@ class CollaboratorsList extends Component {
                   tooltipPosition="left"
                   component="a" />
         </span>)
+      } if (item.type == 'anonymous-invitation' && item.lastActivity) {
+        return (<span className="invitation-activity">
+          {`Created ${moment(item.lastActivity).fromNow()}`}
+        </span>)
       } else if (item.lastActivity) {
         return moment(item.lastActivity).fromNow()
       } else {
         return ''
+      }
+    }
+    const emailContent = item => {
+      if (item.type == 'invitation' || item.type == 'collaborator') {
+        return item.email
+      } else {
+        const copyLink = (e) => {
+          e.stopPropagation()
+          e.preventDefault()
+          copy(item.link)
+          return false
+        }
+        return (
+          <Tooltipped label="Click to copy the link to the clipboard" position="right">
+            <a className="tooltip-link" href={item.link} onClick={copyLink}>
+              <FontIcon>link</FontIcon>
+              Single use link
+            </a>
+          </Tooltipped>
+        )
       }
     }
     const roleContent = role => item => {
@@ -83,13 +110,13 @@ class CollaboratorsList extends Component {
                   aria-label={`Toggle ${role} role`}
                   onChange={toggle}
                   checked={isChecked}
-                  disabled={item.type == 'invitation'}
+                  disabled={item.type != 'collaborator'}
                   checkedCheckboxIcon={<FontIcon>check</FontIcon>}
                   uncheckedCheckboxIcon={null} />
       )
     }
     const renderCollaboratorAction = (item) => {
-      if (item.type == 'invitation') {
+      if (item.type == 'invitation' || item.type == 'anonymous-invitation') {
         return (<Button icon iconChildren="close"
                         className="invitation-row"
                         onClick={() => onCancelInvitation(item.data)}
@@ -104,7 +131,7 @@ class CollaboratorsList extends Component {
     }
     return (
       <Listing items={items} title={title}>
-        <Column title="Email"         render={renderCollaboratorColumn('email')} />
+        <Column title="Email"         render={renderCollaboratorColumn(emailContent)} />
         <Column title="Publish"       render={renderCollaboratorColumn(roleContent('publish'))} />
         <Column title="Behaviour"     render={renderCollaboratorColumn(roleContent('behaviour'))} />
         <Column title="Content"       render={renderCollaboratorColumn(roleContent('content'))} />
@@ -117,17 +144,21 @@ class CollaboratorsList extends Component {
   }
 }
 
+const newInvitationToken = () => generateToken(20)
+
 class InviteDialog extends Component {
   state = {
     email: '',
-    roles: []
+    roles: [],
+    token: newInvitationToken()
   }
 
   static propTypes = {
     visible: PropTypes.bool,
     onCancel: PropTypes.func,
     onInvite: PropTypes.func,
-    anonymousLink: PropTypes.string
+    onCreateLink: PropTypes.func,
+    invitationLinkPrefix: PropTypes.string
   }
 
   static defaultProps = {
@@ -135,10 +166,12 @@ class InviteDialog extends Component {
   }
 
   render() {
-    const { anonymousLink, visible, onCancel, onInvite } = this.props
-    const { email, roles } = this.state
+    const { invitationLinkPrefix, visible, onCancel, onCreateLink, onInvite } = this.props
+    const { email, roles, token } = this.state
 
-    const resetState = () => this.setState({ email: '', roles: [] })
+    const invitationUrl = `${invitationLinkPrefix}${token}`
+
+    const resetState = () => this.setState({ email: '', roles: [], token: newInvitationToken() })
 
     const hideDialog = () => {
       if (onCancel) {
@@ -149,7 +182,7 @@ class InviteDialog extends Component {
 
     const inviteCollaborator = () => {
       if (onInvite) {
-        onInvite(this.state.email, this.state.roles)
+        onInvite(email, roles)
       }
       resetState()
     }
@@ -159,11 +192,28 @@ class InviteDialog extends Component {
                 key={role}
                 name={`role-invitation-${role}`}
                 className="role-toggle-control"
-                onChange={() => this.setState({ roles: toggleRole(this.state.roles, role) })}
+                onChange={() => this.setState({ roles: toggleRole(roles, role) })}
                 label={<span className="role-description">
                   {label}
                   <span className="hint">{description}</span>
                 </span>} />
+    )
+
+    const createLink = (e) => {
+      if (onCreateLink) {
+        onCreateLink(token, roles)
+        copy(invitationUrl)
+      }
+      resetState()
+      e.stopPropagation()
+      e.preventDefault()
+      return false
+    }
+
+    const theLink = (
+      <Tooltipped label="Click to copy the link to the clipboard" position="top">
+        <a className="tooltip-link" href={invitationUrl} onClick={createLink}>single use link</a>
+      </Tooltipped>
     )
 
     return (
@@ -193,7 +243,7 @@ class InviteDialog extends Component {
             <Button flat id="invite-cancel-button" onClick={hideDialog}>Cancel</Button>
           </div>
           <footer>
-            <FontIcon>link</FontIcon> Or invite to collaborate with a <a href={anonymousLink}>single use link</a>
+            <FontIcon>link</FontIcon> Or invite to collaborate with a {theLink}
           </footer>
         </DialogContainer>
     )
@@ -207,7 +257,7 @@ class BotCollaborators extends Component {
   }
 
   render() {
-    const { bot, loaded, collaborators, invitations, anonymousLink,
+    const { bot, loaded, collaborators, invitations,
             currentUserEmail, invitationsActions,
             actions, dialogVisible, hideDialog, showDialog } = this.props
 
@@ -215,15 +265,28 @@ class BotCollaborators extends Component {
       return (<EmptyLoader>Loading collaborators for {bot.name}</EmptyLoader>)
     }
 
+    const sortedInvitations = [...invitations].sort((a, b) => {
+      if (a.email && b.email) {
+        return a.email < b.email ? -1 : 1
+      } else if (a.email) {
+        return -1
+      } else if (b.email) {
+        return 1
+      } else {
+        return a.sent_at < b.sent_at ? -1 : 1
+      }
+    })
+
     const items = map(collaborators, c => ({
       type: 'collaborator',
       email: c.user_email,
       roles: c.roles,
       lastActivity: c.last_activity,
       data: c
-    })).concat(map(invitations, i => ({
-      type: 'invitation',
+    })).concat(map(sortedInvitations, i => ({
+      type: i.email ? 'invitation' : 'anonymous-invitation',
       email: i.email,
+      link: i.link_url,
       roles: i.roles,
       lastActivity: i.sent_at,
       data: i
@@ -231,6 +294,10 @@ class BotCollaborators extends Component {
 
     const inviteCollaborator = (email, roles) => {
       actions.inviteCollaborator(bot, email, roles)
+      hideDialog()
+    }
+    const createInvitationLink = (token, roles) => {
+      actions.createAnonymousInvitation(bot, token, roles)
       hideDialog()
     }
     const cancelInvitation = (invitation) => {
@@ -250,7 +317,8 @@ class BotCollaborators extends Component {
     const inviteDialog = (<InviteDialog visible={dialogVisible}
                                         onCancel={hideDialog}
                                         onInvite={inviteCollaborator}
-                                        anonymousLink={anonymousLink} />)
+                                        onCreateLink={createInvitationLink}
+                                        invitationLinkPrefix={window.location.origin + '/invitation/'} />)
 
     if (items.length == 0) {
       return (
@@ -290,7 +358,6 @@ const mapStateToProps = (state, {bot}) => {
     return {
       collaborators: data.collaborators,
       invitations: data.invitations,
-      anonymousLink: data.anonymous_invitation.link_url,
       loaded: true,
       currentUserEmail: state.auth.userEmail
     }

@@ -98,6 +98,13 @@ export const inviteCollaborator = (bot : T.Bot, email : string, roles : T.RoleLi
             .catch(error => dispatch(_collaboratorsInviteError(bot.id, error)))
 }
 
+export const createAnonymousInvitation = (bot : T.Bot, token : string, roles : T.RoleList) => (dispatch : T.Dispatch) => {
+  dispatch(_collaboratorsInvite(bot.id))
+  return api.createAnonymousInvitation(bot.id, token, roles)
+            .then(invitation => dispatch(_collaboratorsInviteSuccess(bot.id, invitation)))
+            .catch(error => dispatch(_collaboratorsInviteError(bot.id, error)))
+}
+
 export const removeCollaborator = (collaborator : T.Collaborator) => (dispatch : T.Dispatch) => {
   dispatch(_collaboratorsRemove(collaborator))
   return api.removeCollaborator(collaborator.id)

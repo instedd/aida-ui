@@ -124,10 +124,8 @@ input[type=number]:invalid {
 .invitation-activity {
   white-space: nowrap;
   position: relative;
-  top: -10px;
   a {
-    position: relative;
-    top: 10px;
+    vertical-align: middle;
   }
 }
 
@@ -186,6 +184,20 @@ input[type=number]:invalid {
       top: 5px;
       margin-right: 10px;
     }
+  }
+}
+
+.tooltip-link {
+  position: relative;
+  &, &:hover {
+    text-decoration: underline;
+  }
+  color: $md-grey-700;
+  i {
+    vertical-align: middle;
+  }
+  i:first-child {
+    margin-right: 5px;
   }
 }
 

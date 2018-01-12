@@ -119,6 +119,10 @@ export const inviteCollaborator = (botId : number, email : string, roles : T.Rol
   return apiPostJSON(`bots/${botId}/invitations`, null, {email, roles})
 }
 
+export const createAnonymousInvitation = (botId : number, token : string, roles : T.RoleList) => {
+  return apiPostJSON(`bots/${botId}/invitations`, null, {token, roles})
+}
+
 export const cancelInvitation = (invitationId : number) => {
   return apiDelete(`invitations/${invitationId}`)
 }
