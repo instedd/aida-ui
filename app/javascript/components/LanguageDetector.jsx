@@ -57,7 +57,7 @@ export default class LanguageDetector extends Component {
           items={config.languages}
           createItemLabel="Add language" onCreateItem={addLanguage}
           canRemoveItem={(item, index) => index > 0} onRemoveItem={(item, index) => removeLanguage(index)}
-          renderKey={({code, keywords}, index) => <EditDialogColumn inline inlineIcon={null} value={keywords} onChange={updateLanguage(index, 'keywords')}/>}
+          renderKey={({code, keywords}, index) => <EditDialogColumn inline inlineIcon={null} value={keywords} onChange={updateLanguage(index, 'keywords')} resize={{min: 100, max: 200}}/>}
           renderValue={({code, keywords}, index) => <TableColumn><LanguageSelector code={code} onChange={updateLanguage(index, 'code')} /></TableColumn>}
         />
       </div>
