@@ -163,7 +163,7 @@ class Behaviour < ApplicationRecord
           case config["schedule_type"]
           when "since_last_incoming_message"
             {
-              delay: message["delay"].to_s,
+              delay: message["delay"],
               message: localized_value("messages/[id=#{message['id']}]/message")
             }
           when "fixed_time"
