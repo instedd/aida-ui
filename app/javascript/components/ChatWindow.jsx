@@ -28,24 +28,27 @@ let ChatHeader = ({title, publishing}) => (
   </div>
 )
 
-const Message = ({
-  text,
-  sent,
-  timestamp
-}) => (
-  <li className={sent ? "message-sent" : "message-received"}>
+const MessageBulk = ({
+  messages
+}) => {
+  const sentMessages = messages[0].sent
+  return (
     <Paper
       zDepth={2}
-      className={"message-bubble " + (sent ? "message-sent" : "message-received")} >
-      <div className="content-text">
-        {text}
-      </div>
-      <div className="content-timestamp">
-        {moment(timestamp).format("HH:mm")}
-      </div>
+      className={"message-bubble " + (sentMessages ? "message-sent" : "message-received")} >
+      {messages.map(message =>
+        (<li key={message.id}>
+          <div className="content-text">
+            {message.text}
+          </div>
+          <div className="content-timestamp">
+            {moment(message.timestamp).format("HH:mm")}
+          </div>
+        </li>)
+      )}
     </Paper>
-  </li>
-)
+  )
+}
 
 class MessageList extends Component {
 
@@ -64,14 +67,31 @@ class MessageList extends Component {
   }
 
   render() {
+
+    const groupBy = (elems, func) => {
+      const lastElem = (collection) => (collection[collection.length - 1])
+
+      return elems.reduce(function(groups, elem) {
+        const lastGroup = lastElem(groups)
+        if (groups.length == 0 || func(lastElem(lastGroup)) != func(elem)) {
+          groups.push([elem])
+        } else {
+          lastGroup.push(elem)
+        }
+        return groups
+      }, [])
+    }
+
     const { messages } = this.props
+    const groupedMessages = groupBy(messages, (message) => (message.sent))
+
     return (
       <div className="chat-window-body">
         <ul>
-          {messages.map(message =>
-            <Message
-              key={message.id}
-              {...message}
+          {groupedMessages.map((messages, ix) =>
+            <MessageBulk
+              key={`msg-bulk-${ix}`}
+              messages={messages}
             />
           )}
         </ul>
