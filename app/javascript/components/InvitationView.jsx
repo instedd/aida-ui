@@ -3,6 +3,8 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import { Button, Divider } from 'react-md'
+import map from 'lodash/map'
+import compact from 'lodash/compact'
 
 import { MainGrey } from '../ui/MainGrey'
 import EmptyContent from '../ui/EmptyContent'
@@ -41,6 +43,34 @@ class InvitationView extends Component {
       const acceptInvitation = () => {
         actions.acceptInvitation(token, history)
       }
+      const roleDescriptions = compact(map(invitation.roles, role => {
+        switch(role) {
+          case 'publish':
+            return 'publish the bot and change channel configuration'
+          case 'behaviour':
+            return 'change skills configuration'
+          case 'content':
+            return 'edit messages and translations'
+          case 'variables':
+            return 'modify variables'
+          case 'results':
+            return 'view stats, conversation logs, survey results and feedback'
+        }
+      }))
+      const roleNode = (() => {
+        if (roleDescriptions.length == 0) {
+          return null
+        } else if (roleDescriptions.length == 1) {
+          return (<p>You will be able to {roleDescriptions[0]}.</p>)
+        } else {
+          return (<div>
+            <p>You will be able to:</p>
+            <ul>
+              {map(roleDescriptions, (description, index) => (<li key={index}>{description}</li>))}
+            </ul>
+          </div>)
+        }
+      })()
       return (
         <AppLayout title={invitation.bot_name}>
           <MainGrey>
@@ -49,7 +79,7 @@ class InvitationView extends Component {
                {invitation.inviter} has invited you to collaborate on <b>{invitation.bot_name}</b>
              </Headline>
              <Divider className="empty-divider" />
-             <p>You will be able to manage behaviour, translations and access data.</p>
+             {roleNode}
              <Button primary raised onClick={acceptInvitation}>Accept invitation</Button>
            </EmptyContent>
           </MainGrey>
