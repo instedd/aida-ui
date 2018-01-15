@@ -3,7 +3,7 @@ class Behaviour < ApplicationRecord
 
   has_many :translations, dependent: :destroy
 
-  validates :kind, inclusion: { in: %w(front_desk language_detector keyword_responder survey scheduled_messages) }
+  validates :kind, inclusion: { in: %w(front_desk language_detector keyword_responder survey scheduled_messages decision_tree) }
 
   validate :config_must_match_schema
 
@@ -83,6 +83,25 @@ class Behaviour < ApplicationRecord
                            "messages" => []
                          }
                        }
+                     when "decision_tree"
+                        {
+                          kind: "decision_tree",
+                          name: "Decision tree",
+                          config: {
+                            "explanation" => "",
+                            "clarification" => "",
+                            "tree": {
+                              initial: "0",
+                              nodes: {
+                                "0": {
+                                  id: "0",
+                                  message: "",
+                                  options: []
+                                }
+                              }
+                            }
+                          }
+                        }
                      else
                        fail "invalid skill type #{kind}"
                      end
@@ -333,6 +352,8 @@ class Behaviour < ApplicationRecord
       "#/definitions/surveyConfig"
     when "scheduled_messages"
       "#/definitions/scheduledMessagesConfig"
+    when "decision_tree"
+      "#/definitions/decisionTreeConfig"
     else
       fail "config schema not defined"
     end
