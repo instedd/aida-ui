@@ -1,4 +1,6 @@
 class CollaboratorPolicy < ApplicationPolicy
+  include RolesMixin
+
   def destroy?
     is_bot_owner? or (is_collaborator? and !is_self?)
   end
@@ -7,12 +9,8 @@ class CollaboratorPolicy < ApplicationPolicy
     is_bot_owner?
   end
 
-  def is_bot_owner?
-    record.bot.owner_id == user.id
-  end
-
-  def is_collaborator?
-    record.bot.collaborators.any? { |c| c.user_id == user.id }
+  def bot
+    record.bot
   end
 
   def is_self?
