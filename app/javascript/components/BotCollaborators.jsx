@@ -97,16 +97,17 @@ class CollaboratorsList extends Component {
         )
       }
     }
-    const roleContent = role => item => {
+    const roleContent = (role) => (item) => {
       const isChecked = hasRole(item.roles, role)
       const toggle = () => {
         if (item.type == 'collaborator') {
           onToggleCollaboratorRole(item.data, role)
         }
       }
+      const id = `role-${role}-${item.type}-${item.data.id}`
       return (
-        <Checkbox id={`role-${role}-${item.type}-${item.id}`}
-                  name={`role-${role}-${item.type}-${item.id}`}
+        <Checkbox id={id}
+                  name={id}
                   aria-label={`Toggle ${role} role`}
                   onChange={toggle}
                   checked={isChecked}
