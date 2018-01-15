@@ -176,7 +176,7 @@ class BotTranslationsVariables extends Component {
   }
 
   render() {
-    const { hasPermission, bot, languages, defaultLang, variables, actions } = this.props
+    const { hasPermission, bot, languages, defaultLang, variables, actions, onToggleChatWindow } = this.props
     const { firstLang, secondLang } = this.state
 
     if (!hasPermission) {
@@ -200,8 +200,10 @@ class BotTranslationsVariables extends Component {
       onRemove: (variableId, conditionId) => (actions.removeVariable(bot.id, variableId, conditionId)),
       onAddCondition: (variableId) => (actions.addVariableCondition(bot.id, variableId)) })
 
+    const buttons = (<Button icon onClick={() => onToggleChatWindow()}>chat</Button>)
+
     return (
-      <MainWhite>
+      <MainWhite buttons={buttons}>
         <div className="translations-header">
           <div className="translations-tittle">
             <Title>Translations</Title>

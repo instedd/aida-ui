@@ -97,7 +97,7 @@ class BotTranslations extends Component {
   }
 
   render() {
-    const { hasPermission, bot, languages, defaultLang, behaviours, actions } = this.props
+    const { hasPermission, bot, languages, defaultLang, behaviours, actions, onToggleChatWindow } = this.props
     const { firstLang, secondLang } = this.state
     if (!hasPermission) {
       return <ContentDenied />
@@ -119,8 +119,10 @@ class BotTranslations extends Component {
     }
     const rows = renderRows({ behaviours, firstLang, secondLang, defaultLang, onChange: onTranslationChange })
 
+    const buttons = (<Button icon onClick={() => onToggleChatWindow()}>chat</Button>)
+
     return (
-      <MainWhite>
+      <MainWhite buttons={buttons}>
         <div className="translations-header">
           <div className="translations-tittle">
             <Title>Translations</Title>

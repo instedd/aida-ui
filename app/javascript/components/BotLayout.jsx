@@ -155,8 +155,8 @@ export class BotLayoutComponent extends Component {
           <Route exact path="/b/:id/channel" render={() => <BotChannel bot={bot} />} />
           <Route path="/b/:id/behaviour" render={() => <BotBehaviour bot={bot} onToggleChatWindow={toggleChatWindow}/>} />
           <Route exact path="/b/:id/translations" render={() => <Redirect to={defaultTranslationsView}/>} />
-          <Route exact path="/b/:id/translations/content" render={() => <BotTranslations bot={bot} />} />
-          <Route exact path="/b/:id/translations/variables" render={() => <BotTranslationsVariables bot={bot} />} />
+          <Route exact path="/b/:id/translations/content" render={() => <BotTranslations bot={bot} onToggleChatWindow={toggleChatWindow} />} />
+          <Route exact path="/b/:id/translations/variables" render={() => <BotTranslationsVariables bot={bot} onToggleChatWindow={toggleChatWindow} />} />
           <Route exact path="/b/:id/collaborators" render={() => <BotCollaborators bot={bot}
                                                                                    dialogVisible={this.state.collaborators}
                                                                                    showDialog={showCollaborators}
@@ -164,6 +164,7 @@ export class BotLayoutComponent extends Component {
           {confirmationDialog}
 
           <Route path="/b/:id/behaviour" render={() => chatWindow} />
+          <Route path="/b/:id/translations" render={() => chatWindow} />
         </AppLayout>
       )
     } else if (botsLoaded == true && bot == null) {
