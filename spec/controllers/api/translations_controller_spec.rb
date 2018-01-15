@@ -18,7 +18,7 @@ RSpec.describe Api::TranslationsController, type: :controller do
     bot.skills.create_skill! 'keyword_responder'
   }
   let!(:shared_bot) {
-    create(:bot, shared_with: user) do |bot|
+    create(:bot) do |bot|
       bot.skills.create_skill! 'language_detector',
                                config: {
                                  languages: [
@@ -27,6 +27,9 @@ RSpec.describe Api::TranslationsController, type: :controller do
                                  ]
                                }
     end
+  }
+  let!(:collaborator) {
+    shared_bot.collaborators.add_collaborator!(user, roles: %w())
   }
   let!(:other_shared_skill) {
     shared_bot.skills.create_skill! 'keyword_responder'
@@ -47,10 +50,23 @@ RSpec.describe Api::TranslationsController, type: :controller do
       end
     end
 
-    it "is allowed on a shared bot" do
+    it "is allowed on a shared bot with content role" do
+      collaborator.update_attributes! roles: %w(content)
       get :index, params: { bot_id: shared_bot.id }
       expect(response).to be_success
       expect(json_body).to be_a_translations_index_as_json
+    end
+
+    it "is allowed on a shared bot with variables role" do
+      collaborator.update_attributes! roles: %w(variables)
+      get :index, params: { bot_id: shared_bot.id }
+      expect(response).to be_success
+      expect(json_body).to be_a_translations_index_as_json
+    end
+
+    it "is denied on a shared bot without content/variables roles" do
+      get :index, params: { bot_id: shared_bot.id }
+      expect(response).to be_denied
     end
   end
 
@@ -108,7 +124,8 @@ RSpec.describe Api::TranslationsController, type: :controller do
       expect(response.status).to eq(400)
     end
 
-    it "is allowed on shared bots" do
+    it "is allowed on shared bots with content role" do
+      collaborator.update_attributes! roles: %w(content)
       put :update, params: { bot_id: shared_bot.id,
                              behaviour_id: shared_bot.front_desk.id,
                              key: 'greeting',
@@ -122,6 +139,16 @@ RSpec.describe Api::TranslationsController, type: :controller do
                                                   lang: 'es').first
       expect(translation).to_not be_nil
       expect(translation.value).to eq('Hola, soy un bot')
+    end
+
+    it "is denied on shared bots without content role" do
+      put :update, params: { bot_id: shared_bot.id,
+                             behaviour_id: shared_bot.front_desk.id,
+                             key: 'greeting',
+                             lang: 'es',
+                             value: 'Hola, soy un bot' }
+
+      expect(response).to be_denied
     end
   end
 

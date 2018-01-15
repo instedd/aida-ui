@@ -29,14 +29,13 @@ RSpec.describe Api::InvitationsController, type: :controller do
       expect(response.status).to eq(400)
     end
 
-    it "is allowed on shared bots" do
-      shared_bot = create(:bot, shared_with: user)
+    it "is denied on shared bots" do
+      shared_bot = create(:bot, shared_with: user, grants: %w(publish))
       post :create, params: { bot_id: shared_bot.id,
                               email: generate(:email),
                               roles: ['publish'] }
 
-      expect(response).to be_success
-      expect(json_body).to be_a_invitation_as_json
+      expect(response).to be_denied
     end
 
     it "creates anonymous invitations provided a token" do
@@ -75,15 +74,13 @@ RSpec.describe Api::InvitationsController, type: :controller do
       expect(all_mail_destinations).to include(email)
     end
 
-    it "is allowed on shared bots" do
-      shared_bot = create(:bot, shared_with: user)
+    it "is denied on shared bots" do
+      shared_bot = create(:bot, shared_with: user, grants: %w(publish))
       invitation = create(:invitation, bot: shared_bot, email: email)
 
       post :resend, params: { id: invitation.id }
 
-      expect(response).to be_success
-      expect(all_mail_deliveries.size).to eq(1)
-      expect(all_mail_destinations).to include(email)
+      expect(response).to be_denied
     end
   end
 
@@ -97,12 +94,13 @@ RSpec.describe Api::InvitationsController, type: :controller do
       end.to change(Invitation, :count).by(-1)
     end
 
-    it "is allowed on shared bots" do
-      shared_bot = create(:bot, shared_with: user)
+    it "is denied on shared bots" do
+      shared_bot = create(:bot, shared_with: user, grants: %w(publish))
       invitation = create(:invitation, bot: shared_bot, email: email)
       expect do
         delete :destroy, params: { id: invitation.id }
-      end.to change(Invitation, :count).by(-1)
+      end.not_to change(Invitation, :count)
+      expect(response).to be_denied
     end
   end
 

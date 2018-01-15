@@ -3,14 +3,20 @@ class Api::TranslationsController < ApplicationApiController
 
   def index
     bot = Bot.find(params[:bot_id])
-    authorize bot, :read_translations?
+    bot_policy = policy(bot)
+
+    unless bot_policy.read_translations? or bot_policy.read_variables?
+      raise Pundit::NotAuthorizedError, "not allowed read translations or variables for #{bot.name}"
+    else
+      skip_authorization
+    end
 
     languages = bot.available_languages
-    translations = bot.translations.where(lang: languages)
+    translations = bot.translations.where(lang: languages) if bot_policy.read_translations?
     keys = bot.translation_keys
-    variable_assignments = bot.variable_assignments
+    variable_assignments = bot.variable_assignments if bot_policy.read_variables?
 
-    render json: translations_api_json(keys, variable_assignments, bot.default_language, bot.other_languages, translations)
+    render json: translations_api_json(keys, variable_assignments || [], bot.default_language, bot.other_languages, translations || [])
   end
 
   def update
@@ -43,7 +49,7 @@ class Api::TranslationsController < ApplicationApiController
 
   def update_variable
     bot = Bot.find(params[:bot_id])
-    authorize bot, :update_translation?
+    authorize bot, :update_variable?
 
     assignment_params = params.permit(:variable_id, :variable_name, :condition_id, :condition, :lang, :value, :condition_order)
 
@@ -108,7 +114,7 @@ class Api::TranslationsController < ApplicationApiController
 
   def destroy_variable
     bot = Bot.find(params[:bot_id])
-    authorize bot, :update_translation?
+    authorize bot, :destroy_variable?
 
     assignment_params = params.permit(:variable_id, :condition_id)
 

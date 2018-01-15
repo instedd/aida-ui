@@ -3,6 +3,16 @@ require "rspec/expectations"
 module AidaMatchers
   extend RSpec::Matchers::DSL
 
+  matcher :be_denied do
+    match do |actual|
+      actual.status == 403
+    end
+
+    failure_message do |actual|
+      "expected response status to be forbidden (403), but it is #{actual.status}"
+    end
+  end
+
   %w(bot channel skill bot_stats translations_index collaborator invitation).each do |noun|
     matcher "be_a_#{noun}_as_json".to_sym do
       define_method :fragment do

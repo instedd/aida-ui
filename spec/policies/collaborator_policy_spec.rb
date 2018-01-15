@@ -21,7 +21,6 @@ describe CollaboratorPolicy do
   describe "of shared bots" do
     let(:bot) { create(:bot, shared_with: user) }
 
-    it { is_expected.to permit_actions([:destroy]) }
-    it { is_expected.to forbid_actions([:update]) }
+    it { is_expected.to forbid_actions([:destroy, :update]) }
   end
 end

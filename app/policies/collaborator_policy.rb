@@ -2,11 +2,11 @@ class CollaboratorPolicy < ApplicationPolicy
   include RolesMixin
 
   def destroy?
-    is_bot_owner? or (is_collaborator? and !is_self?)
+    can_admin?
   end
 
   def update?
-    is_bot_owner?
+    can_admin?
   end
 
   def bot

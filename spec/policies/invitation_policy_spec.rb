@@ -22,7 +22,7 @@ describe InvitationPolicy do
     describe "of shared bots" do
       let(:bot) { create(:bot, shared_with: user) }
 
-      it { is_expected.to permit_actions([:resend, :destroy]) }
+      it { is_expected.to forbid_actions([:resend, :destroy]) }
     end
   end
 

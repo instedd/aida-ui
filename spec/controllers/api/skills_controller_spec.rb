@@ -5,8 +5,11 @@ RSpec.describe Api::SkillsController, type: :controller do
   before(:each) { sign_in user }
   let!(:bot) { create(:bot, owner: user) }
 
-  let!(:shared_bot) { create(:bot, shared_with: user) }
+  let!(:shared_bot) { create(:bot, shared_with: user, grants: %w(behaviour)) }
   let!(:shared_skill) { shared_bot.skills.create_skill! "keyword_responder", order: 1 }
+
+  let!(:other_shared_bot) { create(:bot, shared_with: user, grants: %w()) }
+  let!(:other_shared_skill) { other_shared_bot.skills.create_skill! "keyword_responder", order: 1 }
 
   describe "index" do
     it "fetches all the behaviours except front_desk" do
@@ -28,10 +31,15 @@ RSpec.describe Api::SkillsController, type: :controller do
                                         }])
     end
 
-    it "is allowed for shared bots" do
+    it "is allowed for shared bots with behaviour role" do
       get :index, params: { bot_id: shared_bot.id }
       expect(response).to be_success
       expect(json_body).to all(be_a_skill_as_json)
+    end
+
+    it "is denied for shared bots without behaviour role" do
+      get :index, params: { bot_id: other_shared_bot.id }
+      expect(response).to be_denied
     end
   end
 
@@ -61,11 +69,17 @@ RSpec.describe Api::SkillsController, type: :controller do
       expect(bot.skills.count).to be_zero
     end
 
-    it "is allowed for shared bots" do
+    it "is allowed for shared bots with behaviour role" do
       post :create, params: { bot_id: shared_bot.id, kind: "keyword_responder", name: "skill" }
 
       expect(response.status).to eq(201)
       expect(json_body).to be_a_skill_as_json.matching(kind: 'keyword_responder', name: 'skill')
+    end
+
+    it "is denied for shared bots without behaviour role" do
+      post :create, params: { bot_id: other_shared_bot.id, kind: "keyword_responder", name: "skill" }
+
+      expect(response).to be_denied
     end
   end
 
@@ -108,12 +122,18 @@ RSpec.describe Api::SkillsController, type: :controller do
       expect(bot.front_desk.name).to_not eq('Test')
     end
 
-    it "is allowed for shared bots" do
+    it "is allowed for shared bots with behaviour role" do
       put :update, params: { id: shared_skill.id, skill: valid_skill_config }
 
       expect(response).to be_success
       shared_skill.reload
       expect(shared_skill.name).to eq('Food menu')
+    end
+
+    it "is denied for shared bots without behaviour role" do
+      put :update, params: { id: other_shared_skill.id, skill: valid_skill_config }
+
+      expect(response).to be_denied
     end
   end
 
@@ -132,10 +152,15 @@ RSpec.describe Api::SkillsController, type: :controller do
       expect(response.status).to eq(404)
     end
 
-    it "is allowed for shared bots" do
+    it "is allowed for shared bots with behaviour role" do
       expect do
         delete :destroy, params: { id: shared_skill.id }
       end.to change(shared_bot.skills, :count).by(-1)
+    end
+
+    it "is denied for shared bots without behaviour role" do
+      delete :destroy, params: { id: other_shared_skill.id }
+      expect(response).to be_denied
     end
   end
 end

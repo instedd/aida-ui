@@ -2,11 +2,11 @@ class InvitationPolicy < ApplicationPolicy
   include RolesMixin
 
   def resend?
-    is_bot_owner? or is_collaborator?
+    can_admin?
   end
 
   def destroy?
-    is_bot_owner? or is_collaborator?
+    can_admin?
   end
 
   def retrieve?

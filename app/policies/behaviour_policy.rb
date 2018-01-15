@@ -2,11 +2,11 @@ class BehaviourPolicy < ApplicationPolicy
   include RolesMixin
 
   def update?
-    is_bot_owner? or is_collaborator?
+    manages_behaviour?
   end
 
   def destroy?
-    !is_front_desk? and (is_bot_owner? or is_collaborator?)
+    !is_front_desk? and manages_behaviour?
   end
 
   def is_front_desk?

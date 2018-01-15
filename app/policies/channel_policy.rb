@@ -2,7 +2,7 @@ class ChannelPolicy < ApplicationPolicy
   include RolesMixin
 
   def update?
-    is_bot_owner? or is_collaborator?
+    can_publish?
   end
 
   def bot

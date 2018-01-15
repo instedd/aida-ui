@@ -10,67 +10,79 @@ class BotPolicy < ApplicationPolicy
   end
 
   def update?
-    is_bot_owner? or is_collaborator?
+    can_admin?
   end
 
   def destroy?
-    is_bot_owner? or is_collaborator?
+    can_admin?
   end
 
   def publish?
-    is_bot_owner? or is_collaborator?
+    can_publish?
   end
 
   def unpublish?
-    is_bot_owner? or is_collaborator?
+    can_publish?
   end
 
   def duplicate?
-    is_bot_owner? or is_collaborator?
+    can_admin?
   end
 
   def preview?
-    is_bot_owner? or is_collaborator?
+    has_access?
   end
 
   def download_manifest?
-    is_bot_owner? or is_collaborator?
+    can_publish?
   end
 
   def read_session_data?
-    is_bot_owner? or is_collaborator?
+    manages_results?
   end
 
   def read_usage_stats?
-    is_bot_owner? or is_collaborator?
+    manages_results?
   end
 
   def read_channels?
-    is_bot_owner? or is_collaborator?
+    can_publish?
   end
 
   def read_behaviours?
-    is_bot_owner? or is_collaborator?
+    manages_behaviour?
   end
 
   def create_skill?
-    is_bot_owner? or is_collaborator?
+    manages_behaviour?
   end
 
   def read_translations?
-    is_bot_owner? or is_collaborator?
+    manages_content?
   end
 
   def update_translation?
-    is_bot_owner? or is_collaborator?
+    manages_content?
+  end
+
+  def read_variables?
+    manages_variables?
+  end
+
+  def update_variable?
+    manages_variables?
+  end
+
+  def destroy_variable?
+    manages_variables?
   end
 
   def read_collaborators?
-    is_bot_owner? or is_collaborator?
+    can_admin?
   end
 
   def invite_collaborator?
-    is_bot_owner? or is_collaborator?
+    can_admin?
   end
 
   def bot

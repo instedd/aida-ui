@@ -25,12 +25,11 @@ RSpec.describe Api::CollaboratorsController, type: :controller do
       expect(json_pluck(json_body['invitations'], :email)).to include(invitation.email)
     end
 
-    it "is allowed on shared bots" do
-      shared_bot = create(:bot, shared_with: user)
+    it "is denied on shared bots" do
+      shared_bot = create(:bot, shared_with: user, grants: %w(publish))
 
       get :index, params: { bot_id: shared_bot.id }
-      expect(response).to be_success
-      expect(json_body.keys).to include('collaborators', 'invitations')
+      expect(response).to be_denied
     end
   end
 
@@ -41,14 +40,15 @@ RSpec.describe Api::CollaboratorsController, type: :controller do
       end.to change(bot.collaborators, :count).by(-1)
     end
 
-    it "is allowed on shared bots" do
-      shared_bot = create(:bot, shared_with: user)
+    it "is denied on shared bots" do
+      shared_bot = create(:bot, shared_with: user, grants: %w(publish))
       other_user = create(:user)
       other_collaborator = shared_bot.collaborators.add_collaborator! other_user
 
       expect do
         delete :destroy, params: { id: other_collaborator.id }
-      end.to change(shared_bot.collaborators, :count).by(-1)
+      end.not_to change(shared_bot.collaborators, :count)
+      expect(response).to be_denied
     end
   end
 
@@ -61,6 +61,14 @@ RSpec.describe Api::CollaboratorsController, type: :controller do
       collaborator.reload
 
       expect(collaborator.roles).to match_array(%w(content variables))
+    end
+
+    it "is denied on shared bots" do
+      shared_bot = create(:bot, shared_with: user, grants: %w(publish))
+      other_collaborator = shared_bot.collaborators.add_collaborator! create(:user)
+
+      put :update, params: { id: other_collaborator.id, collaborator: { roles: ['content', 'variables'] }}
+      expect(response).to be_denied
     end
   end
 end
