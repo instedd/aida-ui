@@ -126,10 +126,9 @@ export class BotLayoutComponent extends Component {
 
       return (
         <AppLayout
-          title={
-            <EditableTitleLabel
-              title={bot.name}
-            onSubmit={(name) => { botActions.updateBot({...bot, name}) }} />
+          title={canAdmin
+               ? (<EditableTitleLabel title={bot.name} onSubmit={(name) => { botActions.updateBot({...bot, name}) }} />)
+               : bot.name
           }
           headerNav={[
             <HeaderNavLink label="Analytics" to={r.botAnalytics(bot.id)} />,
