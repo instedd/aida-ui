@@ -4,7 +4,7 @@ class Api::BotsController < ApplicationApiController
 
   def index
     authorize Bot
-    bots = policy_scope(Bot).includes(:channels)
+    bots = policy_scope(Bot).includes(:channels, :collaborators)
     render json: bots.map { |b| bot_api_json(b) }
   end
 
@@ -126,6 +126,19 @@ class Api::BotsController < ApplicationApiController
       name: bot.name,
       published: bot.published?,
       channel_setup: bot.channels.first.setup?,
+      permissions: bot_permissions(bot)
+    }
+  end
+
+  def bot_permissions(bot)
+    bot_policy = policy(bot)
+    {
+      can_admin: bot_policy.can_admin?,
+      can_publish: bot_policy.can_publish?,
+      manages_behaviour: bot_policy.manages_behaviour?,
+      manages_content: bot_policy.manages_content?,
+      manages_variables: bot_policy.manages_variables?,
+      manages_results: bot_policy.manages_results?
     }
   end
 end

@@ -8,10 +8,23 @@
         "id": { "type": "integer" },
         "name": { "type": "string" },
         "published": { "type": "boolean" },
-        "channel_setup": { "type": "boolean" }
+        "channel_setup": { "type": "boolean" },
+        "permissions": { "$ref": "#/definitions/permissions" }
       },
       "additionalProperties": false,
-      "required": [ "id", "name", "published", "channel_setup" ]
+      "required": [ "id", "name", "published", "channel_setup", "permissions" ]
+    },
+
+    "permissions": {
+      "type": "object",
+      "properties": {
+        "can_admin": { "type": "boolean" },
+        "can_publish": { "type": "boolean" },
+        "manages_behaviour": { "type": "boolean" },
+        "manages_content": { "type": "boolean" },
+        "manages_variables": { "type": "boolean" },
+        "manages_results": { "type": "boolean" }
+      }
     },
 
     "facebookChannelConfig": {

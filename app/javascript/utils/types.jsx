@@ -19,6 +19,13 @@ export type UpdatedVariableAttributes = {
   lang: T.Language
 };
 
+export type Permission = 'can_admin'
+                       | 'can_publish'
+                       | 'manages_behaviour'
+                       | 'manages_content'
+                       | 'manages_variables'
+                       | 'manages_results';
+
 export type ChatMessage = {
   id: number,
   text: string,
