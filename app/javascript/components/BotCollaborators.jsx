@@ -240,7 +240,7 @@ class InviteDialog extends Component {
           </div>
           <div className="action-buttons">
             <Button flat secondary swapTheming id="invite-send-button" onClick={inviteCollaborator}>Send</Button>
-            <Button flat id="invite-cancel-button" onClick={hideDialog}>Cancel</Button>
+            <Button flat primary id="invite-cancel-button" onClick={hideDialog}>Cancel</Button>
           </div>
           <footer>
             <FontIcon>link</FontIcon> Or invite to collaborate with a {theLink}
