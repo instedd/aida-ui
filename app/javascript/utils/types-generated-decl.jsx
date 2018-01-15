@@ -6,6 +6,7 @@ export type Bot = {
   published: boolean;
   channel_setup: boolean;
   permissions: Permissions;
+  collaborator_id?: number | null;
 };
 
 export type Permissions = {

@@ -9,7 +9,13 @@
         "name": { "type": "string" },
         "published": { "type": "boolean" },
         "channel_setup": { "type": "boolean" },
-        "permissions": { "$ref": "#/definitions/permissions" }
+        "permissions": { "$ref": "#/definitions/permissions" },
+        "collaborator_id": {
+          "oneOf": [
+            { "type": "integer" },
+            { "type": "null" }
+          ]
+        }
       },
       "additionalProperties": false,
       "required": [ "id", "name", "published", "channel_setup", "permissions" ]
