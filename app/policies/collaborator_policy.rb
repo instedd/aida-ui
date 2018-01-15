@@ -2,7 +2,7 @@ class CollaboratorPolicy < ApplicationPolicy
   include RolesMixin
 
   def destroy?
-    can_admin?
+    can_admin? or is_self?
   end
 
   def update?
