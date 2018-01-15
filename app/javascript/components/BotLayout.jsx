@@ -20,6 +20,7 @@ import BotTranslationsVariables from '../components/BotTranslationsVariables'
 import BotAnalytics from '../components/BotAnalytics'
 import BotData from '../components/BotData'
 import BotCollaborators from '../components/BotCollaborators'
+import { hasPermission } from '../utils'
 
 import ChatWindow from './ChatWindow'
 import * as chatActions from '../actions/chat'
@@ -83,24 +84,43 @@ export class BotLayoutComponent extends Component {
     )
 
     if (botsLoaded == true && bot != null) {
-      const defaultTab = (bot) => {
-        if (bot.published) {
+      const canAdmin = hasPermission(bot, 'can_admin')
+      const canPublish = hasPermission(bot, 'can_publish')
+      const managesContent = hasPermission(bot, 'manages_content')
+      const managesVariables = hasPermission(bot, 'manages_variables')
+      const managesBehaviour = hasPermission(bot, 'manages_behaviour')
+      const managesResults = hasPermission(bot, 'manages_results')
+
+      const defaultTranslationsView = managesVariables && !managesContent
+                                    ? r.botTranslationsVariables(bot.id)
+                                    : r.botTranslationsContent(bot.id)
+
+      const defaultTab = (() => {
+        if (managesResults && bot.published) {
           return r.botAnalytics(bot.id)
-        } else if (bot.channel_setup) {
+        } else if (managesBehaviour && bot.channel_setup) {
           return r.botBehaviour(bot.id)
-        } else {
+        } else if (canPublish) {
           return r.botChannel(bot.id)
+        } else {
+          return defaultTranslationsView
         }
-      }
+      })()
 
       const showCollaborators = () => this.setState({ collaborators: true })
       const hideCollaborators = () => this.setState({ collaborators: false })
 
       const [buttonIcon, buttonAction] = (() => {
         if (location.pathname == r.botCollaborators(bot.id)) {
-          return ["email", showCollaborators]
-        } else {
+          if (canAdmin) {
+            return ["email", showCollaborators]
+          } else {
+            return ["", null]
+          }
+        } else if (canPublish) {
           return ["publish", () => botActions.publishBot(bot)]
+        } else {
+          return ["", null]
         }
       })()
 
@@ -122,19 +142,19 @@ export class BotLayoutComponent extends Component {
           ]}
           headerNavExtra={[
             // <HeaderNavAction label="Rename" />,
-            <HeaderNavAction label="Unpublish" onClick={() => botActions.unpublishBot(bot)}/>,
-            <HeaderNavAction label="Duplicate" onClick={duplicateBot} />,
-            <HeaderNavAction label="Delete" onClick={showDialog} />,
-            <HeaderNavAction label="Download Manifest" onClick={() => window.location = `/api/v1/bots/${bot.id}/manifest.json`} />,
+            <HeaderNavAction label="Unpublish" disabled={!canPublish} onClick={() => botActions.unpublishBot(bot)}/>,
+            <HeaderNavAction label="Duplicate" disabled={!canAdmin} onClick={duplicateBot} />,
+            <HeaderNavAction label="Delete" disabled={!canAdmin} onClick={showDialog} />,
+            <HeaderNavAction label="Download Manifest" disabled={!canPublish} onClick={() => window.location = `/api/v1/bots/${bot.id}/manifest.json`} />,
           ]}
           buttonAction={buttonAction} buttonIcon={buttonIcon}
         >
-          <Route exact path="/b/:id" render={() => <Redirect to={defaultTab(bot)} />} />
+          <Route exact path="/b/:id" render={() => <Redirect to={defaultTab} />} />
           <Route exact path="/b/:id/data" render={() => <BotData bot={bot} />} />
           <Route exact path="/b/:id/analytics" render={() => <BotAnalytics bot={bot} />} />
           <Route exact path="/b/:id/channel" render={() => <BotChannel bot={bot} />} />
           <Route path="/b/:id/behaviour" render={() => <BotBehaviour bot={bot} onToggleChatWindow={toggleChatWindow}/>} />
-          <Route exact path="/b/:id/translations" render={() => <Redirect to={r.botTranslationsContent(bot.id)}/>} />
+          <Route exact path="/b/:id/translations" render={() => <Redirect to={defaultTranslationsView}/>} />
           <Route exact path="/b/:id/translations/content" render={() => <BotTranslations bot={bot} />} />
           <Route exact path="/b/:id/translations/variables" render={() => <BotTranslationsVariables bot={bot} />} />
           <Route exact path="/b/:id/collaborators" render={() => <BotCollaborators bot={bot}

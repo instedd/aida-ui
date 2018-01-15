@@ -19,7 +19,8 @@ import EmptyContent from '../ui/EmptyContent'
 
 import * as actions from '../actions/collaborators'
 import * as invitationsActions from '../actions/invitations'
-import { generateToken } from '../utils'
+import { generateToken, hasPermission } from '../utils'
+import ContentDenied from './ContentDenied'
 
 const hasRole = (roles, role) => {
   return roles.indexOf(role) >= 0
@@ -253,14 +254,20 @@ class InviteDialog extends Component {
 
 class BotCollaborators extends Component {
   componentDidMount() {
-    const { bot, actions } = this.props
-    actions.fetchCollaborators({ botId: bot.id })
+    const { hasPermission, bot, actions } = this.props
+    if (hasPermission) {
+      actions.fetchCollaborators({ botId: bot.id })
+    }
   }
 
   render() {
-    const { bot, loaded, collaborators, invitations,
+    const { hasPermission, bot, loaded, collaborators, invitations,
             currentUserEmail, invitationsActions,
             actions, dialogVisible, hideDialog, showDialog } = this.props
+
+    if (!hasPermission) {
+      return <ContentDenied />
+    }
 
     if (!loaded) {
       return (<EmptyLoader>Loading collaborators for {bot.name}</EmptyLoader>)
@@ -349,14 +356,17 @@ class BotCollaborators extends Component {
 
 const mapStateToProps = (state, {bot}) => {
   const { fetching, scope, data } = state.collaborators
+  const permitted = hasPermission(bot, 'can_admin')
   if (!data || fetching || bot.id != scope.botId) {
     return {
+      hasPermission: permitted,
       collaborators: [],
       invitations: [],
       loaded: false
     }
   } else {
     return {
+      hasPermission: permitted,
       collaborators: data.collaborators,
       invitations: data.invitations,
       loaded: true,

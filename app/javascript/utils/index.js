@@ -54,3 +54,7 @@ const generateRandomBytes = (count) => {
     return bytes;
   }
 }
+
+export const hasPermission = (bot : T.Bot, permission : T.Permission) => {
+  return bot && bot.permissions[permission]
+}

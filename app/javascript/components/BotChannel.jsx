@@ -7,14 +7,16 @@ import Title from '../ui/Title'
 import Headline from '../ui/Headline'
 import Field from '../ui/Field'
 import { EmptyLoader }  from '../ui/Loader'
+import { hasPermission } from '../utils'
+import ContentDenied from './ContentDenied'
 
 import * as channelActions from '../actions/channel'
 import * as channelsActions from '../actions/channels'
 
 class BotChannelComponent extends Component {
   componentDidMount() {
-    const { channelLoaded, bot } = this.props
-    if (!channelLoaded) {
+    const { hasPermission, channelLoaded, bot } = this.props
+    if (hasPermission && !channelLoaded) {
       this.props.channelsActions.fetchChannels({botId : bot.id})
     }
   }
@@ -27,7 +29,11 @@ class BotChannelComponent extends Component {
   }
 
   render() {
-    const { channel, bot } = this.props
+    const { hasPermission, channel, bot } = this.props
+
+    if (!hasPermission) {
+      return <ContentDenied />
+    }
 
     if (channel) {
       return <SingleColumn>
@@ -63,6 +69,7 @@ const mapStateToProps = (state, {bot}) => {
   }
 
   return {
+    hasPermission: hasPermission(bot, 'can_publish'),
     channelLoaded: channelLoaded,
     channel: channel
   }

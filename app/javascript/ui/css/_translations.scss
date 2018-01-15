@@ -18,12 +18,16 @@
     .translations-menu {
       grid-area: menu;
 
-      a {
+      a, button {
         color: $md-grey-500;
         font-size: 18px;
         font-weight: normal;
         padding: 25px 20px;
         text-transform: none;
+
+        &[disabled] {
+          color: $md-grey-300;
+        }
       }
 
       a:link {

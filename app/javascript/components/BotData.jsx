@@ -3,10 +3,16 @@ import { Button, Divider } from 'react-md'
 
 import { EmptyContent } from '../ui/EmptyContent'
 import { Headline } from '../ui/Headline'
+import { hasPermission } from '../utils'
+import ContentDenied from './ContentDenied'
 
 export class BotData extends Component {
   render() {
     const { bot } = this.props
+
+    if (!hasPermission(bot, 'manages_results')) {
+      return <ContentDenied />
+    }
 
     if (!bot.published) {
       return (
