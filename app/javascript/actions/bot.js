@@ -77,6 +77,12 @@ export const deleteBot = (bot : T.Bot) => (dispatch : T.Dispatch) => {
             .then(() => dispatch(_botDelete(bot.id)))
 }
 
+export const leaveBot = (bot : T.Bot) => (dispatch : T.Dispatch) => {
+  if (!bot.collaborator_id) return
+  return api.removeCollaborator(bot.collaborator_id)
+            .then(() => dispatch(_botDelete(bot.id)))
+}
+
 export const duplicateBot = (bot : T.Bot, history : any) => (dispatch : T.Dispatch) => {
   return api.duplicateBot(bot.id)
             .then(duplicate => {
