@@ -85,9 +85,6 @@
   ul .md-list {
     @extend .rounded;
     min-width: 150px;
-    .md-text--disabled {
-      color: $md-black-base;
-    }
   }
 }
 

@@ -44,6 +44,23 @@
   }
 }
 
+.main-fullwidth-buttons {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 90px;
+  grid-template-areas:
+  "main-content button-area";
+  .main-content {
+    grid-area: main-content;
+    background: $md-white-base;
+    padding: 86px 100px 70px;
+  }
+  .button-area {
+    grid-area: button-area;
+    background: $md-grey-300;
+  }
+}
+
 .main-single-column {
   background: $md-white-base;
   width: 100%;

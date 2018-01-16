@@ -17,6 +17,8 @@ import map from 'lodash/map'
 import MainWhite from '../ui/MainWhite'
 import Title from '../ui/Title'
 import { EmptyLoader } from '../ui/Loader'
+import { hasPermission } from '../utils'
+import ContentDenied from './ContentDenied'
 
 import * as actions from '../actions/translations'
 import { languageNameByCode } from '../utils/lang'
@@ -152,9 +154,11 @@ class BotTranslationsVariables extends Component {
   }
 
   componentDidMount() {
-    const { actions, bot } = this.props
+    const { permitted, actions, bot } = this.props
 
-    actions.fetchTranslations({ botId: bot.id })
+    if (permitted) {
+      actions.fetchTranslations({ botId: bot.id })
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -172,8 +176,13 @@ class BotTranslationsVariables extends Component {
   }
 
   render() {
-    const { bot, languages, defaultLang, variables, actions } = this.props
+    const { permitted, bot, languages, defaultLang, variables, actions, onToggleChatWindow } = this.props
     const { firstLang, secondLang } = this.state
+
+    if (!permitted) {
+      return <ContentDenied />
+    }
+
     if (!variables) {
       return <EmptyLoader>Loading translations variables</EmptyLoader>
     }
@@ -191,8 +200,10 @@ class BotTranslationsVariables extends Component {
       onRemove: (variableId, conditionId) => (actions.removeVariable(bot.id, variableId, conditionId)),
       onAddCondition: (variableId) => (actions.addVariableCondition(bot.id, variableId)) })
 
+    const buttons = (<Button icon onClick={() => onToggleChatWindow()}>chat</Button>)
+
     return (
-      <MainWhite>
+      <MainWhite buttons={buttons}>
         <div className="translations-header">
           <div className="translations-tittle">
             <Title>Translations</Title>
@@ -241,8 +252,10 @@ class BotTranslationsVariables extends Component {
 
 const mapStateToProps = (state, { bot }) => {
   const { scope, fetching, variables, languages, defaultLang } = state.translations
+  const permitted = hasPermission(bot, 'manages_variables')
   if (scope && bot.id == scope.botId) {
     return {
+      permitted,
       fetching,
       variables,
       languages,
@@ -250,6 +263,7 @@ const mapStateToProps = (state, { bot }) => {
     }
   } else {
     return {
+      permitted,
       fetching: false,
       variables: [],
       languages: [],

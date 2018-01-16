@@ -56,6 +56,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.6'
   gem 'pundit-matchers', '~> 1.4.1'
   gem 'factory_bot_rails', '~> 4.8'
+  gem 'timecop', '~> 0.9'
 end
 
 group :development do

@@ -5,6 +5,16 @@ export type Bot = {
   name: string;
   published: boolean;
   channel_setup: boolean;
+  permissions: Permissions;
+};
+
+export type Permissions = {
+  can_admin?: boolean;
+  can_publish?: boolean;
+  manages_behaviour?: boolean;
+  manages_content?: boolean;
+  manages_variables?: boolean;
+  manages_results?: boolean;
 };
 
 export type FacebookChannelConfig = {
@@ -202,7 +212,7 @@ export type UpdateVariable = {
 
 export type Collaborator = {
   id: number;
-  role: string;
+  roles: RoleList;
   user_email: string;
   last_activity: string | null;
 };
@@ -217,14 +227,18 @@ export type Invitation = {
   id: number;
   creator?: string;
   email: string | null;
-  role?: string;
+  roles?: RoleList;
   link_url: string | null;
-  created_at: string;
+  sent_at: string;
 };
+
+export type Role = "publish" | "behaviour" | "content" | "variables" | "results";
+
+export type RoleList = Array<Role>;
 
 export type InvitationData = {
   bot_name: string;
   inviter: string;
-  role: string;
+  roles: RoleList;
 };
 

@@ -2,12 +2,10 @@ require 'rails_helper'
 
 RSpec.describe Api::BotsController, type: :controller do
   let!(:user) { create(:user) }
-  let!(:other_user) { create(:user) }
 
   let!(:bot) { create(:bot, owner: user) }
   let!(:published_bot) { create(:bot, :published, owner: user) }
-  let!(:other_bot) { create(:bot, owner: other_user) }
-  let!(:shared_bot) { create(:bot, owner: other_user, shared_with: user) }
+  let!(:other_bot) { create(:bot) }
 
   before(:each) { sign_in user }
 
@@ -20,6 +18,8 @@ RSpec.describe Api::BotsController, type: :controller do
     end
 
     it "lists only the user accessible bots" do
+      shared_bot = create(:bot, shared_with: user)
+
       get :index
 
       bot_ids = json_pluck(json_body, :id)
@@ -50,14 +50,15 @@ RSpec.describe Api::BotsController, type: :controller do
       expect(bot.name).to eq("updated")
     end
 
-    it "can update a shared bot" do
+    it "cannot update a shared bot" do
+      shared_bot = create(:bot, shared_with: user)
+
       put :update, params: { id: shared_bot.id, bot: { name: "updated" } }
 
-      expect(response).to be_success
-      expect(json_body).to be_a_bot_as_json.matching(name: "updated")
+      expect(response).not_to be_success
 
       shared_bot.reload
-      expect(shared_bot.name).to eq("updated")
+      expect(shared_bot.name).not_to eq("updated")
     end
   end
 
@@ -74,10 +75,12 @@ RSpec.describe Api::BotsController, type: :controller do
       delete :destroy, params: { id: published_bot.id }
     end
 
-    it "can delete a shared bot" do
+    it "cannot delete a shared bot" do
+      shared_bot = create(:bot, shared_with: user)
+
       expect do
         delete :destroy, params: { id: shared_bot.id }
-      end.to change(Bot, :count).by(-1)
+      end.not_to change(Bot, :count)
     end
   end
 
@@ -97,12 +100,21 @@ RSpec.describe Api::BotsController, type: :controller do
       post :publish, params: { id: published_bot.id }
     end
 
-    it "is allowed for a shared bot" do
+    it "is allowed for a shared bot with publish role" do
+      shared_bot = create(:bot, shared_with: user, grants: %w(publish))
+
       expect(Backend).to receive(:create_bot).and_return('bot-id')
 
       post :publish, params: { id: shared_bot.id }
 
       expect(response).to be_success
+    end
+
+    it "is denied for a shared bot without publish role" do
+      shared_bot = create(:bot, shared_with: user, grants: %w(results))
+
+      post :publish, params: { id: shared_bot.id }
+      expect(response).to be_denied
     end
   end
 
@@ -115,13 +127,20 @@ RSpec.describe Api::BotsController, type: :controller do
       expect(published_bot.reload).to_not be_published
     end
 
-    it "is allowed for a shared bot" do
-      shared_published_bot = create(:bot, :published, owner: other_user, shared_with: user)
+    it "is allowed for a shared bot with publish role" do
+      shared_published_bot = create(:bot, :published, shared_with: user, grants: %w(publish))
       expect(Backend).to receive(:destroy_bot).with(shared_published_bot.uuid)
 
       delete :unpublish, params: { id: shared_published_bot.id }
 
       expect(shared_published_bot.reload).to_not be_published
+    end
+
+    it "is denied for a shared bot without publish role" do
+      shared_bot = create(:bot, :published, shared_with: user, grants: %w(results))
+
+      delete :unpublish, params: { id: shared_bot.id }
+      expect(response).to be_denied
     end
   end
 
@@ -146,9 +165,16 @@ RSpec.describe Api::BotsController, type: :controller do
       expect(response).to be_success
     end
 
-    it "is allowed for a shared bot" do
+    it "is allowed for a shared bot with results role" do
+      shared_bot = create(:bot, shared_with: user, grants: %w(results))
       get :data, params: { id: shared_bot.id }, format: 'csv'
       expect(response).to be_success
+    end
+
+    it "is denied for a shared bot without results role" do
+      shared_bot = create(:bot, shared_with: user, grants: %w(content))
+      get :data, params: { id: shared_bot.id }, format: 'csv'
+      expect(response).to be_denied
     end
   end
 
@@ -183,8 +209,8 @@ RSpec.describe Api::BotsController, type: :controller do
                                                                         match_attributes({ id: 'language_detector', users: 5 })])
     end
 
-    it "is allowed for shared bots" do
-      shared_published_bot = create(:bot, :published, owner: other_user, shared_with: user)
+    it "is allowed for shared bots with results role" do
+      shared_published_bot = create(:bot, :published, shared_with: user, grants: %w(results))
       expect(Backend).to receive(:usage_summary).with(shared_published_bot.uuid).and_return(sample_summary)
       expect(Backend).to receive(:users_per_skill).with(shared_published_bot.uuid).and_return(sample_users_per_skill)
 
@@ -192,6 +218,14 @@ RSpec.describe Api::BotsController, type: :controller do
 
       expect(response).to be_success
       expect(json_body).to be_a_bot_stats_as_json
+    end
+
+    it "is denied for shared bots without results role" do
+      shared_published_bot = create(:bot, :published, shared_with: user, grants: %w(content))
+
+      get :stats, params: { id: shared_published_bot.id }
+
+      expect(response).to be_denied
     end
   end
 end

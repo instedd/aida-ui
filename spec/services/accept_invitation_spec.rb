@@ -27,7 +27,7 @@ RSpec.describe AcceptInvitation, type: :service do
       expect(collaborator).to be_valid
       expect(collaborator.user).to eq(user)
       expect(collaborator.bot).to eq(bot)
-      expect(collaborator.role).to eq(invitation.role)
+      expect(collaborator.roles).to eq(invitation.roles)
     end
 
     it "rejects if the email does not match" do
@@ -62,11 +62,11 @@ RSpec.describe AcceptInvitation, type: :service do
       expect(collaborator).to be_a(Collaborator)
       expect(collaborator.user).to eq(user)
       expect(collaborator.bot).to eq(bot)
-      expect(collaborator.role).to eq(invitation.role)
+      expect(collaborator.roles).to eq(invitation.roles)
     end
 
     it "fails if the user is already a collaborator" do
-      bot.collaborators.add_collaborator! user
+      bot.collaborators.add_collaborator! user, roles: %w(results)
       expect do
         AcceptInvitation.run(invitation, user)
       end.to raise_error(ActiveRecord::RecordInvalid)

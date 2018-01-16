@@ -6,10 +6,16 @@ import { Button } from 'react-md'
 import FrontDesk from './FrontDesk'
 import SkillsBar from './SkillsBar'
 import BotSkill from './BotSkill'
+import { hasPermission } from '../utils'
+import ContentDenied from './ContentDenied'
 
 export class BotBehaviour extends Component {
   render() {
     const { bot, onToggleChatWindow } = this.props
+
+    if (!hasPermission(bot, 'manages_behaviour')) {
+      return <ContentDenied />
+    }
 
     const buttons = (<Button icon onClick={() => onToggleChatWindow()}>chat</Button>)
 

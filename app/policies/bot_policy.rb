@@ -1,4 +1,6 @@
 class BotPolicy < ApplicationPolicy
+  include RolesMixin
+
   def index?
     true
   end
@@ -8,75 +10,83 @@ class BotPolicy < ApplicationPolicy
   end
 
   def update?
-    is_owner? or is_collaborator?
+    can_admin?
   end
 
   def destroy?
-    is_owner? or is_collaborator?
+    can_admin?
   end
 
   def publish?
-    is_owner? or is_collaborator?
+    can_publish?
   end
 
   def unpublish?
-    is_owner? or is_collaborator?
+    can_publish?
   end
 
   def duplicate?
-    is_owner? or is_collaborator?
+    can_admin?
   end
 
   def preview?
-    is_owner? or is_collaborator?
+    has_access?
   end
 
   def download_manifest?
-    is_owner? or is_collaborator?
+    can_publish?
   end
 
   def read_session_data?
-    is_owner? or is_collaborator?
+    manages_results?
   end
 
   def read_usage_stats?
-    is_owner? or is_collaborator?
+    manages_results?
   end
 
   def read_channels?
-    is_owner? or is_collaborator?
+    can_publish?
   end
 
   def read_behaviours?
-    is_owner? or is_collaborator?
+    manages_behaviour?
   end
 
   def create_skill?
-    is_owner? or is_collaborator?
+    manages_behaviour?
   end
 
   def read_translations?
-    is_owner? or is_collaborator?
+    manages_content?
   end
 
   def update_translation?
-    is_owner? or is_collaborator?
+    manages_content?
+  end
+
+  def read_variables?
+    manages_variables?
+  end
+
+  def update_variable?
+    manages_variables?
+  end
+
+  def destroy_variable?
+    manages_variables?
   end
 
   def read_collaborators?
-    is_owner? or is_collaborator?
+    can_admin?
   end
 
   def invite_collaborator?
-    is_owner? or is_collaborator?
+    can_admin?
   end
 
-  def is_owner?
-    record.owner_id == user.id
-  end
-
-  def is_collaborator?
-    record.collaborators.any? { |c| c.user_id == user.id }
+  def bot
+    record
   end
 
   def permitted_attributes

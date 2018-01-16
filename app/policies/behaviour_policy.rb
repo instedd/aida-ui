@@ -1,22 +1,20 @@
 class BehaviourPolicy < ApplicationPolicy
+  include RolesMixin
+
   def update?
-    is_bot_owner? or is_collaborator?
+    manages_behaviour?
   end
 
   def destroy?
-    !is_front_desk? and (is_bot_owner? or is_collaborator?)
+    !is_front_desk? and manages_behaviour?
   end
 
   def is_front_desk?
     record.kind == 'front_desk'
   end
 
-  def is_bot_owner?
-    record.bot.owner_id == user.id
-  end
-
-  def is_collaborator?
-    record.bot.collaborators.any? { |c| c.user_id == user.id }
+  def bot
+    record.bot
   end
 
   def permitted_attributes

@@ -6,7 +6,7 @@ class AcceptInvitation
 
     Invitation.transaction do
       bot = invitation.bot
-      collaborator = bot.collaborators.create! user: user, role: invitation.role
+      collaborator = bot.collaborators.create! user: user, roles: invitation.roles
       invitation.destroy!
       collaborator
     end

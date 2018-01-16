@@ -10,20 +10,26 @@ import { Headline } from '../ui/Headline'
 import { Metric } from '../ui/Metric'
 
 import * as actions from '../actions/stats'
+import { hasPermission } from '../utils'
+import ContentDenied from './ContentDenied'
 
 const DEFAULT_PERIOD = "this_week"
 
 class BotAnalyticsComponent extends Component {
 
   componentDidMount() {
-    const { bot, actions} = this.props
-    if (bot.published) {
+    const { bot, permitted, actions } = this.props
+    if (permitted && bot.published) {
       actions.fetchStats(bot.id, DEFAULT_PERIOD)
     }
   }
 
   render() {
-    const { bot, fetching, period, data, actions } = this.props
+    const { bot, permitted, fetching, period, data, actions } = this.props
+
+    if (!permitted) {
+      return <ContentDenied />
+    }
 
     if (!bot.published) {
       return (
@@ -90,9 +96,14 @@ class BotAnalyticsComponent extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, { bot }) => {
   const {fetching, data, period} = state.stats
-  return {fetching, data: data || {}, period}
+  return {
+    permitted: hasPermission(bot, 'manages_results'),
+    fetching,
+    data: data || {},
+    period
+  }
 }
 
 const mapDispatchToProps = (dispatch) => ({

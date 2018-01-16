@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe ResendInvitation, type: :service do
-  let(:invitation) { create(:invitation) }
+  let!(:invitation) { create(:invitation) }
 
   before(:each) {
     clear_mail_deliveries
@@ -18,5 +18,13 @@ RSpec.describe ResendInvitation, type: :service do
 
     ResendInvitation.run(anonymous_invitation)
     expect(all_mail_deliveries).to be_empty
+  end
+
+  it "updates the invitation to reflect last delivery time" do
+    Timecop.freeze(Time.now + 1.hour) do
+      ResendInvitation.run(invitation)
+      expect(invitation.updated_at).to eq(Time.now)
+      expect(invitation.updated_at).to be > invitation.created_at
+    end
   end
 end

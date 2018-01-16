@@ -1,17 +1,23 @@
 class CollaboratorPolicy < ApplicationPolicy
+  include RolesMixin
+
   def destroy?
-    is_bot_owner? or (is_collaborator? and !is_self?)
+    can_admin?
   end
 
-  def is_bot_owner?
-    record.bot.owner_id == user.id
+  def update?
+    can_admin?
   end
 
-  def is_collaborator?
-    record.bot.collaborators.any? { |c| c.user_id == user.id }
+  def bot
+    record.bot
   end
 
   def is_self?
     record.user_id == user.id
+  end
+
+  def permitted_attributes
+    {:roles => []}
   end
 end

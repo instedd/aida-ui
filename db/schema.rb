@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171228180737) do
+ActiveRecord::Schema.define(version: 20180110172600) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,9 +49,9 @@ ActiveRecord::Schema.define(version: 20171228180737) do
   create_table "collaborators", force: :cascade do |t|
     t.bigint "bot_id"
     t.bigint "user_id"
-    t.string "role"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "roles", default: [], array: true
     t.index ["bot_id", "user_id"], name: "index_collaborators_on_bot_id_and_user_id", unique: true
     t.index ["bot_id"], name: "index_collaborators_on_bot_id"
     t.index ["user_id"], name: "index_collaborators_on_user_id"
@@ -84,10 +84,10 @@ ActiveRecord::Schema.define(version: 20171228180737) do
     t.bigint "bot_id"
     t.bigint "creator_id"
     t.string "email"
-    t.string "role", null: false
     t.string "token", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "roles", default: [], array: true
     t.index ["bot_id", "email"], name: "index_invitations_on_bot_id_and_email", unique: true
     t.index ["bot_id"], name: "index_invitations_on_bot_id"
     t.index ["creator_id"], name: "index_invitations_on_creator_id"

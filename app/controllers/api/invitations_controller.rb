@@ -5,8 +5,15 @@ class Api::InvitationsController < ApplicationApiController
   def create
     bot = Bot.find(params[:bot_id])
     authorize bot, :invite_collaborator?
-    invitation = InviteCollaborator.run(bot, params[:email], params[:role], current_user)
-    if invitation.valid?
+    invitation = if params[:email].present?
+                   InviteCollaborator.run(bot, params[:email], params[:roles], current_user)
+                 elsif params[:token].present?
+                   bot.invitations.create_anonymous!(params[:token], params[:roles], current_user)
+                 end
+    if invitation.nil?
+      render json: { error: "Must provide either an email or a token" },
+             status: :bad_request
+    elsif invitation.valid?
       render json: invitation_api_json(invitation)
     else
       error_message = invitation.errors.full_messages.join(', ')
@@ -19,7 +26,7 @@ class Api::InvitationsController < ApplicationApiController
     invitation = Invitation.find(params[:id])
     authorize invitation
     ResendInvitation.run(invitation)
-    render json: { result: :ok }
+    render json: invitation_api_json(invitation)
   end
 
   def destroy
@@ -34,7 +41,7 @@ class Api::InvitationsController < ApplicationApiController
     authorize invitation
     render json: { bot_name: invitation.bot.name,
                    inviter: invitation.creator.email,
-                   role: invitation.role }
+                   roles: invitation.roles }
   rescue Pundit::NotAuthorizedError => e
     # render as 404 to avoid leaking security information
     render_not_found_response(e)

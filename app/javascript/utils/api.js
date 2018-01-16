@@ -115,16 +115,28 @@ export const fetchCollaborators = (botId : number) => {
   return apiFetchJSON(`bots/${botId}/collaborators`)
 }
 
-export const inviteCollaborator = (botId : number, email : string, role : string) => {
-  return apiPostJSON(`bots/${botId}/invitations`, null, {email, role})
+export const inviteCollaborator = (botId : number, email : string, roles : T.RoleList) => {
+  return apiPostJSON(`bots/${botId}/invitations`, null, {email, roles})
+}
+
+export const createAnonymousInvitation = (botId : number, token : string, roles : T.RoleList) => {
+  return apiPostJSON(`bots/${botId}/invitations`, null, {token, roles})
 }
 
 export const cancelInvitation = (invitationId : number) => {
   return apiDelete(`invitations/${invitationId}`)
 }
 
+export const resendInvitation = (invitationId : number) => {
+  return apiPostJSON(`invitations/${invitationId}/resend`)
+}
+
 export const removeCollaborator = (collaboratorId : number) => {
   return apiDelete(`collaborators/${collaboratorId}`)
+}
+
+export const updateCollaborator = (collaborator : T.Collaborator) => {
+  return apiPutJSON(`collaborators/${collaborator.id}`, null, {collaborator})
 }
 
 export const retrieveInvitation = (token : string) => {

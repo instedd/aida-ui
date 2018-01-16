@@ -1,6 +1,7 @@
 /* @flow */
 import * as T from '../utils/types'
 import filter from 'lodash/filter'
+import map from 'lodash/map'
 
 import * as actions from '../actions/collaborators'
 import * as invitationsActions from '../actions/invitations'
@@ -18,7 +19,9 @@ export default (state : T.CollaboratorsState, action : T.Action) : T.Collaborato
     case actions.FETCH_SUCCESS: return fetchSuccess(state, action)
     case actions.INVITE_SUCCESS: return inviteSuccess(state, action)
     case invitationsActions.CANCEL: return cancelInvitation(state, action)
+    case invitationsActions.RESEND_SUCCESS: return resendSuccess(state, action)
     case actions.REMOVE: return removeCollaborator(state, action)
+    case actions.UPDATE: return updateCollaborator(state, action)
     default: return state
   }
 }
@@ -79,6 +82,22 @@ const cancelInvitation = (state, action) => {
   }
 }
 
+const resendSuccess = (state, action) => {
+  const {invitation} = action
+  const {data} = state
+  if (data) {
+    return {
+      ...state,
+      data: {
+        ...data,
+        invitations: map(data.invitations, i => (i.id != invitation.id) ? i : invitation)
+      }
+    }
+  } else {
+    return state
+  }
+}
+
 const removeCollaborator = (state, action) => {
   const {collaborator} = action
   const {data} = state
@@ -88,6 +107,22 @@ const removeCollaborator = (state, action) => {
       data: {
         ...data,
         collaborators: filter(data.collaborators, c => c.id != collaborator.id)
+      }
+    }
+  } else {
+    return state
+  }
+}
+
+const updateCollaborator = (state, action) => {
+  const {collaborator} = action
+  const {data} = state
+  if (data) {
+    return {
+      ...state,
+      data: {
+        ...data,
+        collaborators: map(data.collaborators, c => c.id != collaborator.id ? c : collaborator)
       }
     }
   } else {

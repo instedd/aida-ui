@@ -19,6 +19,13 @@ export type UpdatedVariableAttributes = {
   lang: T.Language
 };
 
+export type Permission = 'can_admin'
+                       | 'can_publish'
+                       | 'manages_behaviour'
+                       | 'manages_content'
+                       | 'manages_variables'
+                       | 'manages_results';
+
 export type ChatMessage = {
   id: number,
   text: string,
@@ -135,6 +142,13 @@ export type CollaboratorsAction = {
   type: 'COLLABORATORS_REMOVE_SUCCESS',
 } | {
   type: 'COLLABORATORS_REMOVE_ERROR',
+} | {
+  type: 'COLLABORATORS_UPDATE',
+  collaborator: T.Collaborator,
+} | {
+  type: 'COLLABORATORS_UPDATE_SUCCESS',
+} | {
+  type: 'COLLABORATORS_UPDATE_ERROR',
 };
 
 export type InvitationsAction = {
@@ -160,6 +174,9 @@ export type InvitationsAction = {
   type: 'INVITATION_ACCEPT_SUCCESS',
 } | {
   type: 'INVITATION_ACCEPT_ERROR',
+} | {
+  type: 'INVITATION_RESEND_SUCCESS',
+  invitation: T.Invitation
 };
 
 export type FrontDeskAction = {

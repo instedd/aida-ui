@@ -12,7 +12,7 @@ RSpec.describe Api::InvitationsController, type: :controller do
   describe "create" do
     it "creates a new invitation and sends an email" do
       email = generate(:email)
-      post :create, params: { bot_id: bot.id, email: email, role: 'collaborator' }
+      post :create, params: { bot_id: bot.id, email: email, roles: ['publish'] }
 
       expect(response).to be_success
       expect(json_body).to be_a_invitation_as_json
@@ -24,19 +24,41 @@ RSpec.describe Api::InvitationsController, type: :controller do
       email = generate(:email)
       create(:invitation, bot: bot, email: email)
 
-      post :create, params: { bot_id: bot.id, email: email, role: 'collaborator' }
+      post :create, params: { bot_id: bot.id, email: email, roles: ['publish'] }
 
       expect(response.status).to eq(400)
     end
 
-    it "is allowed on shared bots" do
-      shared_bot = create(:bot, shared_with: user)
+    it "is denied on shared bots" do
+      shared_bot = create(:bot, shared_with: user, grants: %w(publish))
       post :create, params: { bot_id: shared_bot.id,
                               email: generate(:email),
-                              role: 'collaborator' }
+                              roles: ['publish'] }
+
+      expect(response).to be_denied
+    end
+
+    it "creates anonymous invitations provided a token" do
+      token = Invitation.generate_token
+      post :create, params: { bot_id: bot.id, token: token, roles: ['publish'] }
 
       expect(response).to be_success
       expect(json_body).to be_a_invitation_as_json
+      expect(json_body[:link_url]).to include(token)
+    end
+
+    it "anonymous invitations don't send emails" do
+      token = Invitation.generate_token
+      post :create, params: { bot_id: bot.id, token: token, roles: ['publish'] }
+
+      expect(response).to be_success
+      expect(all_mail_deliveries.size).to eq(0)
+    end
+
+    it "validates that either an email or token are given" do
+      post :create, params: { bot_id: bot.id, roles: ['publish'] }
+
+      expect(response.status).to eq(400)
     end
   end
 
@@ -52,15 +74,13 @@ RSpec.describe Api::InvitationsController, type: :controller do
       expect(all_mail_destinations).to include(email)
     end
 
-    it "is allowed on shared bots" do
-      shared_bot = create(:bot, shared_with: user)
+    it "is denied on shared bots" do
+      shared_bot = create(:bot, shared_with: user, grants: %w(publish))
       invitation = create(:invitation, bot: shared_bot, email: email)
 
       post :resend, params: { id: invitation.id }
 
-      expect(response).to be_success
-      expect(all_mail_deliveries.size).to eq(1)
-      expect(all_mail_destinations).to include(email)
+      expect(response).to be_denied
     end
   end
 
@@ -74,12 +94,13 @@ RSpec.describe Api::InvitationsController, type: :controller do
       end.to change(Invitation, :count).by(-1)
     end
 
-    it "is allowed on shared bots" do
-      shared_bot = create(:bot, shared_with: user)
+    it "is denied on shared bots" do
+      shared_bot = create(:bot, shared_with: user, grants: %w(publish))
       invitation = create(:invitation, bot: shared_bot, email: email)
       expect do
         delete :destroy, params: { id: invitation.id }
-      end.to change(Invitation, :count).by(-1)
+      end.not_to change(Invitation, :count)
+      expect(response).to be_denied
     end
   end
 
@@ -95,7 +116,7 @@ RSpec.describe Api::InvitationsController, type: :controller do
         expect(response).to be_success
         expect(json_body).to match_attributes({ bot_name: invitation.bot.name,
                                                 inviter: invitation.creator.email,
-                                                role: invitation.role })
+                                                roles: invitation.roles })
       end
 
       it "validates token" do
@@ -113,7 +134,7 @@ RSpec.describe Api::InvitationsController, type: :controller do
         expect(response).to be_success
         expect(json_body).to match_attributes({ bot_name: anonymous_invitation.bot.name,
                                                 inviter: anonymous_invitation.creator.email,
-                                                role: anonymous_invitation.role })
+                                                roles: anonymous_invitation.roles })
       end
     end
 
@@ -141,7 +162,7 @@ RSpec.describe Api::InvitationsController, type: :controller do
 
         collaborator = other_bot.reload.collaborators.find_by(user_id: user.id)
         expect(collaborator).to_not be_nil
-        expect(collaborator.role).to eq(invitation.role)
+        expect(collaborator.roles).to eq(invitation.roles)
       end
 
       it "removes invitation record" do
@@ -159,7 +180,6 @@ RSpec.describe Api::InvitationsController, type: :controller do
 
         other_bot.reload
         expect(other_bot.collaborators.emails).to include(user.email)
-        expect(other_bot.invitations.anonymous).to be_nil
       end
     end
   end

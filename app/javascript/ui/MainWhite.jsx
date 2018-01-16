@@ -12,6 +12,16 @@ export const MainWhite = ({children, sidebar, buttons}) => {
           <div className="buttons">{buttons}</div>
         </div>
       </div>)
+  } else if (buttons) {
+    return(
+      <div className='main-fullwidth-buttons'>
+        <div className='main-content'>
+          {children}
+        </div>
+        <div className='button-area'>
+          <div className="buttons">{buttons}</div>
+        </div>
+      </div>)
   } else {
     return(
       <div className='main-fullwidth'>

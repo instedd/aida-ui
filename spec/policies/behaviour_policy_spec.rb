@@ -2,13 +2,30 @@ require 'rails_helper'
 
 describe BehaviourPolicy do
   subject { described_class.new(user, behaviour) }
-  let(:user) { User.create! email: 'user@example.com' }
+  let(:user) { create(:user) }
 
   describe "front desk" do
-    let(:behaviour) { Bot.create_prepared!(user).front_desk }
+    let(:behaviour) { bot.front_desk }
 
-    it { is_expected.to permit_actions([:update]) }
-    it { is_expected.to forbid_actions([:destroy]) }
+    describe "of owned bot" do
+      let(:bot) { create(:bot, owner: user) }
+
+      it { is_expected.to permit_actions([:update]) }
+      it { is_expected.to forbid_actions([:destroy]) }
+    end
+
+    describe "of shared bots with behaviour role" do
+      let(:bot) { create(:bot, shared_with: user, grants: %w(behaviour)) }
+
+      it { is_expected.to permit_actions([:update]) }
+      it { is_expected.to forbid_actions([:destroy]) }
+    end
+
+    describe "of shared bots without behaviour role" do
+      let(:bot) { create(:bot, shared_with: user, grants: %w(results)) }
+
+      it { is_expected.to forbid_actions([:update, :destroy]) }
+    end
   end
 
   describe "other behaviours" do
@@ -20,10 +37,16 @@ describe BehaviourPolicy do
       it { is_expected.to permit_actions([:update, :destroy]) }
     end
 
-    describe "of shared bots" do
-      let(:bot) { create(:bot, shared_with: user) }
+    describe "of shared bots with behaviour role" do
+      let(:bot) { create(:bot, shared_with: user, grants: %w(behaviour)) }
 
       it { is_expected.to permit_actions([:update, :destroy]) }
+    end
+
+    describe "of shared bots without behaviour role" do
+      let(:bot) { create(:bot, shared_with: user, grants: %w(results)) }
+
+      it { is_expected.to forbid_actions([:update, :destroy]) }
     end
   end
 

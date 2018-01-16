@@ -2,24 +2,31 @@ require 'rails_helper'
 
 describe ChannelPolicy do
   subject { described_class.new(user, channel) }
-  let(:user) { User.create! email: 'user@example.com' }
+  let(:user) { create(:user) }
+  let(:channel) { bot.channels.first }
 
   describe "of owned bot" do
-    let(:channel) { Bot.create_prepared!(user).channels.first }
+    let(:bot) { create(:bot, owner: user) }
 
     it { is_expected.to permit_actions([:update]) }
   end
 
   describe "of other bots" do
-    let(:other_user) { User.create! email: 'other@example.com' }
-    let(:channel) { Bot.create_prepared!(other_user).channels.first }
+    let(:other_user) { create(:user) }
+    let(:bot) { create(:bot, owner: other_user) }
 
     it { is_expected.to forbid_actions([:update]) }
   end
 
-  describe "of shared bots" do
-    let(:channel) { create(:bot, shared_with: user).channels.first }
+  describe "of shared bots with publish role" do
+    let(:bot) { create(:bot, shared_with: user, grants: %w(publish)) }
 
     it { is_expected.to permit_actions([:update]) }
+  end
+
+  describe "of shared bots without publish role" do
+    let(:bot) { create(:bot, shared_with: user, grants: %w(results)) }
+
+    it { is_expected.to forbid_actions([:update]) }
   end
 end
