@@ -7,6 +7,7 @@ import * as xlsFormsActions from '../actions/xlsForms'
 
 import Title from '../ui/Title'
 import Headline from '../ui/Headline'
+import { getLocalTimezone } from '../utils'
 
 import RelevanceField from './RelevanceField'
 
@@ -66,6 +67,7 @@ class Survey extends Component {
                       inline
                       fullwidth={false}
                       value={date}
+                      timeZone={getLocalTimezone()}
                       onChange={(_, value) => updateConfig('schedule')(value)} />
           <TimePicker id="survey-time"
                       label="at"
