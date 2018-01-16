@@ -43,7 +43,7 @@ RSpec.describe ParseXlsForm, type: :service do
 
     end
 
-    %w(decimal.xlsx cascading_select.xlsx cascading_select_integer.xlsx integer.xlsx multiple_choice_lists.xlsx
+    %w(decimal.xlsx cascading_select.xlsx cascading_select_integer.xlsx image.xlsx integer.xlsx multiple_choice_lists.xlsx
     numbers.xlsx select_many.xlsx select_one.xlsx simple.xlsx single_choices_list_underscore.xlsx
     single_choices_list.xlsx no_choices.xlsx relevant_questions.xlsx constraint_basic.xlsx text.xlsx).each do |file|
       it "returns valid survey for #{file}" do
@@ -142,6 +142,17 @@ RSpec.describe ParseXlsForm, type: :service do
                                        type: 'text',
                                        name: 'request',
                                        message: 'Any particular requests for your dinner?'
+                                     }])
+    end
+
+    it "parses image input question" do
+      survey = Roo::Spreadsheet.open(file_fixture('image.xlsx').open).sheet('survey')
+      result = ParseXlsForm.gather_questions(survey)
+
+      expect(result).to match_array([{
+                                       type: 'image',
+                                       name: 'ceiling',
+                                       message: 'Send a picture of your ceiling'
                                      }])
     end
 

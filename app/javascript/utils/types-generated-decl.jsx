@@ -87,7 +87,7 @@ export type SurveyQuestion = {
   relevant?: string;
   constraint_message?: Message;
 } | {
-  type: "integer" | "decimal" | "text";
+  type: "integer" | "decimal" | "text" | "image";
   name: string;
   message: Message;
   relevant?: string;
