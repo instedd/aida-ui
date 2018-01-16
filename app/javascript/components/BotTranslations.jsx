@@ -6,7 +6,6 @@ import {
   TableBody,
   TableRow,
   TableColumn,
-  EditDialogColumn,
   SelectField,
 } from 'react-md'
 import { bindActionCreators } from 'redux'
@@ -16,6 +15,7 @@ import map from 'lodash/map'
 
 import MainWhite from '../ui/MainWhite'
 import Title from '../ui/Title'
+import Field from '../ui/Field'
 import { EmptyLoader } from '../ui/Loader'
 import { hasPermission } from '../utils'
 import ContentDenied from './ContentDenied'
@@ -42,10 +42,11 @@ const renderRows = ({ behaviours, firstLang, secondLang, defaultLang, onChange }
           </TableColumn>
         )
       } else {
-        return (
-          <EditDialogColumn inline inlineIcon={null}
-                            value={key[lang]}
-                            onChange={value => onChange({ behaviour_id: behaviourId, key: key._key, lang, value })} />
+        return (<TableColumn>
+          <Field  id="translation-value" className="editable-field"
+                  value={key[lang]}
+                  onChange={value => onChange({ behaviour_id: behaviourId, key: key._key, lang, value })} />
+        </TableColumn>
         )
       }
     }

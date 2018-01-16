@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { EditDialogColumn, TableColumn } from 'react-md'
+import { TableColumn } from 'react-md'
 import map from 'lodash/map'
 
 import Title from '../ui/Title'
@@ -57,8 +57,8 @@ export default class LanguageDetector extends Component {
           items={config.languages}
           createItemLabel="Add language" onCreateItem={addLanguage}
           canRemoveItem={(item, index) => index > 0} onRemoveItem={(item, index) => removeLanguage(index)}
-          renderKey={({code, keywords}, index) => <EditDialogColumn inline inlineIcon={null} value={keywords} onChange={updateLanguage(index, 'keywords')} resize={{min: 100, max: 200}}/>}
-          renderValue={({code, keywords}, index) => <TableColumn><LanguageSelector code={code} onChange={updateLanguage(index, 'code')} /></TableColumn>}
+          renderKey={({code, keywords}, index) => <Field className="editable-field" id="ld-key" value={keywords} onChange={updateLanguage(index, 'keywords')} resize={{min: 100, max: 200}} />}
+          renderValue={({code, keywords}, index) => <LanguageSelector code={code} onChange={updateLanguage(index, 'code')} />}
         />
       </div>
     )

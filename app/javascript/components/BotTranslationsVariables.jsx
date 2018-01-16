@@ -6,7 +6,6 @@ import {
   TableBody,
   TableRow,
   TableColumn,
-  EditDialogColumn,
   SelectField,
 } from 'react-md'
 import { bindActionCreators } from 'redux'
@@ -19,6 +18,7 @@ import Title from '../ui/Title'
 import { EmptyLoader } from '../ui/Loader'
 import { hasPermission } from '../utils'
 import ContentDenied from './ContentDenied'
+import Field from '../ui/Field'
 
 import * as actions from '../actions/translations'
 import { languageNameByCode } from '../utils/lang'
@@ -45,41 +45,39 @@ const renderRows = ({ variables, firstLang, secondLang, defaultLang, onChange, o
             add
           </Button>
         </TableColumn>
-
-        <EditDialogColumn
-          inline inlineIcon={null}
-          value={variable.name}
-          placeholder="variable name"
-          onChange={(value) => onChange({
-            id: variable.id,
-            name: value,
-            lang: firstLang,
-            value: variable.default_value[firstLang] || ""
-          })} />
-
-        <EditDialogColumn
-          inline inlineIcon={null}
-          value={variable.default_value[firstLang]}
-          placeholder="value"
-          onChange={(value) => onChange({
-            id: variable.id,
-            name: variable.name,
-            lang: firstLang,
-            value: value
-          })} />
-
-
-        <EditDialogColumn
-          inline inlineIcon={null}
-          value={variable.default_value[secondLang]}
-          placeholder="value"
-          onChange={(value) => onChange({
-            id: variable.id,
-            name: variable.name,
-            lang: secondLang,
-            value: value
-          })} />
-
+        <TableColumn>
+          <Field id="variable-name" className="editable-field"
+            value={variable.name}
+            placeholder="variable name"
+            onChange={(value) => onChange({
+              id: variable.id,
+              name: value,
+              lang: firstLang,
+              value: variable.default_value[firstLang] || ""
+            })} />
+        </TableColumn>
+        <TableColumn>
+          <Field id="variable-value" className="editable-field"
+            value={variable.default_value[firstLang]}
+            placeholder="value"
+            onChange={(value) => onChange({
+              id: variable.id,
+              name: variable.name,
+              lang: firstLang,
+              value: value
+            })} />
+        </TableColumn>
+        <TableColumn>
+          <Field id="variable-value" className="editable-field"
+            value={variable.default_value[secondLang]}
+            placeholder="value"
+            onChange={(value) => onChange({
+              id: variable.id,
+              name: variable.name,
+              lang: secondLang,
+              value: value
+            })} />
+        </TableColumn>
       </TableRow>
     )
 
@@ -96,49 +94,51 @@ const renderRows = ({ variables, firstLang, secondLang, defaultLang, onChange, o
               close
             </Button>
           </TableColumn>
-          <EditDialogColumn
-            inline inlineIcon={null}
-            value={cv.condition}
-            placeholder="condition"
-            className="condition-name-column"
-            onChange={(value) => onChange({
-              id: variable.id,
-              name: variable.name,
-              conditionId: cv.id,
-              condition: value,
-              conditionOrder: cv.order,
-              lang: firstLang,
-              value: cv.value[firstLang] || "",
-            })}
-          />
-          <EditDialogColumn
-            inline inlineIcon={null}
-            value={cv.value[firstLang]}
-            placeholder="value"
-            onChange={(value) => onChange({
-              id: variable.id,
-              name: variable.name,
-              conditionId: cv.id,
-              condition: cv.condition,
-              conditionOrder: cv.order,
-              lang: firstLang,
-              value
-            })}
-          />
-          <EditDialogColumn
-            inline inlineIcon={null}
-            value={cv.value[secondLang]}
-            placeholder="value"
-            onChange={(value) => onChange({
-              id: variable.id,
-              name: variable.name,
-              conditionId: cv.id,
-              condition: cv.condition,
-              conditionOrder: cv.order,
-              lang: secondLang,
-              value
-            })}
-          />
+          <TableColumn>
+            <Field id="condition-name" className="editable-field condition-name-column"
+              value={cv.condition}
+              placeholder="condition"
+              onChange={(value) => onChange({
+                id: variable.id,
+                name: variable.name,
+                conditionId: cv.id,
+                condition: value,
+                conditionOrder: cv.order,
+                lang: firstLang,
+                value: cv.value[firstLang] || "",
+              })}
+            />
+          </TableColumn>
+          <TableColumn>
+            <Field id="condition-value" className="editable-field"
+              value={cv.value[firstLang] || ""}
+              placeholder="value"
+              onChange={(value) => onChange({
+                id: variable.id,
+                name: variable.name,
+                conditionId: cv.id,
+                condition: cv.condition,
+                conditionOrder: cv.order,
+                lang: firstLang,
+                value
+              })}
+            />
+          </TableColumn>
+          <TableColumn>
+            <Field id="condition-value" className="editable-field"
+              value={cv.value[secondLang]}
+              placeholder="value"
+              onChange={(value) => onChange({
+                id: variable.id,
+                name: variable.name,
+                conditionId: cv.id,
+                condition: cv.condition,
+                conditionOrder: cv.order,
+                lang: secondLang,
+                value
+              })}
+            />
+          </TableColumn>
         </TableRow>
       )
     })

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { DatePicker, TimePicker, TextField, SelectField, TableColumn, EditDialogColumn, SelectFieldColumn } from 'react-md'
+import { DatePicker, TimePicker, TextField, SelectField, TableColumn } from 'react-md'
 import uuidv4 from 'uuid/v4'
 
 import Title from '../ui/Title'
@@ -105,8 +105,8 @@ class ScheduledMessages extends Component {
             items={config.messages}
             createItemLabel="Add message" onCreateItem={addMessage}
             canRemoveItem={item => true} onRemoveItem={(item, index) => removeMessage(index)}
-            renderKey={(item, index) => <SelectFieldColumn menuItems={delayOptions} value={item.delay} onChange={updateMessage(index, 'delay')} stripActiveItem={false} fullWidth={false} />}
-            renderValue={(item, index) => <EditDialogColumn className="" inline inlineIcon={null} value={item.message} onChange={updateMessage(index, 'message')}/>}
+            renderKey={(item, index) => <SelectField id="schedule-delay" menuItems={delayOptions} value={item.delay} onChange={updateMessage(index, 'delay')} stripActiveItem={false} fullWidth={false} />}
+            renderValue={(item, index) => <Field id="schedule-message" className="editable-field" value={item.message} onChange={updateMessage(index, 'message')}/>}
           />)
         })()}
 
