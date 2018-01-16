@@ -7,24 +7,13 @@ import uuidv4 from 'uuid/v4'
 
 import {
   Button,
-  Paper
+  Paper,
+  TextField
 } from 'react-md'
 
-//import RelevanceField from './RelevanceField'
+import RelevanceField from './RelevanceField'
 
 export default class DecisionTree extends Component {
-  // state = {
-  //   tree: {
-  //     initial: '0',
-  //     nodes: {
-  //       '0': {
-  //         id: '0',
-  //         message: "Yeah! initial node!",
-  //         options: []
-  //       }
-  //     }
-  //   }
-  // }
 
   render() {
     const { skill, actions } = this.props
@@ -49,7 +38,7 @@ export default class DecisionTree extends Component {
           This skill will guide the user for diagnostic purposes or information access
         </Headline>
 
-        {/* <RelevanceField value={config.relevant} onChange={updateConfig('relevant')} /> */}
+        <RelevanceField value={config.relevant} onChange={updateConfig('relevant')} />
 
         <Field id="kr-explanation" label="Skill explanation"
                value={config.explanation} onChange={updateConfig('explanation')} />
@@ -86,8 +75,11 @@ class DecisionTreeComponent extends Component {
     const { initial, nodes } = this.props.tree
 
     return (
-      <div>
-        <label>Tree</label>
+      <div className="decision-tree-container">
+        <div className="title md-floating-label--floating md-text--secondary">
+          Tree
+        </div>
+
         {this.state.path.map((currentId, pathIx) => {
           const currentNode = nodes[currentId]
           return (
@@ -145,6 +137,9 @@ class DecisionTreeComponent extends Component {
                   ]
                 })
               }}
+              deleteOption={(ix) => {
+
+              }}
             />
           )
         })}
@@ -158,31 +153,70 @@ const TreeNode = ({
   updateMessage,
   addOption,
   updateOption,
-  selectOption
+  selectOption,
+  deleteOption
 }) => {
   return (
     <Paper
+      className="tree-node-container"
       zDepth={2} >
-        <div className="content-text">
-          <Field id="kr-response" placeholder="Message"
-          value={node.message} onChange={updateMessage} />
-        </div>
-        <div>
-          <ul>
-            {
-              node.options.map((option, ix) => (
-                <li key={ix}>
-                  <Button flat onClick={() => selectOption(ix)}>select </Button>
-                  <Field id={`option-${ix}`} placeholder="Message"
-                    value={option.label} onChange={(value) => updateOption(ix, value)} />
-                </li>
-              ))
-            }
-          </ul>
-        </div>
-        <div>
-          <Button flat onClick={addOption}>Add</Button>
-        </div>
+      <Field
+        id={`kr-node-message-${node.id}`}
+        className="tree-node-message"
+        placeholder="Message"
+        value={node.message}
+        onChange={updateMessage} />
+      <ul className="invisible-scrollbar">
+        {
+          node.options.map((option, ix) => (
+            <li key={ix}>
+              <TreeNodeOption
+                id={ix}
+                option={option}
+                onChange={(value) => updateOption(ix, value)}
+                onSelect={() => selectOption(ix)}
+                onDelete={() => deleteOption(ix)} />
+              {/* <Button flat onClick={() => selectOption(ix)}>select </Button>
+              <Field id={`option-${ix}`} placeholder="Message"
+                value={option.label} onChange={(value) => updateOption(ix, value)} /> */}
+            </li>
+          ))
+        }
+        <li>
+          <Button
+            icon
+            onClick={addOption}>
+            add
+          </Button>
+        </li>
+      </ul>
     </Paper>
+  )
+}
+
+const TreeNodeOption = ({
+  id,
+  option,
+  onChange,
+  onSelect,
+  onDelete
+}) => {
+  return (
+    <div className="tree-node-option">
+      <TextField
+        id={`option-${id}`}
+        className="tree-node-option-value"
+        lineDirection="center"
+        value={option.label}
+        onChange={onChange}
+        placeholder="Enter option name"
+        default={false}
+      />
+      <Button
+        icon
+        onClick={onDelete}>
+        close
+      </Button>
+    </div>
   )
 }
