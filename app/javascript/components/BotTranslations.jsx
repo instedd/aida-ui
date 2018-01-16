@@ -143,7 +143,7 @@ class BotTranslations extends Component {
                              onChange={value => this.setState({firstLang: value})} />
               </TableColumn>
               <TableColumn>
-                <SelectField id="first-lang-selector"
+                <SelectField id="second-lang-selector"
                              placeholder="Select language"
                              menuItems={langItems}
                              position={SelectField.Positions.BELOW}
