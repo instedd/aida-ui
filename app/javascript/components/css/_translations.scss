@@ -1,0 +1,16 @@
+#translations-table {
+  tbody .md-table-row {
+    border-bottom: none;
+  }
+  .default-lang, .editable-field {
+    padding-left: 24px;
+  }
+}
+
+.translation-key {
+  padding-left: 2em;
+  display: inline-block;
+}
+.translation-key, .behaviour-label {
+  color: $md-grey-500;
+}
