@@ -5,7 +5,7 @@ RSpec.describe Api::FrontDesksController, type: :controller do
   before(:each) { sign_in user }
   let!(:bot) { create(:bot, owner: user) }
   let!(:shared_bot) { create(:bot, shared_with: user, grants: %w(behaviour)) }
-  let!(:other_shared_bot) { create(:bot, shared_with: user, grants: %w()) }
+  let!(:other_shared_bot) { create(:bot, shared_with: user, grants: %w(results)) }
 
   describe "show" do
     it "retrieves front desk configuration" do

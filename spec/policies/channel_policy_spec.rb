@@ -25,7 +25,7 @@ describe ChannelPolicy do
   end
 
   describe "of shared bots without publish role" do
-    let(:bot) { create(:bot, shared_with: user, grants: %w()) }
+    let(:bot) { create(:bot, shared_with: user, grants: %w(results)) }
 
     it { is_expected.to forbid_actions([:update]) }
   end

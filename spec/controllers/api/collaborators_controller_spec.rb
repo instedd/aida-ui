@@ -43,7 +43,7 @@ RSpec.describe Api::CollaboratorsController, type: :controller do
     it "is denied on shared bots" do
       shared_bot = create(:bot, shared_with: user, grants: %w(publish))
       other_user = create(:user)
-      other_collaborator = shared_bot.collaborators.add_collaborator! other_user
+      other_collaborator = shared_bot.collaborators.add_collaborator! other_user, roles: %w(content)
 
       expect do
         delete :destroy, params: { id: other_collaborator.id }
@@ -65,7 +65,7 @@ RSpec.describe Api::CollaboratorsController, type: :controller do
 
     it "is denied on shared bots" do
       shared_bot = create(:bot, shared_with: user, grants: %w(publish))
-      other_collaborator = shared_bot.collaborators.add_collaborator! create(:user)
+      other_collaborator = shared_bot.collaborators.add_collaborator! create(:user), roles: %w(content)
 
       put :update, params: { id: other_collaborator.id, collaborator: { roles: ['content', 'variables'] }}
       expect(response).to be_denied

@@ -57,7 +57,9 @@ class Invitation < ApplicationRecord
   end
 
   def roles_are_valid
-    unless roles.blank? || roles.all? { |role| Collaborator::ROLES.include?(role) }
+    if roles.blank?
+      errors[:roles] << "cannot be blank"
+    elsif !roles.all? { |role| Collaborator::ROLES.include?(role) }
       errors[:roles] << "contains an invalid value"
     end
   end

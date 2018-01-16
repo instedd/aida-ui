@@ -7,7 +7,7 @@ RSpec.describe Api::ChannelsController, type: :controller do
   let!(:bot) { create(:bot, owner: user) }
   let!(:channel) { bot.channels.first }
   let!(:shared_bot) { create(:bot, shared_with: user, grants: %w(publish)) }
-  let!(:other_shared_bot) { create(:bot, shared_with: user, grants: %w()) }
+  let!(:other_shared_bot) { create(:bot, shared_with: user, grants: %w(results)) }
 
   describe "index" do
     it "list bot channel" do

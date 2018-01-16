@@ -4,7 +4,7 @@ RSpec.describe InviteCollaborator, type: :service do
   let(:user) { create(:user) }
   let(:bot) { create(:bot, owner: user) }
   let(:email) { generate(:email) }
-  let(:roles) { [] }
+  let(:roles) { %w(results) }
 
   before(:each) {
     clear_mail_deliveries
@@ -41,7 +41,7 @@ RSpec.describe InviteCollaborator, type: :service do
 
   it "rejects emails for existing collaborators" do
     collaborator = create(:user)
-    bot.collaborators.add_collaborator!(collaborator)
+    bot.collaborators.add_collaborator!(collaborator, roles: roles)
 
     invitation = InviteCollaborator.run(bot, collaborator.email, roles)
     expect(invitation).to_not be_valid
@@ -71,17 +71,15 @@ RSpec.describe InviteCollaborator, type: :service do
   end
 
   describe "creator" do
-    let!(:creator) { create(:user) }
+    let!(:creator) { user }
 
     it "validates that is (at least) a collaborator" do
-      invitation = InviteCollaborator.run(bot, email, roles, creator)
+      invitation = InviteCollaborator.run(bot, email, roles, create(:user))
       expect(invitation).to_not be_valid
       expect(invitation.errors[:creator]).to be_present
     end
 
     it "is set on the invitation" do
-      bot.collaborators.add_collaborator! creator
-
       invitation = InviteCollaborator.run(bot, email, roles, creator)
       expect(invitation).to be_valid
       expect(invitation.creator).to eq(creator)

@@ -8,7 +8,7 @@ RSpec.describe Api::SkillsController, type: :controller do
   let!(:shared_bot) { create(:bot, shared_with: user, grants: %w(behaviour)) }
   let!(:shared_skill) { shared_bot.skills.create_skill! "keyword_responder", order: 1 }
 
-  let!(:other_shared_bot) { create(:bot, shared_with: user, grants: %w()) }
+  let!(:other_shared_bot) { create(:bot, shared_with: user, grants: %w(results)) }
   let!(:other_shared_skill) { other_shared_bot.skills.create_skill! "keyword_responder", order: 1 }
 
   describe "index" do

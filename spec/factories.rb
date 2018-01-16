@@ -8,7 +8,7 @@ FactoryBot.define do
 
     transient {
       shared_with nil
-      grants []
+      grants ['results']
     }
 
     initialize_with {
@@ -25,14 +25,14 @@ FactoryBot.define do
   factory :collaborator do
     bot
     user
-    roles []
+    roles ['results']
   end
 
   factory :invitation do
     bot
     creator { bot.owner }
     email { generate(:email) }
-    roles []
+    roles ['results']
 
     trait :anonymous do
       email nil

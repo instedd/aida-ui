@@ -22,7 +22,7 @@ describe BehaviourPolicy do
     end
 
     describe "of shared bots without behaviour role" do
-      let(:bot) { create(:bot, shared_with: user, grants: %w()) }
+      let(:bot) { create(:bot, shared_with: user, grants: %w(results)) }
 
       it { is_expected.to forbid_actions([:update, :destroy]) }
     end
@@ -44,7 +44,7 @@ describe BehaviourPolicy do
     end
 
     describe "of shared bots without behaviour role" do
-      let(:bot) { create(:bot, shared_with: user, grants: %w()) }
+      let(:bot) { create(:bot, shared_with: user, grants: %w(results)) }
 
       it { is_expected.to forbid_actions([:update, :destroy]) }
     end

@@ -66,7 +66,7 @@ RSpec.describe AcceptInvitation, type: :service do
     end
 
     it "fails if the user is already a collaborator" do
-      bot.collaborators.add_collaborator! user
+      bot.collaborators.add_collaborator! user, roles: %w(results)
       expect do
         AcceptInvitation.run(invitation, user)
       end.to raise_error(ActiveRecord::RecordInvalid)

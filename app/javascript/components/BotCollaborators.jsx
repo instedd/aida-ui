@@ -102,7 +102,10 @@ class CollaboratorsList extends Component {
       const isChecked = hasRole(item.roles, role)
       const toggle = () => {
         if (item.type == 'collaborator') {
-          onToggleCollaboratorRole(item.data, role)
+          // keep at least one role selected
+          if (item.roles.length > 1 || !isChecked) {
+            onToggleCollaboratorRole(item.data, role)
+          }
         }
       }
       const id = `role-${role}-${item.type}-${item.data.id}`
@@ -218,6 +221,9 @@ class InviteDialog extends Component {
       </Tooltipped>
     )
 
+    const haveRoles = roles.length > 0
+    const haveEmail = email.trim().length > 0
+
     return (
         <DialogContainer
           id="invite-collaborator-dialog"
@@ -241,11 +247,15 @@ class InviteDialog extends Component {
             ]}
           </div>
           <div className="action-buttons">
-            <Button flat secondary swapTheming id="invite-send-button" onClick={inviteCollaborator}>Send</Button>
+            <Button flat secondary swapTheming disabled={!haveRoles || !haveEmail}
+                    id="invite-send-button" onClick={inviteCollaborator}>Send</Button>
             <Button flat primary id="invite-cancel-button" onClick={hideDialog}>Cancel</Button>
           </div>
           <footer>
-            <FontIcon>link</FontIcon> Or invite to collaborate with a {theLink}
+            <FontIcon>link</FontIcon>
+            {haveRoles
+             ? (<span>Or invite to collaborate with a {theLink}</span>)
+             : (<span>Pick at least one role to create a link</span>)}
           </footer>
         </DialogContainer>
     )
@@ -326,7 +336,7 @@ class BotCollaborators extends Component {
                                         onCancel={hideDialog}
                                         onInvite={inviteCollaborator}
                                         onCreateLink={createInvitationLink}
-                                        invitationLinkPrefix={window.location.origin + '/invitation/'} />)
+                                        invitationLinkPrefix={window.baseUrl + 'invitation/'} />)
 
     if (items.length == 0) {
       return (

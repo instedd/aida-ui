@@ -111,7 +111,7 @@ RSpec.describe Api::BotsController, type: :controller do
     end
 
     it "is denied for a shared bot without publish role" do
-      shared_bot = create(:bot, shared_with: user, grants: %w())
+      shared_bot = create(:bot, shared_with: user, grants: %w(results))
 
       post :publish, params: { id: shared_bot.id }
       expect(response).to be_denied
@@ -137,7 +137,7 @@ RSpec.describe Api::BotsController, type: :controller do
     end
 
     it "is denied for a shared bot without publish role" do
-      shared_bot = create(:bot, :published, shared_with: user, grants: %w())
+      shared_bot = create(:bot, :published, shared_with: user, grants: %w(results))
 
       delete :unpublish, params: { id: shared_bot.id }
       expect(response).to be_denied
@@ -172,7 +172,7 @@ RSpec.describe Api::BotsController, type: :controller do
     end
 
     it "is denied for a shared bot without results role" do
-      shared_bot = create(:bot, shared_with: user, grants: %w())
+      shared_bot = create(:bot, shared_with: user, grants: %w(content))
       get :data, params: { id: shared_bot.id }, format: 'csv'
       expect(response).to be_denied
     end
@@ -221,7 +221,7 @@ RSpec.describe Api::BotsController, type: :controller do
     end
 
     it "is denied for shared bots without results role" do
-      shared_published_bot = create(:bot, :published, shared_with: user, grants: %w())
+      shared_published_bot = create(:bot, :published, shared_with: user, grants: %w(content))
 
       get :stats, params: { id: shared_published_bot.id }
 

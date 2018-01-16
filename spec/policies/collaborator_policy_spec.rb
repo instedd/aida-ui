@@ -4,7 +4,7 @@ describe CollaboratorPolicy do
   subject { described_class.new(user, collaborator) }
   let(:user) { create(:user) }
   let(:other_user) { create(:user) }
-  let(:collaborator) { bot.collaborators.add_collaborator!(other_user) }
+  let(:collaborator) { bot.collaborators.add_collaborator!(other_user, roles: %w(results)) }
 
   describe "of owned bot" do
     let(:bot) { create(:bot, owner: user) }

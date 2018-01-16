@@ -29,7 +29,7 @@ RSpec.describe Api::TranslationsController, type: :controller do
     end
   }
   let!(:collaborator) {
-    shared_bot.collaborators.add_collaborator!(user, roles: %w())
+    shared_bot.collaborators.add_collaborator!(user, roles: %w(results))
   }
   let!(:other_shared_skill) {
     shared_bot.skills.create_skill! 'keyword_responder'
