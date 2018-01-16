@@ -39,10 +39,10 @@ class ParseXlsForm
 
     ((sheet.first_row + 1)..sheet.last_row).map do |row_number|
       row = sheet.row(row_number)
-      if question_type = row[type_col].presence
+      if question_type = row[type_col].presence.to_s
         type, choices = question_type.split(/\s+/)
-        name = row[name_col].try(&:strip)
-        label = row[label_col]
+        name = row[name_col].to_s.strip
+        label = row[label_col].to_s
         relevant = row[relevant_col].presence if relevant_col.present?
         constraint = row[constraint_col].presence if constraint_col.present?
         implicit_constraint = false
@@ -127,9 +127,9 @@ class ParseXlsForm
 
     choices = ((sheet.first_row + 1)..sheet.last_row).map do |row_number|
       row = sheet.row(row_number)
-      if choice_list = row[list_name_col].try(&:strip).presence
+      if choice_list = row[list_name_col].to_s.strip
         fail "invalid list name at row #{row_number}" unless name_valid?(choice_list)
-        choice_name = row[name_col].try(&:strip)
+        choice_name = row[name_col].to_s.strip
         fail "invalid choice name at row #{row_number}" unless name_valid?(choice_name)
 
         unless attributes_names_and_col.empty?
@@ -152,7 +152,7 @@ class ParseXlsForm
         {
           list_name: choice_list,
           name: choice_name,
-          label: row[label_col],
+          label: row[label_col].to_s,
           attributes: attributes
         }
       else
