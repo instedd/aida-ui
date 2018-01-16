@@ -54,7 +54,7 @@ RSpec.describe Api::CollaboratorsController, type: :controller do
     it "is allowed if the collaborator is the user" do
       # ie. abandon collaboration
       shared_bot = create(:bot)
-      collaborator = shared_bot.collaborators.add_collaborator!(user)
+      collaborator = shared_bot.collaborators.add_collaborator! user, roles: %w(content)
 
       expect do
         delete :destroy, params: { id: collaborator.id }
