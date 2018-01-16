@@ -254,18 +254,18 @@ class InviteDialog extends Component {
 
 class BotCollaborators extends Component {
   componentDidMount() {
-    const { hasPermission, bot, actions } = this.props
-    if (hasPermission) {
+    const { permitted, bot, actions } = this.props
+    if (permitted) {
       actions.fetchCollaborators({ botId: bot.id })
     }
   }
 
   render() {
-    const { hasPermission, bot, loaded, collaborators, invitations,
+    const { permitted, bot, loaded, collaborators, invitations,
             currentUserEmail, invitationsActions,
             actions, dialogVisible, hideDialog, showDialog } = this.props
 
-    if (!hasPermission) {
+    if (!permitted) {
       return <ContentDenied />
     }
 
@@ -359,14 +359,14 @@ const mapStateToProps = (state, {bot}) => {
   const permitted = hasPermission(bot, 'can_admin')
   if (!data || fetching || bot.id != scope.botId) {
     return {
-      hasPermission: permitted,
+      permitted,
       collaborators: [],
       invitations: [],
       loaded: false
     }
   } else {
     return {
-      hasPermission: permitted,
+      permitted,
       collaborators: data.collaborators,
       invitations: data.invitations,
       loaded: true,

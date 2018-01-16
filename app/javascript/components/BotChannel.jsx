@@ -15,8 +15,8 @@ import * as channelsActions from '../actions/channels'
 
 class BotChannelComponent extends Component {
   componentDidMount() {
-    const { hasPermission, channelLoaded, bot } = this.props
-    if (hasPermission && !channelLoaded) {
+    const { permitted, channelLoaded, bot } = this.props
+    if (permitted && !channelLoaded) {
       this.props.channelsActions.fetchChannels({botId : bot.id})
     }
   }
@@ -29,9 +29,9 @@ class BotChannelComponent extends Component {
   }
 
   render() {
-    const { hasPermission, channel, bot } = this.props
+    const { permitted, channel, bot } = this.props
 
-    if (!hasPermission) {
+    if (!permitted) {
       return <ContentDenied />
     }
 
@@ -69,7 +69,7 @@ const mapStateToProps = (state, {bot}) => {
   }
 
   return {
-    hasPermission: hasPermission(bot, 'can_publish'),
+    permitted: hasPermission(bot, 'can_publish'),
     channelLoaded: channelLoaded,
     channel: channel
   }

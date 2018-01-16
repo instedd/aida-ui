@@ -18,16 +18,16 @@ const DEFAULT_PERIOD = "this_week"
 class BotAnalyticsComponent extends Component {
 
   componentDidMount() {
-    const { bot, hasPermission, actions } = this.props
-    if (hasPermission && bot.published) {
+    const { bot, permitted, actions } = this.props
+    if (permitted && bot.published) {
       actions.fetchStats(bot.id, DEFAULT_PERIOD)
     }
   }
 
   render() {
-    const { bot, hasPermission, fetching, period, data, actions } = this.props
+    const { bot, permitted, fetching, period, data, actions } = this.props
 
-    if (!hasPermission) {
+    if (!permitted) {
       return <ContentDenied />
     }
 
@@ -99,7 +99,7 @@ class BotAnalyticsComponent extends Component {
 const mapStateToProps = (state, { bot }) => {
   const {fetching, data, period} = state.stats
   return {
-    hasPermission: hasPermission(bot, 'manages_results'),
+    permitted: hasPermission(bot, 'manages_results'),
     fetching,
     data: data || {},
     period

@@ -154,9 +154,9 @@ class BotTranslationsVariables extends Component {
   }
 
   componentDidMount() {
-    const { hasPermission, actions, bot } = this.props
+    const { permitted, actions, bot } = this.props
 
-    if (hasPermission) {
+    if (permitted) {
       actions.fetchTranslations({ botId: bot.id })
     }
   }
@@ -176,10 +176,10 @@ class BotTranslationsVariables extends Component {
   }
 
   render() {
-    const { hasPermission, bot, languages, defaultLang, variables, actions, onToggleChatWindow } = this.props
+    const { permitted, bot, languages, defaultLang, variables, actions, onToggleChatWindow } = this.props
     const { firstLang, secondLang } = this.state
 
-    if (!hasPermission) {
+    if (!permitted) {
       return <ContentDenied />
     }
 
@@ -255,7 +255,7 @@ const mapStateToProps = (state, { bot }) => {
   const permitted = hasPermission(bot, 'manages_variables')
   if (scope && bot.id == scope.botId) {
     return {
-      hasPermission: permitted,
+      permitted,
       fetching,
       variables,
       languages,
@@ -263,7 +263,7 @@ const mapStateToProps = (state, { bot }) => {
     }
   } else {
     return {
-      hasPermission: permitted,
+      permitted,
       fetching: false,
       variables: [],
       languages: [],
