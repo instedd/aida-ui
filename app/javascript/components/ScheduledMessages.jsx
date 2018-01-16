@@ -6,6 +6,7 @@ import Title from '../ui/Title'
 import Headline from '../ui/Headline'
 import Field from '../ui/Field'
 import KeyValueListField from '../ui/KeyValueListField'
+import { getLocalTimezone } from '../utils'
 
 import RelevanceField from './RelevanceField'
 
@@ -121,6 +122,7 @@ class ScheduledMessages extends Component {
                           inline
                           fullwidth={false}
                           value={date}
+                          timeZone={getLocalTimezone()}
                           onChange={(_, value) => updateMessage(0, 'schedule')(value)} />
               <TimePicker id="schedule-time"
                           label="at"
