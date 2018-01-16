@@ -44,7 +44,7 @@ RSpec.describe ParseXlsForm, type: :service do
     end
 
     %w(decimal.xlsx cascading_select.xlsx cascading_select_integer.xlsx integer.xlsx multiple_choice_lists.xlsx
-    select_many.xlsx select_one.xlsx simple.xlsx single_choices_list_underscore.xlsx
+    numbers.xlsx select_many.xlsx select_one.xlsx simple.xlsx single_choices_list_underscore.xlsx
     single_choices_list.xlsx no_choices.xlsx relevant_questions.xlsx constraint_basic.xlsx text.xlsx).each do |file|
       it "returns valid survey for #{file}" do
         result = ParseXlsForm.run(file_fixture(file).open)
@@ -61,6 +61,29 @@ RSpec.describe ParseXlsForm, type: :service do
 
       expect(result[:questions].size).to eq(3)
       expect(result[:choice_lists].size).to eq(1)
+    end
+
+    it "accepts numbers in name and labels columns" do
+      result = ParseXlsForm.run(file_fixture("numbers.xlsx").open)
+
+      expect(result[:questions]).to match_array([{
+                                                   type: "select_one",
+                                                   name: "1",
+                                                   choices: "1",
+                                                   message: "1"
+                                                 },
+                                                 {
+                                                   type: "integer",
+                                                   name: "2",
+                                                   message: "2"
+                                                 }])
+      expect(result[:choice_lists]).to match_array([{
+                                                      name: "1",
+                                                      choices: [
+                                                        { name: "1", labels: "1" },
+                                                        { name: "2", labels: "2" }
+                                                      ]
+                                                    }])
     end
   end
 
