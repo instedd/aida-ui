@@ -28,7 +28,7 @@ const renderRows = ({ behaviours, firstLang, secondLang, defaultLang, onChange }
   return flatten(map(behaviours, behaviour => {
     const headerRow = (
       <TableRow key={`behaviour-${behaviour.id}`}>
-        <TableColumn colSpan="3">
+        <TableColumn className="behaviour-label" colSpan="3">
           {behaviour.label}
         </TableColumn>
       </TableRow>
@@ -37,7 +37,7 @@ const renderRows = ({ behaviours, firstLang, secondLang, defaultLang, onChange }
     const keyCell = (behaviourId, key, lang) => {
       if (!lang || lang == defaultLang) {
         return (
-          <TableColumn>
+          <TableColumn className="default-lang">
             {lang ? key[lang] : ''}
           </TableColumn>
         )
