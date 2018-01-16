@@ -125,7 +125,7 @@ class BotTranslations extends Component {
     return (
       <MainWhite buttons={buttons}>
         <div className="translations-header">
-          <div className="translations-tittle">
+          <div className="translations-title">
             <Title>Translations</Title>
           </div>
           <BotTranslationsMenu bot={bot} />
