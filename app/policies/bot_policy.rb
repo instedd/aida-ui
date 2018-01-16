@@ -96,7 +96,7 @@ class BotPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       joined_scope = scope.left_outer_joins(:collaborators)
-      joined_scope.where(owner_id: user.id).or(joined_scope.where('collaborators.user_id = ?', user.id))
+      joined_scope.where(owner_id: user.id).or(joined_scope.where('collaborators.user_id = ?', user.id)).distinct
     end
   end
 end

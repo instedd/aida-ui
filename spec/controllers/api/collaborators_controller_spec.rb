@@ -50,6 +50,16 @@ RSpec.describe Api::CollaboratorsController, type: :controller do
       end.not_to change(shared_bot.collaborators, :count)
       expect(response).to be_denied
     end
+
+    it "is allowed if the collaborator is the user" do
+      # ie. abandon collaboration
+      shared_bot = create(:bot)
+      collaborator = shared_bot.collaborators.add_collaborator!(user)
+
+      expect do
+        delete :destroy, params: { id: collaborator.id }
+      end.to change(shared_bot.collaborators, :count).by(-1)
+    end
   end
 
   describe "update" do

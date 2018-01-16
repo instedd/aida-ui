@@ -23,4 +23,12 @@ describe CollaboratorPolicy do
 
     it { is_expected.to forbid_actions([:destroy, :update]) }
   end
+
+  describe "for own collaboration" do
+    let(:bot) { create(:bot) }
+    let(:collaborator) { bot.collaborators.add_collaborator!(user) }
+
+    it { is_expected.to permit_actions([:destroy]) }
+    it { is_expected.to forbid_actions([:update]) }
+  end
 end

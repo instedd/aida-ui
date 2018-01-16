@@ -25,6 +25,41 @@ import { hasPermission } from '../utils'
 import ChatWindow from './ChatWindow'
 import * as chatActions from '../actions/chat'
 
+const DeleteBotDialog = ({ onHide, onConfirm, visible }) => {
+  const dialogActions = [
+    { primary: true, children: 'Cancel', onClick: onHide },
+    (<Button flat secondary onClick={onConfirm}>Delete</Button>)
+  ]
+  return (
+    <DialogContainer
+      id="delete-bot-dialog"
+      visible={visible}
+      onHide={onHide}
+      actions={dialogActions}
+      title="Delete bot?">
+      <h4>This will destroy the bot and all its associated data. Are you sure?</h4>
+      <b>This action cannot be undone.</b>
+    </DialogContainer>
+  )
+}
+
+const LeaveBotDialog = ({ onHide, onConfirm, visible }) => {
+  const dialogActions = [
+    { primary: true, children: 'Cancel', onClick: onHide },
+    (<Button flat secondary onClick={onConfirm}>Leave Bot</Button>)
+  ]
+  return (
+    <DialogContainer
+      id="leave-bot-dialog"
+      visible={visible}
+      onHide={onHide}
+      actions={dialogActions}
+      title="Leave bot?">
+      <h4>You will leave the bot and stop collaborating. You will need a new invitation from the owner to access the bot again. Are you sure?</h4>
+    </DialogContainer>
+  )
+}
+
 export class BotLayoutComponent extends Component {
   state = {
     dialogVisible: false,
@@ -50,6 +85,11 @@ export class BotLayoutComponent extends Component {
       history.replace(r.botIndex())
       hideDialog()
     }
+    const leaveBot = () => {
+      botActions.leaveBot(bot)
+      history.replace(r.botIndex())
+      hideDialog()
+    }
     const duplicateBot = () => {
       botActions.duplicateBot(bot, history)
     }
@@ -62,22 +102,6 @@ export class BotLayoutComponent extends Component {
         chatActions.pausePreview(bot)
       }
     }
-
-    const dialogActions = [
-      { primary: true, children: 'Cancel', onClick: hideDialog },
-      (<Button flat secondary onClick={deleteBot}>Delete</Button>)
-    ]
-    const confirmationDialog = (
-      <DialogContainer
-        id="delete-bot-dialog"
-        visible={dialogVisible}
-        onHide={hideDialog}
-        actions={dialogActions}
-        title="Delete bot?">
-        <h4>This will destroy the bot and all its associated data. Are you sure?</h4>
-        <b>This action cannot be undone.</b>
-      </DialogContainer>
-    )
 
     const chatWindow =  (
       <ChatWindow visible={chatWindowVisible} />
@@ -124,6 +148,11 @@ export class BotLayoutComponent extends Component {
         }
       })()
 
+      const isCollaborator = !!bot.collaborator_id
+      const confirmationDialog = isCollaborator
+                               ? (<LeaveBotDialog visible={dialogVisible} onHide={hideDialog} onConfirm={leaveBot} />)
+                               : (<DeleteBotDialog visible={dialogVisible} onHide={hideDialog} onConfirm={deleteBot} />)
+
       return (
         <AppLayout
           title={canAdmin
@@ -143,7 +172,7 @@ export class BotLayoutComponent extends Component {
             // <HeaderNavAction label="Rename" />,
             <HeaderNavAction label="Unpublish" disabled={!canPublish} onClick={() => botActions.unpublishBot(bot)}/>,
             <HeaderNavAction label="Duplicate" disabled={!canAdmin} onClick={duplicateBot} />,
-            <HeaderNavAction label="Delete" disabled={!canAdmin} onClick={showDialog} />,
+            <HeaderNavAction label={isCollaborator ? 'Leave' : 'Delete'} onClick={showDialog} />,
             <HeaderNavAction label="Download Manifest" disabled={!canPublish} onClick={() => window.location = `/api/v1/bots/${bot.id}/manifest.json`} />,
           ]}
           buttonAction={buttonAction} buttonIcon={buttonIcon}
