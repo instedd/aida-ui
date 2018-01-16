@@ -58,7 +58,7 @@ const renderRows = ({ variables, firstLang, secondLang, defaultLang, onChange, o
         </TableColumn>
         <TableColumn>
           <Field id="variable-value" className="editable-field"
-            value={variable.default_value[firstLang]}
+            value={variable.default_value[firstLang] || ""}
             placeholder="value"
             onChange={(value) => onChange({
               id: variable.id,
@@ -69,7 +69,7 @@ const renderRows = ({ variables, firstLang, secondLang, defaultLang, onChange, o
         </TableColumn>
         <TableColumn>
           <Field id="variable-value" className="editable-field"
-            value={variable.default_value[secondLang]}
+            value={variable.default_value[secondLang] || ""}
             placeholder="value"
             onChange={(value) => onChange({
               id: variable.id,
@@ -126,7 +126,7 @@ const renderRows = ({ variables, firstLang, secondLang, defaultLang, onChange, o
           </TableColumn>
           <TableColumn>
             <Field id="condition-value" className="editable-field"
-              value={cv.value[secondLang]}
+              value={cv.value[secondLang] || ""}
               placeholder="value"
               onChange={(value) => onChange({
                 id: variable.id,
