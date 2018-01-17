@@ -70,9 +70,51 @@ class DecisionTreeComponent extends Component {
     return result
   }
 
+  _deleteOption(nodes, node, optionIx) {
+
+    //remove option
+    nodes = {
+      ...nodes,
+      [node.id]: {
+        ...node,
+        options: [
+          ...node.options.slice(0, optionIx),
+          ...node.options.slice(optionIx + 1)
+        ]
+      }
+    }
+
+    const removeNode = function(nodeId) {
+      const currentNode = nodes[nodeId]
+      currentNode.options.forEach((option, ix) => {
+        removeNode(option.next)
+      })
+      console.log(nodes)
+      delete nodes[nodeId]
+    }
+
+    // get node referenced by option
+    const nextId = node.options[optionIx].next
+    removeNode(nextId)
+
+    this._buildDefaultPath(nodes, node.id)
+
+    return nodes
+  }
+
+  _deleteNode(nodes, id) {
+    const node = nodes[id]
+
+    node.options.forEach((option, ix) => {
+      this._deleteOption(nodes, node, ix)
+    })
+  }
+
   render() {
     const { onChange } = this.props
     const { initial, nodes } = this.props.tree
+
+    console.log(nodes)
 
     return (
       <div className="decision-tree-container">
@@ -138,7 +180,7 @@ class DecisionTreeComponent extends Component {
                 })
               }}
               deleteOption={(ix) => {
-
+                onChange({initial, nodes: this._deleteOption(nodes, currentNode, ix)})
               }}
             />
           )
@@ -148,69 +190,77 @@ class DecisionTreeComponent extends Component {
   }
 }
 
-const TreeNode = ({
-  node,
-  updateMessage,
-  addOption,
-  updateOption,
-  selectOption,
-  deleteOption
-}) => {
-  return (
-    <Paper
-      className="tree-node-container"
-      zDepth={2} >
-      <Field
-        id={`kr-node-message-${node.id}`}
-        className="tree-node-message"
-        placeholder="Message"
-        value={node.message}
-        onChange={updateMessage} />
-      <ul className="invisible-scrollbar">
-        {
-          node.options.map((option, ix) => (
-            <li key={ix}>
-              <TreeNodeOption
-                id={ix}
-                option={option}
-                onChange={(value) => updateOption(ix, value)}
-                onSelect={() => selectOption(ix)}
-                onDelete={() => deleteOption(ix)} />
-              {/* <Button flat onClick={() => selectOption(ix)}>select </Button>
-              <Field id={`option-${ix}`} placeholder="Message"
-                value={option.label} onChange={(value) => updateOption(ix, value)} /> */}
-            </li>
-          ))
-        }
-        <li>
-          <Button
-            icon
-            onClick={addOption}>
-            add
-          </Button>
-        </li>
-      </ul>
-    </Paper>
-  )
+class TreeNode extends Component {
+
+  state = {
+    selectedOption: 0
+  }
+
+  render() {
+    const { node, updateMessage, addOption, updateOption, selectOption, deleteOption } = this.props
+
+    return (
+      <Paper
+        className="tree-node-container"
+        zDepth={2} >
+        <Field
+          id={`kr-node-message-${node.id}`}
+          className="tree-node-message"
+          placeholder="Message"
+          value={node.message}
+          onChange={updateMessage} />
+        <ul className="invisible-scrollbar">
+          {
+            node.options.map((option, ix) => (
+              <li key={ix}>
+                <TreeNodeOption
+                  id={ix}
+                  selected={ix == this.state.selectedOption}
+                  option={option}
+                  onChange={(value) => updateOption(ix, value)}
+                  onSelect={() => {
+                    this.setState({selectedOption: ix})
+                    selectOption(ix)
+                  }}
+                  onDelete={() => deleteOption(ix)} />
+                {/* <Button flat onClick={() => selectOption(ix)}>select </Button>
+                <Field id={`option-${ix}`} placeholder="Message"
+                  value={option.label} onChange={(value) => updateOption(ix, value)} /> */}
+              </li>
+            ))
+          }
+          <li>
+            <Button
+              icon
+              onClick={addOption}>
+              add
+            </Button>
+          </li>
+        </ul>
+      </Paper>
+    )
+  }
 }
 
 const TreeNodeOption = ({
   id,
+  selected,
   option,
   onChange,
   onSelect,
   onDelete
 }) => {
   return (
-    <div className="tree-node-option">
+    <div className={`tree-node-option ${selected ? 'selected' : ''}`}>
       <TextField
         id={`option-${id}`}
         className="tree-node-option-value"
         lineDirection="center"
         value={option.label}
-        onChange={onChange}
-        placeholder="Enter option name"
+        placeholder="Enter option"
         default={false}
+        onChange={onChange}
+        onClick={onSelect}
       />
       <Button
         icon

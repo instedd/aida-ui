@@ -31,8 +31,8 @@
     }
 
     .tree-node-option {
-      border: 1px solid #AAA;
-      border-radius: 30px;
+      border: 1px solid $md-grey-300;
+      border-radius: 35px;
       padding: 0px 8px 3px 15px;
       width: 200px;
 
@@ -40,6 +40,16 @@
         display: inline-block;
         width: 80%;
       }
+
+      .md-text-field-container {
+        .md-divider {
+          //display: none;
+        }
+      }
+    }
+
+    .tree-node-option.selected {
+      background: $md-grey-300;
     }
   }
 }
