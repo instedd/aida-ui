@@ -97,7 +97,9 @@ class DecisionTreeComponent extends Component {
     const nextId = node.options[optionIx].next
     removeNode(nextId)
 
-    this._buildDefaultPath(nodes, node.id)
+    this.setState({
+      path: this._buildDefaultPath(nodes, this.state.path[0])
+    })
 
     return nodes
   }
