@@ -222,7 +222,6 @@ class TreeNode extends Component {
                   option={option}
                   onChange={(value) => updateOption(ix, value)}
                   onSelect={() => {
-                    //this.setState({selectedOption: ix})
                     selectOption(ix)
                   }}
                   onDelete={() => deleteOption(ix)} />
