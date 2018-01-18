@@ -6,3 +6,15 @@
 .skill-item-relevant > div > .md-tile-addon--icon > i {
   border: 2px dotted $md-grey-400;
 }
+
+.recurrence-column {
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.recurrence-data {
+  .md-inline-block {
+    vertical-align: middle;
+  }
+  white-space: nowrap;
+}

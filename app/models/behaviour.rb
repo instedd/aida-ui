@@ -174,6 +174,27 @@ class Behaviour < ApplicationRecord
               schedule: message["schedule"],
               message: localized_value("messages/[id=#{message['id']}]/message")
             }
+          when "recurrent"
+            recurrence = message["recurrence"]
+            start_date = Time.parse(config["start_date"]).beginning_of_day
+            type = recurrence["type"]
+            every = recurrence["every"]
+            each = recurrence["each"]
+            on = recurrence["on"]
+            at = Time.parse(recurrence["at"])
+            start = start_date + (at - at.beginning_of_day).seconds
+            start = start.utc.to_s(:iso8601)
+            {
+              recurrence: case type
+                          when 'daily'
+                            { type: 'daily', every: every, start: start }
+                          when 'weekly'
+                            { type: 'weekly', every: every, on: on, start: start }
+                          when 'monthly'
+                            { type: 'monthly', every: every, each: each, start: start }
+                          end,
+              message: localized_value("messages/[id=#{message['id']}]/message")
+            }
           else
             raise NotImplementedError
           end
@@ -231,6 +252,25 @@ class Behaviour < ApplicationRecord
       when "fixed_time"
         config["messages"].map.with_index do |message, i|
           translation_key("messages/[id=#{message['id']}]/message", "Message")
+        end
+      when "recurrent"
+        config["messages"].map.with_index do |message, i|
+          every = message['recurrence']['every']
+          each = message['recurrence']['each']
+          at = message['recurrence']['at']
+          on = message['recurrence']['on']
+          label = case message['recurrence']['type']
+                  when 'daily'
+                    every == 1 ? "Daily" : "Every #{every} days"
+                  when 'weekly'
+                    prefix = every == 1 ? "Weekly" : "Every #{every} weeks"
+                    "#{prefix} on #{on[0].titleize}"
+                  when 'monthly'
+                    prefix = every == 1 ? "Monthly" : "Every #{every} months"
+                    "#{prefix} on day #{each}"
+                  end
+          label = "#{label} at #{at}"
+          translation_key("messages/[id=#{message['id']}]/message", label)
         end
       else
         raise NotImplementedError
