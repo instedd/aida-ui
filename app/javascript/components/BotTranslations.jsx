@@ -6,7 +6,6 @@ import {
   TableBody,
   TableRow,
   TableColumn,
-  EditDialogColumn,
   SelectField,
 } from 'react-md'
 import { bindActionCreators } from 'redux'
@@ -16,6 +15,7 @@ import map from 'lodash/map'
 
 import MainWhite from '../ui/MainWhite'
 import Title from '../ui/Title'
+import Field from '../ui/Field'
 import { EmptyLoader } from '../ui/Loader'
 import { hasPermission } from '../utils'
 import ContentDenied from './ContentDenied'
@@ -28,7 +28,7 @@ const renderRows = ({ behaviours, firstLang, secondLang, defaultLang, onChange }
   return flatten(map(behaviours, behaviour => {
     const headerRow = (
       <TableRow key={`behaviour-${behaviour.id}`}>
-        <TableColumn colSpan="3">
+        <TableColumn className="behaviour-label" colSpan="3">
           {behaviour.label}
         </TableColumn>
       </TableRow>
@@ -37,15 +37,16 @@ const renderRows = ({ behaviours, firstLang, secondLang, defaultLang, onChange }
     const keyCell = (behaviourId, key, lang) => {
       if (!lang || lang == defaultLang) {
         return (
-          <TableColumn>
+          <TableColumn className="default-lang">
             {lang ? key[lang] : ''}
           </TableColumn>
         )
       } else {
-        return (
-          <EditDialogColumn inline inlineIcon={null}
-                            value={key[lang]}
-                            onChange={value => onChange({ behaviour_id: behaviourId, key: key._key, lang, value })} />
+        return (<TableColumn>
+          <Field  id="translation-value" className="editable-field"
+                  value={key[lang]}
+                  onChange={value => onChange({ behaviour_id: behaviourId, key: key._key, lang, value })} />
+        </TableColumn>
         )
       }
     }
@@ -124,7 +125,7 @@ class BotTranslations extends Component {
     return (
       <MainWhite buttons={buttons}>
         <div className="translations-header">
-          <div className="translations-tittle">
+          <div className="translations-title">
             <Title>Translations</Title>
           </div>
           <BotTranslationsMenu bot={bot} />
@@ -142,7 +143,7 @@ class BotTranslations extends Component {
                              onChange={value => this.setState({firstLang: value})} />
               </TableColumn>
               <TableColumn>
-                <SelectField id="first-lang-selector"
+                <SelectField id="second-lang-selector"
                              placeholder="Select language"
                              menuItems={langItems}
                              position={SelectField.Positions.BELOW}

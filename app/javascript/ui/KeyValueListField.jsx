@@ -23,11 +23,15 @@ export class KeyValueListField extends Component {
           <TableColumn>
             { canRemoveItem(item, index) ? <Button icon iconChildren="close" onClick={() => onRemoveItem(item, index)} /> : null}
           </TableColumn>
-          {renderKey(item, index)}
+          <TableColumn>
+            {renderKey(item, index)}
+          </TableColumn>
           <TableColumn>
             <FontIcon>chevron_right</FontIcon>
           </TableColumn>
-          {renderValue(item, index)}
+          <TableColumn>
+            {renderValue(item, index)}
+          </TableColumn>
         </TableRow>
       )
     })

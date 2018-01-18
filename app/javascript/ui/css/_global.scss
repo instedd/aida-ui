@@ -71,21 +71,21 @@ main {
   }
 }
 
+.editable-field {
+  margin-top: 0;
+  .md-divider--text-field:after {
+    background: $md-secondary-color;
+  }
+}
+
 #lang-menu-list .md-list-tile .md-tile-content {
   display: grid;
   grid-template-columns: 10em 2em;
   grid-column-gap: 1em;
 }
 
-#translations-table {
-  tbody .md-table-row {
-    border-bottom: none;
-  }
-}
-
-.translation-key {
-  padding-left: 2em;
-  display: inline-block;
+#lang-menu .md-divider--text-field::after {
+  background: $md-secondary-color;
 }
 
 .file-upload-control {
