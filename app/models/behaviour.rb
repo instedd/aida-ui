@@ -84,6 +84,7 @@ class Behaviour < ApplicationRecord
                          }
                        }
                      when "decision_tree"
+                        uuid = SecureRandom.uuid
                         {
                           kind: "decision_tree",
                           name: "Decision tree",
@@ -91,10 +92,10 @@ class Behaviour < ApplicationRecord
                             "explanation" => "",
                             "clarification" => "",
                             "tree": {
-                              initial: "0",
+                              initial: uuid,
                               nodes: {
-                                "0": {
-                                  id: "0",
+                                uuid => {
+                                  id: uuid,
                                   message: "",
                                   options: []
                                 }

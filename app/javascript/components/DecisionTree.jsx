@@ -116,7 +116,10 @@ class DecisionTreeComponent extends Component {
     const { onChange } = this.props
     const { initial, nodes } = this.props.tree
 
+    console.log("Nodes:")
     console.log(nodes)
+    console.log("Path:")
+    console.log(this.state.path)
 
     return (
       <div className="decision-tree-container">
@@ -130,6 +133,7 @@ class DecisionTreeComponent extends Component {
             <TreeNode
               key={`tree-node-${currentId}`}
               node={currentNode}
+              nextNodeId={this.state.path[pathIx+1]}
               updateMessage={(value) => {
                 onChange({ initial, nodes: {
                   ...nodes,
@@ -149,7 +153,7 @@ class DecisionTreeComponent extends Component {
                       ...currentNode,
                       options: [
                         ...currentNode.options,
-                        { label: '', next: id }
+                        { label: '', next: id, new: true }
                       ]
                     }
                   }})
@@ -194,12 +198,9 @@ class DecisionTreeComponent extends Component {
 
 class TreeNode extends Component {
 
-  state = {
-    selectedOption: 0
-  }
-
   render() {
-    const { node, updateMessage, addOption, updateOption, selectOption, deleteOption } = this.props
+    const { node, nextNodeId, updateMessage,
+            addOption, updateOption, selectOption, deleteOption } = this.props
 
     return (
       <Paper
@@ -217,17 +218,14 @@ class TreeNode extends Component {
               <li key={ix}>
                 <TreeNodeOption
                   id={ix}
-                  selected={ix == this.state.selectedOption}
+                  selected={nextNodeId == option.next}
                   option={option}
                   onChange={(value) => updateOption(ix, value)}
                   onSelect={() => {
-                    this.setState({selectedOption: ix})
+                    //this.setState({selectedOption: ix})
                     selectOption(ix)
                   }}
                   onDelete={() => deleteOption(ix)} />
-                {/* <Button flat onClick={() => selectOption(ix)}>select </Button>
-                <Field id={`option-${ix}`} placeholder="Message"
-                  value={option.label} onChange={(value) => updateOption(ix, value)} /> */}
               </li>
             ))
           }
@@ -263,6 +261,14 @@ const TreeNodeOption = ({
         default={false}
         onChange={onChange}
         onClick={onSelect}
+        ref={option.new
+          ? (el) => {
+              if (el) {
+                el.focus()
+                delete option.new
+              }
+            }
+          : null}
       />
       <Button
         icon
