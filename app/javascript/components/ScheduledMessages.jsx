@@ -183,7 +183,101 @@ class RecurrenceDialog extends Component {
   }
 }
 
-class ScheduledMessages extends Component {
+class InactivityMessages extends Component {
+  static propTypes = {
+    messages: PropTypes.array.isRequired,
+    onAdd: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
+    onRemove: PropTypes.func.isRequired
+  }
+
+  render() {
+    const { messages, onAdd, onChange, onRemove } = this.props
+
+    // duplicated in behaviour.rb
+    const delayOptions = [
+      {value: 60, label: '1 hour'},
+      {value: 1440, label: '1 day'},
+      {value: 10080, label: '1 week'},
+      {value: 40320, label: '1 month'}, // 28 days month so we end up in the same day of week
+    ]
+
+    const addMessage = () => {
+      onAdd({id: uuidv4(), delay: 60, message: ''})
+    }
+
+    const canRemoveItem = () => messages.length > 1
+    const removeMessage = (item, index) => {
+      onRemove(index)
+    }
+
+    const renderDelay = (item, index) => {
+      return (<SelectField id={`schedule-delay-#{index}`}
+                           menuItems={delayOptions}
+                           value={item.delay}
+                           onChange={value => onChange(index, 'delay', value)}
+                           stripActiveItem={false}
+                           fullWidth={false} />)
+    }
+    const renderMessage = (item, index) => {
+      return (<Field id={`schedule-message-#{index}`}
+                     className="editable-field"
+                     value={item.message}
+                     onChange={value => onChange(index, 'message', value)} />)
+    }
+
+    return (<KeyValueListField label="Messages"
+                               items={messages}
+                               createItemLabel="Add message" onCreateItem={addMessage}
+                               canRemoveItem={canRemoveItem} onRemoveItem={removeMessage}
+                               renderKey={renderDelay}
+                               renderValue={renderMessage} />)
+  }
+}
+
+class FixedTimeMessages extends Component {
+  static propTypes = {
+    messages: PropTypes.array.isRequired,
+    onChange: PropTypes.func.isRequired
+  }
+
+  render() {
+    const { messages, onChange } = this.props
+    const date = messages[0].schedule ? new Date(messages[0].schedule) : undefined
+
+    return (<div>
+      <div className="date-time-picker ui-field">
+        <DatePicker id="schedule-date"
+                    label="Schedule this message for"
+                    inline
+                    fullwidth={false}
+                    value={date}
+                    timeZone={getLocalTimezone()}
+                    onChange={(_, value) => onChange(0, 'schedule', value)} />
+        <TimePicker id="schedule-time"
+                    label="at"
+                    inline
+                    value={date}
+                    onChange={(_, value) => onChange(0, 'schedule', value)} />
+      </div>
+
+      <Field id="message" label="Message"
+             value={messages[0].message}
+             onChange={value => onChange(0, 'message', value)} />
+    </div>)
+  }
+}
+
+class RecurrentMessages extends Component {
+  static propTypes = {
+    startDate: PropTypes.string.isRequired,
+    onChangeStartDate: PropTypes.func.isRequired,
+    messages: PropTypes.array.isRequired,
+    onAdd: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
+    onRemove: PropTypes.func.isRequired
+  }
+
   state = {
     dialogVisible: false,
     index: null,
@@ -191,9 +285,71 @@ class ScheduledMessages extends Component {
   }
 
   render() {
+    const { startDate, onChangeStartDate, messages, onAdd, onChange, onRemove } = this.props
+
+    const date = startDate ? new Date(startDate) : undefined
+
+    const addMessage = () => {
+      onAdd({id: uuidv4(), recurrence: {type: 'daily', every: 1, at: '00:00'}, message: ''})
+    }
+
+    const canRemoveItem = () => messages.length > 1
+    const removeMessage = (item, index) => {
+      onRemove(index)
+    }
+
+    const editRecurrence = (index) => {
+      const recurrence = messages[index].recurrence
+      this.setState({ dialogVisible: true, index, recurrence: {...recurrence} })
+    }
+    const hideDialog = () => {
+      this.setState({ dialogVisible: false })
+    }
+    const saveRecurrence = () => {
+      const { index, recurrence } = this.state
+      onChange(index, 'recurrence', recurrence)
+      hideDialog()
+    }
+
+    const renderRecurrence = (item, index) => {
+      const description = recurrenceDescription(item.recurrence)
+      return (<span className="recurrence-column"
+                    onClick={() => editRecurrence(index)}>
+        {description}
+      </span>)
+    }
+    const renderMessage = (item, index) => {
+      return (<Field id={`recurrent-message-#{index}`}
+                     className="editable-field"
+                     value={item.message}
+                     onChange={value => onChange(index, 'message', value)} />)
+    }
+
+    return (<div>
+      <DatePicker id="start-date"
+                  label="Beginning"
+                  value={date}
+                  timeZone={getLocalTimezone()}
+                  onChange={(_, value) => onChangeStartDate(formatTimeISOWithTimezone(value))} />
+      <KeyValueListField label="Messages"
+                         items={messages}
+                         createItemLabel="Add message" onCreateItem={addMessage}
+                         canRemoveItem={canRemoveItem} onRemoveItem={removeMessage}
+                         renderKey={renderRecurrence}
+                         renderValue={renderMessage} />
+      <RecurrenceDialog visible={this.state.dialogVisible}
+                        onCancel={hideDialog}
+                        onConfirm={saveRecurrence}
+                        onChange={recurrence => this.setState({ recurrence })}
+                        recurrence={this.state.recurrence} />
+    </div>)
+  }
+}
+
+class ScheduledMessages extends Component {
+  render() {
     const { skill, actions } = this.props
     const { name, config } = skill
-    const { dialogVisible, recurrence } = this.state
 
     const updateConfig = (key) => {
       return (value) => {
@@ -229,7 +385,6 @@ class ScheduledMessages extends Component {
           }
         })
       } else if (schedule_type == "recurrent") {
-        this.setState({ dialogVisible: false })
         actions.updateSkill({
           ...skill,
           config: {
@@ -245,11 +400,8 @@ class ScheduledMessages extends Component {
       }
     }
 
-    const addDelayedMessage = () => {
-      updateConfig('messages')([...skill.config.messages, {id: uuidv4(), delay: 60, message: ''}])
-    }
-    const addRecurrentMessage = () => {
-      updateConfig('messages')([...skill.config.messages, {id: uuidv4(), recurrence: {type: 'daily', every: 1, at: '00:00'}, message: ''}])
+    const addMessage = (message) => {
+      updateConfig('messages')([...skill.config.messages, message])
     }
 
     const removeMessage = (index) => {
@@ -258,19 +410,11 @@ class ScheduledMessages extends Component {
       updateConfig('messages')(newMessages)
     }
 
-    const updateMessage = (index, key) => (value) => {
+    const updateMessage = (index, key, value) => {
       const newMessages = skill.config.messages.slice()
       newMessages[index][key] = value
       updateConfig('messages')(newMessages)
     }
-
-    // duplicated in behaviour.rb
-    const delayOptions = [
-      {value: 60, label: '1 hour'},
-      {value: 1440, label: '1 day'},
-      {value: 10080, label: '1 week'},
-      {value: 40320, label: '1 month'}, // 28 days month so we end up in the same day of week
-    ]
 
     return (
       <div>
@@ -294,89 +438,27 @@ class ScheduledMessages extends Component {
         />
 
         {(() => {
-           if (config.schedule_type != "since_last_incoming_message") return null;
-
-           const canRemoveItem = config.messages.length > 1
-
-           return (<KeyValueListField
-                     label="Messages"
-                     items={config.messages}
-                     createItemLabel="Add message" onCreateItem={addDelayedMessage}
-                     canRemoveItem={() => canRemoveItem} onRemoveItem={(item, index) => removeMessage(index)}
-                     renderKey={(item, index) => <SelectField id={`schedule-delay-#{index}`} menuItems={delayOptions} value={item.delay} onChange={updateMessage(index, 'delay')} stripActiveItem={false} fullWidth={false} />}
-                     renderValue={(item, index) => <Field id={`schedule-message-#{index}`} className="editable-field" value={item.message} onChange={updateMessage(index, 'message')}/>}
-           />)
-        })()}
-
-        {(() => {
-           if (config.schedule_type != "fixed_time") return null;
-
-           const date = config.messages[0].schedule ? new Date(config.messages[0].schedule) : undefined
-
-           return (<div>
-             <div className="date-time-picker ui-field">
-               <DatePicker id="schedule-date"
-                           label="Schedule this message for"
-                           inline
-                           fullwidth={false}
-                           value={date}
-                           timeZone={getLocalTimezone()}
-                           onChange={(_, value) => updateMessage(0, 'schedule')(value)} />
-               <TimePicker id="schedule-time"
-                           label="at"
-                           inline
-                           value={date}
-                           onChange={(_, value) => updateMessage(0, 'schedule')(value)} />
-             </div>
-
-             <Field id="message" label="Message" value={config.messages[0].message} onChange={updateMessage(0, 'message')} />
-           </div>)
-        })()}
-
-        {(() => {
-           if (config.schedule_type != "recurrent") return null;
-
-           const date = config.start_date ? new Date(config.start_date) : undefined
-           const canRemoveItem = config.messages.length > 1
-
-           const editRecurrence = (index) => {
-             const recurrence = config.messages[index].recurrence
-             this.setState({ dialogVisible: true, index, recurrence: {...recurrence} })
+           switch (config.schedule_type) {
+             case 'since_last_incoming_message':
+               return (<InactivityMessages messages={config.messages}
+                                           onAdd={addMessage}
+                                           onChange={updateMessage}
+                                           onRemove={removeMessage} />)
+             case 'fixed_time':
+               return (<FixedTimeMessages messages={config.messages}
+                                          onChange={updateMessage} />)
+             case 'recurrent':
+               return (<RecurrentMessages startDate={config.start_date}
+                                          onChangeStartDate={updateConfig('start_date')}
+                                          messages={config.messages}
+                                          onAdd={addMessage}
+                                          onChange={updateMessage}
+                                          onRemove={removeMessage} />)
            }
-           const hideDialog = () => {
-             this.setState({ dialogVisible: false })
-           }
-           const saveRecurrence = () => {
-             const { index, recurrence } = this.state
-             updateMessage(index, 'recurrence')(recurrence)
-             hideDialog()
-           }
-
-           return (<div>
-             <DatePicker id="start-date"
-                         label="Beginning"
-                         value={date}
-                         timeZone={getLocalTimezone()}
-                         onChange={(_, value) => updateConfig('start_date')(formatTimeISOWithTimezone(value))} />
-             <KeyValueListField
-                     label="Messages"
-                     items={config.messages}
-                     createItemLabel="Add message" onCreateItem={addRecurrentMessage}
-                     canRemoveItem={() => canRemoveItem} onRemoveItem={(item, index) => removeMessage(index)}
-                     renderKey={(item, index) => (<span className="recurrence-column" onClick={() => editRecurrence(index)}>{recurrenceDescription(item.recurrence)}</span>)}
-                     renderValue={(item, index) => <Field id={`schedule-message-#{index}`} className="editable-field" value={item.message} onChange={updateMessage(index, 'message')}/>}
-             />
-             <RecurrenceDialog visible={dialogVisible}
-                               onCancel={hideDialog}
-                               onConfirm={saveRecurrence}
-                               onChange={(recurrence) => this.setState({ recurrence })}
-                               recurrence={this.state.recurrence} />
-           </div>)
         })()}
 
       </div>
     )
-
   }
 }
 
