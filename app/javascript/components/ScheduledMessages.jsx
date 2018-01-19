@@ -83,10 +83,6 @@ class RecurrenceDialog extends Component {
   render() {
     const { visible, onCancel, onConfirm, onChange, recurrence } = this.props
     const { type, every, at, on, each } = recurrence
-    const dialogActions = [
-      { primary: true, children: 'Cancel', onClick: onCancel },
-      (<Button flat secondary onClick={onConfirm}>Done</Button>)
-    ]
 
     const changeRecurrenceType = (value) => {
       if (!onChange) return
@@ -103,6 +99,36 @@ class RecurrenceDialog extends Component {
           break
       }
     }
+
+    const everyValid = every > 0
+    const atValid = (time => {
+      if (time && time.match(/^[0-9]{1,2}:[0-9]{2}$/)) {
+        const [ hour, minutes ] = time.split(':').map(x => parseInt(x))
+        return hour >= 0 && hour <= 23 && minutes >= 0 && minutes <= 59
+      } else {
+        return false
+      }
+    })(at)
+    const onValid = on && on.length == 1
+    const eachValid = each && each >= 1 && each <= 31
+
+    const allValid = (type => {
+      switch (type) {
+        case 'daily':
+          return everyValid && atValid
+        case 'weekly':
+          return everyValid && onValid && atValid
+        case 'monthly':
+          return everyValid && eachValid && atValid
+        default:
+          return false
+      }
+    })(type)
+
+    const dialogActions = [
+      { primary: true, children: 'Cancel', onClick: onCancel },
+      (<Button flat secondary disabled={!allValid} onClick={onConfirm}>Done</Button>)
+    ]
 
     const everyField = (
       <TextField id="recurrence-every"
@@ -136,7 +162,8 @@ class RecurrenceDialog extends Component {
       <TextField id="recurrence-at"
                  fullWidth={false}
                  style={{width: "3em"}}
-                 onChange={value => onChange ? onChange({...recurrence, at: value}) : null}
+                 error={!atValid}
+                 onChange={value => onChange ? onChange({...recurrence, at: value.trim()}) : null}
                  value={at} />
     )
 
