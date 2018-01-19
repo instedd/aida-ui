@@ -299,6 +299,11 @@ class Behaviour < ApplicationRecord
       else
         raise NotImplementedError
       end
+    when "decision_tree"
+      [
+        translation_key("explanation",   "Skill explanation"),
+        translation_key("clarification", "Clarification message")
+      ]
     else
       raise NotImplementedError
     end
