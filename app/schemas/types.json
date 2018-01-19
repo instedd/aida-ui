@@ -164,7 +164,6 @@
             "start_date": { "type": "string" },
             "messages": {
               "type": "array",
-              "minItems": 1,
               "items": {
                 "type": "object",
                 "properties": {

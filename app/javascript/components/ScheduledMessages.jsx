@@ -233,7 +233,7 @@ class InactivityMessages extends Component {
       onAdd({id: uuidv4(), delay: 60, message: ''})
     }
 
-    const canRemoveItem = () => messages.length > 1
+    const canRemoveItem = () => true
     const removeMessage = (item, index) => {
       onRemove(index)
     }
@@ -320,7 +320,7 @@ class RecurrentMessages extends Component {
       onAdd({id: uuidv4(), recurrence: {type: 'daily', every: 1, at: '00:00'}, message: ''})
     }
 
-    const canRemoveItem = () => messages.length > 1
+    const canRemoveItem = () => true
     const removeMessage = (item, index) => {
       onRemove(index)
     }
@@ -352,12 +352,19 @@ class RecurrentMessages extends Component {
                      onChange={value => onChange(index, 'message', value)} />)
     }
 
+    const changeStartDate = (_, value) => {
+      value.setHours(0)
+      value.setMinutes(0)
+      value.setSeconds(0)
+      onChangeStartDate(formatTimeISOWithTimezone(value))
+    }
+
     return (<div>
       <DatePicker id="start-date"
                   label="Beginning"
                   value={date}
                   timeZone={getLocalTimezone()}
-                  onChange={(_, value) => onChangeStartDate(formatTimeISOWithTimezone(value))} />
+                  onChange={changeStartDate} />
       <KeyValueListField label="Messages"
                          items={messages}
                          createItemLabel="Add message" onCreateItem={addMessage}
@@ -396,9 +403,7 @@ class ScheduledMessages extends Component {
           ...skill,
           config: {
             schedule_type,
-            messages: [
-              {id: uuidv4(), delay: 60, message: ''}
-            ]
+            messages: []
           }
         })
       } else if (schedule_type == "fixed_time") {
@@ -412,14 +417,16 @@ class ScheduledMessages extends Component {
           }
         })
       } else if (schedule_type == "recurrent") {
+        const startDate = new Date()
+        startDate.setHours(0)
+        startDate.setMinutes(0)
+        startDate.setSeconds(0)
         actions.updateSkill({
           ...skill,
           config: {
             schedule_type,
-            start_date: formatTimeISOWithTimezone(new Date()),
-            messages: [
-              {id: uuidv4(), recurrence: {type: 'daily', every: 1, at: '00:00'}, message: ''}
-            ]
+            start_date: formatTimeISOWithTimezone(startDate),
+            messages: []
           }
         })
       } else {
