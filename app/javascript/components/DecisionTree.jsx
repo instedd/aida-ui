@@ -89,7 +89,6 @@ class DecisionTreeComponent extends Component {
       currentNode.options.forEach((option, ix) => {
         removeNode(option.next)
       })
-      console.log(nodes)
       delete nodes[nodeId]
     }
 
@@ -115,11 +114,6 @@ class DecisionTreeComponent extends Component {
   render() {
     const { onChange } = this.props
     const { initial, nodes } = this.props.tree
-
-    console.log("Nodes:")
-    console.log(nodes)
-    console.log("Path:")
-    console.log(this.state.path)
 
     return (
       <div className="decision-tree-container">
@@ -207,7 +201,7 @@ class TreeNode extends Component {
         className="tree-node-container"
         zDepth={2} >
         <Field
-          id={`kr-node-message-${node.id}`}
+          id={`tree-node-message-${node.id}`}
           className="tree-node-message"
           placeholder="Message"
           value={node.message}
@@ -221,21 +215,18 @@ class TreeNode extends Component {
                   selected={nextNodeId == option.next}
                   option={option}
                   onChange={(value) => updateOption(ix, value)}
-                  onSelect={() => {
-                    selectOption(ix)
-                  }}
+                  onSelect={() => selectOption(ix)}
                   onDelete={() => deleteOption(ix)} />
               </li>
             ))
           }
-          <li>
-            <Button
-              icon
-              onClick={addOption}>
-              add
-            </Button>
-          </li>
         </ul>
+        <Button
+          className="addlink"
+          iconChildren="add"
+          onClick={addOption}>
+          Add node
+        </Button>
       </Paper>
     )
   }
@@ -264,6 +255,7 @@ const TreeNodeOption = ({
           ? (el) => {
               if (el) {
                 el.focus()
+                el.getField().scrollIntoView({ behavior: "smooth" })
                 delete option.new
               }
             }
