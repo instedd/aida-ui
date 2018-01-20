@@ -224,6 +224,16 @@ class Behaviour < ApplicationRecord
       }.tap do |manifest_fragment|
         manifest_fragment[:relevant] = config["relevant"] if config["relevant"].present?
       end
+    when "decision_tree"
+      {
+        type: kind,
+        id: id.to_s,
+        name: name,
+        explanation: localized_value(:explanation),
+        clarification: localized_value(:clarification)
+      }.tap do |manifest_fragment|
+        manifest_fragment[:relevant] = config["relevant"] if config["relevant"].present?
+      end
     else
       raise NotImplementedError
     end
@@ -302,14 +312,29 @@ class Behaviour < ApplicationRecord
     when "decision_tree"
       [
         translation_key("explanation",   "Skill explanation"),
-        translation_key("clarification", "Clarification message")
-      ]
+        translation_key("clarification", "Clarification message"),
+        build_array_from_tree(config["tree"]['nodes'], config["tree"]['initial'], "1")
+      ].flatten
     else
       raise NotImplementedError
     end
   end
 
   private
+
+  def build_array_from_tree(nodes, uuid, level)
+    [
+      translation_key("tree/nodes/#{uuid}/message", "Question #{level}"),
+      nodes[uuid]['options'].map.with_index do |option, ix|
+        translation_key("tree/nodes/#{uuid}/options/[next=#{option['next']}]/label",
+                        "Answer #{level}.#{ix+1}")
+      end,
+      nodes[uuid]['options'].map.with_index do |option, ix|
+        next if option['next'].nil?
+        build_array_from_tree(nodes, option['next'], "#{level}.#{ix+1}")
+      end
+    ]
+  end
 
   def get_in_config(key)
     key.to_s.split(/\//).inject(config) do |value, part|
