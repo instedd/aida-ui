@@ -313,7 +313,7 @@ class Behaviour < ApplicationRecord
       [
         translation_key("explanation",   "Skill explanation"),
         translation_key("clarification", "Clarification message"),
-        build_array_from_tree(config["tree"]['nodes'], config["tree"]['initial'], "1")
+        build_array_from_tree(config["tree"]['nodes'], config["tree"]['initial'], 1)
       ].flatten
     else
       raise NotImplementedError
@@ -322,18 +322,23 @@ class Behaviour < ApplicationRecord
 
   private
 
-  def build_array_from_tree(nodes, uuid, level)
-    [
-      translation_key("tree/nodes/#{uuid}/message", "Question #{level}"),
-      nodes[uuid]['options'].map.with_index do |option, ix|
-        translation_key("tree/nodes/#{uuid}/options/[next=#{option['next']}]/label",
+  def build_array_from_tree(nodes, initial_uuid, level)
+    translations = []
+    uuids = [initial_uuid]
+    until uuids.empty?
+      uuid = uuids.shift
+      translations.push(translation_key("tree/nodes/#{uuid}/message", "Question #{level}"))
+      translations.concat(
+        nodes[uuid]['options'].map.with_index do |option, ix|
+          uuids.push(option['next']) unless option['next'].nil?
+          translation_key("tree/nodes/#{uuid}/options/[next=#{option['next']}]/label",
                         "Answer #{level}.#{ix+1}")
-      end,
-      nodes[uuid]['options'].map.with_index do |option, ix|
-        next if option['next'].nil?
-        build_array_from_tree(nodes, option['next'], "#{level}.#{ix+1}")
-      end
-    ]
+        end
+      )
+      level += 1
+    end
+
+    return translations
   end
 
   def get_in_config(key)
