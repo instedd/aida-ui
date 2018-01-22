@@ -199,7 +199,7 @@ class TreeNode extends Component {
     return (
       <Paper
         className="tree-node-container"
-        zDepth={2} >
+        zDepth={1} >
         <Field
           id={`tree-node-message-${node.id}`}
           className="tree-node-message"
@@ -225,7 +225,7 @@ class TreeNode extends Component {
           className="addlink"
           iconChildren="add"
           onClick={addOption}>
-          Add node
+          Add option
         </Button>
       </Paper>
     )
@@ -260,6 +260,7 @@ const TreeNodeOption = ({
               }
             }
           : null}
+        resize={ { min: 50, max: 200 } }
       />
       <Button
         icon

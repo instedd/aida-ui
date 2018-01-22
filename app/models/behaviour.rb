@@ -324,18 +324,17 @@ class Behaviour < ApplicationRecord
 
   def build_array_from_tree(nodes, initial_uuid, level)
     translations = []
-    uuids = [initial_uuid]
+    uuids = [[initial_uuid, level]]
     until uuids.empty?
-      uuid = uuids.shift
-      translations.push(translation_key("tree/nodes/#{uuid}/message", "Question #{level}"))
+      uuid, level = uuids.shift
+      translations.push(translation_key("tree/nodes/#{uuid}/message", "#{level}#{level.ordinal} Question"))
       translations.concat(
         nodes[uuid]['options'].map.with_index do |option, ix|
-          uuids.push(option['next']) unless option['next'].nil?
+          uuids.push([option['next'], level + 1]) unless option['next'].nil?
           translation_key("tree/nodes/#{uuid}/options/[next=#{option['next']}]/label",
-                        "Answer #{level}.#{ix+1}")
+                        "Option")
         end
       )
-      level += 1
     end
 
     return translations
