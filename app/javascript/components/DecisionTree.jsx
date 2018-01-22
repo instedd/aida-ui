@@ -55,7 +55,8 @@ class DecisionTreeComponent extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      path: this._buildDefaultPath(props.tree.nodes, props.tree.initial)
+      path: this._buildDefaultPath(props.tree.nodes, props.tree.initial),
+      editingOptionTo: null
     }
   }
 
@@ -128,6 +129,7 @@ class DecisionTreeComponent extends Component {
               key={`tree-node-${currentId}`}
               node={currentNode}
               nextNodeId={this.state.path[pathIx+1]}
+              editingOptionTo={this.state.editingOptionTo}
               updateMessage={(value) => {
                 onChange({ initial, nodes: {
                   ...nodes,
@@ -147,7 +149,7 @@ class DecisionTreeComponent extends Component {
                       ...currentNode,
                       options: [
                         ...currentNode.options,
-                        { label: '', next: id, new: true }
+                        { label: '', next: id }
                       ]
                     }
                   }})
@@ -155,7 +157,8 @@ class DecisionTreeComponent extends Component {
                   path: [
                     ...this.state.path.slice(0, pathIx + 1),
                     id
-                  ]
+                  ],
+                  editingOptionTo: id
                 })
               }}
               updateOption={(ix, value) => {
@@ -182,6 +185,12 @@ class DecisionTreeComponent extends Component {
               deleteOption={(ix) => {
                 onChange({initial, nodes: this._deleteOption(nodes, currentNode, ix)})
               }}
+              focusedOption={(ix) => {
+                this.setState({
+                  ...this.state,
+                  editingOptionTo: null
+                })
+              }}
             />
           )
         })}
@@ -193,8 +202,8 @@ class DecisionTreeComponent extends Component {
 class TreeNode extends Component {
 
   render() {
-    const { node, nextNodeId, updateMessage,
-            addOption, updateOption, selectOption, deleteOption } = this.props
+    const { node, nextNodeId, editingOptionTo, updateMessage,
+      addOption, updateOption, selectOption, deleteOption, focusedOption } = this.props
 
     return (
       <Paper
@@ -213,10 +222,12 @@ class TreeNode extends Component {
                 <TreeNodeOption
                   id={ix}
                   selected={nextNodeId == option.next}
+                  focused={editingOptionTo == option.next}
                   option={option}
                   onChange={(value) => updateOption(ix, value)}
                   onSelect={() => selectOption(ix)}
-                  onDelete={() => deleteOption(ix)} />
+                  onDelete={() => deleteOption(ix)}
+                  onFocused={(ix) => focusedOption(ix)} />
               </li>
             ))
           }
@@ -238,10 +249,12 @@ class TreeNode extends Component {
 const TreeNodeOption = ({
   id,
   selected,
+  focused,
   option,
   onChange,
   onSelect,
-  onDelete
+  onDelete,
+  onFocused
 }) => {
   return (
     <div className={`tree-node-option ${selected ? 'selected' : ''}`}>
@@ -254,12 +267,12 @@ const TreeNodeOption = ({
         default={false}
         onChange={onChange}
         onClick={onSelect}
-        ref={option.new
+        ref={
+          focused
           ? (el) => {
               if (el) {
                 el.focus()
-                el.getField().scrollIntoView({ behavior: "smooth" })
-                delete option.new
+                onFocused(id)
               }
             }
           : null}
