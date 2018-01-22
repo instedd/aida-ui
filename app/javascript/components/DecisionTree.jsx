@@ -40,10 +40,12 @@ export default class DecisionTree extends Component {
 
         <RelevanceField value={config.relevant} onChange={updateConfig('relevant')} />
 
-        <Field id="kr-explanation" label="Skill explanation"
+        <Field id="tree-explanation" label="Skill explanation"
                value={config.explanation} onChange={updateConfig('explanation')} />
-        <Field id="kr-clarification" label="Skill clarification"
+        <Field id="tree-clarification" label="Skill clarification"
                value={config.clarification} onChange={updateConfig('clarification')} />
+        <Field id="tree-clarification" label="Valid keywords (comma separated)"
+          value={config.keywords} onChange={updateConfig('keywords')} />
         <DecisionTreeComponent tree={config.tree} onChange={updateConfig('tree')} />
       </div>
     )

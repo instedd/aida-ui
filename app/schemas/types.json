@@ -227,7 +227,8 @@
       "properties": {
         "relevant": { "type": "string" },
         "explanation": { "$ref": "#/definitions/message" },
-        "clarification": { "$ref": "#/definitions/message" }
+        "clarification": { "$ref": "#/definitions/message" },
+        "keywords": { "$ref": "#/definitions/message" }
       },
       "additionalProperties": true,
       "required": [ "explanation", "clarification" ]

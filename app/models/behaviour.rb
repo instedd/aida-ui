@@ -91,6 +91,7 @@ class Behaviour < ApplicationRecord
                           config: {
                             "explanation" => "",
                             "clarification" => "",
+                            "keywords" => "",
                             "tree": {
                               initial: uuid,
                               nodes: {
@@ -231,7 +232,9 @@ class Behaviour < ApplicationRecord
         name: name,
         explanation: localized_value(:explanation),
         clarification: localized_value(:clarification),
-        # keywords: localized_value(:keywords),
+        keywords: localized_value(:keywords) do |keywords|
+          keywords.split(/,\s*/)
+        end,
         tree: build_manifest_tree(config["tree"]["nodes"], config["tree"]["initial"])
       }.tap do |manifest_fragment|
         manifest_fragment[:relevant] = config["relevant"] if config["relevant"].present?
@@ -313,8 +316,9 @@ class Behaviour < ApplicationRecord
       end
     when "decision_tree"
       [
-        translation_key("explanation",   "Skill explanation"),
-        translation_key("clarification", "Clarification message"),
+        translation_key("explanation",    "Skill explanation"),
+        translation_key("clarification",  "Clarification message"),
+        translation_key("keywords",       "Valid keywords (comma separated)"),
         build_array_from_tree(config["tree"]["nodes"], config["tree"]["initial"], 1)
       ].flatten
     else
@@ -333,8 +337,7 @@ class Behaviour < ApplicationRecord
       translations.concat(
         nodes[uuid]['options'].map.with_index do |option, ix|
           uuids.push([option['next'], level + 1]) unless option['next'].nil?
-          translation_key("tree/nodes/#{uuid}/options/[next=#{option['next']}]/label",
-                        "Option")
+          translation_key("tree/nodes/#{uuid}/options/[next=#{option['next']}]/label", "Option")
         end
       )
     end
@@ -343,17 +346,29 @@ class Behaviour < ApplicationRecord
   end
 
   def build_manifest_tree(nodes, uuid)
-    {
-      uuid: uuid,
-      question: localized_value("tree/nodes/#{uuid}/message"),
-      responses: nodes[uuid]['options'].map do |option|
-        next_uuid = option['next']
-        {
-          keywords: localized_value("tree/nodes/#{uuid}/options/[next=#{next_uuid}]/label"),
-          next: build_manifest_tree(nodes, next_uuid)
-        }
-      end
+
+    result = {
+      id: uuid
     }
+    loc_value = localized_value("tree/nodes/#{uuid}/message")
+
+    options = nodes[uuid]['options']
+    if options.empty?
+      result[:answer] = loc_value
+    else
+      result[:question] = loc_value
+      result[:responses] =  options.map do |option|
+                              next_uuid = option['next']
+                              {
+                                keywords: localized_value("tree/nodes/#{uuid}/options/[next=#{next_uuid}]/label") do |keywords|
+                                  keywords.split(/,\s*/)
+                                end,
+                                next: build_manifest_tree(nodes, next_uuid)
+                              }
+                            end
+    end
+
+    return result
   end
 
   def get_in_config(key)
