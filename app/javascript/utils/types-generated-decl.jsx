@@ -38,6 +38,7 @@ export type LanguageDetectorConfig = {
     code: Language;
     keywords: KeywordList;
   }>;
+  reply_to_unsupported_language?: boolean;
 };
 
 export type KeywordResponderConfig = {

@@ -115,6 +115,7 @@ class Behaviour < ApplicationRecord
       {
         type: kind,
         explanation: config["explanation"],
+        reply_to_unsupported_language: !!config["reply_to_unsupported"],
         languages: Hash[config["languages"].map do |lang|
                           [lang["code"], lang["keywords"].split(/,\s*/)]
                         end]

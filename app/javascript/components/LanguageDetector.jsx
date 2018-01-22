@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { TableColumn } from 'react-md'
+import { Checkbox } from 'react-md'
 import map from 'lodash/map'
 
 import Title from '../ui/Title'
@@ -41,6 +41,8 @@ export default class LanguageDetector extends Component {
       updateConfig('languages')(newLangs)
     }
 
+    const replyToUnsupportedLang = !!config['reply_to_unsupported_language']
+
     return (
       <div>
         <Title>Language detector</Title>
@@ -60,6 +62,12 @@ export default class LanguageDetector extends Component {
           renderKey={({code, keywords}, index) => <Field className="editable-field" id="ld-key" value={keywords} onChange={updateLanguage(index, 'keywords')} resize={{min: 100, max: 200}} />}
           renderValue={({code, keywords}, index) => <LanguageSelector code={code} onChange={updateLanguage(index, 'code')} />}
         />
+
+        <Checkbox id="reply-to-unsupported-language"
+                  name="reply-to-unsupported-language"
+                  label="Automatic response for unsupported languages"
+                  checked={replyToUnsupportedLang}
+                  onChange={updateConfig('reply_to_unsupported_language')} />
       </div>
     )
   }

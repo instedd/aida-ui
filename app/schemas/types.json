@@ -72,7 +72,8 @@
             },
             "required": [ "code", "keywords" ]
           }
-        }
+        },
+        "reply_to_unsupported_language": { "type": "boolean" }
       },
       "additionalProperties": false,
       "required": [ "explanation", "languages" ]

@@ -91,7 +91,7 @@ RSpec.describe Behaviour, type: :model do
     it "generates manifest fragment" do
       fragment = detector.manifest_fragment
       expect(fragment).to_not be_nil
-      expect(fragment.keys).to match_array(%i(type explanation languages))
+      expect(fragment.keys).to match_array(%i(type explanation reply_to_unsupported_language languages))
     end
 
     it "has no translation keys" do
