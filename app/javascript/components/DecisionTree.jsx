@@ -221,12 +221,15 @@ class TreeNode extends Component {
             ))
           }
         </ul>
-        <Button
-          className="addlink"
-          iconChildren="add"
-          onClick={addOption}>
-          Add option
-        </Button>
+        <div className="option-toolbar">
+          <Button
+            flat
+            className="addlink"
+            iconChildren="add"
+            onClick={addOption}>
+            Add option
+          </Button>
+        </div>
       </Paper>
     )
   }

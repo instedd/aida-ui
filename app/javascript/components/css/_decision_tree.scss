@@ -10,13 +10,10 @@
 
     ul {
       list-style-type: none;
-      overflow: auto;
       margin: 15px 0 0;
       padding: 0 0 15px;
-      white-space: nowrap;
 
       li {
-        // float: left;
         margin: 0px 10px;
         display: inline-block;
       }
@@ -30,10 +27,15 @@
       }
     }
 
-    .addlink .md-icon-text,
-    .addlink .md-icon {
-      color: $md-secondary-color;
-      font-weight: normal;
+    .option-toolbar{
+      text-align: right;
+
+      .addlink .md-icon-text,
+      .addlink .md-icon {
+        color: $md-secondary-color;
+        font-weight: normal;
+        text-transform: none;
+      }
     }
 
     .addlink:hover {
@@ -44,6 +46,7 @@
       border: 1px solid $md-grey-300;
       border-radius: 35px;
       padding: 0px 8px 3px 15px;
+      margin: 3px 0;
 
       .tree-node-option-value {
         display: inline-block;
