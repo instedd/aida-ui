@@ -221,16 +221,17 @@ class InactivityMessages extends Component {
   render() {
     const { messages, onAdd, onChange, onRemove } = this.props
 
-    // duplicated in behaviour.rb
-    const delayOptions = [
-      {value: 60, label: '1 hour'},
-      {value: 1440, label: '1 day'},
-      {value: 10080, label: '1 week'},
-      {value: 40320, label: '1 month'}, // 28 days month so we end up in the same day of week
+    // keep in sync with behaviour.rb
+    const delayUnits = [
+      {value: 'minute', label: 'Minute', plural: 'Minutes'},
+      {value: 'hour',   label: 'Hour',   plural: 'Hours'},
+      {value: 'day',    label: 'Day',    plural: 'Days'},
+      {value: 'week',   label: 'Week',   plural: 'Weeks'},
+      {value: 'month',  label: 'Month',  plural: 'Months'}
     ]
 
     const addMessage = () => {
-      onAdd({id: uuidv4(), delay: 60, message: ''})
+      onAdd({id: uuidv4(), delay: 1, delay_unit: 'hour', message: ''})
     }
 
     const canRemoveItem = () => true
@@ -239,12 +240,23 @@ class InactivityMessages extends Component {
     }
 
     const renderDelay = (item, index) => {
-      return (<SelectField id={`schedule-delay-#{index}`}
-                           menuItems={delayOptions}
-                           value={item.delay}
-                           onChange={value => onChange(index, 'delay', value)}
-                           stripActiveItem={false}
-                           fullWidth={false} />)
+      return (<span style={{whiteSpace: 'nowrap'}}>
+        <TextField id={`schedule-delay-#{index}`}
+                   value={item.delay}
+                   type="number"
+                   min={1}
+                   fullWidth={false}
+                   style={{width: "2em", marginRight: "0.5em"}}
+                   onChange={value => onChange(index, 'delay', parseInt(value))} />
+        <SelectField id={`schedule-delay-unit-#{index}`}
+                     menuItems={delayUnits}
+                     itemLabel={item.delay == 1 ? 'label' : 'plural'}
+                     value={item.delay_unit}
+                     onChange={value => onChange(index, 'delay_unit', value)}
+                     style={{width: "5em"}}
+                     stripActiveItem={false}
+                     fullWidth={false} />
+      </span>)
     }
     const renderMessage = (item, index) => {
       return (<Field id={`schedule-message-#{index}`}

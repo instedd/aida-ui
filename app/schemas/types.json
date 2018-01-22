@@ -123,10 +123,11 @@
                 "properties": {
                   "id": { "type": "string" },
                   "delay": { "type": "number" },
+                  "delay_unit": { "enum": ["minute", "hour", "day", "week", "month"] },
                   "message": { "$ref": "#/definitions/message" }
                 },
                 "additionalProperties": false,
-                "required": [ "id", "delay", "message" ]
+                "required": [ "id", "delay", "delay_unit", "message" ]
               }
             }
           },
