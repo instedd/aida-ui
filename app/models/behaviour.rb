@@ -230,7 +230,9 @@ class Behaviour < ApplicationRecord
         id: id.to_s,
         name: name,
         explanation: localized_value(:explanation),
-        clarification: localized_value(:clarification)
+        clarification: localized_value(:clarification),
+        # keywords: localized_value(:keywords),
+        tree: build_manifest_tree(config["tree"]["nodes"], config["tree"]["initial"])
       }.tap do |manifest_fragment|
         manifest_fragment[:relevant] = config["relevant"] if config["relevant"].present?
       end
@@ -313,7 +315,7 @@ class Behaviour < ApplicationRecord
       [
         translation_key("explanation",   "Skill explanation"),
         translation_key("clarification", "Clarification message"),
-        build_array_from_tree(config["tree"]['nodes'], config["tree"]['initial'], 1)
+        build_array_from_tree(config["tree"]["nodes"], config["tree"]["initial"], 1)
       ].flatten
     else
       raise NotImplementedError
@@ -338,6 +340,20 @@ class Behaviour < ApplicationRecord
     end
 
     return translations
+  end
+
+  def build_manifest_tree(nodes, uuid)
+    {
+      uuid: uuid,
+      question: localized_value("tree/nodes/#{uuid}/message"),
+      responses: nodes[uuid]['options'].map do |option|
+        next_uuid = option['next']
+        {
+          keywords: localized_value("tree/nodes/#{uuid}/options/[next=#{next_uuid}]/label"),
+          next: build_manifest_tree(nodes, next_uuid)
+        }
+      end
+    }
   end
 
   def get_in_config(key)
