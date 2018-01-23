@@ -71,6 +71,25 @@ export type ScheduledMessagesConfig = {
     schedule: string;
     message: Message;
   }>;
+} | {
+  relevant?: string;
+  schedule_type: "recurrent";
+  messages: Array<{
+    id: string;
+    recurrence: {
+      type: "daily";
+      every: number;
+    } | {
+      type: "weekly";
+      every: number;
+      on: Array<"monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday" | "sunday">;
+    } | {
+      type: "monthly";
+      every: number;
+      each: number;
+    };
+    message: Message;
+  }>;
 };
 
 export type Message = string;
