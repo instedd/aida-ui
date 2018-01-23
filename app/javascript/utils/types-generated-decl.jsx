@@ -61,6 +61,7 @@ export type ScheduledMessagesConfig = {
   messages: Array<{
     id: string;
     delay: number;
+    delay_unit: "minute" | "hour" | "day" | "week" | "month";
     message: Message;
   }>;
 } | {
@@ -74,19 +75,23 @@ export type ScheduledMessagesConfig = {
 } | {
   relevant?: string;
   schedule_type: "recurrent";
+  start_date: string;
   messages: Array<{
     id: string;
     recurrence: {
       type: "daily";
       every: number;
+      at: string;
     } | {
       type: "weekly";
       every: number;
       on: Array<"monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday" | "sunday">;
+      at: string;
     } | {
       type: "monthly";
       every: number;
       each: number;
+      at: string;
     };
     message: Message;
   }>;

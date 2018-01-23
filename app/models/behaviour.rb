@@ -14,11 +14,13 @@ class Behaviour < ApplicationRecord
   scope :enabled, ->{ where(enabled: true) }
 
   # duplicated in ScheduledMessages.jsx
-  DELAY_OPTIONS = {
-    60 => '1 hour',
-    1440 => '1 day',
-    10080 => '1 week',
-    40320 => '1 month', # 28 days month so we end up in the same day of week
+  # manifest expects delays in minutes
+  DELAY_UNITS = {
+    'minute' => 1,
+    'hour'   => 60,
+    'day'    => 1440,
+    'week'   => 10080,
+    'month'  => 40320 # 28 days month so we end up in the same day of week
   }
 
   def self.create_front_desk!(params = {})
@@ -166,7 +168,7 @@ class Behaviour < ApplicationRecord
           case config["schedule_type"]
           when "since_last_incoming_message"
             {
-              delay: message["delay"],
+              delay: message["delay"] * DELAY_UNITS[message["delay_unit"]],
               message: localized_value("messages/[id=#{message['id']}]/message")
             }
           when "fixed_time"
@@ -247,7 +249,9 @@ class Behaviour < ApplicationRecord
       case config["schedule_type"]
       when "since_last_incoming_message"
         config["messages"].map.with_index do |message, i|
-          translation_key("messages/[id=#{message['id']}]/message", DELAY_OPTIONS[message['delay']])
+          delay = message['delay']
+          unit = delay == 1 ? message['delay_unit'] : message['delay_unit'].pluralize
+          translation_key("messages/[id=#{message['id']}]/message", "#{delay} #{unit}")
         end
       when "fixed_time"
         config["messages"].map.with_index do |message, i|
