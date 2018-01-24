@@ -11,6 +11,7 @@ import Headline from '../ui/Headline'
 
 import * as actions from '../actions/bots'
 import * as api from '../utils/api'
+import { absoluteUrl } from '../utils/routes'
 
 class SettingsApiComponent extends Component {
   state = {
@@ -23,14 +24,12 @@ class SettingsApiComponent extends Component {
   }
 
   render() {
-    const baseUrl = window.baseUrl
-
     const { bots } = this.props
     const { token, botId } = this.state
 
     const authHeader = `Authorization: Bearer ${token || "<ACCESS_TOKEN>"}`
     const authQuery = `access_token=${token || "<ACCESS_TOKEN>"}`
-    const botApi = `${baseUrl}api/v1/bots/${botId || "<BOT_ID>"}/`
+    const botApi = absoluteUrl(`/api/v1/bots/${botId || "<BOT_ID>"}/`)
 
     const botOptions = bots ? Object.values(bots).map(b => ({label: b.name, value: b.id})) : []
 
