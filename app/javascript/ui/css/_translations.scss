@@ -67,6 +67,9 @@
   tbody .md-table-row {
     border-bottom: none;
   }
+  thead tr.md-table-row {
+    border-bottom: 1px solid $md-grey-300;
+  }
   th {
     width: 33%;
   }

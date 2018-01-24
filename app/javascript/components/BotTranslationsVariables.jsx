@@ -213,8 +213,7 @@ class BotTranslationsVariables extends Component {
         <DataTable plain id="translations-table">
           <TableHeader>
             <TableRow>
-              <TableColumn />
-              <TableColumn />
+              <TableColumn colSpan={2}/>
               <TableColumn>
                 <SelectField id="first-lang-selector"
                   placeholder="Select language"
