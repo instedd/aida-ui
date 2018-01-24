@@ -4,14 +4,14 @@
     grid-template-columns: auto -webkit-max-content;
     grid-template-columns: auto max-content;
     grid-template-rows: auto;
-    grid-template-areas: "tittle menu";
+    grid-template-areas: "title menu";
 
     h1 {
       margin: 0
     }
 
-    .translations-tittle {
-      grid-area: tittle;
+    .translations-title {
+      grid-area: title;
       padding: 10px 0;
     }
 
