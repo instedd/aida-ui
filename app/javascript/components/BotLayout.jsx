@@ -22,6 +22,7 @@ import BotData from '../components/BotData'
 import BotCollaborators from '../components/BotCollaborators'
 import { hasPermission } from '../utils'
 
+import ChatClient from './ChatClient'
 import ChatWindow from './ChatWindow'
 import * as chatActions from '../actions/chat'
 
@@ -103,10 +104,16 @@ export class BotLayoutComponent extends Component {
       }
     }
 
-    const chatWindow =  (
-      <ChatWindow visible={chatWindowVisible} />
-    )
-
+    const sendChatMessage = (message) => {
+      if (this._chatClient) {
+        this._chatClient.sendMessage(message)
+      }
+    }
+    const newChatSession = () => {
+      if (this._chatClient) {
+        this._chatClient.getNewSession()
+      }
+    }
     if (botsLoaded == true && bot != null) {
       const canAdmin = hasPermission(bot, 'can_admin')
       const canPublish = hasPermission(bot, 'can_publish')
@@ -153,6 +160,16 @@ export class BotLayoutComponent extends Component {
                                ? (<LeaveBotDialog visible={dialogVisible} onHide={hideDialog} onConfirm={leaveBot} />)
                                : (<DeleteBotDialog visible={dialogVisible} onHide={hideDialog} onConfirm={deleteBot} />)
 
+      const viewHasChat = location.pathname.startsWith(r.botTranslations(bot.id)) ||
+                          location.pathname.startsWith(r.botBehaviour(bot.id))
+      const chatWindow = viewHasChat ? (
+        <ChatWindow bot={bot}
+                    visible={chatWindowVisible}
+                    onSendMessage={sendChatMessage}
+                    onNewSession={newChatSession} />
+
+    ) : null
+
       return (
         <AppLayout
           title={canAdmin
@@ -191,8 +208,8 @@ export class BotLayoutComponent extends Component {
                                                                                    hideDialog={hideCollaborators} />} />
           {confirmationDialog}
 
-          <Route path="/b/:id/behaviour" render={() => chatWindow} />
-          <Route path="/b/:id/translations" render={() => chatWindow} />
+          <ChatClient bot={bot} visible={chatWindowVisible} clientRef={client => this._chatClient = client} />
+          {chatWindow}
         </AppLayout>
       )
     } else if (botsLoaded == true && bot == null) {

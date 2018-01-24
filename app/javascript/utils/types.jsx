@@ -116,6 +116,12 @@ export type ChatAction = {
   type: 'NEW_SESSION',
   botId: number,
   sessionId: string,
+} | {
+  type: 'CHAT_CONNECTED',
+  previewUuid: string
+} | {
+  type: 'CHAT_DISCONNECTED',
+  previewUuid: string
 }
 
 export type CollaboratorsAction = {

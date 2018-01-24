@@ -12,6 +12,8 @@ export const SEND_MESSAGE = 'SEND_MESSAGE'
 export const RECEIVE_MESSAGE = 'RECEIVE_MESSAGE'
 export const PAUSE_PREVIEW = 'PAUSE_PREVIEW'
 export const NEW_SESSION = 'NEW_SESSION'
+export const CONNECTED = 'CHAT_CONNECTED'
+export const DISCONNECTED = 'CHAT_DISCONNECTED'
 
 // Action Creator
 let nextMessageId = 1;
@@ -92,4 +94,14 @@ export const newSession = (bot : T.Bot, sessionId: string) : T.ChatAction => ({
   type: NEW_SESSION,
   botId: bot.id,
   sessionId,
+})
+
+export const chatConnected = (previewUuid : string) => ({
+  type: CONNECTED,
+  previewUuid
+})
+
+export const chatDisconnected = (previewUuid : string) => ({
+  type: DISCONNECTED,
+  previewUuid
 })
