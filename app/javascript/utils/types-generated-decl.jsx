@@ -97,6 +97,29 @@ export type ScheduledMessagesConfig = {
   }>;
 };
 
+export type TreeNode = {
+  id: string;
+  message: Message;
+  options: Array<{
+    label: KeywordList;
+    next: string;
+  }>;
+};
+
+export type TreeNodesDict = { [key: string]: TreeNode;
+};
+
+export type DecisionTreeConfig = {
+  relevant: string;
+  explanation: Message;
+  clarification: Message;
+  keywords: Message;
+  tree: {
+    initial: string;
+    nodes: TreeNodesDict;
+  };
+};
+
 export type Message = string;
 
 export type KeywordList = string;
@@ -171,6 +194,13 @@ export type Skill = {
   enabled: boolean;
   order: number;
   config: ScheduledMessagesConfig;
+} | {
+  id: number;
+  kind: "decision_tree";
+  name: string;
+  enabled: boolean;
+  order: number;
+  config: DecisionTreeConfig;
 };
 
 export type BotStats = {

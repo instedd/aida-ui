@@ -58,7 +58,8 @@ class DecisionTreeComponent extends Component {
     super(props)
     this.state = {
       path: this._buildDefaultPath(props.tree.nodes, props.tree.initial),
-      editingOptionTo: null
+      triggerFocusOnOptionToNode: null // Node (uuid) pointed by the new added
+                                       // option, so it can be focused.
     }
   }
 
@@ -74,7 +75,6 @@ class DecisionTreeComponent extends Component {
   }
 
   _deleteOption(nodes, node, optionIx) {
-
     //remove option
     nodes = {
       ...nodes,
@@ -99,19 +99,20 @@ class DecisionTreeComponent extends Component {
     const nextId = node.options[optionIx].next
     removeNode(nextId)
 
-    this.setState({
-      path: this._buildDefaultPath(nodes, this.state.path[0])
-    })
+    // remove node from path (if the node is selected)
+    const pathIx = this.state.path.findIndex((pathId) => pathId == nextId)
+    if (pathIx >= 0) {
+      // select the next option to the right
+      const optionNextIx = Math.min(nodes[node.id].options.length - 1, optionIx)
+      this.setState({
+        path: [
+          ...this.state.path.slice(0, pathIx),
+          ...this._buildDefaultPath(nodes, nodes[node.id].options[optionNextIx].next)
+        ]
+      })
+    }
 
     return nodes
-  }
-
-  _deleteNode(nodes, id) {
-    const node = nodes[id]
-
-    node.options.forEach((option, ix) => {
-      this._deleteOption(nodes, node, ix)
-    })
   }
 
   render() {
@@ -131,7 +132,7 @@ class DecisionTreeComponent extends Component {
               key={`tree-node-${currentId}`}
               node={currentNode}
               nextNodeId={this.state.path[pathIx+1]}
-              editingOptionTo={this.state.editingOptionTo}
+              triggerFocusOnOptionToNode={this.state.triggerFocusOnOptionToNode}
               updateMessage={(value) => {
                 onChange({ initial, nodes: {
                   ...nodes,
@@ -160,7 +161,7 @@ class DecisionTreeComponent extends Component {
                     ...this.state.path.slice(0, pathIx + 1),
                     id
                   ],
-                  editingOptionTo: id
+                  triggerFocusOnOptionToNode: id
                 })
               }}
               updateOption={(ix, value) => {
@@ -190,7 +191,7 @@ class DecisionTreeComponent extends Component {
               focusedOption={(ix) => {
                 this.setState({
                   ...this.state,
-                  editingOptionTo: null
+                  triggerFocusOnOptionToNode: null
                 })
               }}
             />
@@ -204,7 +205,7 @@ class DecisionTreeComponent extends Component {
 class TreeNode extends Component {
 
   render() {
-    const { node, nextNodeId, editingOptionTo, updateMessage,
+    const { node, nextNodeId, triggerFocusOnOptionToNode, updateMessage,
       addOption, updateOption, selectOption, deleteOption, focusedOption } = this.props
 
     return (
@@ -217,14 +218,14 @@ class TreeNode extends Component {
           placeholder="Message"
           value={node.message}
           onChange={updateMessage} />
-        <ul className="invisible-scrollbar">
+        <ul>
           {
             node.options.map((option, ix) => (
               <li key={ix}>
                 <TreeNodeOption
                   id={ix}
                   selected={nextNodeId == option.next}
-                  focused={editingOptionTo == option.next}
+                  focused={triggerFocusOnOptionToNode == option.next}
                   option={option}
                   onChange={(value) => updateOption(ix, value)}
                   onSelect={() => selectOption(ix)}
