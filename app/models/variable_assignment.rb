@@ -58,10 +58,10 @@ class VariableAssignment < ApplicationRecord
   end
 
   def non_zero_condition_order
-    if condition.present?
-      errors.add(:condition_order, "condition_order greater than zero if condition") unless condition_order > 0
-    else
+    if condition.nil?
       errors.add(:condition_order, "condition_order must be zero if no condition") unless condition_order == 0
+    else
+      errors.add(:condition_order, "condition_order greater than zero if condition") unless condition_order > 0
     end
   end
 end
