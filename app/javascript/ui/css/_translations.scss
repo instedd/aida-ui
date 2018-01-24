@@ -37,32 +37,6 @@
   }
 }
 
-.row-variable-condition {
-  &:hover {
-    .btn-remove-variable {
-      visibility: visible;
-    }
-  }
-  &:hover {
-    .btn-remove-condition {
-      visibility: visible;
-    }
-  }
-  .condition-name-column {
-    padding-left: 25px;
-  }
-}
-
-.btn-remove-variable, .btn-remove-condition {
-  visibility: hidden;
-}
-
-.btn-add-variable {
-  color:$md-cyan-500;
-  font-size: 16px;
-  text-transform: none;
-}
-
 #translations-table {
   tbody .md-table-row {
     border-bottom: none;
@@ -86,3 +60,51 @@
   color: $md-grey-500;
 }
 
+#variables-table {
+  @extend #translations-table;
+  th {
+    width: 30%;
+  }
+
+  .row-variable-condition-header {
+    width: 40%;
+  }
+
+  .row-variable, .row-condition {
+    height: 64px;
+  }
+  .row-variable {
+    &:hover {
+      .btn-remove-variable {
+        visibility: visible;
+      }
+    }
+  }
+  .row-condition {
+    &:hover {
+      .btn-remove-condition {
+        visibility: visible;
+      }
+    }
+    .condition-name-column {
+      padding-left: 50px !important;
+    }
+  }
+}
+
+.variable-buttons {
+  display: flex;
+  align-items: flex-end;
+  padding: 0 !important;
+  float: right;
+  .btn-remove-variable, .btn-remove-condition {
+    visibility: hidden;
+  }
+}
+
+.btn-add-variable {
+  color:$md-cyan-500;
+  font-size: 16px;
+  text-transform: none;
+  margin-top: 20px;
+}
