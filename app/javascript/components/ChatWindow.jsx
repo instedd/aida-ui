@@ -1,20 +1,18 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import {  Card,
-          CardTitle,
-          CardText,
-          TextField,
-          Button,
-          FontIcon,
-          Paper } from 'react-md'
+import { Card,
+         CardTitle,
+         CardText,
+         TextField,
+         Button,
+         FontIcon,
+         Paper } from 'react-md'
 import moment from 'moment'
-import * as actions from '../actions/chat'
-import * as notificationsActions from '../actions/notifications'
 import { Loader } from '../ui/Loader'
-import socket from '../utils/socket'
 
-let ChatHeader = ({title, publishing}) => (
+let ChatHeader = ({ title, publishing }) => (
   <div className="chat-window-header">
     <h2 className="bot-name">
       {title}
@@ -28,9 +26,7 @@ let ChatHeader = ({title, publishing}) => (
   </div>
 )
 
-const MessageBulk = ({
-  messages
-}) => {
+const MessageBulk = ({ messages }) => {
   const sentMessages = messages[0].sent
   return (
     <Paper
@@ -67,7 +63,6 @@ class MessageList extends Component {
   }
 
   render() {
-
     const groupBy = (elems, func) => {
       const lastElem = (collection) => (collection[collection.length - 1])
 
@@ -108,15 +103,24 @@ class InputMessage extends Component {
     messageText: ""
   }
 
+  focus() {
+    setTimeout(() => {
+      if (this._textfield) {
+        this._textfield.focus()
+      }
+    }, 0)
+  }
+
   render() {
-    const { onSend, disabled, newSession, inputRef } = this.props
+    const { onSend, disabled, newSession } = this.props
 
     const sendMessageAndClearInput = () => {
-      const text = _textfield.value.trim()
+      const text = this._textfield.value.trim()
       if (text != "") {
         onSend(text)
         this.setState({ messageText: "" })
       }
+      this.focus()
     }
 
     const sendMessageIfEnterPressed = (ev) => {
@@ -126,7 +130,6 @@ class InputMessage extends Component {
       }
     }
 
-    let _textfield;
     return (
       <div className="chat-window-input">
         <div className="chat-input">
@@ -134,20 +137,21 @@ class InputMessage extends Component {
             id="chat-input"
             placeholder="Write your message here"
             value={this.state.messageText}
-            onChange={(text) => this.setState({messageText: text})}
-            onKeyPress={(ev) => (sendMessageIfEnterPressed(ev)) }
-            ref={node => { _textfield = node; inputRef(node) }} disabled={disabled} />
+            onChange={messageText => this.setState({ messageText })}
+            onKeyPress={sendMessageIfEnterPressed}
+            ref={node => { this._textfield = node }}
+            disabled={disabled} />
         </div>
         <div className="chat-button">
           <Button
             icon
-            onClick={() => sendMessageAndClearInput()}
+            onClick={sendMessageAndClearInput}
             disabled={disabled}>
             send
           </Button>
           <Button
             icon
-            onClick={() => { newSession(); _textfield.focus() }}
+            onClick={() => { newSession(); this.focus() }}
             disabled={disabled}>
             replay
           </Button>
@@ -157,96 +161,82 @@ class InputMessage extends Component {
   }
 }
 
-const ChatWindowComponent = ({sendMessage, newSession, bot, messages, publishing, disabled, inputRef}) => (
+const ChatWindowComponent = ({ sendMessage, newSession, bot, messages, publishing, disabled, inputRef }) => (
   <Paper
     zDepth={5}
     className={"chat-window"}>
       <ChatHeader
-        title={bot.name} publishing={publishing}/>
+        title={bot.name} publishing={publishing} />
       <MessageList
-        messages={messages}  />
+        messages={messages} />
       <InputMessage
-        onSend={(text) => sendMessage(text)} newSession={newSession} disabled={disabled} inputRef={inputRef} />
+        onSend={sendMessage} newSession={newSession} disabled={disabled} ref={inputRef}/>
   </Paper>
 )
 
 class ChatWindow extends Component {
-  state = {
-    channel: null,
-    previewUuid: null,
+  static propTypes = {
+    bot: PropTypes.object.isRequired,
+    messages: PropTypes.array.isRequired,
+    publishing: PropTypes.bool,
+    connected: PropTypes.bool,
+    visible: PropTypes.bool,
+    sessionId: PropTypes.string,
+    onSendMessage: PropTypes.func.isRequired,
+    onNewSession: PropTypes.func.isRequired
   }
 
-  componentWillMount() {
-    if (this.props.visible == true && this.props.previewUuid != null) {
-      this.join(this.props.previewUuid, this.props.accessToken, this.props.sessionId == null)
+  constructor(props) {
+    super(props)
+    this._wantsFocus = props.visible
+  }
+
+  componentDidMount() {
+    const { connected, sessionId, onNewSession } = this.props
+    if (connected) {
+      if (!sessionId) {
+        onNewSession()
+      } else if (!publishing && this._wantsFocus) {
+        this.focus()
+      }
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.publishing == false && nextProps.previewUuid != null &&
-        this.state.previewUuid != nextProps.previewUuid) {
-      this.join(nextProps.previewUuid, nextProps.accessToken, nextProps.sessionId == null)
+    const { connected, sessionId, onNewSession } = nextProps
+    if (!this.props.visible && nextProps.visible) {
+      this._wantsFocus = true
+    }
+    if (connected) {
+      if (!sessionId) {
+        onNewSession()
+      } else {
+        if (!nextProps.publishing && this._wantsFocus && nextProps.visible) {
+          this.focus()
+        }
+      }
     }
   }
 
-  join(previewUuid, accessToken, startSession) {
-    let { channel } = this.state
-    if (channel) { channel.leave() }
-    this.setState({ previewUuid }, () => {
-      channel = socket.channel(`bot:${previewUuid}`, {"access_token": accessToken})
-
-      channel.join()
-        .receive('ok', resp => {
-          this.setState({ channel: channel, previewUuid: previewUuid}, () => {
-            if (startSession) {
-              this.getNewSession()
-            }
-          })
-        })
-        .receive('error', resp => {
-          this.props.notificationsActions.pushNotification("Unable to join preview channel")
-          this.setState({ channel: null, previewUuid: null })
-        })
-
-      channel.on('btu_msg', payload => {
-        if (payload.session == this.props.sessionId) {
-          this.props.actions.receiveMessage(payload.text)
-        }
-      })
-    })
-  }
-
-  getNewSession() {
-    const { channel } = this.state
-
-    channel
-      .push('new_session', {data: {first_name: 'John', last_name: 'Doe', gender: 'male'}})
-      .receive('ok', resp => {
-        this.props.actions.newSession(this.props.bot, resp.session)
-        this.input.focus()
-      })
-      .receive('error', resp => {
-        this.props.notificationsActions.pushNotification("Unable to start session")
-      })
-  }
-
-  sendMessage(text) {
-    const {actions, sessionId} = this.props
-    const {channel} = this.state
-    actions.sendMessage(text)
-    channel.push('utb_msg', {session: sessionId, text: text})
+  focus() {
+    if (this._input) {
+      this._input.focus()
+      this._wantsFocus = false
+    }
   }
 
   render() {
-    const {actions, bot, messages, publishing, visible, sessionId} = this.props
+    const { bot, messages, connected, publishing, visible, sessionId, onSendMessage, onNewSession } = this.props
 
     if (visible) {
       return (
-        <ChatWindowComponent bot={bot} messages={messages}
-        sendMessage={(text) => this.sendMessage(text)}
-        newSession={() => this.getNewSession()}
-        publishing={publishing} disabled={publishing || sessionId == null}
-        inputRef={(node) => this.input = node} />
+        <ChatWindowComponent bot={bot}
+                             messages={messages}
+                             sendMessage={onSendMessage}
+                             newSession={onNewSession}
+                             publishing={publishing}
+                             inputRef={input => this._input = input}
+                             disabled={!connected || publishing || sessionId == null} />
       )
     } else {
       return null
@@ -254,23 +244,14 @@ class ChatWindow extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  let props = {
-    messages: state.chat.messages,
-    previewUuid: state.chat.previewUuid,
-    accessToken: state.chat.accessToken,
-    publishing: state.chat.publishing,
-    sessionId: state.chat.sessionId,
-  }
-
-  if (state.chat.scope) {
-    props.bot = state.bots.items[state.chat.scope.botId] || null
-  }
-
-  return props
-}
-const mapDispatchToProps = (dispatch) => ({
-  actions: bindActionCreators(actions, dispatch),
-  notificationsActions: bindActionCreators(notificationsActions, dispatch)
+const mapStateToProps = (state) => ({
+  messages: state.chat.messages,
+  publishing: state.chat.publishing,
+  sessionId: state.chat.sessionId,
+  connected: state.chat.connected
 })
+
+const mapDispatchToProps = (dispatch) => ({
+})
+
 export default connect(mapStateToProps, mapDispatchToProps)(ChatWindow)

@@ -9,6 +9,7 @@ const initialState = {
   previewUuid: null,
   accessToken: "",
   publishing: false,
+  connected: false,
   previewPaused: false,
   sessionId: null,
 }
@@ -22,6 +23,8 @@ export default (state : T.ChatState, action : T.ChatAction) : T.ChatState => {
     case actions.RECEIVE_MESSAGE: return receiveMessage(state, action)
     case actions.PAUSE_PREVIEW: return pausePreview(state, action)
     case actions.NEW_SESSION: return newSession(state, action)
+    case actions.CONNECTED: return chatConnected(state, action)
+    case actions.DISCONNECTED: return chatDisconnected(state, action)
     default:
       return state;
   }
@@ -38,6 +41,7 @@ const startPreview = (state, action) => {
       pausePreview: false,
       previewUuid,
       accessToken,
+      connected: false,
       sessionId: null,
     }
   } else {
@@ -104,6 +108,28 @@ const addMessage = (state, action) => {
       ...state.messages,
       createMessageWith(action),
     ]
+  }
+}
+
+const chatConnected = (state, action) => {
+  if (action.previewUuid == state.previewUuid) {
+    return {
+      ...state,
+      connected: true
+    }
+  } else {
+    return state
+  }
+}
+
+const chatDisconnected = (state, action) => {
+  if (action.previewUuid == state.previewUuid) {
+    return {
+      ...state,
+      connected: false
+    }
+  } else {
+    return state
   }
 }
 
