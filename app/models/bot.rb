@@ -4,6 +4,7 @@ class Bot < ApplicationRecord
   has_many :behaviours, dependent: :destroy
   has_many :translations, through: :behaviours
   has_many :variable_assignments, dependent: :destroy
+  has_many :data_tables, dependent: :destroy
   has_many :collaborators, dependent: :destroy
   has_many :invitations, dependent: :destroy
   has_many :collaborating_users, through: :collaborators, source: :user
