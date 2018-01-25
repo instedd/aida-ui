@@ -23,11 +23,11 @@ RSpec.describe VariableAssignment, type: :model do
 
   it "can create variable without condition" do
     create!(variable_name: "foo", condition: nil)
-    create!(variable_name: "foo", condition: "")
   end
 
   it "can create variable with condition" do
     create!(variable_name: "foo", condition: "${age} > 18", condition_order: 1)
+    create!(variable_name: "foo", condition: "", condition_order: 2)
   end
 
   it "can create multiple conditions and translations" do
@@ -43,12 +43,12 @@ RSpec.describe VariableAssignment, type: :model do
 
   it "order should be 0 if condition is empty" do
     create!(condition_order: 0)
-    create!(condition_order: 0, condition: "")
+    create!(condition_order: 1, condition: "")
     create!(condition_order: 1, condition: "${ans} = 42")
 
 
     expect { create!(condition_order: 0, condition: "${ans} = 42") }.to raise_exception(ActiveRecord::RecordInvalid)
     expect { create!(condition_order: 1) }.to raise_exception(ActiveRecord::RecordInvalid)
-    expect { create!(condition_order: 1, condition: "") }.to raise_exception(ActiveRecord::RecordInvalid)
+    expect { create!(condition_order: 0, condition: "") }.to raise_exception(ActiveRecord::RecordInvalid)
   end
 end
