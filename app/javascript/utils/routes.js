@@ -21,3 +21,14 @@ export const botTranslationsContent = (botId) => `/b/${botId}/translations/conte
 export const botTranslationsVariables = (botId) => `/b/${botId}/translations/variables`
 
 export const botCollaborators = (botId) => `/b/${botId}/collaborators`
+
+export const absoluteUrl = (path) => {
+  let baseUrl = window.baseUrl
+  if (baseUrl.endsWith('/')) {
+    baseUrl = baseUrl.slice(0, baseUrl.length - 1)
+  }
+  if (!path.startsWith('/')) {
+    throw new Error('path argument must start with /')
+  }
+  return `${baseUrl}${path}`
+}

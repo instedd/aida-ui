@@ -19,6 +19,7 @@ import EmptyContent from '../ui/EmptyContent'
 
 import * as actions from '../actions/collaborators'
 import * as invitationsActions from '../actions/invitations'
+import { absoluteUrl } from '../utils/routes'
 import { generateToken, hasPermission } from '../utils'
 import ContentDenied from './ContentDenied'
 
@@ -336,7 +337,7 @@ class BotCollaborators extends Component {
                                         onCancel={hideDialog}
                                         onInvite={inviteCollaborator}
                                         onCreateLink={createInvitationLink}
-                                        invitationLinkPrefix={window.baseUrl + 'invitation/'} />)
+                                        invitationLinkPrefix={absoluteUrl('/invitation/')} />)
 
     if (items.length == 0) {
       return (
