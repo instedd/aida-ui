@@ -17,12 +17,14 @@
 
     .translations-menu {
       grid-area: menu;
+      margin-bottom: 40px;
 
       a, button {
         color: $md-grey-500;
         font-size: 18px;
         font-weight: normal;
         padding: 25px 20px;
+        margin-left: 20px;
         text-transform: none;
 
         &[disabled] {
