@@ -27,8 +27,10 @@ main {
 
 footer {
   grid-area: footer;
+  background: $md-grey-200;
   color: $md-grey-500;
   padding: 17px 20px;
+  border-top: 1px solid $md-grey-300;
 }
 
 .date-time-picker {
