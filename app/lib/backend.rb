@@ -42,6 +42,14 @@ class Backend
       handle_response { get("/api/bots/#{uuid}/stats/users_per_skill", query: query) }
     end
 
+    def sessions(uuid)
+      handle_response { get("/api/bots/#{uuid}/sessions") }
+    end
+
+    def sessions_log(uuid, session_id)
+      handle_response { get("/api/bots/#{uuid}/sessions/#{session_id}/log") }
+    end
+
     private
 
     def handle_response(&block)

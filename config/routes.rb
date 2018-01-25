@@ -26,6 +26,11 @@ Rails.application.routes.draw do
           delete :variable, to: 'translations#destroy_variable'
         end
       end
+      resources :sessions, only: [:index] do
+        member do
+          get :log
+        end
+      end
     end
 
     resources :channels, only: [:update]
