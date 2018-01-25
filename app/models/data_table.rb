@@ -5,6 +5,14 @@ class DataTable < ApplicationRecord
   validates_uniqueness_of :name, scope: :bot_id
   validate :shape_of_data
 
+  def columns
+    if data.nil?
+      []
+    else
+      data.first
+    end
+  end
+
   private
 
   def shape_of_data

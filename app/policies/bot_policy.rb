@@ -77,6 +77,14 @@ class BotPolicy < ApplicationPolicy
     manages_variables?
   end
 
+  def read_data_tables?
+    manages_variables?
+  end
+
+  def create_data_table?
+    manages_variables?
+  end
+
   def read_collaborators?
     can_admin?
   end

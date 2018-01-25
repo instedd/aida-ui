@@ -297,3 +297,11 @@ export type InvitationData = {
   roles: RoleList;
 };
 
+export type DataTable = {
+  id: number;
+  name: string;
+  columns: Array<string>;
+  updated_at: string;
+  data: null | Array<any>;
+};
+

@@ -32,10 +32,18 @@ Rails.application.routes.draw do
           post :send_message
         end
       end
+
+      resources :data_tables, only: [:index, :create]
     end
 
     resources :channels, only: [:update]
     resources :skills, only: [:update, :destroy]
+    resources :data_tables, only: [:show, :update, :destroy] do
+      collection do
+        post :parse
+      end
+    end
+
     resources :collaborators, only: [:update, :destroy]
     resources :invitations, only: [:destroy] do
       member do

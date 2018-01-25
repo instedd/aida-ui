@@ -642,6 +642,23 @@
         "roles": { "$ref": "#/definitions/role_list" }
       },
       "required": [ "bot_name", "inviter", "roles" ]
+    },
+
+    "data_table": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "name": { "type": "string" },
+        "columns": { "type": "array", "items": { "type": "string" }},
+        "updated_at": { "type": "string" },
+        "data": {
+          "oneOf": [
+            { "type": "null" },
+            { "type": "array", "items": "array" }
+          ]
+        }
+      },
+      "required": [ "id", "name", "columns", "updated_at", "data" ]
     }
   },
 
