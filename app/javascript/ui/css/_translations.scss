@@ -4,25 +4,27 @@
     grid-template-columns: auto -webkit-max-content;
     grid-template-columns: auto max-content;
     grid-template-rows: auto;
-    grid-template-areas: "tittle menu";
+    grid-template-areas: "title menu";
 
     h1 {
       margin: 0
     }
 
-    .translations-tittle {
-      grid-area: tittle;
+    .translations-title {
+      grid-area: title;
       padding: 10px 0;
     }
 
     .translations-menu {
       grid-area: menu;
+      margin-bottom: 40px;
 
       a, button {
         color: $md-grey-500;
         font-size: 18px;
         font-weight: normal;
         padding: 25px 20px;
+        margin-left: 20px;
         text-transform: none;
 
         &[disabled] {
@@ -37,28 +39,75 @@
   }
 }
 
-.row-variable-condition {
-  &:hover {
-    .btn-remove-variable {
-      visibility: visible;
-    }
+#translations-table {
+  tbody .md-table-row {
+    border-bottom: none;
   }
-  &:hover {
-    .btn-remove-condition {
-      visibility: visible;
-    }
+  thead tr.md-table-row {
+    border-bottom: 1px solid $md-grey-300;
   }
-  .condition-name-column {
-    padding-left: 25px;
+  th {
+    width: 33%;
+  }
+  .default-lang, .editable-field {
+    padding-left: 24px;
+    min-width: 150px;
   }
 }
 
-.btn-remove-variable, .btn-remove-condition {
-  visibility: hidden;
+.translation-key {
+  padding-left: 2em;
+  display: inline-block;
+}
+.translation-key, .behaviour-label {
+  color: $md-grey-500;
+}
+
+#variables-table {
+  @extend #translations-table;
+  th {
+    width: 30%;
+  }
+
+  .row-variable-condition-header {
+    width: 40%;
+  }
+
+  .row-variable, .row-condition {
+    height: 64px;
+  }
+  .row-variable {
+    &:hover {
+      .btn-remove-variable {
+        visibility: visible;
+      }
+    }
+  }
+  .row-condition {
+    &:hover {
+      .btn-remove-condition {
+        visibility: visible;
+      }
+    }
+    .editable-field.condition-name-column {
+      padding-left: 50px;
+    }
+  }
+}
+
+.variable-buttons {
+  display: flex;
+  align-items: flex-end;
+  padding: 0 !important;
+  float: right;
+  .btn-remove-variable, .btn-remove-condition {
+    visibility: hidden;
+  }
 }
 
 .btn-add-variable {
   color:$md-cyan-500;
   font-size: 16px;
   text-transform: none;
+  margin-top: 20px;
 }

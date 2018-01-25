@@ -27,8 +27,8 @@ import BotTranslationsMenu from './BotTranslationsMenu'
 const renderRows = ({ variables, firstLang, secondLang, defaultLang, onChange, onRemove, onAddCondition }) => {
   return flatten(map(variables, (variable) => {
     const variableRow = (
-      <TableRow key={`variable-${variable.id}`} className="row-variable-condition">
-        <TableColumn>
+      <TableRow key={`variable-${variable.id}`} className="row-variable">
+        <TableColumn className="variable-buttons">
           <Button
             icon
             className="btn-remove-variable"
@@ -83,8 +83,8 @@ const renderRows = ({ variables, firstLang, secondLang, defaultLang, onChange, o
 
     const conditionalRows = map(variable.conditional_values, cv => {
       return (
-        <TableRow key={`condition-${cv.id}`} className="row-variable-condition">
-          <TableColumn>
+        <TableRow key={`condition-${cv.id}`} className="row-condition">
+          <TableColumn className="variable-buttons">
             <Button
               icon
               className="btn-remove-condition"
@@ -205,16 +205,15 @@ class BotTranslationsVariables extends Component {
     return (
       <MainWhite buttons={buttons}>
         <div className="translations-header">
-          <div className="translations-tittle">
+          <div className="translations-title">
             <Title>Translations</Title>
           </div>
           <BotTranslationsMenu bot={bot} />
         </div>
-        <DataTable plain id="translations-table">
+        <DataTable plain id="variables-table" responsive={false} >
           <TableHeader>
             <TableRow>
-              <TableColumn />
-              <TableColumn />
+              <TableColumn colSpan={2} className="row-variable-condition-header" />
               <TableColumn>
                 <SelectField id="first-lang-selector"
                   placeholder="Select language"
