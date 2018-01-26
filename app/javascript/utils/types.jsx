@@ -244,6 +244,22 @@ export type StatsAction = {
   error: string
 };
 
+export type TablesAction = {
+  type: 'TABLES_FETCH',
+  scope: Scope
+} | {
+  type: 'TABLES_FETCH_SUCCESS',
+  scope: Scope,
+  items: ById<T.DataTable>
+} | {
+  type: 'TABLES_FETCH_ERROR',
+  scope: Scope
+} | {
+  type: 'TABLE_UPDATED',
+  table: T.DataTable,
+  botId: number
+};
+
 export type TranslationsAction = {
   type: 'TRANSLATIONS_FETCH',
   scope: Scope,
@@ -300,6 +316,7 @@ export type Action = AuthAction
                    | SkillAction
                    | SkillsAction
                    | StatsAction
+                   | TablesAction
                    | TranslationsAction
                    | VariablesAction
                    | XlsFormsAction;
@@ -363,6 +380,12 @@ export type StatsState = {
   data: ?T.BotStats
 };
 
+export type TablesState = {
+  fetching: boolean,
+  scope: ?Scope,
+  items: ?ById<T.DataTable>
+};
+
 export type TranslationsState = {
   fetching: boolean,
   scope: ?Scope,
@@ -389,6 +412,7 @@ export type State = {
   notifications: NotifState,
   skills: SkillsState,
   stats: StatsState,
+  tables: TablesState,
   translations: TranslationsState,
   xlsForms: XlsFormsState,
 };

@@ -8,6 +8,7 @@ import invitation from './invitation'
 import notifications from './notifications'
 import skills from './skills'
 import stats from './stats'
+import tables from './tables'
 import translations from './translations'
 import xlsForms from './xlsForms'
 import chat from './chat'
@@ -23,6 +24,7 @@ export default combineReducers({
   notifications,
   skills,
   stats,
+  tables,
   translations,
   xlsForms,
 })

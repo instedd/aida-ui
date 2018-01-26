@@ -14,7 +14,10 @@ class Api::DataTablesController < ApplicationApiController
   end
 
   def show
-    # TODO
+    data_table = DataTable.find(params[:id])
+    authorize data_table
+
+    render json: data_table_api_json(data_table, true)
   end
 
   def update

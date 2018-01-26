@@ -7,6 +7,7 @@ const botSchema = new schema.Entity('bots')
 const channelSchema = new schema.Entity('channels')
 const frontDeskSchema = new schema.Entity('front_desks')
 const skillSchema = new schema.Entity('skills')
+const dataTableSchema = new schema.Entity('data_tables')
 
 export const fetchBots = () => {
   return (apiFetchJSON(`bots`, new schema.Array(botSchema)) : Promise<{entities: {bots: T.ById<T.Bot>}}>)
@@ -149,4 +150,12 @@ export const acceptInvitation = (token : string) => {
 
 export const generateToken = () => {
   return apiPutJSON(`generate_token`, null)
+}
+
+export const fetchDataTables = (botId : number) => {
+  return apiFetchJSON(`bots/${botId}/data_tables`, new schema.Array(dataTableSchema))
+}
+
+export const fetchDataTable = (tableId : number) => {
+  return apiFetchJSON(`data_tables/${tableId}`)
 }

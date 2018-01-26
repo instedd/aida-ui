@@ -26,6 +26,15 @@ const BotTranslationsMenu = ({location, bot}) => (
       component={hasPermission(bot, 'manages_variables') ? Link : null}>
       Variables
     </Button>
+    <Button
+      flat
+      iconChildren="view_list"
+      className={location.pathname.startsWith(r.botTables(bot.id)) ? "active" : ""}
+      disabled={!hasPermission(bot, 'manages_variables')}
+      to={r.botTables(bot.id)}
+      component={hasPermission(bot, 'manages_variables') ? Link : null}>
+      Tables
+    </Button>
   </div>
 )
 
