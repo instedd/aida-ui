@@ -30,6 +30,9 @@ class SettingsApiComponent extends Component {
     const authHeader = `Authorization: Bearer ${token || "<ACCESS_TOKEN>"}`
     const authQuery = `access_token=${token || "<ACCESS_TOKEN>"}`
     const botApi = absoluteUrl(`/api/v1/bots/${botId || "<BOT_ID>"}/`)
+    const sessionsApi = "sessions/"
+    const session_id_ex = "3d5303e7-3e10-4b0e-a18b-169193bdbfb7"
+    const sessionLogApi = `${sessionsApi}${session_id_ex}/log`
 
     const botOptions = bots ? Object.values(bots).map(b => ({label: b.name, value: b.id})) : []
 
@@ -65,6 +68,30 @@ class SettingsApiComponent extends Component {
 
               <code>
               $&nbsp;curl&nbsp;{botApi}data.json?{authQuery}
+              </code>
+            </dd>
+          </dl>
+          <dl>
+            <dt>Sessions data</dt>
+            <dd>
+              <code>
+                $&nbsp;curl&nbsp;-H&nbsp;"{authHeader}"&nbsp;{botApi}{sessionsApi}
+              </code>
+
+              <code>
+                $&nbsp;curl&nbsp;{botApi}{sessionsApi}?{authQuery}
+              </code>
+            </dd>
+          </dl>
+          <dl>
+            <dt>Session log (example session id: 3d5303e7-3e10-4b0e-a18b-169193bdbfb7)</dt>
+            <dd>
+              <code>
+                $&nbsp;curl&nbsp;-H&nbsp;"{authHeader}"&nbsp;{botApi}{sessionLogApi}
+              </code>
+
+              <code>
+                $&nbsp;curl&nbsp;{botApi}{sessionLogApi}?{authQuery}
               </code>
             </dd>
           </dl>
