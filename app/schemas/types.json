@@ -256,7 +256,7 @@
         "relevant": { "type": "string" },
         "explanation": { "$ref": "#/definitions/message" },
         "clarification": { "$ref": "#/definitions/message" },
-        "keywords": { "$ref": "#/definitions/message" },
+        "keywords": { "$ref": "#/definitions/keywordList" },
         "tree": {
           "type": "object",
           "properties": {
