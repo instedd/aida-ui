@@ -13,6 +13,7 @@ import KeywordResponder from './KeywordResponder'
 import LanguageDetector from './LanguageDetector'
 import Survey from './Survey'
 import ScheduledMessages from './ScheduledMessages'
+import DecisionTree from './DecisionTree'
 
 const SkillComponent = ({skill, actions}) => {
   const { kind } = skill
@@ -26,6 +27,8 @@ const SkillComponent = ({skill, actions}) => {
       return (<Survey skill={skill} actions={actions} />)
     case 'scheduled_messages':
       return (<ScheduledMessages skill={skill} actions={actions} />)
+    case 'decision_tree':
+      return (<DecisionTree skill={skill} actions={actions} />)
     default:
       return (<Title>{skill.name} #{skill.id}</Title>)
   }

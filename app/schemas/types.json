@@ -222,6 +222,55 @@
       ]
     },
 
+    "tree_node": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "message": { "$ref": "#/definitions/message" },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": { "$ref": "#/definitions/keywordList" },
+              "next": { "type": "string" }
+            },
+            "additionalProperties": false,
+            "required": [ "label", "next" ]
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": [ "id", "message", "options" ]
+    },
+
+    "tree_nodes_dict": {
+      "type": "object",
+      "properties": {},
+      "additionalProperties": { "$ref": "#/definitions/tree_node" }
+    },
+
+    "decisionTreeConfig": {
+      "type": "object",
+      "properties": {
+        "relevant": { "type": "string" },
+        "explanation": { "$ref": "#/definitions/message" },
+        "clarification": { "$ref": "#/definitions/message" },
+        "keywords": { "$ref": "#/definitions/keywordList" },
+        "tree": {
+          "type": "object",
+          "properties": {
+            "initial": { "type": "string" },
+            "nodes": { "$ref": "#/definitions/tree_nodes_dict" }
+          },
+          "additionalProperties": false,
+          "required": [ "initial", "nodes" ]
+        }
+      },
+      "additionalProperties": false,
+      "required": [ "explanation", "clarification", "keywords", "tree"]
+    },
+
     "message": {
       "type": "string"
     },
@@ -363,6 +412,18 @@
             "enabled": { "type": "boolean" },
             "order": { "type": "integer" },
             "config": { "$ref": "#/definitions/scheduledMessagesConfig" }
+          },
+          "required": [ "id", "kind", "name", "enabled", "order", "config" ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer" },
+            "kind": { "enum": [ "decision_tree" ] },
+            "name": { "type": "string" },
+            "enabled": { "type": "boolean" },
+            "order": { "type": "integer" },
+            "config": { "$ref": "#/definitions/decisionTreeConfig" }
           },
           "required": [ "id", "kind", "name", "enabled", "order", "config" ]
         }

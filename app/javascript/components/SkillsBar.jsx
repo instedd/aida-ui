@@ -20,8 +20,8 @@ import { blank } from '../utils/string'
 import * as actions from '../actions/skills'
 import * as skillActions from '../actions/skill'
 
-const SKILL_KINDS = ['language_detector', 'keyword_responder', 'survey', 'scheduled_messages']
-const RENAMEABLE_SKILLS = ['keyword_responder', 'survey', 'scheduled_messages']
+const SKILL_KINDS = ['language_detector', 'keyword_responder', 'survey', 'scheduled_messages', 'decision_tree']
+const RENAMEABLE_SKILLS = ['keyword_responder', 'survey', 'scheduled_messages', 'decision_tree']
 
 const skillIcon = (kind) => {
   switch (kind) {
@@ -35,6 +35,8 @@ const skillIcon = (kind) => {
       return 'assignment_turned_in'
     case 'scheduled_messages':
       return 'query_builder'
+    case 'decision_tree':
+      return 'device_hub'
     case 'ADD':
       return 'add'
   }
@@ -50,6 +52,8 @@ const defaultSkillName = (kind) => {
       return 'Survey'
     case 'scheduled_messages':
       return 'Scheduled messages'
+    case 'decision_tree':
+      return 'Decision tree'
   }
 }
 
@@ -61,6 +65,8 @@ const skillDescription = (kind) => {
       return 'This skill will let you examine users opinions'
     case 'scheduled_messages':
       return 'This skill will let you send messages automatically on a schedule'
+    case 'decision_tree':
+      return 'This skill will guide the user for diagnostic purposes or information access'
     default:
       return ''
   }

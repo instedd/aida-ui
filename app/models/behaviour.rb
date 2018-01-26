@@ -3,7 +3,7 @@ class Behaviour < ApplicationRecord
 
   has_many :translations, dependent: :destroy
 
-  validates :kind, inclusion: { in: %w(front_desk language_detector keyword_responder survey scheduled_messages) }
+  validates :kind, inclusion: { in: %w(front_desk language_detector keyword_responder survey scheduled_messages decision_tree) }
 
   validate :config_must_match_schema
 
@@ -83,6 +83,27 @@ class Behaviour < ApplicationRecord
                            "messages" => []
                          }
                        }
+                     when "decision_tree"
+                        uuid = SecureRandom.uuid
+                        {
+                          kind: "decision_tree",
+                          name: "Decision tree",
+                          config: {
+                            "explanation" => "",
+                            "clarification" => "",
+                            "keywords" => "",
+                            "tree": {
+                              initial: uuid,
+                              nodes: {
+                                uuid => {
+                                  id: uuid,
+                                  message: "",
+                                  options: []
+                                }
+                              }
+                            }
+                          }
+                        }
                      else
                        fail "invalid skill type #{kind}"
                      end
@@ -204,6 +225,20 @@ class Behaviour < ApplicationRecord
       }.tap do |manifest_fragment|
         manifest_fragment[:relevant] = config["relevant"] if config["relevant"].present?
       end
+    when "decision_tree"
+      {
+        type: kind,
+        id: id.to_s,
+        name: name,
+        explanation: localized_value(:explanation),
+        clarification: localized_value(:clarification),
+        keywords: localized_value(:keywords) do |keywords|
+          keywords.split(/,\s*/)
+        end,
+        tree: build_manifest_tree(config["tree"]["nodes"], config["tree"]["initial"])
+      }.tap do |manifest_fragment|
+        manifest_fragment[:relevant] = config["relevant"] if config["relevant"].present?
+      end
     else
       raise NotImplementedError
     end
@@ -279,12 +314,62 @@ class Behaviour < ApplicationRecord
       else
         raise NotImplementedError
       end
+    when "decision_tree"
+      [
+        translation_key("explanation",    "Skill explanation"),
+        translation_key("clarification",  "Clarification message"),
+        translation_key("keywords",       "Valid keywords (comma separated)"),
+        build_array_from_tree(config["tree"]["nodes"], config["tree"]["initial"], 1)
+      ].flatten
     else
       raise NotImplementedError
     end
   end
 
   private
+
+  def build_array_from_tree(nodes, initial_uuid, level)
+    translations = []
+    uuids = [[initial_uuid, level]]
+    until uuids.empty?
+      uuid, level = uuids.shift
+      translations.push(translation_key("tree/nodes/#{uuid}/message", "#{level}#{level.ordinal} Question"))
+      translations.concat(
+        nodes[uuid]['options'].map.with_index do |option, ix|
+          uuids.push([option['next'], level + 1]) unless option['next'].nil?
+          translation_key("tree/nodes/#{uuid}/options/[next=#{option['next']}]/label", "Option")
+        end
+      )
+    end
+
+    return translations
+  end
+
+  def build_manifest_tree(nodes, uuid)
+
+    result = {
+      id: uuid
+    }
+    loc_value = localized_value("tree/nodes/#{uuid}/message")
+
+    options = nodes[uuid]['options']
+    if options.empty?
+      result[:answer] = loc_value
+    else
+      result[:question] = loc_value
+      result[:responses] =  options.map do |option|
+                              next_uuid = option['next']
+                              {
+                                keywords: localized_value("tree/nodes/#{uuid}/options/[next=#{next_uuid}]/label") do |keywords|
+                                  keywords.split(/,\s*/)
+                                end,
+                                next: build_manifest_tree(nodes, next_uuid)
+                              }
+                            end
+    end
+
+    return result
+  end
 
   def get_in_config(key)
     key.to_s.split(/\//).inject(config) do |value, part|
@@ -333,6 +418,8 @@ class Behaviour < ApplicationRecord
       "#/definitions/surveyConfig"
     when "scheduled_messages"
       "#/definitions/scheduledMessagesConfig"
+    when "decision_tree"
+      "#/definitions/decisionTreeConfig"
     else
       fail "config schema not defined"
     end

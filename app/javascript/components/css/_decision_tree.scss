@@ -1,0 +1,67 @@
+.decision-tree-container {
+  margin-top: 3rem;
+
+  .title {
+    margin-bottom: 20px;
+  }
+
+  .tree-node-container {
+    padding: 5px 20px 10px;
+
+    ul {
+      list-style-type: none;
+      margin: 15px 0 0;
+      padding: 0 0 15px;
+
+      li {
+        margin: 0px 10px;
+        display: inline-block;
+      }
+    }
+
+    .tree-node-message {
+      margin: 0px;
+
+      input {
+        font-weight: bold;
+      }
+    }
+
+    .option-toolbar{
+      text-align: right;
+
+      .addlink .md-icon-text,
+      .addlink .md-icon {
+        color: $md-secondary-color;
+        font-weight: normal;
+        text-transform: none;
+      }
+    }
+
+    .addlink:hover {
+      background: transparent;
+    }
+
+    .tree-node-option {
+      border: 1px solid $md-grey-300;
+      border-radius: 35px;
+      padding: 0px 8px 3px 15px;
+      margin: 3px 0;
+
+      .tree-node-option-value {
+        display: inline-block;
+        width: 80%;
+      }
+
+      .md-text-field-container {
+        input {
+          cursor: pointer;
+        }
+      }
+    }
+
+    .tree-node-option.selected {
+      background: $md-grey-300;
+    }
+  }
+}
