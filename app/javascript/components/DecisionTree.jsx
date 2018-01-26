@@ -279,7 +279,7 @@ const TreeNodeOption = ({
               }
             }
           : null}
-        resize={ { min: 50, max: 200 } }
+        resize={ { min: 90, max: 200 } }
       />
       <Button
         icon
