@@ -15,6 +15,13 @@ class Api::SessionsController < ApplicationApiController
     render json: { data: result }
   end
 
+  def send_message
+    authorize @bot, :read_session_data?
+
+    result = Backend.sessions_send_data(@bot.uuid, params[:id], request.request_parameters)
+    render json: { data: result }
+  end
+
   private
 
   def load_bot

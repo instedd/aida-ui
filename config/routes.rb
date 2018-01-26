@@ -29,6 +29,7 @@ Rails.application.routes.draw do
       resources :sessions, only: [:index] do
         member do
           get :log
+          post :send_message
         end
       end
     end
