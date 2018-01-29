@@ -10,6 +10,14 @@ class DataTable < ApplicationRecord
     data.first
   end
 
+  def manifest_fragment
+    {
+      name: name,
+      columns: columns,
+      data: data.drop(1)
+    }
+  end
+
   private
 
   def shape_of_data

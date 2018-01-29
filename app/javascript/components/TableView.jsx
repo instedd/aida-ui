@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import { FontIcon } from 'react-md'
+import { FontIcon, TextField } from 'react-md'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import size from 'lodash/size'
 import map from 'lodash/map'
+import humps from 'humps'
 
 import { Listing, ListingLoading, Column } from '../ui/Listing'
 
@@ -24,7 +25,7 @@ class TableView extends Component {
       return <ListingLoading legend="Loading table..." />
     } else {
       const tableCount = size(items)
-      const title = tableCount == 1 ? "1 table" : `${tableCount} tables`
+      const parentTitle = tableCount == 1 ? "1 table" : `${tableCount} tables`
       const data = table.data ? table.data.slice(1) : []
       const columns = map(table.columns || [], (column, index) => {
         const colTitle = index == 0
@@ -32,16 +33,29 @@ class TableView extends Component {
                        : column
         return (<Column key={index} title={colTitle} render={item => item[index]} />)
       })
+      const keyColumn = humps.camelize(table.columns[0])
+      const lookupColumn = table.columns[1]
+      const sampleUsage = `{{lookup($\{${keyColumn}\}), "${table.name}", "${lookupColumn}"}}`
+      const title = (
+        <div className="data-table-header">
+          <div>
+            <span className="link" onClick={() => history.replace(routes.botTables(bot.id))}>{parentTitle}</span>
+            <FontIcon className="separator">chevron_right</FontIcon>
+            {table.name}
+          </div>
+          <TextField id="table-usage-example"
+                     className="example"
+                     leftIcon={<FontIcon>info</FontIcon>}
+                     value={sampleUsage}
+                     onChange={() => null}
+                     resize={{min:400, max: 500}} />
+        </div>
+      )
+
       return (
         <Listing className="data-table-listing"
                  items={data}
-                 title={
-                   <div>
-                     <span className="link" onClick={() => history.replace(routes.botTables(bot.id))}>{title}</span>
-                     <FontIcon className="separator">chevron_right</FontIcon>
-                     {table.name}
-                   </div>
-                 }>
+                 title={title}>
           {columns}
         </Listing>
       )

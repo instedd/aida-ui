@@ -2,6 +2,7 @@
 import * as T from '../utils/types'
 
 import * as actions from '../actions/tables'
+import mapValues from 'lodash/mapValues'
 
 const initialState = {
   fetching: false,
@@ -41,11 +42,22 @@ const fetch = (state, action) => {
 const fetchSuccess = (state, action) => {
   const {scope, items} = action
   if (state.scope && scope.botId == state.scope.botId) {
+    const loadedItems = state.items || {}
     return {
       ...state,
       fetching: false,
       scope,
-      items,
+      items: mapValues(items, (item, id) => {
+        // retain data for previously loaded tables
+        if (loadedItems[id]) {
+          return {
+            ...item,
+            data: loadedItems[id].data
+          }
+        } else {
+          return item
+        }
+      }),
     }
   } else {
     return state
