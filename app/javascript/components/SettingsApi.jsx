@@ -102,9 +102,8 @@ class SettingsApiComponent extends Component {
               <code>
                 $&nbsp;curl&nbsp;-H&nbsp;"{authHeader}"&nbsp;-d&nbsp;"message=Test message"&nbsp;{botApi}{sessionSendMessageApi}
               </code>
-
               <code>
-                $&nbsp;curl&nbsp;-X&nbsp;POST&nbsp;'{botApi}{sessionSendMessageApi}?{authQuery}&message=TestMessage'
+                $&nbsp;curl&nbsp;-d&nbsp;"message=Test message"&nbsp;{botApi}{sessionSendMessageApi}?{authQuery}
               </code>
             </dd>
           </dl>

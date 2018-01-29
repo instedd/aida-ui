@@ -18,10 +18,7 @@ class Api::SessionsController < ApplicationApiController
   def send_message
     authorize @bot, :read_session_data?
 
-    body = params.to_unsafe_h.reject { |k,v|
-      %w(id controller action access_token bot_id).include?(k)
-    }
-    result = Backend.sessions_send_message(@bot.uuid, params[:id], body)
+    result = Backend.sessions_send_message(@bot.uuid, params[:id], request.request_parameters)
     render json: { data: result }
   end
 
