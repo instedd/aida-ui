@@ -31,8 +31,9 @@ class SettingsApiComponent extends Component {
     const authQuery = `access_token=${token || "<ACCESS_TOKEN>"}`
     const botApi = absoluteUrl(`/api/v1/bots/${botId || "<BOT_ID>"}/`)
     const sessionsApi = "sessions/"
-    const session_id_ex = "3d5303e7-3e10-4b0e-a18b-169193bdbfb7"
-    const sessionLogApi = `${sessionsApi}${session_id_ex}/log`
+    const session_id_example = "2e2cf082-7c31-453c-aa9d-cbd1f949fee0"
+    const sessionLogApi = `${sessionsApi}${session_id_example}/log`
+    const sessionSendMessageApi = `${sessionsApi}${session_id_example}/send_message`
 
     const botOptions = bots ? Object.values(bots).map(b => ({label: b.name, value: b.id})) : []
 
@@ -84,7 +85,7 @@ class SettingsApiComponent extends Component {
             </dd>
           </dl>
           <dl>
-            <dt>Session log (example session id: 3d5303e7-3e10-4b0e-a18b-169193bdbfb7)</dt>
+            <dt>Session log (example session id: {session_id_example})</dt>
             <dd>
               <code>
                 $&nbsp;curl&nbsp;-H&nbsp;"{authHeader}"&nbsp;{botApi}{sessionLogApi}
@@ -92,6 +93,18 @@ class SettingsApiComponent extends Component {
 
               <code>
                 $&nbsp;curl&nbsp;{botApi}{sessionLogApi}?{authQuery}
+              </code>
+            </dd>
+          </dl>
+          <dl>
+            <dt>Session send message (example session id: {session_id_example})</dt>
+            <dd>
+              <code>
+                $&nbsp;curl&nbsp;-H&nbsp;"{authHeader}"&nbsp;-d&nbsp;"message=Test message"&nbsp;{botApi}{sessionSendMessageApi}
+              </code>
+
+              <code>
+                $&nbsp;curl&nbsp;-X&nbsp;POST&nbsp;'{botApi}{sessionSendMessageApi}?{authQuery}&message=TestMessage'
               </code>
             </dd>
           </dl>

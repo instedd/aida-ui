@@ -50,7 +50,7 @@ class Backend
       handle_response { get("/api/bots/#{uuid}/sessions/#{session_id}/log") }
     end
 
-    def sessions_send_data(uuid, session_id, body)
+    def sessions_send_message(uuid, session_id, body)
       handle_response { post("/api/bots/#{uuid}/sessions/#{session_id}/send_message", body: body) }
     end
 
