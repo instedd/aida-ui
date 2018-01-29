@@ -69,7 +69,6 @@ class Api::BotsController < ApplicationApiController
       format.csv do
         cols = []
         cols = data.flat_map { |elem| elem["data"].keys }.uniq
-        puts cols
 
         csv_data = CSV.generate do |csv|
           csv << ["id", *cols]

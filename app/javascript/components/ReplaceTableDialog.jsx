@@ -2,15 +2,11 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { Button, DialogContainer, FileUpload, FontIcon, TextField } from 'react-md'
-import values from 'lodash/values'
-import map from 'lodash/map'
-import includes from 'lodash/includes'
+import { Button, DialogContainer, FileUpload, FontIcon } from 'react-md'
 
 import * as actions from '../actions/tables'
-import { blank } from '../utils/string'
 
-class NewTableDialog extends Component {
+class ReplaceTableDialog extends Component {
   static propTypes = {
     visible: PropTypes.bool.isRequired,
     onCancel: PropTypes.func.isRequired,
@@ -18,26 +14,21 @@ class NewTableDialog extends Component {
     actions: PropTypes.any.isRequired,
     uploading: PropTypes.bool,
     uploadError: PropTypes.string,
-    uploadedData: PropTypes.any,
-    takenNames: PropTypes.array
-  }
-
-  state = {
-    name: ''
+    uploadedData: PropTypes.any
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.visible && !this.props.visible) {
-      this.setState({name: ''})
+    if (nextProps.uploadedData && !this.props.uploadedData) {
+      setTimeout(() => {
+        nextProps.onConfirm(nextProps.uploadedData)
+      }, 0)
     }
   }
-
   render() {
     const {
-      uploading, uploadError, uploadedData, takenNames,
+      uploading, uploadError, uploadedData,
       visible, onCancel, onConfirm, actions
     } = this.props
-    const { name } = this.state
 
     let formLabel, formIcon, formExtraClass
 
@@ -59,51 +50,26 @@ class NewTableDialog extends Component {
       formIcon = (<FontIcon>file_upload</FontIcon>)
     }
 
-    const trimmedName = name.trim()
-    let nameValid, nameError
-
-    if (blank(trimmedName)) {
-      nameValid = false
-    } else if (includes(takenNames || [], trimmedName)) {
-      nameValid = false
-      nameError = 'Table already exists'
-    } else {
-      nameValid = true
-    }
-
-    const isValid = !uploading && nameValid && uploadedData
+    const isValid = !uploading && uploadedData
 
     const uploadFile = (file) => {
-      if (blank(trimmedName)) {
-        this.setState({name: file.name})
-      }
       actions.uploadTableFile(file)
     }
 
-    const addTable = () => {
-      this.setState({name: ''})
-      actions.resetUpload()
-      onConfirm(trimmedName, uploadedData)
-    }
-
     const buttons = [
-      { primary: true, children: 'Cancel', onClick: onCancel },
-      (<Button flat secondary disabled={!isValid} onClick={addTable}>Add</Button>)
+      { primary: true, children: 'Cancel', onClick: onCancel }
     ]
 
     return (
       <DialogContainer visible={visible}
-                       id="create-table-dialog"
-                       title="Add a new table"
+                       id="replace-table-dialog"
+                       title="Replace table data"
                        width={500}
                        actions={buttons}
                        onHide={onCancel}>
-        <TextField label="Table name"
-                   value={name}
-                   onChange={name => this.setState({name})}
-                   error={!!nameError}
-                   errorText={nameError}
-                   id="new-table-name" />
+        <p>
+          Select a new file to parse and replace the data table contents
+        </p>
         <div className="file-upload-field">
           <label htmlFor="table-file-upload">Upload a file</label>
           <FileUpload id="table-file-upload"
@@ -123,10 +89,8 @@ class NewTableDialog extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { items, uploading, uploadError, uploadedData } = state.tables
-  const takenNames = map(values(items), 'name')
+  const { uploading, uploadError, uploadedData } = state.tables
   return {
-    takenNames,
     uploading,
     uploadError,
     uploadedData
@@ -137,4 +101,4 @@ const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(actions, dispatch)
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewTableDialog)
+export default connect(mapStateToProps, mapDispatchToProps)(ReplaceTableDialog)

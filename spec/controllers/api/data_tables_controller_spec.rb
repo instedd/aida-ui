@@ -33,7 +33,7 @@ RSpec.describe Api::DataTablesController, type: :controller do
 
   describe "show" do
     it "returns the full definition of the data table" do
-      get :show, params: { id: data_table.id }
+      get :show, params: { id: data_table.id }, format: :json
       expect(response).to be_success
       expect(json_body).to be_a_data_table_as_json
       expect(json_body['data']).to match_array(data_table.data)

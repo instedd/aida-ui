@@ -12,14 +12,7 @@ class Api::DataTablesController < ApplicationApiController
   def create
     bot = Bot.find(params[:bot_id])
     authorize bot, :create_data_table?
-
-    # merge 'data' parameter manually since Rails chokes on nested array parameters
-    # See https://github.com/rails/rails/issues/23640
-    data_table_params = params.require(:data_table)
-                          .permit(policy(DataTable).permitted_attributes)
-                          .merge({ data: params[:data_table][:data] })
     data_table = bot.data_tables.build(data_table_params)
-
     data_table.save!
     render json: data_table_api_json(data_table), status: :created
   end
@@ -28,17 +21,24 @@ class Api::DataTablesController < ApplicationApiController
     data_table = DataTable.find(params[:id])
     authorize data_table
 
-    render json: data_table_api_json(data_table, true)
+    respond_to do |format|
+      format.json do
+        render json: data_table_api_json(data_table, true)
+      end
+      format.csv do
+        csv_data = CSV.generate do |csv|
+          data_table.data.each do |row|
+            csv << row
+          end
+        end
+        send_data csv_data
+      end
+    end
   end
 
   def update
     data_table = DataTable.find(params[:id])
     authorize data_table
-    # merge 'data' parameter manually since Rails chokes on nested array parameters
-    # See https://github.com/rails/rails/issues/23640
-    data_table_params = params.require(:data_table)
-                          .permit(policy(DataTable).permitted_attributes)
-                          .merge({ data: params[:data_table][:data] })
     data_table.update_attributes!(data_table_params)
 
     render json: data_table_api_json(data_table, true)
@@ -73,4 +73,23 @@ class Api::DataTablesController < ApplicationApiController
       data: (data_table.data if with_data)
     }
   end
+
+  def data_table_params
+    table_params = params.require(:data_table)
+                     .permit(policy(DataTable).permitted_attributes)
+                     .merge({ data: params[:data_table][:data] })
+    if params[:data_table][:data]
+      # merge 'data' parameter manually since Rails chokes on nested array parameters
+      # See https://github.com/rails/rails/issues/23640
+      table_params[:data] = params[:data_table][:data]
+    end
+    if params[:json_data]
+      # also, we use a separate text serialized json_data parameter because
+      # Rails eliminates nil values at the end of nested arrays; thanks for
+      # nothing Rails
+      table_params[:data] = JSON.parse(params[:json_data])
+    end
+    table_params
+  end
+
 end

@@ -166,12 +166,21 @@ export const parseDataTable = (file : any) => {
   return apiPostJSON(`data_tables/parse`, null, formData)
 }
 
+// we use a separate text serialized json_data parameter to avoid Rails removing
+// tailing nulls from nested arrays
 export const createDataTable = (botId : number, name : string, data: T.DataTableData) => {
-  return apiPostJSON(`bots/${botId}/data_tables`, null, {name, data})
+  return apiPostJSON(`bots/${botId}/data_tables`, null, {name, json_data: JSON.stringify(data)})
 }
 
 export const updateDataTable = (table : T.DataTable) => {
-  return apiPutJSON(`data_tables/${table.id}`, null, table)
+  const wireTable = {...table}
+  if (table.data) {
+    // we use a separate text serialized json_data parameter to avoid Rails
+    // removing tailing nulls from nested arrays
+    wireTable.json_data = JSON.stringify(table.data)
+    delete wireTable.data
+  }
+  return apiPutJSON(`data_tables/${table.id}`, null, wireTable)
 }
 
 export const destroyDataTable = (tableId : number) => {

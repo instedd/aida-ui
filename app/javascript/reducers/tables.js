@@ -98,7 +98,7 @@ const createSuccess = (state, action) => {
 
 const update = (state, action) => {
   const {table} = action
-  const {oldTable} = state.items && state.items[table.id] || {}
+  const oldTable = state.items && state.items[table.id.toString()] || {}
   return {
     ...state,
     items: {

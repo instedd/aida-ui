@@ -9,11 +9,16 @@ import humps from 'humps'
 
 import { Listing, ListingLoading, Column } from '../ui/Listing'
 import EditableTitleLabel from '../ui/EditableTitleLabel'
+import ReplaceTableDialog from './ReplaceTableDialog'
 
 import * as actions from '../actions/tables'
 import * as routes from '../utils/routes'
 
 class TableView extends Component {
+  state = {
+    dialogVisible: false
+  }
+
   componentDidMount() {
     const { actions, tableId, bot } = this.props
     actions.fetchTable(bot.id, tableId)
@@ -48,6 +53,15 @@ class TableView extends Component {
         actions.destroyTable(table.id)
         history.replace(routes.botTables(bot.id))
       }
+      const hideDialog = () => this.setState({ dialogVisible: false })
+      const showDialog = () => {
+        actions.resetUpload()
+        this.setState({ dialogVisible: true })
+      }
+      const replaceData = data => {
+        actions.updateTable({id: table.id, data})
+        hideDialog()
+      }
       const buttons = (
         <div className="data-table-header">
           <TextField id="table-usage-example"
@@ -56,20 +70,25 @@ class TableView extends Component {
                      value={sampleUsage}
                      onChange={() => null} />
           <div className="actions">
-            <Button icon onClick={() => null}>file_download</Button>
-            <Button icon onClick={() => null}>refresh</Button>
+            <Button icon element="a" href={`/api/v1/data_tables/${table.id}.csv`} onClick={() => null}>file_download</Button>
+            <Button icon onClick={showDialog}>autorenew</Button>
             <Button icon onClick={destroyTable}>delete</Button>
           </div>
         </div>
       )
 
       return (
-        <Listing className="data-table-listing"
-                 items={data}
-                 actions={buttons}
-                 title={title}>
-          {columns}
-        </Listing>
+        <div>
+          <Listing className="data-table-listing"
+                   items={data}
+                   actions={buttons}
+                   title={title}>
+            {columns}
+          </Listing>
+          <ReplaceTableDialog visible={this.state.dialogVisible}
+                              onCancel={hideDialog}
+                              onConfirm={replaceData} />
+        </div>
       )
     }
   }

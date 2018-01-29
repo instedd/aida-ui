@@ -265,9 +265,15 @@ export type TablesAction = {
   botId: number,
   error: string
 } | {
-  type: 'TABLE_UPDATED',
-  table: T.DataTable,
-  botId: number
+  type: 'TABLE_UPDATE',
+  table: T.DataTable
+} | {
+  type: 'TABLE_UPDATE_SUCCESS',
+  table: T.DataTable
+} | {
+  type: 'TABLE_UPDATE_ERROR',
+  tableId: number,
+  error: string
 } | {
   type: 'TABLE_DESTROY',
   tableId: number,

@@ -83,7 +83,7 @@ export const _tableUpdateSuccess = (table : T.DataTable) : T.TablesAction => ({
   table
 })
 
-export const _tableUpdateError = (table : T.DataTable) : T.TablesAction => ({
+export const _tableUpdateError = (tableId : number, error : string) : T.TablesAction => ({
   type: UPDATE_ERROR,
   tableId,
   error

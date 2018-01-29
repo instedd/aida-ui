@@ -28,7 +28,10 @@ class TablesIndex extends Component {
     if (fetching) {
       return <ListingLoading legend="Loading tables..." />
     } else {
-      const showDialog = () => this.setState({ dialogVisible: true })
+      const showDialog = () => {
+        actions.resetUpload()
+        this.setState({ dialogVisible: true })
+      }
       const hideDialog = () => this.setState({ dialogVisible: false })
       const buttons = [
         <Button flat secondary className="table-header-button" onClick={showDialog}>Add table</Button>
