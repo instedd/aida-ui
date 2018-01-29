@@ -1,17 +1,43 @@
+.data-table-listing {
+  .separator {
+    vertical-align: bottom;
+    margin-right: 5px;
+    margin-left: 5px;
+  }
+
+  .link {
+    cursor: pointer;
+    color: $md-grey-500;
+  }
+
+  .md-card-title h2 {
+    margin-right: 10px;
+    white-space: nowrap;
+  }
+}
+
 .data-table-header {
+  margin-top: 10px;
+  margin-right: 10px;
   display: flex;
   flex-direction: row;
   width: 100%;
+
+  .actions {
+    margin-top: -5px;
+  }
 }
 
 .example {
   flex: 1;
   margin-left: 20px;
+  margin-right: 20px;
   border-radius: 20px;
   padding-left: 10px;
   padding-right: 20px;
   background: inherit;
   border: 1px solid $md-grey-200;
+  height: 27px;
 
   input.md-text-field {
     margin-top: 2px;

@@ -269,6 +269,16 @@ export type TablesAction = {
   table: T.DataTable,
   botId: number
 } | {
+  type: 'TABLE_DESTROY',
+  tableId: number,
+} | {
+  type: 'TABLE_DESTROY_SUCCESS',
+  tableId: number
+} | {
+  type: 'TABLE_DESTROY_ERROR',
+  tableId: number,
+  error: string
+} | {
   type: 'TABLES_UPLOAD',
 } | {
   type: 'TABLES_UPLOAD_SUCCESS',

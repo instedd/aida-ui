@@ -3,6 +3,7 @@ import * as T from '../utils/types'
 
 import * as actions from '../actions/tables'
 import mapValues from 'lodash/mapValues'
+import omit from 'lodash/omit'
 
 const initialState = {
   fetching: false,
@@ -21,6 +22,7 @@ export default (state : T.TablesState, action : T.Action) : T.TablesState => {
     case actions.FETCH_ERROR: return fetchError(state, action)
     case actions.CREATE_SUCCESS: return createSuccess(state, action)
     case actions.TABLE_UPDATED: return tableUpdated(state, action)
+    case actions.DESTROY: return destroy(state, action)
     case actions.UPLOAD: return upload(state, action)
     case actions.UPLOAD_SUCCESS: return uploadSuccess(state, action)
     case actions.UPLOAD_ERROR: return uploadError(state, action)
@@ -136,5 +138,13 @@ const uploadError = (state, action) => {
     }
   } else {
     return state
+  }
+}
+
+const destroy = (state, action) => {
+  const { tableId } = action
+  return {
+    ...state,
+    items: omit(state.items, [tableId])
   }
 }

@@ -53,4 +53,12 @@ RSpec.describe Api::DataTablesController, type: :controller do
       end.to change(DataTable, :count).by(1)
     end
   end
+
+  describe "destroy" do
+    it "destroys the data table" do
+      expect do
+        delete :destroy, params: { id: data_table.id }
+      end.to change(DataTable, :count).by(-1)
+    end
+  end
 end

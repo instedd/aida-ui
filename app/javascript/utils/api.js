@@ -169,3 +169,7 @@ export const parseDataTable = (file : any) => {
 export const createDataTable = (botId : number, name : string, data: T.DataTableData) => {
   return apiPostJSON(`bots/${botId}/data_tables`, null, {name, data})
 }
+
+export const destroyDataTable = (tableId : number) => {
+  return apiDelete(`data_tables/${tableId}`)
+}

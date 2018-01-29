@@ -12,6 +12,10 @@ export const CREATE_ERROR = 'TABLE_CREATE_ERROR'
 
 export const TABLE_UPDATED = 'TABLE_UPDATED'
 
+export const DESTROY = 'TABLE_DESTROY'
+export const DESTROY_SUCCESS = 'TABLE_DESTROY_SUCCESS'
+export const DESTROY_ERROR = 'TABLE_DESTROY_ERROR'
+
 export const UPLOAD = 'TABLES_UPLOAD'
 export const UPLOAD_SUCCESS = 'TABLES_UPLOAD_SUCCESS'
 export const UPLOAD_ERROR = 'TABLES_UPLOAD_ERROR'
@@ -73,6 +77,22 @@ export const _tableUpdated = (botId : number, table : T.DataTable) : T.TablesAct
   table
 })
 
+export const _tableDestroy = (tableId : number) : T.TablesAction => ({
+  type: DESTROY,
+  tableId
+})
+
+export const _tableDestroySuccess = (tableId : number) : T.TablesAction => ({
+  type: DESTROY_SUCCESS,
+  tableId
+})
+
+export const _tableDestroyError = (tableId : number, error : string) : T.TablesAction => ({
+  type: DESTROY_ERROR,
+  tableId,
+  error
+})
+
 export const fetchTables = (scope : {botId : number}) => (dispatch : T.Dispatch, getState : T.GetState) => {
   const state = getState()
 
@@ -121,4 +141,11 @@ export const createTable = (botId : number, name : string, data : T.DataTableDat
                 dispatch(_tableCreateError(botId, errResponse.statusText))
               }
             })
+}
+
+export const destroyTable = (tableId : number) => (dispatch : T.Dispatch, getState : T.GetState) => {
+  dispatch(_tableDestroy(tableId))
+  return api.destroyDataTable(tableId)
+            .then(response => dispatch(_tableDestroySuccess(tableId)))
+            .catch(errResponse => dispatch(_tableDestroyError(tableId, errResponse.statusText)))
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { FontIcon, TextField } from 'react-md'
+import { Button, FontIcon, TextField } from 'react-md'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
@@ -19,7 +19,7 @@ class TableView extends Component {
   }
 
   render() {
-    const { fetching, bot, items, table, history } = this.props
+    const { fetching, bot, items, table, actions, history } = this.props
 
     if (fetching || !table) {
       return <ListingLoading legend="Loading table..." />
@@ -37,24 +37,35 @@ class TableView extends Component {
       const lookupColumn = table.columns[1]
       const sampleUsage = `{{lookup($\{${keyColumn}\}), "${table.name}", "${lookupColumn}"}}`
       const title = (
+        <div>
+          <span className="link" onClick={() => history.replace(routes.botTables(bot.id))}>{parentTitle}</span>
+          <FontIcon className="separator">chevron_right</FontIcon>
+          {table.name}
+        </div>
+      )
+      const destroyTable = () => {
+        actions.destroyTable(table.id)
+        history.replace(routes.botTables(bot.id))
+      }
+      const buttons = (
         <div className="data-table-header">
-          <div>
-            <span className="link" onClick={() => history.replace(routes.botTables(bot.id))}>{parentTitle}</span>
-            <FontIcon className="separator">chevron_right</FontIcon>
-            {table.name}
-          </div>
           <TextField id="table-usage-example"
                      className="example"
                      leftIcon={<FontIcon>info</FontIcon>}
                      value={sampleUsage}
-                     onChange={() => null}
-                     resize={{min:400, max: 500}} />
+                     onChange={() => null} />
+          <div className="actions">
+            <Button icon onClick={() => null}>file_download</Button>
+            <Button icon onClick={() => null}>refresh</Button>
+            <Button icon onClick={destroyTable}>delete</Button>
+          </div>
         </div>
       )
 
       return (
         <Listing className="data-table-listing"
                  items={data}
+                 actions={buttons}
                  title={title}>
           {columns}
         </Listing>

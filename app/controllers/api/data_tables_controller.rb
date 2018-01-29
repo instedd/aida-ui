@@ -36,7 +36,10 @@ class Api::DataTablesController < ApplicationApiController
   end
 
   def destroy
-    # TODO
+    data_table = DataTable.find(params[:id])
+    authorize data_table
+    data_table.destroy
+    head :ok
   end
 
   def parse
