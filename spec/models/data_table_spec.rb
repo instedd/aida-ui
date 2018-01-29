@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe DataTable, type: :model do
   describe "validations" do
     describe "data" do
-      it "can be nil" do
-        expect(build(:data_table, data: nil)).to be_valid
+      it "cannot be nil" do
+        expect(build(:data_table, data: nil)).not_to be_valid
       end
 
       it "can have no data rows" do

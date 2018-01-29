@@ -2,15 +2,12 @@ class DataTable < ApplicationRecord
   belongs_to :bot
 
   validates_presence_of :name
+  validates_presence_of :data
   validates_uniqueness_of :name, scope: :bot_id
   validate :shape_of_data
 
   def columns
-    if data.nil?
-      []
-    else
-      data.first
-    end
+    data.first
   end
 
   private

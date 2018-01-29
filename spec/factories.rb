@@ -46,5 +46,6 @@ FactoryBot.define do
   factory :data_table do
     bot
     sequence(:name) { |n| "data-table-#{n}" }
+    data { [%w(key value), %w(foo bar)] }
   end
 end

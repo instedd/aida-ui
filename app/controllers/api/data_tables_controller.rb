@@ -10,7 +10,18 @@ class Api::DataTablesController < ApplicationApiController
   end
 
   def create
-    # TODO
+    bot = Bot.find(params[:bot_id])
+    authorize bot, :create_data_table?
+
+    # merge 'data' parameter manually since Rails chokes on nested array parameters
+    # See https://github.com/rails/rails/issues/23640
+    data_table_params = params.require(:data_table)
+                          .permit(policy(DataTable).permitted_attributes)
+                          .merge({ data: params[:data_table][:data] })
+    data_table = bot.data_tables.build(data_table_params)
+
+    data_table.save!
+    render json: data_table_api_json(data_table), status: :created
   end
 
   def show
@@ -29,7 +40,14 @@ class Api::DataTablesController < ApplicationApiController
   end
 
   def parse
-    # TODO
+    if params[:file].present?
+      data = ParseTableData.run(params[:file])
+      render json: data
+    else
+      render json: { error: "missing parameter" }, status: 400
+    end
+  rescue => e
+    render json: { error: e.message }, status: 422
   end
 
   private

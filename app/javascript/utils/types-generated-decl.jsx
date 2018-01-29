@@ -110,10 +110,10 @@ export type TreeNodesDict = { [key: string]: TreeNode;
 };
 
 export type DecisionTreeConfig = {
-  relevant: string;
+  relevant?: string;
   explanation: Message;
   clarification: Message;
-  keywords: Message;
+  keywords: KeywordList;
   tree: {
     initial: string;
     nodes: TreeNodesDict;
@@ -297,11 +297,13 @@ export type InvitationData = {
   roles: RoleList;
 };
 
+export type DataTableData = Array<Array<any>>;
+
 export type DataTable = {
   id: number;
   name: string;
   columns: Array<string>;
   updated_at: string;
-  data: null | Array<any>;
+  data: null | DataTableData;
 };
 

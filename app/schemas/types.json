@@ -644,6 +644,16 @@
       "required": [ "bot_name", "inviter", "roles" ]
     },
 
+    "data_table_data": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "any"
+        }
+      }
+    },
+
     "data_table": {
       "type": "object",
       "properties": {
@@ -654,7 +664,7 @@
         "data": {
           "oneOf": [
             { "type": "null" },
-            { "type": "array", "items": "array" }
+            { "$ref": "#/definitions/data_table_data" }
           ]
         }
       },

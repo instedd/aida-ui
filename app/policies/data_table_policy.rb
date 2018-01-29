@@ -18,6 +18,6 @@ class DataTablePolicy < ApplicationPolicy
   end
 
   def permitted_attributes
-    [:name, :data]
+    [:name, :data => []]
   end
 end
