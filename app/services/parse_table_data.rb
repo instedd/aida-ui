@@ -11,9 +11,17 @@ class ParseTableData
   def self.gather_table(sheet)
     header = sheet.row(sheet.first_row)
     col_count = header.size
-    data = [header]
 
     fail "table must have at least two columns" unless col_count >= 2
+    seen_cols = Set.new
+    header = header.map do |column|
+      normalized_col = column.to_s.strip
+      fail "duplicate column name #{normalized_col}" if seen_cols.include?(normalized_col)
+      seen_cols << normalized_col
+      normalized_col
+    end
+
+    data = [header]
 
     ((sheet.first_row + 1)..sheet.last_row).each do |row_number|
       row = sheet.row(row_number)

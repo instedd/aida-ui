@@ -39,4 +39,18 @@ RSpec.describe Api::DataTablesController, type: :controller do
       expect(json_body['data']).to match_array(data_table.data)
     end
   end
+
+  describe "create" do
+    it "creates a new data table" do
+      expect do
+        post :create, params: {
+               bot_id: bot.id,
+               data_table: {
+                 name: 'Test',
+                 data: [%w(key value), [1,2]]
+               }
+             }, as: :json
+      end.to change(DataTable, :count).by(1)
+    end
+  end
 end
