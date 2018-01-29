@@ -10,7 +10,9 @@ export const CREATE = 'TABLE_CREATE'
 export const CREATE_SUCCESS = 'TABLE_CREATE_SUCCESS'
 export const CREATE_ERROR = 'TABLE_CREATE_ERROR'
 
-export const TABLE_UPDATED = 'TABLE_UPDATED'
+export const UPDATE = 'TABLE_UPDATE'
+export const UPDATE_SUCCESS = 'TABLE_UPDATE_SUCCESS'
+export const UPDATE_ERROR = 'TABLE_UPDATE_ERROR'
 
 export const DESTROY = 'TABLE_DESTROY'
 export const DESTROY_SUCCESS = 'TABLE_DESTROY_SUCCESS'
@@ -71,10 +73,20 @@ export const _tableCreateError = (botId : number, error : string) : T.TablesActi
   error
 })
 
-export const _tableUpdated = (botId : number, table : T.DataTable) : T.TablesAction => ({
-  type: TABLE_UPDATED,
-  botId,
+export const _tableUpdate = (table : T.DataTable) : T.TablesAction => ({
+  type: UPDATE,
   table
+})
+
+export const _tableUpdateSuccess = (table : T.DataTable) : T.TablesAction => ({
+  type: UPDATE_SUCCESS,
+  table
+})
+
+export const _tableUpdateError = (table : T.DataTable) : T.TablesAction => ({
+  type: UPDATE_ERROR,
+  tableId,
+  error
 })
 
 export const _tableDestroy = (tableId : number) : T.TablesAction => ({
@@ -108,7 +120,7 @@ export const fetchTables = (scope : {botId : number}) => (dispatch : T.Dispatch,
 
 export const fetchTable = (botId : number, tableId : number) => (dispatch : T.Dispatch, getState : T.GetState) => {
   return api.fetchDataTable(tableId)
-            .then(table => dispatch(_tableUpdated(botId, table)))
+            .then(table => dispatch(_tableUpdateSuccess(table)))
 }
 
 export const resetUpload = _tablesUploadReset
@@ -141,6 +153,12 @@ export const createTable = (botId : number, name : string, data : T.DataTableDat
                 dispatch(_tableCreateError(botId, errResponse.statusText))
               }
             })
+}
+
+export const updateTable = (table : T.DataTable) => (dispatch : T.Dispatch, getState : T.GetState) => {
+  dispatch(_tableUpdate(table))
+  return api.updateDataTable(table)
+            .then(table => dispatch(_tableUpdateSuccess(table)))
 }
 
 export const destroyTable = (tableId : number) => (dispatch : T.Dispatch, getState : T.GetState) => {

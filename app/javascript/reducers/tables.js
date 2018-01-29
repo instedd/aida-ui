@@ -21,7 +21,8 @@ export default (state : T.TablesState, action : T.Action) : T.TablesState => {
     case actions.FETCH_SUCCESS: return fetchSuccess(state, action)
     case actions.FETCH_ERROR: return fetchError(state, action)
     case actions.CREATE_SUCCESS: return createSuccess(state, action)
-    case actions.TABLE_UPDATED: return tableUpdated(state, action)
+    case actions.UPDATE: return update(state, action)
+    case actions.UPDATE_SUCCESS: return update(state, action)
     case actions.DESTROY: return destroy(state, action)
     case actions.UPLOAD: return upload(state, action)
     case actions.UPLOAD_SUCCESS: return uploadSuccess(state, action)
@@ -80,7 +81,7 @@ const fetchError = (state, action) => {
   }
 }
 
-const tableUpdated = (state, action) => {
+const createSuccess = (state, action) => {
   const {table, botId} = action
   if (state.scope && state.scope.botId == botId) {
     return {
@@ -95,7 +96,20 @@ const tableUpdated = (state, action) => {
   }
 }
 
-const createSuccess = tableUpdated
+const update = (state, action) => {
+  const {table} = action
+  const {oldTable} = state.items && state.items[table.id] || {}
+  return {
+    ...state,
+    items: {
+      ...(state.items || {}),
+      [table.id]: {
+        ...oldTable,
+        ...table
+      }
+    }
+  }
+}
 
 const uploadReset = (state, action) => {
   return {

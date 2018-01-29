@@ -170,6 +170,10 @@ export const createDataTable = (botId : number, name : string, data: T.DataTable
   return apiPostJSON(`bots/${botId}/data_tables`, null, {name, data})
 }
 
+export const updateDataTable = (table : T.DataTable) => {
+  return apiPutJSON(`data_tables/${table.id}`, null, table)
+}
+
 export const destroyDataTable = (tableId : number) => {
   return apiDelete(`data_tables/${tableId}`)
 }

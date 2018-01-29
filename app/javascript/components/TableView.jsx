@@ -8,6 +8,7 @@ import map from 'lodash/map'
 import humps from 'humps'
 
 import { Listing, ListingLoading, Column } from '../ui/Listing'
+import EditableTitleLabel from '../ui/EditableTitleLabel'
 
 import * as actions from '../actions/tables'
 import * as routes from '../utils/routes'
@@ -40,7 +41,7 @@ class TableView extends Component {
         <div>
           <span className="link" onClick={() => history.replace(routes.botTables(bot.id))}>{parentTitle}</span>
           <FontIcon className="separator">chevron_right</FontIcon>
-          {table.name}
+          <EditableTitleLabel title={table.name} onSubmit={name => actions.updateTable({...table, name})} />
         </div>
       )
       const destroyTable = () => {

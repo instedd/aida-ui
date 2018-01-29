@@ -14,6 +14,17 @@
     margin-right: 10px;
     white-space: nowrap;
   }
+
+  .md-card-title {
+    a.ui-editable-title-label {
+      color: black;
+    }
+
+    .md-text-field-container {
+      display: inline-block;
+      margin-right: 60px;
+    }
+  }
 }
 
 .data-table-header {
@@ -25,11 +36,13 @@
 
   .actions {
     margin-top: -5px;
+    white-space: nowrap;
+    flex: 1;
   }
 }
 
 .example {
-  flex: 1;
+  flex: 10;
   margin-left: 20px;
   margin-right: 20px;
   border-radius: 20px;
