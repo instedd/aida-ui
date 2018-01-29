@@ -24,7 +24,7 @@ class TableView extends Component {
       return <ListingLoading legend="Loading table..." />
     } else {
       const tableCount = size(items)
-      const title = tableCount == 1 ? "1 table" : `${tableCount} tables"`
+      const title = tableCount == 1 ? "1 table" : `${tableCount} tables`
       const data = table.data ? table.data.slice(1) : []
       const columns = map(table.columns || [], (column, index) => {
         const colTitle = index == 0

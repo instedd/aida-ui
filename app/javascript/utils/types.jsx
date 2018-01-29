@@ -255,9 +255,29 @@ export type TablesAction = {
   type: 'TABLES_FETCH_ERROR',
   scope: Scope
 } | {
+  type: 'TABLE_CREATE',
+} | {
+  type: 'TABLE_CREATE_SUCCESS',
+  botId: number,
+  table: T.DataTable
+} | {
+  type: 'TABLE_CREATE_ERROR',
+  botId: number,
+  error: string
+} | {
   type: 'TABLE_UPDATED',
   table: T.DataTable,
   botId: number
+} | {
+  type: 'TABLES_UPLOAD',
+} | {
+  type: 'TABLES_UPLOAD_SUCCESS',
+  data: T.DataTableData
+} | {
+  type: 'TABLES_UPLOAD_ERROR',
+  error: string
+} | {
+  type: 'TABLES_UPLOAD_RESET',
 };
 
 export type TranslationsAction = {
@@ -383,7 +403,10 @@ export type StatsState = {
 export type TablesState = {
   fetching: boolean,
   scope: ?Scope,
-  items: ?ById<T.DataTable>
+  items: ?ById<T.DataTable>,
+  uploading: boolean,
+  uploadError: ?string,
+  uploadedData: null | Array<any>;
 };
 
 export type TranslationsState = {

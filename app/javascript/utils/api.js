@@ -159,3 +159,13 @@ export const fetchDataTables = (botId : number) => {
 export const fetchDataTable = (tableId : number) => {
   return apiFetchJSON(`data_tables/${tableId}`)
 }
+
+export const parseDataTable = (file : any) => {
+  const formData = new FormData()
+  formData.append('file', file)
+  return apiPostJSON(`data_tables/parse`, null, formData)
+}
+
+export const createDataTable = (botId : number, name : string, data: T.DataTableData) => {
+  return apiPostJSON(`bots/${botId}/data_tables`, null, {name, data})
+}

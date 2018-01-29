@@ -2,11 +2,11 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Paper, TableCardHeader, DataTable, TableHeader, TableBody, TableRow, TableColumn } from 'react-md';
 
-export const Listing = ({id, className, items, title, children, onItemClick}) => {
+export const Listing = ({id, className, items, title, children, actions, onItemClick}) => {
   const columns = children
 
   return <Paper id={id} className={className}>
-    <TableCardHeader title={title} visible={false} />
+    <TableCardHeader title={title} visible={false} children={actions || []}/>
     <DataTable plain>
       <TableHeader>
         <TableRow>

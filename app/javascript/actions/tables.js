@@ -6,7 +6,16 @@ export const FETCH = 'TABLES_FETCH'
 export const FETCH_SUCCESS = 'TABLES_FETCH_SUCCESS'
 export const FETCH_ERROR = 'TABLES_FETCH_ERROR'
 
+export const CREATE = 'TABLE_CREATE'
+export const CREATE_SUCCESS = 'TABLE_CREATE_SUCCESS'
+export const CREATE_ERROR = 'TABLE_CREATE_ERROR'
+
 export const TABLE_UPDATED = 'TABLE_UPDATED'
+
+export const UPLOAD = 'TABLES_UPLOAD'
+export const UPLOAD_SUCCESS = 'TABLES_UPLOAD_SUCCESS'
+export const UPLOAD_ERROR = 'TABLES_UPLOAD_ERROR'
+export const UPLOAD_RESET = 'TABLES_UPLOAD_RESET'
 
 export const _tablesFetch = (scope : T.Scope) : T.TablesAction => ({
   type: FETCH,
@@ -24,12 +33,45 @@ export const _tablesFetchError = (scope : T.Scope) : T.TablesAction => ({
   scope
 })
 
-export const _tableUpdated = (botId : number, table : T.DataTable) => ({
-  type: TABLE_UPDATED,
+export const _tablesUpload = () : T.TablesAction => ({
+  type: UPLOAD,
+})
+
+export const _tablesUploadSuccess = (data : T.DataTableData) : T.TablesAction => ({
+  type: UPLOAD_SUCCESS,
+  data
+})
+
+export const _tablesUploadError = (error : string) : T.TablesAction => ({
+  type: UPLOAD_ERROR,
+  error
+})
+
+export const _tablesUploadReset = () : T.TablesAction => ({
+  type: UPLOAD_RESET,
+})
+
+export const _tableCreate = () : T.TablesAction => ({
+  type: CREATE
+})
+
+export const _tableCreateSuccess = (botId : number, table : T.DataTable) : T.TablesAction => ({
+  type: CREATE_SUCCESS,
   botId,
   table
 })
 
+export const _tableCreateError = (botId : number, error : string) : T.TablesAction => ({
+  type: CREATE_ERROR,
+  botId,
+  error
+})
+
+export const _tableUpdated = (botId : number, table : T.DataTable) : T.TablesAction => ({
+  type: TABLE_UPDATED,
+  botId,
+  table
+})
 
 export const fetchTables = (scope : {botId : number}) => (dispatch : T.Dispatch, getState : T.GetState) => {
   const state = getState()
@@ -47,4 +89,36 @@ export const fetchTables = (scope : {botId : number}) => (dispatch : T.Dispatch,
 export const fetchTable = (botId : number, tableId : number) => (dispatch : T.Dispatch, getState : T.GetState) => {
   return api.fetchDataTable(tableId)
             .then(table => dispatch(_tableUpdated(botId, table)))
+}
+
+export const resetUpload = _tablesUploadReset
+
+export const uploadTableFile = (file : any) => (dispatch : T.Dispatch, getState : T.GetState) => {
+  dispatch(_tablesUpload())
+  return api.parseDataTable(file)
+            .then(data => dispatch(_tablesUploadSuccess(data)))
+            .catch(errResponse => {
+              if (errResponse.status == 422) {
+                errResponse.json().then(error => {
+                  dispatch(_tablesUploadError(error.error))
+                })
+              } else {
+                dispatch(_tablesUploadError(errResponse.statusText))
+              }
+            })
+}
+
+export const createTable = (botId : number, name : string, data : T.DataTableData) => (dispatch : T.Dispatch, getState : T.GetState) => {
+  dispatch(_tableCreate())
+  return api.createDataTable(botId, name, data)
+            .then(table => dispatch(_tableCreateSuccess(botId, table)))
+            .catch(errResponse => {
+              if (errResponse.status == 422) {
+                errResponse.json().then(error => {
+                  dispatch(_tableCreateError(botId, error.error))
+                })
+              } else {
+                dispatch(_tableCreateError(botId, errResponse.statusText))
+              }
+            })
 }
