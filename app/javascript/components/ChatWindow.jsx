@@ -192,7 +192,7 @@ class ChatWindow extends Component {
   }
 
   componentDidMount() {
-    const { connected, sessionId, onNewSession } = this.props
+    const { connected, publishing, sessionId, onNewSession } = this.props
     if (connected) {
       if (!sessionId) {
         onNewSession()
