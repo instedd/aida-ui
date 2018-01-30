@@ -102,14 +102,15 @@ class DecisionTreeComponent extends Component {
     // remove node from path (if the node is selected)
     const pathIx = this.state.path.findIndex((pathId) => pathId == nextId)
     if (pathIx >= 0) {
+      const newPath = [
+        ...this.state.path.slice(0, pathIx)
+      ]
       // select the next option to the right
       const optionNextIx = Math.min(nodes[node.id].options.length - 1, optionIx)
-      this.setState({
-        path: [
-          ...this.state.path.slice(0, pathIx),
-          ...this._buildDefaultPath(nodes, nodes[node.id].options[optionNextIx].next)
-        ]
-      })
+      if (optionNextIx >= 0) {
+        newPath.push(this._buildDefaultPath(nodes, nodes[node.id].options[optionNextIx].next))
+      }
+      this.setState({ path: newPath })
     }
 
     return nodes
