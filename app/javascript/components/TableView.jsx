@@ -41,7 +41,7 @@ class TableView extends Component {
       })
       const keyColumn = humps.camelize(table.columns[0])
       const lookupColumn = table.columns[1]
-      const sampleUsage = `{{lookup($\{${keyColumn}\}), "${table.name}", "${lookupColumn}"}}`
+      const sampleUsage = `{{ lookup($\{${keyColumn}\}, "${table.name}", "${lookupColumn}") }}`
       const title = (
         <div>
           <span className="link" onClick={() => history.replace(routes.botTables(bot.id))}>{parentTitle}</span>
