@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { TextField, Button } from 'react-md'
+import { TextField, Button, FontIcon } from 'react-md'
 
 import AppLayout from './AppLayout'
 import { MainWhite } from '../ui/MainWhite'
@@ -9,35 +9,32 @@ import { SingleColumn } from '../ui/SingleColumn'
 import Title from '../ui/Title'
 import Headline from '../ui/Headline'
 
-import * as actions from '../actions/bots'
-import * as api from '../utils/api'
-import { absoluteUrl } from '../utils/routes'
+import * as actions from '../actions/keypair'
 
 class SettingsEncryptionComponent extends Component {
   state = {
-    token: null,
-    botId: null,
+    passphrase: '',
+    confirmation: '',
+    startConfirmation: false,
+    isConfirmationCorrect: false
   }
 
   componentDidMount() {
-    this.props.actions.fetchBots()
+    this.props.actions.fetchEncryptedKeyPair()
   }
 
   render() {
-    const { bots } = this.props
-    const { token, botId } = this.state
+    const { actions, fetching, isKeyPairPresent} = this.props
 
-    const authHeader = `Authorization: Bearer ${token || "<ACCESS_TOKEN>"}`
-    const authQuery = `access_token=${token || "<ACCESS_TOKEN>"}`
-    const botApi = absoluteUrl(`/api/v1/bots/${botId || "<BOT_ID>"}/`)
+    const generateEncryptionKeys = () => (actions.generateKeyPair(this.state.passphrase))
 
-    const botOptions = bots ? Object.values(bots).map(b => ({ label: b.name, value: b.id })) : []
+    const isConfirmationCorrect = (passphrase, confirmation) => (passphrase == confirmation)
 
-    const generateToken = () => {
-      api.generateToken()
-        .then(response =>
-          this.setState({ token: response.token })
-        )
+    let iconCheck = null
+    if (this.state.isConfirmationCorrect) {
+      iconCheck = <FontIcon className="confirmation-check">done</FontIcon>
+    } else {
+      iconCheck = <FontIcon className="confirmation-warning">warning</FontIcon>
     }
 
     return (
@@ -48,16 +45,44 @@ class SettingsEncryptionComponent extends Component {
             Generate public and private encryption keys using a passphrase
           </Headline>
 
-          <TextField
-            id="tf-passphrase"
-            label="Passphrase"
-            type="password"
-            className="md-cell md-cell--bottom"
-          />
-          <div className="md-cell encryption-buttons">
-            <Button flat secondary>Generate keys</Button>
-          </div>
-
+          {fetching ? (
+            <div> Loading </div>
+          ) : (
+            <div>
+              <TextField
+                id="tf-passphrase"
+                label="Passphrase"
+                type="password"
+                className="md-cell md-cell--bottom"
+                value={this.state.passphrase}
+                onChange={(passphrase) => this.setState({
+                    passphrase,
+                    isConfirmationCorrect: isConfirmationCorrect(passphrase, this.state.confirmation) })}
+              />
+              <div className="passphrase-confirmation">
+                <TextField
+                  id="tf-passphrase-confirm"
+                  label="Confirm passphrase"
+                  type="password"
+                  className="confirmation-input md-cell md-cell--bottom"
+                  value={this.state.confirmation}
+                  onChange={(confirmation) => this.setState({
+                    confirmation,
+                    startConfirmation: true,
+                    isConfirmationCorrect: isConfirmationCorrect(this.state.passphrase, confirmation) })}
+                />
+                {this.state.passphrase.trim() != "" && this.state.startConfirmation ? iconCheck : null}
+              </div>
+              <div className="md-cell encryption-buttons">
+                <Button
+                  secondary
+                  raised
+                  onClick={generateEncryptionKeys}>
+                    Generate keys
+                </Button>
+              </div>
+            </div>
+          )}
         </MainWhite>
       </AppLayout>
     )
@@ -65,7 +90,8 @@ class SettingsEncryptionComponent extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  bots: state.bots.items
+  fetching: state.keypair.fetching,
+  isKeyPairPresent: !!state.keypair.encryptedKeyPair
 })
 
 const mapDispatchToProps = (dispatch) => ({

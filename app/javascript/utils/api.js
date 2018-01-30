@@ -186,3 +186,11 @@ export const updateDataTable = (table : T.DataTable) => {
 export const destroyDataTable = (tableId : number) => {
   return apiDelete(`data_tables/${tableId}`)
 }
+
+export const updateEncryptionKeys = (publicKey, encryptedSecretKey) => {
+  return apiPostJSON(`encryption_keys`, null, {public_key, encrypted_secret_key})
+}
+
+export const fetchEncryptionKeys = () => {
+  return apiFetchJSON(`encryption_keys`)
+}
