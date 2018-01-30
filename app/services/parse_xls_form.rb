@@ -31,6 +31,7 @@ class ParseXlsForm
     constraint_col = header.find_index 'constraint'
     constraint_message_col = header.find_index('constraint_message') || header.find_index('constraint message')
     choice_filter_col = header.find_index('choice_filter')
+    encrypt_col = header.find_index('encrypt')
     seen_names = Set.new
 
     fail "missing 'type' column in survey sheet" unless type_col.present?
@@ -48,6 +49,7 @@ class ParseXlsForm
         implicit_constraint = false
         constraint_message = row[constraint_message_col].presence if constraint_message_col.present?
         choice_filter = row[choice_filter_col].presence if choice_filter_col.present?
+        encrypt = row[encrypt_col].presence if encrypt_col.present?
 
         fail "invalid question name at row #{row_number}" unless name_valid?(name)
         if seen_names.include?(name)
@@ -90,6 +92,7 @@ class ParseXlsForm
           elem[:constraint] = constraint if constraint
           elem[:constraint_message] = constraint_message if constraint_message and (constraint or implicit_constraint)
           elem[:choice_filter] = choice_filter if choice_filter
+          elem[:encrypt] = true if encrypt && as_boolean(encrypt)
         end
 
         elem
@@ -104,6 +107,10 @@ class ParseXlsForm
     return (type == 'start' && name == 'start') ||
       (type == 'end' && name == 'end') ||
       (type == 'calculate' && name == '__version__')
+  end
+
+  def self.as_boolean(value)
+    value == true || value == 1 || value.to_s.strip.downcase == "yes"
   end
 
   def self.gather_choices(sheet)

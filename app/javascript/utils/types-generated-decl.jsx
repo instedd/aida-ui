@@ -133,6 +133,7 @@ export type SurveyQuestion = {
   message: Message;
   relevant?: string;
   constraint_message?: Message;
+  encrypt?: boolean;
 } | {
   type: "integer" | "decimal" | "text" | "image";
   name: string;
@@ -140,6 +141,7 @@ export type SurveyQuestion = {
   relevant?: string;
   constraint?: string;
   constraint_message?: Message;
+  encrypt?: boolean;
 };
 
 export type AttributesDict = { [key: string]: string | number;

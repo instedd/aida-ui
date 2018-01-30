@@ -159,6 +159,7 @@ class Behaviour < ApplicationRecord
             question_fragment[:constraint] = question["constraint"] if question["constraint"].present?
             question_fragment[:constraint_message] = localized_value("questions/[name=#{question['name']}]/constraint_message") if question["constraint_message"].present?
             question_fragment[:choice_filter] = question["choice_filter"] if question["choice_filter"].present?
+            question_fragment[:encrypt] = question["encrypt"] if question["encrypt"].present?
           end
         end,
         choice_lists: config["choice_lists"].map.with_index do |choice_list, i|
