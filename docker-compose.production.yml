@@ -10,6 +10,7 @@ services:
       SECRET_KEY_BASE: secret
       SETTINGS__BACKEND__URL: http://backend/
       SETTINGS__BACKEND__PUBLIC_SOCKET_URL: ws://localhost:3000/socket
+      SETTINGS__BACKEND__PUBLIC_CONTENT_URL: http://localhost:3000/content
       SETTINGS__BASE_URL: http://localhost:3000
       GUISSO_CLIENT_ID:     --- REGISTER APP AT login.instedd.org ---
       GUISSO_CLIENT_SECRET: --- REGISTER APP AT login.instedd.org ---
@@ -21,7 +22,7 @@ services:
       - db
     environment:
       DATABASE_URL: ecto://root:@db/aida-backend
-      VIRTUAL_HOST: '*/callback, */callback/*, */socket, */socket/*'
+      VIRTUAL_HOST: '*/callback, */callback/*, */socket, */socket/*, */content, */content/*'
       VIRTUAL_HOST_WEIGHT: 1
     command: /bin/sh -c 'mix ecto.migrate && mix phx.server'
 
