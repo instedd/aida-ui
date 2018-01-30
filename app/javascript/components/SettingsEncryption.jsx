@@ -37,6 +37,57 @@ class SettingsEncryptionComponent extends Component {
       iconCheck = <FontIcon className="confirmation-warning">warning</FontIcon>
     }
 
+    let main = null
+    if (fetching) {
+      main = <div> Loading </div>
+    } else {
+      if (isKeyPairPresent) {
+        main = (
+          <div>
+            Warning ...
+          </div>
+        )
+      } else {
+        main = (
+          <div>
+            <TextField
+              id="tf-passphrase"
+              label="Passphrase"
+              type="password"
+              className="md-cell md-cell--bottom"
+              value={this.state.passphrase}
+              onChange={(passphrase) => this.setState({
+                passphrase,
+                isConfirmationCorrect: checkConfirmation(passphrase, this.state.confirmation)
+              })}
+            />
+            <TextField
+              id="tf-passphrase-confirm"
+              label="Confirm passphrase"
+              type="password"
+              className="confirmation-input md-cell md-cell--bottom"
+              value={this.state.confirmation}
+              onChange={(confirmation) => this.setState({
+                confirmation,
+                startConfirmation: true,
+                isConfirmationCorrect: checkConfirmation(this.state.passphrase, confirmation)
+              })}
+            />
+            { this.state.passphrase.trim() != "" && this.state.startConfirmation ? iconCheck : null }
+            <div className="md-cell encryption-buttons">
+              <Button
+                secondary
+                raised
+                disabled={!this.state.isConfirmationCorrect}
+                onClick={generateEncryptionKeys}>
+                Generate keys
+                    </Button>
+            </div>
+          </div>
+        )
+      }
+    }
+
     return (
       <AppLayout title="Encryption">
         <MainWhite>
@@ -44,46 +95,7 @@ class SettingsEncryptionComponent extends Component {
           <Headline>
             Generate public and private encryption keys using a passphrase
           </Headline>
-
-          {fetching ? (
-            <div> Loading </div>
-          ) : (
-            <div>
-              <TextField
-                id="tf-passphrase"
-                label="Passphrase"
-                type="password"
-                className="md-cell md-cell--bottom"
-                value={this.state.passphrase}
-                onChange={(passphrase) => this.setState({
-                    passphrase,
-                    isConfirmationCorrect: checkConfirmation(passphrase, this.state.confirmation) })}
-              />
-              <div className="passphrase-confirmation">
-                <TextField
-                  id="tf-passphrase-confirm"
-                  label="Confirm passphrase"
-                  type="password"
-                  className="confirmation-input md-cell md-cell--bottom"
-                  value={this.state.confirmation}
-                  onChange={(confirmation) => this.setState({
-                    confirmation,
-                    startConfirmation: true,
-                    isConfirmationCorrect: checkConfirmation(this.state.passphrase, confirmation) })}
-                />
-                {this.state.passphrase.trim() != "" && this.state.startConfirmation ? iconCheck : null}
-              </div>
-              <div className="md-cell encryption-buttons">
-                <Button
-                  secondary
-                  raised
-                  disabled={!this.state.isConfirmationCorrect}
-                  onClick={generateEncryptionKeys}>
-                    Generate keys
-                </Button>
-              </div>
-            </div>
-          )}
+          {main}
         </MainWhite>
       </AppLayout>
     )
@@ -92,7 +104,8 @@ class SettingsEncryptionComponent extends Component {
 
 const mapStateToProps = (state) => ({
   fetching: state.keypair.fetching,
-  isKeyPairPresent: !!state.keypair.encryptedKeyPair
+  //isKeyPairPresent: !!state.keypair.encryptedKeyPair,
+  isKeyPairPresent: state.keypair.encryptedKeyPair && state.keypair.encryptedKeyPair.public_key && state.keypair.encryptedKeyPair.encrypted_secret_key
 })
 
 const mapDispatchToProps = (dispatch) => ({

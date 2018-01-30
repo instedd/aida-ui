@@ -11,22 +11,16 @@ dd {
 
 .encryption-buttons {
   text-align: right;
-
-  // button:hover {
-  //   // background: transparent;
-  // }
 }
 
-.passphrase-confirmation {
-  .confirmation-input, .confirmation-check {
-    display: inline-block;
-  }
-  .confirmation-check {
-    color: $md-light-green-700;
-    font-size: 28px;
-  }
-  .confirmation-warning {
-    color: $md-red-700;
-    font-size: 24px;
-  }
+.confirmation-input, .confirmation-check {
+  display: inline-block;
+}
+.confirmation-check {
+  color: $md-light-green-700;
+  font-size: 28px;
+}
+.confirmation-warning {
+  color: $md-red-700;
+  font-size: 24px;
 }

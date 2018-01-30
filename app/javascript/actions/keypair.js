@@ -3,7 +3,6 @@ import * as nacl from 'tweetnacl'
 
 export const FETCH = 'FETCH'
 export const FETCH_SUCCESS = 'FETCH_SUCCESS'
-export const GENERATE_KEYPAIR = 'GENERATE_KEYPAIR'
 
 export const fetch = () => ({
   type: FETCH
