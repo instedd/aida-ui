@@ -14,8 +14,6 @@ export const fetchSuccess = (encryptedKeyPair) => ({
   encryptedKeyPair
 })
 
-const encodeUint8Array = (arr) => (btoa(String.fromCharCode.apply(null, arr)))
-
 export const generateKeyPair = (passphrase) => (dispatch, getState) => {
   const keyPair = nacl.box.keyPair()
   const password = nacl.hash(new Uint8Array(passphrase.split().map(c => c.charCodeAt(0) & 255)))
@@ -38,3 +36,5 @@ export const fetchEncryptedKeyPair = () => (dispatch, getState) => {
     })
     .catch(() => console.log("Error fetching encrypted pair"))
 }
+
+const encodeUint8Array = (arr) => (btoa(String.fromCharCode.apply(null, arr)))

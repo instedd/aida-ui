@@ -28,7 +28,7 @@ class SettingsEncryptionComponent extends Component {
 
     const generateEncryptionKeys = () => (actions.generateKeyPair(this.state.passphrase))
 
-    const isConfirmationCorrect = (passphrase, confirmation) => (passphrase == confirmation)
+    const checkConfirmation = (passphrase, confirmation) => (passphrase == confirmation)
 
     let iconCheck = null
     if (this.state.isConfirmationCorrect) {
@@ -57,7 +57,7 @@ class SettingsEncryptionComponent extends Component {
                 value={this.state.passphrase}
                 onChange={(passphrase) => this.setState({
                     passphrase,
-                    isConfirmationCorrect: isConfirmationCorrect(passphrase, this.state.confirmation) })}
+                    isConfirmationCorrect: checkConfirmation(passphrase, this.state.confirmation) })}
               />
               <div className="passphrase-confirmation">
                 <TextField
@@ -69,7 +69,7 @@ class SettingsEncryptionComponent extends Component {
                   onChange={(confirmation) => this.setState({
                     confirmation,
                     startConfirmation: true,
-                    isConfirmationCorrect: isConfirmationCorrect(this.state.passphrase, confirmation) })}
+                    isConfirmationCorrect: checkConfirmation(this.state.passphrase, confirmation) })}
                 />
                 {this.state.passphrase.trim() != "" && this.state.startConfirmation ? iconCheck : null}
               </div>
@@ -77,6 +77,7 @@ class SettingsEncryptionComponent extends Component {
                 <Button
                   secondary
                   raised
+                  disabled={!this.state.isConfirmationCorrect}
                   onClick={generateEncryptionKeys}>
                     Generate keys
                 </Button>
