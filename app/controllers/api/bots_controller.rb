@@ -65,6 +65,16 @@ class Api::BotsController < ApplicationApiController
     data = []
     data = Backend.session_data(@bot.uuid) if @bot.published?
 
+    data.each do |row|
+      row_data = row["data"]
+      row_data.each do |key, value|
+        if value.is_a?(Hash) && value["type"] == "image"
+          @public_content_url ||= URI.parse("#{Settings.backend.public_content_url}/")
+          value["url"] = @public_content_url.merge("./image/#{value["id"]}").to_s
+        end
+      end
+    end
+
     respond_to do |format|
       format.csv do
         cols = []
@@ -78,6 +88,8 @@ class Api::BotsController < ApplicationApiController
               value = r["data"][c]
               if value.is_a?(Array)
                 row << value.join(", ")
+              elsif value.is_a?(Hash) && value["type"] == "image"
+                row << value["url"]
               elsif value.is_a?(Hash)
                 row << value.to_json
               else
