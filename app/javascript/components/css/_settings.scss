@@ -8,3 +8,11 @@ dd {
   margin-top: 0.5em;
   margin-left: 0;
 }
+
+.encryption-buttons {
+  text-align: right;
+
+  button:hover {
+    background: transparent;
+  }
+}
