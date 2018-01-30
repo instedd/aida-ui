@@ -71,6 +71,7 @@ export default class EditableTitleLabel extends Component {
           onKeyDown={e => this.onKeyDown(e)}
           onBlur={e => this.endAndSubmit(e)}
           size={50}
+          fullWidth={false}
           className='app-header-title-edit'
           id="ui-editable-title-label" />
       )

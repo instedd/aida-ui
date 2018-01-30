@@ -42,4 +42,10 @@ FactoryBot.define do
   sequence :email do |n|
     "sample-#{n}@example.com"
   end
+
+  factory :data_table do
+    bot
+    sequence(:name) { |n| "data-table-#{n}" }
+    data { [%w(key value), %w(foo bar)] }
+  end
 end

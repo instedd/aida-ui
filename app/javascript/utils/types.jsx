@@ -244,6 +244,58 @@ export type StatsAction = {
   error: string
 };
 
+export type TablesAction = {
+  type: 'TABLES_FETCH',
+  scope: Scope
+} | {
+  type: 'TABLES_FETCH_SUCCESS',
+  scope: Scope,
+  items: ById<T.DataTable>
+} | {
+  type: 'TABLES_FETCH_ERROR',
+  scope: Scope
+} | {
+  type: 'TABLE_CREATE',
+} | {
+  type: 'TABLE_CREATE_SUCCESS',
+  botId: number,
+  table: T.DataTable
+} | {
+  type: 'TABLE_CREATE_ERROR',
+  botId: number,
+  error: string
+} | {
+  type: 'TABLE_UPDATE',
+  table: T.DataTable
+} | {
+  type: 'TABLE_UPDATE_SUCCESS',
+  table: T.DataTable
+} | {
+  type: 'TABLE_UPDATE_ERROR',
+  tableId: number,
+  error: string
+} | {
+  type: 'TABLE_DESTROY',
+  tableId: number,
+} | {
+  type: 'TABLE_DESTROY_SUCCESS',
+  tableId: number
+} | {
+  type: 'TABLE_DESTROY_ERROR',
+  tableId: number,
+  error: string
+} | {
+  type: 'TABLES_UPLOAD',
+} | {
+  type: 'TABLES_UPLOAD_SUCCESS',
+  data: T.DataTableData
+} | {
+  type: 'TABLES_UPLOAD_ERROR',
+  error: string
+} | {
+  type: 'TABLES_UPLOAD_RESET',
+};
+
 export type TranslationsAction = {
   type: 'TRANSLATIONS_FETCH',
   scope: Scope,
@@ -300,6 +352,7 @@ export type Action = AuthAction
                    | SkillAction
                    | SkillsAction
                    | StatsAction
+                   | TablesAction
                    | TranslationsAction
                    | VariablesAction
                    | XlsFormsAction;
@@ -363,6 +416,15 @@ export type StatsState = {
   data: ?T.BotStats
 };
 
+export type TablesState = {
+  fetching: boolean,
+  scope: ?Scope,
+  items: ?ById<T.DataTable>,
+  uploading: boolean,
+  uploadError: ?string,
+  uploadedData: null | Array<any>;
+};
+
 export type TranslationsState = {
   fetching: boolean,
   scope: ?Scope,
@@ -389,6 +451,7 @@ export type State = {
   notifications: NotifState,
   skills: SkillsState,
   stats: StatsState,
+  tables: TablesState,
   translations: TranslationsState,
   xlsForms: XlsFormsState,
 };

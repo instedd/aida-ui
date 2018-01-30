@@ -4,6 +4,7 @@ class Bot < ApplicationRecord
   has_many :behaviours, dependent: :destroy
   has_many :translations, through: :behaviours
   has_many :variable_assignments, dependent: :destroy
+  has_many :data_tables, dependent: :destroy
   has_many :collaborators, dependent: :destroy
   has_many :invitations, dependent: :destroy
   has_many :collaborating_users, through: :collaborators, source: :user
@@ -41,6 +42,9 @@ class Bot < ApplicationRecord
       variables: VariableAssignment.manifest(self.variable_assignments, self.default_language, self.other_languages),
       channels: channels.map do |channel|
         channel.config.merge(type: channel.kind)
+      end,
+      data_tables: data_tables.map do |table|
+        table.manifest_fragment
       end
     }
   end
@@ -54,7 +58,10 @@ class Bot < ApplicationRecord
         skill.manifest_fragment
       end,
       variables: VariableAssignment.manifest(self.variable_assignments, self.default_language, self.other_languages),
-      channels: [{type: "websocket", access_token: access_token}]
+      channels: [{type: "websocket", access_token: access_token}],
+      data_tables: data_tables.map do |table|
+        table.manifest_fragment
+      end
     }
   end
 

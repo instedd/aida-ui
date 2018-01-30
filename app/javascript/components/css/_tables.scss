@@ -1,0 +1,68 @@
+.data-table-listing {
+  .separator {
+    vertical-align: bottom;
+    margin-right: 5px;
+    margin-left: 5px;
+  }
+
+  .link {
+    cursor: pointer;
+    color: $md-grey-500;
+  }
+
+  .md-card-title h2 {
+    margin-right: 10px;
+    white-space: nowrap;
+  }
+
+  .md-card-title {
+    a.ui-editable-title-label {
+      color: black;
+    }
+
+    .md-text-field-container {
+      display: inline-block;
+      margin-right: 60px;
+    }
+  }
+}
+
+.data-table-header {
+  margin-top: 10px;
+  margin-right: 10px;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+
+  .actions {
+    margin-top: -5px;
+    white-space: nowrap;
+    flex: 1;
+  }
+}
+
+.example {
+  flex: 10;
+  margin-left: 20px;
+  margin-right: 20px;
+  border-radius: 20px;
+  padding-left: 10px;
+  padding-right: 20px;
+  background: inherit;
+  border: 1px solid $md-grey-200;
+  height: 27px;
+
+  input.md-text-field {
+    margin-top: 2px;
+    margin-bottom: 2px;
+    color: $md-grey-500;
+  }
+  i.md-icon {
+    margin-bottom: 2px;
+    margin-top: 2px;
+    margin-left: -2px;
+  }
+  hr {
+    display: none;
+  }
+}

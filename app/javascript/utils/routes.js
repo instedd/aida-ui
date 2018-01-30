@@ -19,6 +19,8 @@ export const botSkill = (botId, skillId) => `/b/${botId}/behaviour/${skillId}`
 export const botTranslations = (botId) => `/b/${botId}/translations`
 export const botTranslationsContent = (botId) => `/b/${botId}/translations/content`
 export const botTranslationsVariables = (botId) => `/b/${botId}/translations/variables`
+export const botTables = (botId) => `/b/${botId}/translations/tables`
+export const botTable = (botId, tableId) => `/b/${botId}/translations/tables/${tableId}`
 
 export const botCollaborators = (botId) => `/b/${botId}/collaborators`
 

@@ -642,6 +642,33 @@
         "roles": { "$ref": "#/definitions/role_list" }
       },
       "required": [ "bot_name", "inviter", "roles" ]
+    },
+
+    "data_table_data": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "any"
+        }
+      }
+    },
+
+    "data_table": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "name": { "type": "string" },
+        "columns": { "type": "array", "items": { "type": "string" }},
+        "updated_at": { "type": "string" },
+        "data": {
+          "oneOf": [
+            { "type": "null" },
+            { "$ref": "#/definitions/data_table_data" }
+          ]
+        }
+      },
+      "required": [ "id", "name", "columns", "updated_at", "data" ]
     }
   },
 

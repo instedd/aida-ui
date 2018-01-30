@@ -7,6 +7,7 @@ const botSchema = new schema.Entity('bots')
 const channelSchema = new schema.Entity('channels')
 const frontDeskSchema = new schema.Entity('front_desks')
 const skillSchema = new schema.Entity('skills')
+const dataTableSchema = new schema.Entity('data_tables')
 
 export const fetchBots = () => {
   return (apiFetchJSON(`bots`, new schema.Array(botSchema)) : Promise<{entities: {bots: T.ById<T.Bot>}}>)
@@ -149,4 +150,39 @@ export const acceptInvitation = (token : string) => {
 
 export const generateToken = () => {
   return apiPutJSON(`generate_token`, null)
+}
+
+export const fetchDataTables = (botId : number) => {
+  return apiFetchJSON(`bots/${botId}/data_tables`, new schema.Array(dataTableSchema))
+}
+
+export const fetchDataTable = (tableId : number) => {
+  return apiFetchJSON(`data_tables/${tableId}`)
+}
+
+export const parseDataTable = (file : any) => {
+  const formData = new FormData()
+  formData.append('file', file)
+  return apiPostJSON(`data_tables/parse`, null, formData)
+}
+
+// we use a separate text serialized json_data parameter to avoid Rails removing
+// tailing nulls from nested arrays
+export const createDataTable = (botId : number, name : string, data: T.DataTableData) => {
+  return apiPostJSON(`bots/${botId}/data_tables`, null, {name, json_data: JSON.stringify(data)})
+}
+
+export const updateDataTable = (table : T.DataTable) => {
+  const wireTable = {...table}
+  if (table.data) {
+    // we use a separate text serialized json_data parameter to avoid Rails
+    // removing tailing nulls from nested arrays
+    wireTable.json_data = JSON.stringify(table.data)
+    delete wireTable.data
+  }
+  return apiPutJSON(`data_tables/${table.id}`, null, wireTable)
+}
+
+export const destroyDataTable = (tableId : number) => {
+  return apiDelete(`data_tables/${tableId}`)
 }

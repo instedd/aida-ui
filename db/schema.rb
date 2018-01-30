@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180122145329) do
+ActiveRecord::Schema.define(version: 20180124201150) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,6 +55,15 @@ ActiveRecord::Schema.define(version: 20180122145329) do
     t.index ["bot_id", "user_id"], name: "index_collaborators_on_bot_id_and_user_id", unique: true
     t.index ["bot_id"], name: "index_collaborators_on_bot_id"
     t.index ["user_id"], name: "index_collaborators_on_user_id"
+  end
+
+  create_table "data_tables", force: :cascade do |t|
+    t.bigint "bot_id"
+    t.string "name", null: false
+    t.json "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bot_id"], name: "index_data_tables_on_bot_id"
   end
 
   create_table "delayed_jobs", force: :cascade do |t|
@@ -137,6 +146,7 @@ ActiveRecord::Schema.define(version: 20180122145329) do
   add_foreign_key "channels", "bots"
   add_foreign_key "collaborators", "bots"
   add_foreign_key "collaborators", "users"
+  add_foreign_key "data_tables", "bots"
   add_foreign_key "invitations", "bots"
   add_foreign_key "invitations", "users", column: "creator_id"
   add_foreign_key "translations", "behaviours"

@@ -23,6 +23,7 @@ describe BotPolicy do
                                           :read_behaviours, :create_skill,
                                           :read_translations, :update_translation,
                                           :read_variables, :update_variable, :destroy_variable,
+                                          :read_data_tables, :create_data_table,
                                           :read_collaborators, :invite_collaborator]) }
     end
 
@@ -37,6 +38,7 @@ describe BotPolicy do
                                           :read_behaviours, :create_skill,
                                           :read_translations, :update_translation,
                                           :read_variables, :update_variable, :destroy_variable,
+                                          :read_data_tables, :create_data_table,
                                           :read_collaborators, :invite_collaborator]) }
     end
 
@@ -51,7 +53,8 @@ describe BotPolicy do
                                             :read_channels,
                                             :read_behaviours, :create_skill,
                                             :read_translations, :update_translation,
-                                            :read_variables, :update_variable, :destroy_variable]) }
+                                            :read_variables, :update_variable, :destroy_variable,
+                                            :read_data_tables, :create_data_table]) }
         it { is_expected.to forbid_actions([:update, :destroy,
                                             :duplicate,
                                             :read_collaborators, :invite_collaborator]) }
@@ -62,7 +65,8 @@ describe BotPolicy do
 
         it { is_expected.to permit_actions([:read_behaviours, :create_skill,
                                             :read_translations, :update_translation,
-                                            :read_variables, :update_variable, :destroy_variable]) }
+                                            :read_variables, :update_variable, :destroy_variable,
+                                            :read_data_tables, :create_data_table]) }
         it { is_expected.to forbid_actions([:update, :destroy,
                                             :publish, :unpublish,
                                             :duplicate,
@@ -82,13 +86,15 @@ describe BotPolicy do
                                             :read_channels,
                                             :read_behaviours, :create_skill,
                                             :read_variables, :update_variable, :destroy_variable,
+                                            :read_data_tables, :create_data_table,
                                             :read_collaborators, :invite_collaborator]) }
       end
 
       describe "with variables role" do
         let(:grants) { %w(variables) }
 
-        it { is_expected.to permit_actions([:read_variables, :update_variable, :destroy_variable]) }
+        it { is_expected.to permit_actions([:read_variables, :update_variable, :destroy_variable,
+                                            :read_data_tables, :create_data_table]) }
         it { is_expected.to forbid_actions([:update, :destroy,
                                             :publish, :unpublish,
                                             :duplicate,
@@ -110,6 +116,7 @@ describe BotPolicy do
                                             :read_behaviours, :create_skill,
                                             :read_translations, :update_translation,
                                             :read_variables, :update_variable, :destroy_variable,
+                                            :read_data_tables, :create_data_table,
                                             :read_collaborators, :invite_collaborator]) }
       end
     end

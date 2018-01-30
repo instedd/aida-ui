@@ -6,6 +6,7 @@
     "babel-preset-react": "^6.24.1",
     "clipboard-copy": "^1.2.0",
     "coffeescript": "1.12.7",
+    "humps": "^2.0.1",
     "iso-639-3": "^1.0.1",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.17.4",
