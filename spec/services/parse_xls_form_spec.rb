@@ -43,7 +43,7 @@ RSpec.describe ParseXlsForm, type: :service do
 
     end
 
-    %w(decimal.xlsx cascading_select.xlsx cascading_select_integer.xlsx image.xlsx integer.xlsx multiple_choice_lists.xlsx
+    %w(decimal.xlsx cascading_select.xlsx cascading_select_integer.xlsx encrypt.xlsx image.xlsx integer.xlsx multiple_choice_lists.xlsx
     numbers.xlsx select_many.xlsx select_one.xlsx simple.xlsx single_choices_list_underscore.xlsx
     single_choices_list.xlsx no_choices.xlsx relevant_questions.xlsx constraint_basic.xlsx text.xlsx).each do |file|
       it "returns valid survey for #{file}" do
@@ -292,6 +292,51 @@ RSpec.describe ParseXlsForm, type: :service do
                                        name: 'city',
                                        message: 'city',
                                        choice_filter: 'state=${state} and county=${county}'
+                                     }])
+    end
+
+    it "parses encrypt if present" do
+      survey = Roo::Spreadsheet.open(file_fixture('encrypt.xlsx').open).sheet('survey')
+      result = ParseXlsForm.gather_questions(survey)
+
+      expect(result).to match_array([{
+                                       type: 'select_one',
+                                       choices: 'male_female',
+                                       name: 'gender',
+                                       message: 'Respondent gender?',
+                                       encrypt: true,
+                                     },
+                                     {
+                                       type: 'integer',
+                                       name: 'age',
+                                       message: 'Respondent age?',
+                                       encrypt: true,
+                                     },
+                                     {
+                                       type: 'integer',
+                                       name: 'secret',
+                                       message: 'secret',
+                                       encrypt: true,
+                                     },
+                                     {
+                                       type: 'integer',
+                                       name: 'num1',
+                                       message: 'Num1'
+                                     },
+                                     {
+                                       type: 'integer',
+                                       name: 'num2',
+                                       message: 'Num2'
+                                     },
+                                     {
+                                       type: 'integer',
+                                       name: 'num3',
+                                       message: 'Num3'
+                                     },
+                                     {
+                                       type: 'integer',
+                                       name: 'num4',
+                                       message: 'Num4'
                                      }])
     end
   end

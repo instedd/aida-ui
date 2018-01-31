@@ -294,7 +294,8 @@
             "choices": { "type": "string" },
             "message": { "$ref": "#/definitions/message" },
             "relevant": { "type": "string" },
-            "constraint_message": { "$ref": "#/definitions/message" }
+            "constraint_message": { "$ref": "#/definitions/message" },
+            "encrypt": { "type": "boolean" }
           }
         },
         {
@@ -306,7 +307,8 @@
             "message": { "$ref": "#/definitions/message" },
             "relevant": { "type": "string" },
             "constraint": { "type": "string" },
-            "constraint_message": { "$ref": "#/definitions/message" }
+            "constraint_message": { "$ref": "#/definitions/message" },
+            "encrypt": { "type": "boolean" }
           }
         }
       ]
