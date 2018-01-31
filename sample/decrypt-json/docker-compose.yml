@@ -1,0 +1,14 @@
+version: '2.0'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile-dev
+    working_dir: /src
+    volumes:
+      - .:/src
+      - node_modules:/src/node_modules
+
+volumes:
+  node_modules:

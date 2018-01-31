@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "isomorphic-fetch": "^2.2.1",
+    "minimist": "^1.2.0",
+    "msgpack-lite": "^0.1.26",
+    "pbkdf2": "^3.0.14",
+    "tweetnacl": "^1.0.0"
+  },
+  "scripts": {
+    "fetch-data": "node fetch-data.js"
+  },
+  "private": true
+}
