@@ -90,6 +90,8 @@ class Api::BotsController < ApplicationApiController
                 row << value.join(", ")
               elsif value.is_a?(Hash) && value["type"] == "image"
                 row << value["url"]
+              elsif value.is_a?(Hash) && value["type"] == "encrypted"
+                row << "** encrypted **"
               elsif value.is_a?(Hash)
                 row << value.to_json
               else
