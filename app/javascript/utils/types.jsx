@@ -198,6 +198,13 @@ export type FrontDeskAction = {
   config: T.FrontDeskConfig
 };
 
+export type KeyPairAction = {
+  type: 'KEYPAIR_FETCH'
+} | {
+  type: 'KEYPAIR_FETCH_SUCCESS',
+  encryptedKeyPair: T.EncryptedKeyPair
+};
+
 export type NotificationsAction = {
   type: 'NOTIF_PUSH',
   message: string
@@ -348,6 +355,7 @@ export type Action = AuthAction
                    | CollaboratorsAction
                    | InvitationsAction
                    | FrontDeskAction
+                   | KeyPairAction
                    | NotificationsAction
                    | SkillAction
                    | SkillsAction
@@ -391,6 +399,11 @@ export type FrontDeskState = {
   fetching: boolean,
   botId: ?number,
   data: ?T.FrontDesk
+};
+
+export type KeyPairState = {
+  fetching: boolean,
+  encryptedKeyPair: ?T.EncryptedKeyPair
 };
 
 export type InvitationState = {
@@ -447,6 +460,7 @@ export type State = {
   chat: ChatState,
   collaborators: CollaboratorsState,
   frontDesk: FrontDeskState,
+  keypair: KeyPairState,
   invitation: InvitationState,
   notifications: NotifState,
   skills: SkillsState,

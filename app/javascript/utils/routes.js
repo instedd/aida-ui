@@ -1,5 +1,7 @@
 export const settingsApi = () => '/settings/api'
 
+export const settingsEncryption = () => '/settings/encryption'
+
 export const botIndex = () => '/b'
 
 export const bot = (botId) => `/b/${botId}`

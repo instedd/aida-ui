@@ -56,6 +56,9 @@ Rails.application.routes.draw do
     end
 
     post :xls_form, to: 'xls_form#upload'
+
+    get :encryption_keys, to: 'encryption_keys#fetch'
+    post :encryption_keys, to: 'encryption_keys#update'
   end
 
   get "/_design(/*path)", to: 'welcome#design'

@@ -12,6 +12,7 @@ import { BotIndex } from '../components/BotIndex'
 import { BotLayout } from '../components/BotLayout'
 import InvitationView from '../components/InvitationView'
 import { SettingsApi } from '../components/SettingsApi'
+import { SettingsEncryption} from '../components/SettingsEncryption'
 
 export const createAppStore = () => {
   return createStore(reducers, applyMiddleware(
@@ -30,6 +31,7 @@ export const App = ({store}) => (
         <Route path="/b/:id" component={BotLayout} />
         <Route path="/invitation/:token" render={({match}) => <InvitationView token={match.params.token} />} />
         <Route exact path="/settings/api" component={SettingsApi} />
+        <Route exact path="/settings/encryption" component={SettingsEncryption} />
       </div>
     </BrowserRouter>
   </Provider>

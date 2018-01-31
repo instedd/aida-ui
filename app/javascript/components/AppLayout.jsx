@@ -21,7 +21,8 @@ export const AppLayout = ({title, headerNav, headerNavExtra, userName, children,
             ]}
             sectionNavLinks={[
               <SectionNavLink key={0} label="Bots" to="/b" />,
-              <SectionNavLink key={1} label="API" to={r.settingsApi()} />
+              <SectionNavLink key={1} label="API" to={r.settingsApi()} />,
+              <SectionNavLink key={2} label="Encryption" to={r.settingsEncryption()} />
             ]}
             headerNav={headerNav}
             headerNavExtra={headerNavExtra}

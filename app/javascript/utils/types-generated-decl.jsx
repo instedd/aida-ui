@@ -307,3 +307,8 @@ export type DataTable = {
   data: null | DataTableData;
 };
 
+export type EncryptedKeyPair = {
+  public_key: string;
+  encrypted_secret_key: string;
+};
+

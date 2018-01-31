@@ -5,6 +5,7 @@ import channels from './channels'
 import collaborators from './collaborators'
 import frontDesk from './frontDesk'
 import invitation from './invitation'
+import keypair from './keypair'
 import notifications from './notifications'
 import skills from './skills'
 import stats from './stats'
@@ -21,6 +22,7 @@ export default combineReducers({
   collaborators,
   frontDesk,
   invitation,
+  keypair,
   notifications,
   skills,
   stats,
