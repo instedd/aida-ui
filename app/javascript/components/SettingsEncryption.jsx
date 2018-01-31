@@ -15,8 +15,7 @@ class SettingsEncryptionComponent extends Component {
   state = {
     passphrase: '',
     confirmation: '',
-    startConfirmation: false,
-    isConfirmationCorrect: false
+    warningDismissed: false
   }
 
   componentDidMount() {
@@ -24,68 +23,85 @@ class SettingsEncryptionComponent extends Component {
   }
 
   render() {
-    const { actions, fetching, isKeyPairPresent} = this.props
+    const { actions, fetching, isKeyPairPresent } = this.props
+    const { warningDismissed, passphrase, confirmation } = this.state
 
-    const generateEncryptionKeys = () => (actions.generateKeyPair(this.state.passphrase))
-
-    const checkConfirmation = (passphrase, confirmation) => (passphrase == confirmation)
-
-    let iconCheck = null
-    if (this.state.isConfirmationCorrect) {
-      iconCheck = <FontIcon className="confirmation-check">done</FontIcon>
-    } else {
-      iconCheck = <FontIcon className="confirmation-warning">warning</FontIcon>
+    const generateEncryptionKeys = () => {
+      actions.generateKeyPair(this.state.passphrase)
+        .then(()=>{
+          this.setState({
+            passphrase: '',
+            confirmation: '',
+            warningDismissed: false
+          })
+        })
     }
+
+    const passwordsMatch = passphrase == confirmation
+
+    const iconCheck = passwordsMatch
+      ? (<FontIcon className="confirmation-check">done</FontIcon>)
+      : (<FontIcon className="confirmation-warning">warning</FontIcon>)
 
     let main = null
     if (fetching) {
       main = <div> Loading </div>
     } else {
-      if (isKeyPairPresent) {
-        main = (
-          <div>
-            Warning ...
+      const warning = (
+        <div className="encryption-warning md-cell md-cell--bottom">
+          <h3>Warning</h3>
+          <div className="encryption-warning-content">
+            A pair of public/private keys has already been generated. <br/>
+            If a new pair is generated then existing encrypted data will be unrecoverable.
           </div>
-        )
-      } else {
-        main = (
-          <div>
-            <TextField
-              id="tf-passphrase"
-              label="Passphrase"
-              type="password"
-              className="md-cell md-cell--bottom"
-              value={this.state.passphrase}
-              onChange={(passphrase) => this.setState({
-                passphrase,
-                isConfirmationCorrect: checkConfirmation(passphrase, this.state.confirmation)
-              })}
-            />
-            <TextField
-              id="tf-passphrase-confirm"
-              label="Confirm passphrase"
-              type="password"
-              className="confirmation-input md-cell md-cell--bottom"
-              value={this.state.confirmation}
-              onChange={(confirmation) => this.setState({
-                confirmation,
-                startConfirmation: true,
-                isConfirmationCorrect: checkConfirmation(this.state.passphrase, confirmation)
-              })}
-            />
-            { this.state.passphrase.trim() != "" && this.state.startConfirmation ? iconCheck : null }
-            <div className="md-cell encryption-buttons">
-              <Button
-                secondary
-                raised
-                disabled={!this.state.isConfirmationCorrect}
-                onClick={generateEncryptionKeys}>
-                Generate keys
-                    </Button>
-            </div>
+          <div className="encryption-warning-action">
+            <Button
+              raised
+              primary
+              onClick={() => (this.setState({warningDismissed: true}))}>
+              Continue
+            </Button>
           </div>
-        )
-      }
+        </div>
+      )
+
+      const passwordDialog = (
+        <div>
+          <TextField
+            id="tf-passphrase"
+            label="Passphrase"
+            type="password"
+            className="md-cell md-cell--bottom"
+            value={passphrase}
+            onChange={passphrase => this.setState({passphrase})}
+          />
+          <TextField
+            id="tf-passphrase-confirm"
+            label="Confirm passphrase"
+            type="password"
+            className="confirmation-input md-cell md-cell--bottom"
+            value={this.state.confirmation}
+            onChange={(confirmation) => this.setState({confirmation})}
+          />
+          {iconCheck}
+          <div className="md-cell encryption-buttons">
+            <Button
+              secondary
+              raised
+              disabled={!passwordsMatch || passphrase.trim().length == 0}
+              onClick={generateEncryptionKeys}>
+              Generate keys
+            </Button>
+          </div>
+        </div>
+      )
+
+      main = (
+        <div>
+          {(isKeyPairPresent && !warningDismissed) ? warning : null}
+          {(!isKeyPairPresent || warningDismissed) ? passwordDialog : null}
+        </div>
+      )
     }
 
     return (
@@ -104,8 +120,9 @@ class SettingsEncryptionComponent extends Component {
 
 const mapStateToProps = (state) => ({
   fetching: state.keypair.fetching,
-  //isKeyPairPresent: !!state.keypair.encryptedKeyPair,
-  isKeyPairPresent: state.keypair.encryptedKeyPair && state.keypair.encryptedKeyPair.public_key && state.keypair.encryptedKeyPair.encrypted_secret_key
+  isKeyPairPresent: state.keypair.encryptedKeyPair &&
+                    state.keypair.encryptedKeyPair.public_key &&
+                    state.keypair.encryptedKeyPair.encrypted_secret_key
 })
 
 const mapDispatchToProps = (dispatch) => ({

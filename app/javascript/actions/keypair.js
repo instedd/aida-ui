@@ -23,7 +23,7 @@ export const generateKeyPair = (passphrase) => (dispatch, getState) => {
 
   dispatch(fetch())
 
-  api.updateEncryptionKeys(encodeUint8Array(keyPair.publicKey), encodeUint8Array(encryptedSecretKey))
+  return api.updateEncryptionKeys(encodeUint8Array(keyPair.publicKey), encodeUint8Array(encryptedSecretKey))
     .then(response => dispatch(fetchSuccess(response)))
 }
 
