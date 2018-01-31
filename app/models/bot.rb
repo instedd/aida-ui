@@ -42,12 +42,13 @@ class Bot < ApplicationRecord
       variables: VariableAssignment.manifest(self.variable_assignments, self.default_language, self.other_languages),
       channels: channels.map do |channel|
         channel.config.merge(type: channel.kind)
-      end,
-      data_tables: data_tables.map do |table|
+      end
+    }.tap do |manifest|
+      manifest[:data_tables] = data_tables.map do |table|
         table.manifest_fragment
-      end,
-      public_keys: public_keys_fragment
-    }
+      end if data_tables.present?
+      manifest[:public_keys] = public_keys_fragment if public_keys_fragment.present?
+    end
   end
 
   def preview_manifest(access_token)
