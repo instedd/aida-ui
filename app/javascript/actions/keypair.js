@@ -1,20 +1,23 @@
+// @flow
+import * as T from '../utils/types'
+
 import * as api from '../utils/api'
 import * as nacl from 'tweetnacl'
 import pbkdf2 from 'pbkdf2'
 
-export const FETCH = 'FETCH'
-export const FETCH_SUCCESS = 'FETCH_SUCCESS'
+export const FETCH = 'KEYPAIR_FETCH'
+export const FETCH_SUCCESS = 'KEYPAIR_FETCH_SUCCESS'
 
-export const fetch = () => ({
+export const fetch = () : T.KeyPairAction => ({
   type: FETCH
 })
 
-export const fetchSuccess = (encryptedKeyPair) => ({
+export const fetchSuccess = (encryptedKeyPair : T.EncryptedKeyPair) : T.KeyPairAction => ({
   type: FETCH_SUCCESS,
   encryptedKeyPair
 })
 
-export const generateKeyPair = (passphrase) => (dispatch, getState) => {
+export const generateKeyPair = (passphrase : string) => (dispatch : T.Dispatch, getState : T.GetState) => {
   const keyPair = nacl.box.keyPair()
 
   const key = pbkdf2.pbkdf2Sync(passphrase, '', 1000, 32, "sha512")
@@ -34,7 +37,7 @@ export const generateKeyPair = (passphrase) => (dispatch, getState) => {
     .then(response => dispatch(fetchSuccess(response)))
 }
 
-export const fetchEncryptedKeyPair = () => (dispatch, getState) => {
+export const fetchEncryptedKeyPair = () => (dispatch : T.Dispatch, getState : T.GetState) => {
   dispatch(fetch())
   api.fetchEncryptionKeys()
     .then((response) => {

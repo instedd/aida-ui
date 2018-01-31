@@ -1,3 +1,5 @@
+// @flow
+import * as T from '../utils/types'
 
 import * as actions from '../actions/keypair'
 
@@ -6,7 +8,7 @@ const initialState = {
   encryptedKeyPair: null
 }
 
-export default (state, action) => {
+export default (state : T.KeyPairState, action : T.Action) => {
   state = state || initialState
   switch (action.type) {
     case actions.FETCH: return fetch(state, action)
