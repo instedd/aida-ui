@@ -52,20 +52,9 @@ class Bot < ApplicationRecord
   end
 
   def preview_manifest(access_token)
-    {
-      version: "1",
-      languages: available_languages,
-      front_desk: front_desk.manifest_fragment,
-      skills: skills.enabled.map do |skill|
-        skill.manifest_fragment
-      end,
-      variables: VariableAssignment.manifest(self.variable_assignments, self.default_language, self.other_languages),
-      channels: [{type: "websocket", access_token: access_token}],
-      data_tables: data_tables.map do |table|
-        table.manifest_fragment
-      end,
-      public_keys: public_keys_fragment
-    }
+    manifest.tap do |m|
+      m[:channels] = [{type: "websocket", access_token: access_token}]
+    end
   end
 
   def front_desk
@@ -77,7 +66,7 @@ class Bot < ApplicationRecord
   end
 
   def language_detector
-    behaviours.where(kind: "language_detector").first
+    behaviours.enabled.where(kind: "language_detector").first
   end
 
   def available_languages

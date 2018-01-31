@@ -13,11 +13,23 @@ RSpec.describe Bot, type: :model do
     let!(:bot) { Bot.create_prepared! user }
     let!(:skill) { bot.skills.create_skill! 'keyword_responder' }
 
-    it "generates manifest" do
-      manifest = bot.manifest
-      expect(manifest).to_not be_nil
-      expect(manifest[:version]).to eq("1")
-      expect(manifest.keys).to match_array(%i(version languages front_desk skills variables channels))
+    describe "manifest" do
+      it "is generated" do
+        manifest = bot.manifest
+        expect(manifest).to_not be_nil
+        expect(manifest[:version]).to eq("1")
+        expect(manifest.keys).to match_array(%i(version languages front_desk skills variables channels))
+      end
+
+      it "has a public_keys section if the owner has a key pair" do
+        user.update_attributes! public_key: "public_key", encrypted_secret_key: "secret"
+        expect(bot.manifest.keys).to include(:public_keys)
+      end
+
+      it "has a data_tables section if the bot has tables" do
+        create(:data_table, bot: bot)
+        expect(bot.manifest.keys).to include(:data_tables)
+      end
     end
 
     it "outputs only enabled skills" do
@@ -76,6 +88,19 @@ RSpec.describe Bot, type: :model do
                                }
       expect(bot.language_detector).to_not be_nil
       expect(bot.available_languages).to eq(['en', 'es'])
+    end
+
+    it "returns a single language if the bot has a disable language detector" do
+      bot.skills.create_skill! 'language_detector',
+                               enabled: false,
+                               config: {
+                                 languages: [
+                                   {code: 'en', keywords: 'en'},
+                                   {code: 'es', keywords: 'es'}
+                                 ]
+                               }
+      expect(bot.language_detector).to be_nil
+      expect(bot.available_languages).to eq(['en'])
     end
   end
 
