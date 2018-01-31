@@ -187,7 +187,7 @@ export const destroyDataTable = (tableId : number) => {
   return apiDelete(`data_tables/${tableId}`)
 }
 
-export const updateEncryptionKeys = (publicKey, encryptedSecretKey) => {
+export const updateEncryptionKeys = (publicKey : string, encryptedSecretKey : string) => {
   return apiPostJSON(`encryption_keys`, null, { public_key: publicKey, encrypted_secret_key: encryptedSecretKey})
 }
 
