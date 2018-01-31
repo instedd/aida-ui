@@ -17,7 +17,7 @@ RSpec.describe Bot, type: :model do
       manifest = bot.manifest
       expect(manifest).to_not be_nil
       expect(manifest[:version]).to eq("1")
-      expect(manifest.keys).to match_array(%i(version languages front_desk skills variables channels data_tables))
+      expect(manifest.keys).to match_array(%i(version languages front_desk skills variables channels data_tables public_keys))
     end
 
     it "outputs only enabled skills" do

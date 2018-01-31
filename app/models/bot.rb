@@ -45,7 +45,8 @@ class Bot < ApplicationRecord
       end,
       data_tables: data_tables.map do |table|
         table.manifest_fragment
-      end
+      end,
+      public_keys: public_keys_fragment
     }
   end
 
@@ -61,7 +62,8 @@ class Bot < ApplicationRecord
       channels: [{type: "websocket", access_token: access_token}],
       data_tables: data_tables.map do |table|
         table.manifest_fragment
-      end
+      end,
+      public_keys: public_keys_fragment
     }
   end
 
@@ -106,6 +108,14 @@ class Bot < ApplicationRecord
         }
       end
     end.compact
+  end
+
+  def public_keys_fragment
+    if owner.public_key.present?
+      [owner.public_key]
+    else
+      []
+    end
   end
 
   private
