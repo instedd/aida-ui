@@ -4,8 +4,8 @@ class GatherBotStats
     fail "Bot is not yet published" unless bot.published?
     fail "Period is invalid" unless %w(today this_week this_month).include?(period)
 
-    summary = Backend.usage_summary(bot.uuid)
-    users_per_skill = Backend.users_per_skill(bot.uuid)
+    summary = Backend.usage_summary(bot.uuid, period: period)
+    users_per_skill = Backend.users_per_skill(bot.uuid, period: period)
 
     skills = bot.skills.index_by(&:id)
     {

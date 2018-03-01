@@ -196,10 +196,10 @@ RSpec.describe Api::BotsController, type: :controller do
     end
 
     it "returns the usage stats for the bot" do
-      expect(Backend).to receive(:usage_summary).with(published_bot.uuid).and_return(sample_summary)
-      expect(Backend).to receive(:users_per_skill).with(published_bot.uuid).and_return(sample_users_per_skill)
+      expect(Backend).to receive(:usage_summary).with(published_bot.uuid, period: "this_week").and_return(sample_summary)
+      expect(Backend).to receive(:users_per_skill).with(published_bot.uuid, period: "this_week").and_return(sample_users_per_skill)
 
-      get :stats, params: { id: published_bot.id }
+      get :stats, params: { id: published_bot.id, period: "this_week" }
 
       expect(response).to be_success
       expect(json_body).to be_a_bot_stats_as_json.matching(active_users: 10,
@@ -211,10 +211,10 @@ RSpec.describe Api::BotsController, type: :controller do
 
     it "is allowed for shared bots with results role" do
       shared_published_bot = create(:bot, :published, shared_with: user, grants: %w(results))
-      expect(Backend).to receive(:usage_summary).with(shared_published_bot.uuid).and_return(sample_summary)
-      expect(Backend).to receive(:users_per_skill).with(shared_published_bot.uuid).and_return(sample_users_per_skill)
+      expect(Backend).to receive(:usage_summary).with(shared_published_bot.uuid, period: "this_month").and_return(sample_summary)
+      expect(Backend).to receive(:users_per_skill).with(shared_published_bot.uuid, period: "this_month").and_return(sample_users_per_skill)
 
-      get :stats, params: { id: shared_published_bot.id }
+      get :stats, params: { id: shared_published_bot.id, period: "this_month" }
 
       expect(response).to be_success
       expect(json_body).to be_a_bot_stats_as_json
