@@ -62,8 +62,8 @@ class BotAnalyticsComponent extends Component {
         <Grid>
           <Cell size={3}>
             <Metric label="active users" value={l(data.active_users)}/>
-            <Metric label="messages received" value={l(data.messages_sent)}/>
-            <Metric label="messages sent" value={l(data.messages_received)}/>
+            <Metric label="messages received" value={l(data.messages_received)}/>
+            <Metric label="messages sent" value={l(data.messages_sent)}/>
           </Cell>
           <Cell size={9}>
             <Paper style={{padding: 30}}>
