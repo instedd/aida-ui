@@ -105,6 +105,7 @@ RSpec.describe Behaviour, type: :model do
     let!(:survey) {
       bot.skills.create_skill!('survey', config: {
                                  schedule: '2017-12-15T14:30:00Z',
+                                 keywords: 'age',
                                  questions: [
                                    { type: 'select_one',
                                      name: 'opt_in',
@@ -134,7 +135,7 @@ RSpec.describe Behaviour, type: :model do
     it "generates manifest fragment" do
       fragment = survey.manifest_fragment
       expect(fragment).to_not be_nil
-      expect(fragment.keys).to match_array(%i(type id schedule name questions choice_lists))
+      expect(fragment.keys).to match_array(%i(type id schedule keywords name questions choice_lists))
       expect(fragment[:questions].size).to eq(2)
       expect(fragment[:questions][0]).to match({ type: 'select_one',
                                                  name: 'opt_in',
@@ -170,6 +171,7 @@ RSpec.describe Behaviour, type: :model do
 
     it "generates manifest with translations" do
       add_languages 'en', 'es'
+      survey.translations.create! key: 'keywords', lang: 'es', value: 'edad'
       survey.translations.create! key: 'questions/[name=opt_in]/message', lang: 'es', value: 'Puedo preguntarte algo?'
       survey.translations.create! key: 'questions/[name=age]/message', lang: 'es', value: 'Qué edad tenés?'
       survey.translations.create! key: 'questions/[name=age]/constraint_message', lang: 'es', value: 'No podés tener esa edad'
@@ -177,6 +179,7 @@ RSpec.describe Behaviour, type: :model do
       survey.translations.create! key: 'choice_lists/[name=yes_no]/choices/[name=no]/labels', lang: 'es', value: 'no,luego'
 
       fragment = survey.manifest_fragment
+      expect(fragment[:keywords]).to match({ 'en' => ['age'], 'es' => ['edad'] })
       expect(fragment[:questions][0][:message]).to match({ 'en' => 'Can I ask you a question?',
                                                            'es' => 'Puedo preguntarte algo?' })
       expect(fragment[:questions][1][:message]).to match({ 'en' => 'How old are you?',
@@ -192,12 +195,14 @@ RSpec.describe Behaviour, type: :model do
     it "returns translation keys for questions and choice lists" do
       keys = survey.translation_keys
       expect(keys).to be_an(Array)
-      expect(keys.map { |key| key[:key] }).to match_array(['questions/[name=opt_in]/message',
+      expect(keys.map { |key| key[:key] }).to match_array(['keywords',
+                                                           'questions/[name=opt_in]/message',
                                                            'questions/[name=age]/message',
                                                            'questions/[name=age]/constraint_message',
                                                            'choice_lists/[name=yes_no]/choices/[name=yes]/labels',
                                                            'choice_lists/[name=yes_no]/choices/[name=no]/labels'])
-      expect(keys.map { |key| key[:default_translation] }).to match_array(['Can I ask you a question?',
+      expect(keys.map { |key| key[:default_translation] }).to match_array(['age',
+                                                                           'Can I ask you a question?',
                                                                            'How old are you?',
                                                                            'No way you are that old',
                                                                            'yes,yep,sure,ok',

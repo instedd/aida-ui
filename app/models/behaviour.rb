@@ -70,6 +70,7 @@ class Behaviour < ApplicationRecord
                          name: "Survey",
                          config: {
                            "schedule" => "",
+                           "keywords" => "",
                            "questions" => [],
                            "choice_lists" => []
                          }
@@ -149,6 +150,9 @@ class Behaviour < ApplicationRecord
         id: id.to_s,
         name: name,
         schedule: config["schedule"],
+        keywords: localized_value(:keywords) do |keywords|
+          keywords.split(/,\s*/)
+        end,
         questions: config["questions"].map.with_index do |question, i|
           {
             type: question["type"],
@@ -266,6 +270,7 @@ class Behaviour < ApplicationRecord
       []
     when "survey"
       [
+        translation_key("keywords", "Valid keywords (comma separated)"),
         config["questions"].map do |question|
           keys = [translation_key("questions/[name=#{question['name']}]/message",
                                   "Question #{question['name']}")]

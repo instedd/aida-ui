@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux'
 
 import * as xlsFormsActions from '../actions/xlsForms'
 
+import Field from '../ui/Field'
 import Title from '../ui/Title'
 import Headline from '../ui/Headline'
 import { getLocalTimezone } from '../utils'
@@ -75,6 +76,9 @@ class Survey extends Component {
                       value={date}
                       onChange={(_, value) => updateConfig('schedule')(value)} />
         </div>
+
+        <Field id="survey-keywords" label="Valid keywords (comma separated)"
+          value={config.keywords} onChange={updateConfig('keywords')} />
 
         <div className="file-upload-field">
           <label htmlFor="survey-xlsform-upload">Survey form</label>
