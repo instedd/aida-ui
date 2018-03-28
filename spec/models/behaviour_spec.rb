@@ -169,6 +169,11 @@ RSpec.describe Behaviour, type: :model do
                                                   })
     end
 
+    it "does not include keywords when not defined" do
+      survey.config["keywords"] = ""
+      expect(survey.manifest_fragment.keys).to_not include(:keywords)
+    end
+
     it "generates manifest with translations" do
       add_languages 'en', 'es'
       survey.translations.create! key: 'keywords', lang: 'es', value: 'edad'

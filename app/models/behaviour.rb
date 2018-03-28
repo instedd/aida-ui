@@ -150,9 +150,6 @@ class Behaviour < ApplicationRecord
         id: id.to_s,
         name: name,
         schedule: config["schedule"],
-        keywords: localized_value(:keywords) do |keywords|
-          keywords.split(/,\s*/)
-        end,
         questions: config["questions"].map.with_index do |question, i|
           {
             type: question["type"],
@@ -184,6 +181,12 @@ class Behaviour < ApplicationRecord
         end
       }.tap do |manifest_fragment|
         manifest_fragment[:relevant] = config["relevant"] if config["relevant"].present?
+        if config["keywords"].present?
+          manifest_fragment[:keywords] =
+            localized_value(:keywords) do |keywords|
+              keywords.split(/,\s*/)
+            end
+        end
       end
     when "scheduled_messages"
       {
