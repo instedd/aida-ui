@@ -1,17 +1,19 @@
 class WelcomeController < ApplicationController
+  layout 'welcoming', only: [:landing]
   before_action :authenticate_user!, only: [:login, :generate_token]
 
   def index
     if user_signed_in?
       render :index
     else
-      # render :landing
-      redirect_to login_path
+      render :landing
+      #redirect_to login_path
     end
   end
 
   def login
-    redirect_to root_path
+    redirect_to login_path
+    #redirect_to root_path
   end
 
   def logout
