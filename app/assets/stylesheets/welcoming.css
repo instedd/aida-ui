@@ -2016,7 +2016,7 @@ body.welcome .section {
   body.welcome .section.left-img {
     padding-left: 0; }
     body.welcome .section.left-img .col.m7 {
-      padding-left: ; }
+      padding-left: 0; }
   body.welcome .section .description {
     display: flex !important;
     flex-direction: column !important;
