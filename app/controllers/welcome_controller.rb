@@ -1,12 +1,11 @@
 class WelcomeController < ApplicationController
-  layout 'welcoming', only: [:landing]
   before_action :authenticate_user!, only: [:login, :generate_token]
 
   def index
     if user_signed_in?
       render :index
     else
-      render :landing
+      render :landing, layout: false
       #redirect_to login_path
     end
   end
