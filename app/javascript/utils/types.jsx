@@ -233,6 +233,13 @@ export type SkillsAction = {
   type: 'SKILLS_CREATE_SUCCESS',
   scope: Scope,
   skill: T.Skill
+} | {
+  type: 'SKILLS_MOVE_SKILL',
+  source: T.Skill,
+  target: T.Skill
+} | {
+  type: 'SKILLS_MOVE_SKILL_TO_TOP',
+  source: T.Skill
 };
 
 export type StatsAction = {
