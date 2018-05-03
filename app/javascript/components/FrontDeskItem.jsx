@@ -21,11 +21,6 @@ class FrontDeskItem extends Component {
   render() {
     const { bot, icon, onClick, connectDropTarget, isOver, isDragging } = this.props
 
-    let draggableStyle: any = {
-      opacity: isDragging ? 0.0 : 1,
-      cursor: 'move'
-    }
-
     return connectDropTarget(
       <div className={isOver ? 'drop-target' : ''} >
         <SidebarItem icon={icon}

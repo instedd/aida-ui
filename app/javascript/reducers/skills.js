@@ -4,8 +4,6 @@ import omit from 'lodash/omit'
 
 import * as actions from '../actions/skills'
 import * as skillActions from '../actions/skill'
-import findIndex from 'lodash/findIndex'
-import reduce from 'lodash/reduce'
 import sortBy from 'lodash/sortBy'
 
 const initialState = {
@@ -125,6 +123,7 @@ export const orderAfterMovingSkill = (skills: Array<T.Skill>, source: T.Skill, t
       }
     }
   })
+
   return res
 }
 
