@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { SidebarItem, SidebarMenuItem } from '../ui/SideBar'
+import { skillIcon, skillDnDType } from '../utils/skills_bar'
 import includes from 'lodash/includes'
 import { DragSource, DropTarget } from 'react-dnd'
 import { connect } from 'react-redux'
@@ -10,25 +11,6 @@ import sortBy from 'lodash/sortBy'
 const RENAMEABLE_SKILLS = ['keyword_responder', 'survey', 'scheduled_messages', 'decision_tree']
 const isSkillRenameable = (kind) => includes(RENAMEABLE_SKILLS, kind)
 
-const skillIcon = (kind) => {
-  switch (kind) {
-    case 'front_desk':
-      return 'chat'
-    case 'language_detector':
-      return 'language'
-    case 'keyword_responder':
-      return 'reply'
-    case 'survey':
-      return 'assignment_turned_in'
-    case 'scheduled_messages':
-      return 'query_builder'
-    case 'decision_tree':
-      return 'device_hub'
-    case 'ADD':
-      return 'add'
-  }
-}
-
 const skillItemSource = {
   beginDrag(props) {
     return {skill: props.skill.id};
@@ -37,11 +19,14 @@ const skillItemSource = {
   endDrag(props, monitor, component) {
     const { skills, skill, questionnaireActions, actions, botId} = props
 
-    if (monitor.didDrop()) {
-      if (monitor.getDropResult().skill == 'front_desk') {
-        actions.moveSkillToTop(botId, skills, skill, monitor.getDropResult().skill)
+    if (monitor.didDrop() && monitor.getDropResult().skill) {
+      const targetSkill = monitor.getDropResult().skill
+      if (targetSkill.kind == 'front_desk') {
+        if (skill.order != skills[0].order) {
+          actions.moveSkillToTop(botId, skills, skill, monitor.getDropResult().skill)
+        }
       } else {
-        if (monitor.getDropResult().skill != null) {
+        if (skill.order != targetSkill.order && skill.order != (targetSkill.order + 1)) {
           actions.moveSkill(botId, skills, skill, monitor.getDropResult().skill)
         }
       }
@@ -74,15 +59,6 @@ class SkillListItem extends Component {
     const { skill, active, onClick, onToggleSkill, onDeleteSkill, onRenameSkill, connectDragSource, isDragging, isOver } = this.props
     let actionItems = []
 
-    let draggableStyle: any = {
-      opacity: isDragging ? 0.0 : 1,
-      cursor: 'move'
-    }
-
-    if (isOver) {
-      draggableStyle['borderBottom'] = '#212121 thin solid'
-    }
-
     if (isSkillRenameable(skill.kind)) {
       actionItems.push(<SidebarMenuItem key={0}
                                  icon="edit"
@@ -97,7 +73,7 @@ class SkillListItem extends Component {
     const relevant = skill.config.relevant && !blank(skill.config.relevant)
 
     return connectDragSource(
-      <div style={draggableStyle}>
+      <div className={(isOver ? 'drop-target' : '') + (isDragging ? ' dragging' : '')} >
         <SidebarItem id={`skill-${skill.id}`}
         icon={skillIcon(skill.kind)} label={skill.name}
         enabled={skill.enabled} active={active}
@@ -128,7 +104,7 @@ const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(actions, dispatch)
 })
 
-const source = DragSource('SKILL_ITEM', skillItemSource, collectSource)(SkillListItem)
-const target = DropTarget('SKILL_ITEM', skillItemTarget, collectTarget)(source)
+const source = DragSource(skillDnDType, skillItemSource, collectSource)(SkillListItem)
+const target = DropTarget(skillDnDType, skillItemTarget, collectTarget)(source)
 
 export default connect(mapStateToProps, mapDispatchToProps)(target)

@@ -3,14 +3,13 @@ import * as T from '../utils/types'
 import * as api from '../utils/api'
 import * as routes from '../utils/routes'
 import { botBehaviourUpdated } from './bot'
-import { moveSkillOrder, skillToTopOrder } from '../reducers/skills'
+import { orderAfterMovingSkill, orderAfterMovingToTop } from '../reducers/skills'
 
 export const FETCH = 'SKILLS_FETCH'
 export const RECEIVE = 'SKILLS_RECEIVE'
 export const RECEIVE_ERROR = 'SKILLS_RECEIVE_ERROR'
 export const CREATE_SUCCESS = 'SKILLS_CREATE_SUCCESS'
-export const MOVE_SKILL = 'SKILLS_MOVE_SKILL'
-export const MOVE_SKILL_TO_TOP = 'SKILLS_MOVE_SKILL_TO_TOP'
+export const REORDER = 'SKILLS_REORDER'
 
 export const _skillsFetch = (scope : T.Scope) : T.SkillsAction => ({
   type: FETCH,
@@ -33,15 +32,9 @@ export const _skillsCreateSuccess = (scope : T.Scope, skill : T.Skill) : T.Skill
   skill
 })
 
-export const _moveSkill = (source : T.Skill, target : T.Skill) : T.SkillsAction => ({
-  type: MOVE_SKILL,
-  source,
-  target
-})
-
-export const _moveSkillToTop = (source : T.Skill) : T.SkillsAction => ({
-  type: MOVE_SKILL_TO_TOP,
-  source
+export const _reorder = (order : any) : T.SkillsAction => ({
+  type: REORDER,
+  order
 })
 
 export const fetchSkills = (scope : {botId : number}) => (dispatch : T.Dispatch, getState : T.GetState) => {
@@ -73,15 +66,15 @@ export const createSkill = (scope : {botId : number}, {kind, name} : {name: ?str
 }
 
 export const moveSkill = (botId : number, skills : Array<T.Skill>, source : T.Skill, target : T.Skill) => (dispatch : T.Dispatch) => {
-  const order = moveSkillOrder(skills, source, target)
+  const order = orderAfterMovingSkill(skills, source, target)
   api.reorderSkills(botId, order).then(() => {
-    dispatch(_moveSkill(source, target))
+    dispatch(_reorder(order))
   })
 }
 
 export const moveSkillToTop = (botId : number, skills : Array<T.Skill>, source : T.Skill) => (dispatch : T.Dispatch) => {
-  const order = skillToTopOrder(skills, source)
+  const order = orderAfterMovingToTop(skills, source)
   api.reorderSkills(botId, order).then(() => {
-    dispatch(_moveSkillToTop(source))
+    dispatch(_reorder(order))
   })
 }

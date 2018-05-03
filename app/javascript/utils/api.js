@@ -65,7 +65,7 @@ export const createSkill = (botId : number, kind : string, name : ?string) => {
   return apiPostJSON(`bots/${botId}/skills`, null, {kind, name})
 }
 
-export const reorderSkills = (botId : number, order: any) => {
+export const reorderSkills = (botId : number, order: {}) => {
   return apiPostJSON(`bots/${botId}/skills/reorder`, null, {order})
 }
 

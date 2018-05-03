@@ -20,8 +20,7 @@ export default (state : T.SkillsState, action : T.Action) : T.SkillsState => {
     case actions.FETCH: return fetch(state, action)
     case actions.RECEIVE: return receive(state, action)
     case actions.CREATE_SUCCESS: return createSuccess(state, action)
-    case actions.MOVE_SKILL: return moveSkill(state, action)
-    case actions.MOVE_SKILL_TO_TOP: return moveSkillToTop(state, action)
+    case actions.REORDER: return reorder(state, action)
     case skillActions.UPDATE: return update(state, action)
     case skillActions.DELETE: return deleteSkill(state, action)
     default: return state
@@ -84,29 +83,10 @@ const createSuccess = (state, action) => {
   }
 }
 
-const moveSkill = (state, action) => {
+const reorder = (state, action) => {
   const new_items = {...state.items}
-  const source_order = action.source.order
-  const target_order = action.target.order
   Object.keys(new_items).map(Number).forEach((id : number) => {
-    if (source_order < target_order) {
-      if (id == action.source.id) {
-        new_items[id] = {...new_items[id], order: target_order}
-      } else {
-        if (new_items[id].order > source_order && new_items[id].order <= target_order) {
-          new_items[id] = {...new_items[id], order: new_items[id].order - 1}
-        }
-      }
-    }
-    if (source_order > target_order) {
-      if (id == action.source.id) {
-        new_items[id] = {...new_items[id], order: target_order + 1}
-      } else {
-        if (new_items[id].order > action.target.order && new_items[id].order < action.source.order) {
-        new_items[id] = {...new_items[id], order: new_items[id].order + 1}
-        }
-      }
-    }
+    new_items[id] = {...new_items[id], order: action.order[id]}
   })
 
   return {
@@ -115,26 +95,7 @@ const moveSkill = (state, action) => {
   }
 }
 
-const moveSkillToTop = (state, action) => {
-  const minOrder = sortBy(Object.values(state.items), 'order')[0].order
-  const new_items = {...state.items}
-  Object.keys(new_items).map(Number).forEach((id : number) => {
-    if (id == action.source.id) {
-      new_items[id] = {...new_items[id], order: minOrder}
-    } else {
-      if (new_items[id].order < action.source.order) {
-        new_items[id] = {...new_items[id], order: new_items[id].order + 1}
-      }
-    }
-  })
-
-  return {
-    ...state,
-    items: new_items
-  }
-}
-
-export const moveSkillOrder = (skills: Array<T.Skill>, source: T.Skill, target: T.Skill) => {
+export const orderAfterMovingSkill = (skills: Array<T.Skill>, source: T.Skill, target: T.Skill) => {
   const res = {}
   const items = skills
   const source_order = source.order
@@ -167,7 +128,7 @@ export const moveSkillOrder = (skills: Array<T.Skill>, source: T.Skill, target: 
   return res
 }
 
-export const skillToTopOrder = (skills: Array<T.Skill>, source: T.Skill) => {
+export const orderAfterMovingToTop = (skills: Array<T.Skill>, source: T.Skill) => {
   const res = {}
   const minOrder = sortBy(skills, 'order')[0].order
   skills.forEach((s) => {

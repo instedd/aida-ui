@@ -234,12 +234,8 @@ export type SkillsAction = {
   scope: Scope,
   skill: T.Skill
 } | {
-  type: 'SKILLS_MOVE_SKILL',
-  source: T.Skill,
-  target: T.Skill
-} | {
-  type: 'SKILLS_MOVE_SKILL_TO_TOP',
-  source: T.Skill
+  type: 'SKILLS_REORDER',
+  order: {}
 };
 
 export type StatsAction = {

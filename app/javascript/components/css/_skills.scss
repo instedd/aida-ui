@@ -18,3 +18,12 @@
   }
   white-space: nowrap;
 }
+
+.drop-target {
+  border-bottom: #212121 thin solid;
+  opacity: 1.0;
+}
+
+.dragging {
+  opacity: 0.0
+}

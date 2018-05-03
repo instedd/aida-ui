@@ -21,30 +21,12 @@ import SkillListItem from './SkillListItem'
 import FrontDeskItem from './FrontDeskItem'
 import * as routes from '../utils/routes'
 import { blank } from '../utils/string'
+import { skillIcon } from '../utils/skills_bar'
 import * as actions from '../actions/skills'
 import * as skillActions from '../actions/skill'
 
 const SKILL_KINDS = ['language_detector', 'keyword_responder', 'survey', 'scheduled_messages', 'decision_tree']
 const RENAMEABLE_SKILLS = ['keyword_responder', 'survey', 'scheduled_messages', 'decision_tree']
-
-const skillIcon = (kind) => {
-  switch (kind) {
-    case 'front_desk':
-      return 'chat'
-    case 'language_detector':
-      return 'language'
-    case 'keyword_responder':
-      return 'reply'
-    case 'survey':
-      return 'assignment_turned_in'
-    case 'scheduled_messages':
-      return 'query_builder'
-    case 'decision_tree':
-      return 'device_hub'
-    case 'ADD':
-      return 'add'
-  }
-}
 
 const defaultSkillName = (kind) => {
   switch (kind) {
@@ -185,7 +167,11 @@ class SkillsBar extends Component {
 
     return (
       <SideBar title="Skills">
-        <FrontDeskItem bot={bot} skill="front_desk" />
+        <FrontDeskItem
+          bot={bot}
+          skill={{"kind": "front_desk"}}
+          icon={skillIcon("front_desk")}
+          onClick={() => history.push(routes.botFrontDesk(bot.id))}/>
         {skillsItems}
 
         <DropdownMenu id="add-skill-menu"

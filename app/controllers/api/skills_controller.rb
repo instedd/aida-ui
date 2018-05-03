@@ -44,13 +44,13 @@ class Api::SkillsController < ApplicationApiController
   def reorder
     bot = Bot.find(params[:bot_id])
     authorize bot, :reorder_skills?
-    behaviours = bot.behaviours
-    new_order = params[:order]
     if params[:order].keys.include? bot.front_desk.id.to_s
       head :bad_request
     else
-      new_order.each do |key, value|
-        b = behaviours.find(key)
+      # Behaviours are indexed by id to avoid doing an additional query to fetch each behaviour
+      behaviours = bot.behaviours.all.index_by(&:id)
+      params[:order].each do |key, value|
+        b = behaviours[Integer(key)]
         b.order = value
         b.save!
       end
