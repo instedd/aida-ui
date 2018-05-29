@@ -96,6 +96,8 @@ main {
   background-position: center center;
   background-size: 90%;
   min-height: 60vh;
+  border-top: 1px solid $gray-light;
+  border-bottom: 1px solid $gray-medium;
 }
 
 footer {
