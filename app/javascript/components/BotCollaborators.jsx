@@ -141,7 +141,7 @@ class CollaboratorsList extends Component {
         <Column title="Publish"       render={renderCollaboratorColumn(roleContent('publish'))} />
         <Column title="Behaviour"     render={renderCollaboratorColumn(roleContent('behaviour'))} />
         <Column title="Content"       render={renderCollaboratorColumn(roleContent('content'))} />
-        <Column title="Variables"     render={renderCollaboratorColumn(roleContent('variables'))} />
+        <Column title="Variables and tables"     render={renderCollaboratorColumn(roleContent('variables'))} />
         <Column title="Results"       render={renderCollaboratorColumn(roleContent('results'))} />
         <Column title="Last activity" render={renderCollaboratorColumn(lastActivityContent)} />
         <Column title=""              render={renderCollaboratorAction} />
@@ -243,7 +243,7 @@ class InviteDialog extends Component {
                roleCheckbox('publish',   'Publish',   'Can publish the bot and change the channel configuration'),
                roleCheckbox('behaviour', 'Behaviour', 'Can change skills configuration'),
                roleCheckbox('content',   'Content',   'Can edit messages and translations'),
-               roleCheckbox('variables', 'Variables', 'Can modify variable values'),
+               roleCheckbox('variables', 'Variables and tables', 'Can modify variable values'),
                roleCheckbox('results',   'Results',   'Can view stats, conversation logs, survey results and feedback'),
             ]}
           </div>
