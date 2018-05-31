@@ -8,6 +8,8 @@ import values from 'lodash/values'
 import sortBy from 'lodash/sortBy'
 import moment from 'moment'
 
+import { hasPermission } from '../utils'
+import ContentDenied from './ContentDenied'
 import NewTableDialog from './NewTableDialog'
 import { Listing, ListingLoading, Column } from '../ui/Listing'
 
@@ -20,7 +22,11 @@ class TablesIndex extends Component {
   }
 
   render() {
-    const { fetching, bot, items, history, actions } = this.props
+    const { permitted, fetching, bot, items, history, actions } = this.props
+
+    if (!permitted) {
+      return <ContentDenied />
+    }
 
     const tables = sortBy(values(items), 'name')
     const title = tables.length == 1 ? "1 table" : `${tables.length} tables`
@@ -61,13 +67,16 @@ class TablesIndex extends Component {
 
 const mapStateToProps = (state, { bot }) => {
   const { scope, fetching, items } = state.tables
+  const permitted = hasPermission(bot, 'manages_variables')
   if (scope && scope.botId == bot.id) {
     return {
+      permitted,
       fetching,
       items
     }
   } else {
     return {
+      permitted,
       fetching: false,
       items: {}
     }
