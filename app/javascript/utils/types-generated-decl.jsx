@@ -52,6 +52,7 @@ export type KeywordResponderConfig = {
 export type SurveyConfig = {
   relevant?: string;
   schedule?: string;
+  keywords?: KeywordList;
   questions?: Array<SurveyQuestion>;
   choice_lists?: Array<SurveyChoiceList>;
 };

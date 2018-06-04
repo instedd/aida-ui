@@ -57,6 +57,10 @@ class BotPolicy < ApplicationPolicy
     manages_behaviour?
   end
 
+  def reorder_skills?
+    manages_behaviour?
+  end
+
   def read_translations?
     manages_content?
   end

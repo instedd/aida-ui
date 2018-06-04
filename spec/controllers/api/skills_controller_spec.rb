@@ -163,4 +163,51 @@ RSpec.describe Api::SkillsController, type: :controller do
       expect(response).to be_denied
     end
   end
+
+  describe "reorder" do
+    it "reorder skills" do
+      (1..5).to_a.each do |k|
+        bot.behaviours.create_skill! "keyword_responder", order: k
+      end
+      ids = bot.behaviours.map {|b| b.id}
+      front_desk_prev_order = bot.front_desk.order
+
+      reordered_ids = {
+        ids[5] => 1,
+        ids[4] => 2,
+        ids[1] => 3,
+        ids[2] => 4,
+        ids[3] => 5
+      }
+
+      post :reorder, params: { bot_id: bot.id, order: reordered_ids }
+      expect(response).to be_success
+
+      bot.reload
+      behaviours = bot.behaviours
+      expect(bot.front_desk.order).to eq(front_desk_prev_order)
+      behaviours.select { |b| b.kind != "front_desk" }.each do |b|
+        expect(b.order).to eq(reordered_ids[b.id])
+      end
+    end
+
+    it "doesn't reorder if reordered ids include front_desk id" do
+      (1..5).to_a.each do |k|
+        bot.behaviours.create_skill! "keyword_responder", order: k
+      end
+      ids = bot.behaviours.map {|b| b.id}
+
+      reordered_ids = {
+        ids[0] => 1,
+        ids[1] => 2,
+        ids[2] => 3,
+        ids[3] => 4,
+        ids[4] => 5,
+        ids[5] => 6
+      }
+
+      post :reorder, params: { bot_id: bot.id, order: reordered_ids }
+      expect(response).not_to be_success
+    end
+  end
 end

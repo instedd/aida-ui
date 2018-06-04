@@ -17,7 +17,11 @@ Rails.application.routes.draw do
         get :manifest
       end
       resource :front_desk, only: [:show, :update]
-      resources :skills, only: [:index, :create]
+      resources :skills, only: [:index, :create] do
+        collection do
+          post :reorder
+        end
+      end
       resources :translations, only: [:index] do
         collection do
           put :update

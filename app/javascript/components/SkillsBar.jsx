@@ -8,6 +8,8 @@ import { FontIcon,
          Menu,
 } from 'react-md'
 import SideBar, { SidebarItem, SidebarMenuItem } from '../ui/SideBar'
+import { DragDropContext } from 'react-dnd'
+import HTML5Backend from 'react-dnd-html5-backend'
 
 import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
@@ -15,32 +17,16 @@ import { bindActionCreators } from 'redux'
 import sortBy from 'lodash/sortBy'
 import includes from 'lodash/includes'
 
+import SkillListItem from './SkillListItem'
+import FrontDeskItem from './FrontDeskItem'
 import * as routes from '../utils/routes'
 import { blank } from '../utils/string'
+import { skillIcon } from '../utils/skills_bar'
 import * as actions from '../actions/skills'
 import * as skillActions from '../actions/skill'
 
 const SKILL_KINDS = ['language_detector', 'keyword_responder', 'survey', 'scheduled_messages', 'decision_tree']
 const RENAMEABLE_SKILLS = ['keyword_responder', 'survey', 'scheduled_messages', 'decision_tree']
-
-const skillIcon = (kind) => {
-  switch (kind) {
-    case 'front_desk':
-      return 'chat'
-    case 'language_detector':
-      return 'language'
-    case 'keyword_responder':
-      return 'reply'
-    case 'survey':
-      return 'assignment_turned_in'
-    case 'scheduled_messages':
-      return 'query_builder'
-    case 'decision_tree':
-      return 'device_hub'
-    case 'ADD':
-      return 'add'
-  }
-}
 
 const defaultSkillName = (kind) => {
   switch (kind) {
@@ -73,29 +59,6 @@ const skillDescription = (kind) => {
 }
 
 const isSkillRenameable = (kind) => includes(RENAMEABLE_SKILLS, kind)
-
-
-const SkillListItem = ({skill, active, onClick, onToggleSkill, onDeleteSkill, onRenameSkill}) => {
-  let actionItems = []
-  if (isSkillRenameable(skill.kind)) {
-    actionItems.push(<SidebarMenuItem key={0}
-                               icon="edit"
-                               label="Rename"
-                               onClick={() => onRenameSkill(skill)} />)
-  }
-  actionItems.push(<SidebarMenuItem key={1}
-                             icon="close"
-                             label="Delete"
-                             onClick={() => onDeleteSkill(skill)}/>)
-
-  const relevant = skill.config.relevant && !blank(skill.config.relevant)
-
-  return (<SidebarItem id={`skill-${skill.id}`}
-    icon={skillIcon(skill.kind)} label={skill.name}
-    enabled={skill.enabled} active={active}
-    className={`skill-item ${relevant ? "skill-item-relevant" : ""}`}
-    onClick={onClick} onToggle={onToggleSkill} menuItems={actionItems} />)
-}
 
 class SkillNameDialog extends Component {
   state = {
@@ -157,7 +120,7 @@ class SkillsBar extends Component {
 
     const skillsItems = skills
                       ? skills.map(skill => (
-                        <SkillListItem skill={skill} key={skill.id}
+                        <SkillListItem skill={skill} key={skill.id} botId={bot.id}
                                        active={location.pathname == routes.botSkill(bot.id, skill.id)}
                                        onClick={() => history.push(routes.botSkill(bot.id, skill.id))}
                                        onToggleSkill={() => skillActions.toggleSkill(skill)}
@@ -204,11 +167,11 @@ class SkillsBar extends Component {
 
     return (
       <SideBar title="Skills">
-        <SidebarItem icon={skillIcon('front_desk')}
-                  label="Front desk"
-                  active={location.pathname == routes.botFrontDesk(bot.id)}
-                  onClick={() => history.push(routes.botFrontDesk(bot.id))}/>
-
+        <FrontDeskItem
+          bot={bot}
+          skill={{"kind": "front_desk"}}
+          icon={skillIcon("front_desk")}
+          onClick={() => history.push(routes.botFrontDesk(bot.id))}/>
         {skillsItems}
 
         <DropdownMenu id="add-skill-menu"
@@ -250,4 +213,4 @@ const mapDispatchToProps = (dispatch) => ({
   skillActions: bindActionCreators(skillActions, dispatch)
 })
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SkillsBar))
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(DragDropContext(HTML5Backend)(SkillsBar)))

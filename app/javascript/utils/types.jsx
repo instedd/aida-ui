@@ -233,6 +233,9 @@ export type SkillsAction = {
   type: 'SKILLS_CREATE_SUCCESS',
   scope: Scope,
   skill: T.Skill
+} | {
+  type: 'SKILLS_REORDER',
+  order: {}
 };
 
 export type StatsAction = {
