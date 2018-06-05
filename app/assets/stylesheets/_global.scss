@@ -82,6 +82,9 @@ hr {
 .sans {
   font-family: $sans-family;
 }
+.strong {
+  font-weight: 700;
+}
 .small-text {
   font-size: .8rem;
 }
@@ -168,4 +171,7 @@ hr {
     clear: both;
     visibility: hidden;
   }
+}
+.shadow {
+  box-shadow: 0 12px 35px 3px rgba(0, 0, 0, 0.2);
 }

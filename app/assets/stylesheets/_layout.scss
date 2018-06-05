@@ -27,6 +27,17 @@ header {
   align-items: center;
   min-height: $header;
 
+
+  .logo {
+    font-size: 1.6rem;
+    color: #555555;
+    display: inline-flex;
+    align-items: center;
+    img {
+      margin-right: .8rem;
+    }
+  }
+
   .navMenu {
     position: absolute;
     left: 5%;
@@ -91,7 +102,7 @@ main {
 }
 .illustrated {
   background-color: $gray-lighten;
-  background-image: url("chatbubbles.png");
+  background-image: url("world-map@2x.png");
   background-repeat: no-repeat;
   background-position: center center;
   background-size: 90%;

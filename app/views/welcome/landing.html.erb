@@ -6,9 +6,12 @@
 <body>
   <header>
     <div class="navMenu icon hideDesktop" onclick="openNav()">menu</div>
-    <a href="#!">
-        <%= image_tag("aidalogo.png", :width => 120) %>
-    </a>
+    <div>
+      <a href="#!" class="logo">
+        <%= image_tag("logo.svg", :width => 60) %>
+        <span>Aida</span>
+      </a>
+    </div>
     <nav id="menu" class="hideTablet">
       <ul>
         <li><a href="http://instedd.org/technologies/" class="btn">About Instedd Platform</a></li>
@@ -22,7 +25,7 @@
     <div class="section headline">
       <div class="grid x2">
         <div class="cell">
-          <h1>Build and Interact</h1>
+          <h1 class="strong">Build and Interact</h1>
           <h3>Customizable chatbots for humanitarian response and development work </h3>
           <p class="text-gray">
             <b>What is AIDA?</b>
@@ -31,7 +34,7 @@
           </p>
         </div>
         <div class="cell">
-          <%= image_tag("welcome-main_new.png", :class => "right responsive-img") %>
+          <%= image_tag("illustration.svg", :class => "right responsive-img") %>
         </div>
       </div>
     </div>
@@ -43,21 +46,8 @@
           <p>AIDA loosely stands for “artificial intelligence development assistant”.
           <br>It’s also a name in Spanish and French meaning “help”. </p>
         </div>
-        <div class="cell">
-          <%= image_tag("aidaclipart.png", :class => "responsive-img") %>
-        </div>
-      </div>
-    </div>
-
-    <hr>
-
-    <div class="section no-padd-right centerTablet">
-      <div class="grid x2">
-        <div class="cell">
-          <h1><span>Define</span> chatbot language skills</h1>
-        </div>
-        <div class="cell">
-          <%= image_tag("aida1.png", :class => "right responsive-img") %>
+        <div class="cell center-text">
+          <%= image_tag("frame.svg", :class => "responsive-img") %>
         </div>
       </div>
     </div>
@@ -67,23 +57,39 @@
     <div class="section center-text">
       <div class="grid">
         <div class="cell">
-          <h1><span>Set-up</span> keyword responders to trigger behavior</h1>
+          <h1><span>Define</span> chatbot language skills</h1>
         </div>
         <div class="cell">
-          <%= image_tag("aida2.png", :class => "responsive-img center-align") %>
+          <%= image_tag("language@2x.png", :width => '748px', :class => "right responsive-img shadow") %>
         </div>
       </div>
     </div>
 
     <hr>
 
-    <div class="section no-padd-left centerTablet">
+    <div class="section no-padd-right centerTablet">
       <div class="grid x2">
-        <div class="cell order-2">
-          <%= image_tag("aida32.png", :class => "left responsive-img") %>
+        <div class="cell">
+          <h1><span>Set-up</span> keyword responders to trigger behavior</h1>
         </div>
-        <div class="cell order-1">
+        <div class="cell">
+          <%= image_tag("keyword-responder@2x.png", :width => '770px', :class => "responsive-img center-align shadow") %>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="section center-text centerTablet">
+      <div class="grid x2">
+        <div class="cell span2">
           <h1><span>Create</span> scheduled messages and surveys</h1>
+        </div>
+        <div class="cell">
+          <%= image_tag("scheduled-messages@2x.png", :width => '476px', :class => "responsive-img") %>
+          </div>
+        <div class="cell">
+          <%= image_tag("survey@2x.png", :width => '782px', :class => "responsive-img") %>
         </div>
       </div>
     </div>
@@ -96,12 +102,12 @@
           <h1><span>Generate</span> complex decision trees</h1>
         </div>
         <div class="cell">
-          <%= image_tag("aida4.png", :class => "right responsive-img") %>
+          <%= image_tag("decision-tree@2x.png", :width => '740px', :class => "right responsive-img shadow") %>
         </div>
       </div>
     </div>
 
-    <div class="section center-text illustrated">
+    <div class="section center-text illustrated v-height">
       <h1>A tool founded to combat food insecurity</h1>
       <p class="margin">The need to engage vulnerable populations on food security issues sparked a project collaboration between the World Food Programme (WFP) and InSTEDD with support from the Cisco Foundation, working together to create “Foodbot”, a chatbot to collect and share information relating to food security. </p>
     </div>
