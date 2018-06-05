@@ -1,4 +1,175 @@
-<div>Landing page</div>
-<div>
-  <%= link_to 'Login', login_path %>
-</div>
+<head>
+  <%= stylesheet_link_tag "landing" %>
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+</head>
+
+<body>
+  <header>
+    <div class="navMenu icon hideDesktop" onclick="openNav()">menu</div>
+    <div>
+      <a href="#!" class="logo">
+        <%= image_tag("logo.svg", :width => 60) %>
+        <span>Aida</span>
+      </a>
+    </div>
+    <nav id="menu" class="hideTablet">
+      <ul>
+        <li><a href="http://instedd.org/technologies/" class="btn">About Instedd Platform</a></li>
+        <li><a href="login" class="btn">Login</a></li>
+        <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSc8ldIy9lF8jw12kIZky94MIAEq1o1jCkCiL4TqmLAx3jlZng/viewform?usp=sf_link" class="btn-outline">Work with Us</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div class="section headline">
+      <div class="grid x2">
+        <div class="cell">
+          <h1 class="strong">Build and Interact</h1>
+          <h3>Customizable chatbots for humanitarian response and development work </h3>
+          <p class="text-gray">
+            <b>What is AIDA?</b>
+            <br>
+            AIDA is a chatbot builder that allows you to create and train interactive chatbots.
+          </p>
+        </div>
+        <div class="cell">
+          <%= image_tag("illustration.svg", :class => "right responsive-img") %>
+        </div>
+      </div>
+    </div>
+
+    <div class="section gray-lighten">
+      <div class="grid x2">
+        <div class="cell">
+          <h3><b>What does the name "AIDA" mean?</b></h3>
+          <p>AIDA loosely stands for “artificial intelligence development assistant”.
+          <br>It’s also a name in Spanish and French meaning “help”. </p>
+        </div>
+        <div class="cell center-text">
+          <%= image_tag("frame.svg", :class => "responsive-img") %>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="section center-text">
+      <div class="grid">
+        <div class="cell">
+          <h1><span>Define</span> chatbot language skills</h1>
+        </div>
+        <div class="cell">
+          <%= image_tag("language@2x.png", :width => '748px', :class => "right responsive-img shadow") %>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="section no-padd-right centerTablet">
+      <div class="grid x2">
+        <div class="cell">
+          <h1><span>Set-up</span> keyword responders to trigger behavior</h1>
+          <div class="center-text margin">
+            <i class="icon large-icon text-gray-light outline">reply</i>
+          </div>
+        </div>
+        <div class="cell">
+          <%= image_tag("keyword-responder@2x.png", :width => '770px', :class => "responsive-img center-align shadow") %>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="section center-text centerTablet">
+      <div class="grid x2">
+        <div class="cell span2">
+          <h1><span>Create</span> scheduled messages and surveys</h1>
+          <div class="center-text margin">
+          <i class="icon large-icon text-gray-light outline">access_time</i>
+          <i class="icon large-icon text-gray-light outline">assignment_turned_in</i>
+        </div>
+        </div>
+        <div class="cell">
+          <%= image_tag("scheduled-messages@2x.png", :width => '476px', :class => "responsive-img") %>
+          </div>
+        <div class="cell">
+          <%= image_tag("survey@2x.png", :width => '782px', :class => "responsive-img") %>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="section no-padd-right centerTablet">
+      <div class="grid x2">
+        <div class="cell">
+          <h1><span>Generate</span> complex decision trees</h1>
+          <div class="center-text margin">
+            <i class="icon large-icon text-gray-light outline">device_hub</i>
+          </div>
+        </div>
+        <div class="cell">
+          <%= image_tag("decision-tree@2x.png", :width => '740px', :class => "right responsive-img shadow") %>
+        </div>
+      </div>
+    </div>
+
+    <div class="section center-text illustrated v-height">
+      <h1>A tool founded to combat food insecurity</h1>
+      <p class="margin">The need to engage vulnerable populations on food security issues sparked a project collaboration between the World Food Programme (WFP) and InSTEDD with support from the Cisco Foundation, working together to create “Foodbot”, a chatbot to collect and share information relating to food security. </p>
+    </div>
+
+    <div class="section gray-lighten">
+      <div class="grid x2">
+        <div class="cell">
+          <h3><b>About Cisco Corporate Social Responsibility (CSR) </b></h3>
+          <p>
+            AIDA Chatbot Builder is made possible by a cash grant by Cisco CSR, a group which empowers social change agents with technology expertise. Cisco CSR’s goal is to accelerate global problem solving to benefit people, society, and the planet. They help put transformative technology in the hands of passionate people to make a positive societal and environmental impact. <a href="https://www.cisco.com/c/en/us/about/csr.html" target="_blank">Read more</a>
+          </p>
+        </div>
+        <div class="cell">
+          <h3><b>About Cisco CSR’s Critical Human Needs Program</b></h3>
+          <p>
+            Humanitarian crises persist. Many people lack access to basic human needs: food, adequate shelter, and­ clean water. Cisco’s Critical Human Needs Program empowers nonprofits and social change agents worldwide to relieve these problems. AIDA Chatbot Builder is part of Cisco CSR’s commitment to  support scalable technology solutions that help humanitarian teams move faster and provide vital services to more people when disasters strike. <a href="https://www.cisco.com/c/en/us/about/csr/impact/critical-human-needs.html" target="_blank">Read more</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <div class="section medium centerTablet">
+      <ul>
+        <li><a href="http://instedd.org">InSTEDD</a></li>
+        <li><a href="http://instedd.org/terms-of-service/">Terms of service</a></li>
+        <li><a href="mailto:support@instedd.org?subject=[surveda]">Support</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <a class="overlay" href="javascript:void(0)" id="Overlay" onclick="closeNav()"></a>
+  <div id="Sidenav" class="sidenav">
+    <ul>
+        <li><a href="http://instedd.org/technologies/" class="btn block">About Instedd Platform</a></li>
+        <li><a href="login" class="btn block">Login</a></li>
+        <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSc8ldIy9lF8jw12kIZky94MIAEq1o1jCkCiL4TqmLAx3jlZng/viewform?usp=sf_link" class="btn-outline block">Work with Us</a></li>
+      </ul>
+  </div>
+
+  <script>
+      function openNav() {
+          document.getElementById("Sidenav").style.transform = "translateX(0)";
+          document.getElementById("Overlay").style.visibility = "visible";
+      }
+
+      function closeNav() {
+          document.getElementById("Sidenav").style.transform = "translateX(-100%)";
+          document.getElementById("Overlay").style.visibility = "hidden";
+      }
+  </script>
+
+</body>

@@ -5,13 +5,14 @@ class WelcomeController < ApplicationController
     if user_signed_in?
       render :index
     else
-      # render :landing
-      redirect_to login_path
+      render :landing, layout: false
+      #redirect_to login_path
     end
   end
 
   def login
-    redirect_to root_path
+    redirect_to login_path
+    #redirect_to root_path
   end
 
   def logout

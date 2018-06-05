@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="250px" height="132px" viewBox="0 0 250 132" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>5F7CFA5A-53B5-4903-A043-C4400E1561A7</title>
+    <desc>Created with sketchtool.</desc>
+    <defs></defs>
+    <g id="Export" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Pictures" transform="translate(-770.000000, -944.000000)">
+            <g id="Assets/frame" transform="translate(770.000000, 944.000000)">
+                <g id="Frame" fill="#000000">
+                    <path d="M2,3.061617e-16 L12,-3.061617e-16 L12,2 L2,2 L2,12 L0,12 L0,0 L2,0 Z" id="Corner" fill-opacity="0.1"></path>
+                    <path d="M240,3.061617e-16 L250,-3.061617e-16 L250,2 L240,2 L240,12 L238,12 L238,0 L240,0 Z" id="Corner" fill-opacity="0.1" transform="translate(244.000000, 6.000000) scale(-1, 1) translate(-244.000000, -6.000000) "></path>
+                    <path d="M2,120 L12,120 L12,122 L2,122 L2,132 L0,132 L0,120 L2,120 Z" id="Corner" fill-opacity="0.1" transform="translate(6.000000, 126.000000) scale(1, -1) translate(-6.000000, -126.000000) "></path>
+                    <path d="M240,120 L250,120 L250,122 L240,122 L240,132 L238,132 L238,120 L240,120 Z" id="Corner" fill-opacity="0.1" transform="translate(244.000000, 126.000000) scale(-1, -1) translate(-244.000000, -126.000000) "></path>
+                    <rect id="Border" fill-opacity="0.05" x="0" y="12" width="2" height="108"></rect>
+                    <rect id="Border" fill-opacity="0.05" x="248" y="12" width="2" height="108"></rect>
+                    <rect id="Border" fill-opacity="0.05" transform="translate(125.000000, 1.000000) scale(-1, 1) translate(-125.000000, -1.000000) " x="12" y="0" width="226" height="2"></rect>
+                    <rect id="Border-Copy" fill-opacity="0.05" transform="translate(125.000000, 131.000000) scale(-1, 1) translate(-125.000000, -131.000000) " x="12" y="130" width="226" height="2"></rect>
+                </g>
+                <text id="/ɑːˈiːdə/" font-family="Roboto-Regular, Roboto" font-size="18" font-weight="normal" fill="#D8D8D8">
+                    <tspan x="91" y="108">/</tspan>
+                    <tspan x="98.4179688" y="108" font-family="LucidaGrande, Lucida Grande">ɑːˈ</tspan>
+                    <tspan x="119.942383" y="108">i</tspan>
+                    <tspan x="124.310547" y="108" font-family="LucidaGrande, Lucida Grande">ː</tspan>
+                    <tspan x="131.253906" y="108">də/</tspan>
+                </text>
+                <g id="Key" transform="translate(31.000000, 30.000000)">
+                    <rect id="Rectangle-3" fill="#D8D8D8" fill-rule="evenodd" x="0" y="0" width="40" height="40" rx="4"></rect>
+                    <text id="Letter" font-family="RobotoMono-Regular, Roboto Mono" font-size="30" font-weight="normal" fill="#EEEEEE">
+                        <tspan x="11.4985352" y="32">A</tspan>
+                    </text>
+                </g>
+                <g id="Key" transform="translate(77.000000, 30.000000)">
+                    <rect id="Rectangle-3" fill="#D8D8D8" fill-rule="evenodd" x="0" y="0" width="40" height="40" rx="4"></rect>
+                    <text id="Letter" font-family="RobotoMono-Regular, Roboto Mono" font-size="30" font-weight="normal" fill="#EEEEEE">
+                        <tspan x="11.4985352" y="32">i</tspan>
+                    </text>
+                </g>
+                <text id="+" font-family="RobotoMono-Regular, Roboto Mono" font-size="30" font-weight="normal" fill="#D8D8D8">
+                    <tspan x="139.498535" y="61">+</tspan>
+                </text>
+                <g id="Help-icon" transform="translate(174.000000, 26.000000)" fill="#D8D8D8">
+                    <path d="M18.8398,13.1826 L12.9758,7.3186 C16.1358,5.2246 19.9238,4.0006 23.9998,4.0006 C28.0758,4.0006 31.8638,5.2246 35.0238,7.3186 L29.1598,13.1826 C27.5958,12.4326 25.8498,12.0006 23.9998,12.0006 C22.1498,12.0006 20.4038,12.4326 18.8398,13.1826 Z M36,24 C36,22.15 35.566,20.406 34.816,18.838 L40.68,12.976 C42.774,16.138 44,19.924 44,24 C44,28.076 42.774,31.864 40.68,35.024 L34.816,29.16 C35.566,27.594 36,25.85 36,24 Z M29.1602,34.8164 L35.0242,40.6804 C31.8642,42.7744 28.0762,44.0004 24.0002,44.0004 C19.9242,44.0004 16.1362,42.7744 12.9762,40.6804 L18.8402,34.8164 C20.4042,35.5664 22.1502,36.0004 24.0002,36.0004 C25.8502,36.0004 27.5962,35.5664 29.1602,34.8164 Z M12,24 C12,25.85 12.434,27.594 13.184,29.16 L7.32,35.024 C5.226,31.864 4,28.076 4,24 C4,19.924 5.226,16.138 7.32,12.976 L13.184,18.838 C12.434,20.406 12,22.15 12,24 Z" id="Icon"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
