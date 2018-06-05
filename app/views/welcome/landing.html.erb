@@ -1,4 +1,161 @@
-<div>Landing page</div>
-<div>
-  <%= link_to 'Login', login_path %>
-</div>
+<head>
+  <%= stylesheet_link_tag "welcoming" %>
+</head>
+
+<body class="welcome">
+  <div class='wrapper'>
+    <header>
+      <nav>
+        <div class='nav-wrapper'>
+          <a href="#!" class="brand-logo">
+              <%= image_tag("aidalogo.png", :width => 120) %>
+          </a>
+          <ul class="right hide-on-med-and-down">
+            <li><a href="http://instedd.org/technologies/" class="btn-flat btn-large">About Instedd Platform</a></li>
+            <li><a href="login" class="btn-flat btn-large">Login&nbsp;</a></li>
+            <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSc8ldIy9lF8jw12kIZky94MIAEq1o1jCkCiL4TqmLAx3jlZng/viewform?usp=sf_link" class="btn-flat btn-large outlined">Work with Us</a></li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+    <main class="main-welcome">
+      <div class="section main">
+        <div class='row main'>
+          <div class='col s12 m5'>
+            <h3 class="whitetitle">Build and Interact</h3>
+            <h5 class="whitetitle">Customizable chatbots for humanitarian response and development work </h5>
+            <p>
+              What is AIDA?
+              <br>
+              AIDA is a chatbot builder that allows you to create and train interactive chatbots.</p>
+          </div>
+          <div class='clipart'>
+            <div class='col s12 m7'>
+              <%= image_tag("welcome-main_new.png", :class => "right responsive-img") %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section right-img grey lighten-4 grey-section">
+        <div class='row'>
+          <div class='col s12 m8'>
+            <h5>What does the name "AIDA" mean?</h5>
+            <p>AIDA loosely stands for “artificial intelligence development assistant”.
+            <br>It’s also a name in Spanish and French meaning “help”. </p>
+          </div>
+          <div class='col s12 m4'>
+          	<%= image_tag("aidaclipart.png", :class => "responsive-img") %>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="section right-img">
+        <div class='row'>
+          <div class='col s12 m7'>
+            <div class='description'>
+              <h3><span>Define</span> chatbot language skills</h3>
+            </div>
+          </div>
+          <div class='col s12 m5'>
+          	<%= image_tag("aida1.png", :class => "right responsive-img") %>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class='row'>
+          <div class='col s12 center'>
+            <div class='description'>
+              <h3><span>Set-up</span> keyword responders to trigger behavior</h3>
+              <%= image_tag("aida2.png", :class => "responsive-img center-align") %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section left-img">
+        <div class='row'>
+          <div class='col s12 m5'>
+          	<%= image_tag("aida32.png", :class => "left responsive-img") %>
+          </div>
+          <div class='col s12 m7'>
+            <div class='description'>
+              <h3><span>Create</span> scheduled messages and surveys</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section right-img">
+        <div class='row'>
+          <div class='col s12 m7'>
+            <div class='description'>
+              <h3><span>Generate</span> complex decision trees</h3>
+            </div>
+          </div>
+          <div class='col s12 m5'>
+          	<%= image_tag("aida4.png", :class => "right responsive-img") %>
+          </div>
+        </div>
+      </div>
+
+      <div class="section map">
+
+        <div class='row'>
+          <div class='col s12 center '>
+            <div class='description'>
+              <h3>A tool founded to combat food insecurity</h3>
+              <p>The need to engage vulnerable populations on food security issues sparked a project collaboration between the World Food Programme (WFP) and InSTEDD with support from the Cisco Foundation, working together to create “Foodbot”, a chatbot to collect and share information relating to food security. </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="section grey lighten-4 columns">
+        <div class='row'>
+          <div class='col s12 m4 offset-m1'>
+            <h5>About Cisco Corporate Social Responsibility (CSR) </h5>
+            <p>
+              AIDA Chatbot Builder is made possible by a cash grant by Cisco CSR, a group which empowers social change agents with technology expertise. Cisco CSR’s goal is to accelerate global problem solving to benefit people, society, and the planet. They help put transformative technology in the hands of passionate people to make a positive societal and environmental impact. <a href="https://www.cisco.com/c/en/us/about/csr.html" target="_blank">Read more</a>
+            </p>
+          </div>
+          <div class='col s12 m4 offset-m1'>
+            <h5>About Cisco CSR’s Critical Human Needs Program</h5>
+            <p>
+              Humanitarian crises persist. Many people lack access to basic human needs: food, adequate shelter, and­ clean water. Cisco’s Critical Human Needs Program empowers nonprofits and social change agents worldwide to relieve these problems. AIDA Chatbot Builder is part of Cisco CSR’s commitment to  support scalable technology solutions that help humanitarian teams move faster and provide vital services to more people when disasters strike. <a href="https://www.cisco.com/c/en/us/about/csr/impact/critical-human-needs.html" target="_blank">Read more</a>
+            </p>
+
+          </div>
+        </div>
+      </div>
+
+    </main>
+    <footer>
+        <div class="row">
+          <div class="col m9 s12">
+            <ul>
+              <li><a href="http://instedd.org">InSTEDD</a></li>
+              <li><a href="http://instedd.org/terms-of-service/">Terms of service</a></li>
+              <li><a href="mailto:support@instedd.org?subject=[surveda]">Support</a></li>
+            </ul>
+          </div>
+          <div class="col m2 offset-m1 s12">
+          </div>
+        </div>
+    </footer>
+  </div>
+
+</body>
+
+<script>
+
+  (function (w,i,d,g,e,t,s) {w[d] = w[d]||[];t= i.createElement(g);
+
+    t.async=1;t.src=e;s=i.getElementsByTagName(g)[0];s.parentNode.insertBefore(t, s);
+
+  })(window, document, '_gscq','script','//widgets.getsitecontrol.com/131187/script.js');
+
+</script>
