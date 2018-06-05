@@ -83,7 +83,7 @@ hr {
     position: relative;
     line-height: 8rem;
     width: 9rem;
-    margin: 2rem 1rem;
+    margin: 2rem 2.5rem;
     &:before {
       content: '';
       display: block;
@@ -94,9 +94,6 @@ hr {
       position: absolute;
       left: 0px;
       top: -6px;
-    }
-    + .outline {
-      margin-left: 5rem;
     }
   } 
 }
