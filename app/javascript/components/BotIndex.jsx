@@ -14,6 +14,8 @@ import * as routes from '../utils/routes'
 
 import AppLayout from './AppLayout'
 
+import imgIcon from '../../assets/images/front-desk-icon.svg'
+
 export class BotIndexComponent extends Component {
   componentDidMount() {
     this.props.actions.fetchBots()
@@ -31,7 +33,7 @@ export class BotIndexComponent extends Component {
       let content
       if (botList.length == 0) {
         content = (
-           <EmptyContent icon='chat_bubble_outline'>
+           <EmptyContent imageSrc={imgIcon}>
              <Headline>
                You have no bots yet
                <span><a href="javascript:" onClick={createBot}>Create One</a></span>
