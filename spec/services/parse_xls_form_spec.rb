@@ -145,6 +145,17 @@ RSpec.describe ParseXlsForm, type: :service do
                                      }])
     end
 
+    it "parses note message" do
+      survey = Roo::Spreadsheet.open(file_fixture('note.xlsx').open).sheet('survey')
+      result = ParseXlsForm.gather_questions(survey)
+
+      expect(result).to match_array([{
+                                       type: 'note',
+                                       name: 'hello',
+                                       message: 'Hello, world!'
+                                     }])
+    end
+
     it "parses image input question" do
       survey = Roo::Spreadsheet.open(file_fixture('image.xlsx').open).sheet('survey')
       result = ParseXlsForm.gather_questions(survey)
