@@ -60,7 +60,7 @@ class ParseXlsForm
 
         elem =
           case type
-          when 'integer', 'decimal', 'text', 'image'
+          when 'integer', 'decimal', 'text', 'image', 'note'
             {
               type: type,
               name: name,

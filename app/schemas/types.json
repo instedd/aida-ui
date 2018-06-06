@@ -304,7 +304,7 @@
           "type": "object",
           "required": [ "type", "name", "message" ],
           "properties": {
-            "type": { "enum": [ "integer", "decimal", "text", "image" ]},
+            "type": { "enum": [ "integer", "decimal", "text", "image", "note" ]},
             "name": { "type": "string" },
             "message": { "$ref": "#/definitions/message" },
             "relevant": { "type": "string" },
