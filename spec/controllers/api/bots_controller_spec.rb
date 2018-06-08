@@ -28,6 +28,28 @@ RSpec.describe Api::BotsController, type: :controller do
     end
   end
 
+  describe "preview" do
+    it "previews a new bot" do
+      expect(Backend).to receive(:create_bot) { 'bot preview uuid abc' }
+      post :preview, params: { id: bot.id, access_token: "an access token" }
+      expect(response).to be_success
+      expect(json_body).to eq ({"result"=>"ok", "preview_uuid"=>"bot preview uuid abc"})
+      bot.reload
+      expect(bot.preview_uuid).to eq('bot preview uuid abc')
+    end
+
+    it "previews an existing bot" do
+      another_bot = create(:bot, preview_uuid: 'bot preview uuid bcd', owner: user)
+      expect(Backend).to receive(:update_bot)
+      expect {
+        post :preview, params: { id: another_bot.id, access_token: "an access token" }
+        another_bot.reload
+        expect(response).to be_success
+        expect(json_body).to eq ({"result"=>"ok", "preview_uuid"=> another_bot.preview_uuid})
+      }.not_to change(another_bot, :preview_uuid)
+    end
+  end
+
   describe "create" do
     it "creates a new bot" do
       expect do

@@ -102,7 +102,6 @@ export type ChatAction = {
 } | {
   type: 'START_PREVIEW',
   botId: number,
-  previewUuid: ?string,
   accessToken: string
 } | {
   type: 'START_PREVIEW_SUCCESS',

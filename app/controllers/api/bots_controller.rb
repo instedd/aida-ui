@@ -52,7 +52,7 @@ class Api::BotsController < ApplicationApiController
 
   def preview
     authorize @bot
-    if preview_uuid = PublishBot.preview(@bot, params[:preview_uuid], params[:access_token])
+    if preview_uuid = PublishBot.preview(@bot, params[:access_token])
       render json: {result: :ok, preview_uuid: preview_uuid}
     else
       render json: {result: :error}, status: :bad_request
