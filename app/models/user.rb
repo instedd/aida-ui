@@ -7,6 +7,8 @@ class User < ApplicationRecord
   has_many :bots, foreign_key: :owner_id, inverse_of: :owner
   has_many :collaborations, class_name: 'Collaborator', dependent: :destroy
   has_many :invitations, foreign_key: :creator_id, dependent: :destroy, inverse_of: :creator
+  has_many :sessions
+  has_many :bots, through: :sessions
 
   def display_name
     name || email

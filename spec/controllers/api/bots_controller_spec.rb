@@ -33,7 +33,8 @@ RSpec.describe Api::BotsController, type: :controller do
       expect(Backend).to receive(:create_bot) { 'bot preview uuid abc' }
       post :preview, params: { id: bot.id, access_token: "an access token" }
       expect(response).to be_success
-      expect(json_body).to eq ({"result"=>"ok", "preview_uuid"=>"bot preview uuid abc"})
+      expect(json_body[:result]).to eq("ok")
+      expect(json_body[:preview_uuid]).to eq("bot preview uuid abc")
       bot.reload
       expect(bot.preview_uuid).to eq('bot preview uuid abc')
     end
@@ -45,9 +46,158 @@ RSpec.describe Api::BotsController, type: :controller do
         post :preview, params: { id: another_bot.id, access_token: "an access token" }
         another_bot.reload
         expect(response).to be_success
-        expect(json_body).to eq ({"result"=>"ok", "preview_uuid"=> another_bot.preview_uuid})
+        expect(json_body[:result]).to eq("ok")
+        expect(json_body[:preview_uuid]).to eq(another_bot.preview_uuid)
       }.not_to change(another_bot, :preview_uuid)
     end
+
+    it "previews an existing bot with no session" do
+      another_bot = create(:bot, preview_uuid: 'a preview uuid', owner: user)
+      expect(Backend).to receive(:update_bot)
+      post :preview, params: { id: another_bot.id, access_token: "an access token" }
+      expect(response).to be_success
+      expect(json_body[:result]).to eq("ok")
+      expect(json_body.keys).to include("session_uuid")
+      expect(json_body[:session_uuid]).to be_nil
+    end
+
+    it "previews an existing bot when current user has a session" do
+      another_bot = create(:bot, preview_uuid: 'a preview uuid', owner: user)
+      create(:session, user: user, bot: another_bot, session_uuid: "session uuid abc")
+      expect(Backend).to receive(:update_bot)
+      post :preview, params: { id: another_bot.id, access_token: "an access token" }
+      expect(response).to be_success
+      expect(json_body[:result]).to eq("ok")
+      expect(json_body[:session_uuid]).to eq("session uuid abc")
+    end
+
+    it "previews an existing bot with current user session when bot has others" do
+      collaborator1 = create(:user)
+      collaborator2 = create(:user)
+      another_bot = create(:bot, preview_uuid: 'a preview uuid', owner: user)
+      create(:collaborator, bot: another_bot, user:collaborator1)
+      create(:collaborator, bot: another_bot, user:collaborator2)
+      create(:session, user: collaborator1, bot: another_bot, session_uuid: "session uuid def")
+      create(:session, user: user, bot: another_bot, session_uuid: "session uuid efg")
+      create(:session, user: collaborator2, bot: another_bot, session_uuid: "session uuid fgh")
+      expect(Backend).to receive(:update_bot)
+      post :preview, params: { id: another_bot.id, access_token: "an access token" }
+      expect(response).to be_success
+      expect(json_body[:result]).to eq("ok")
+      expect(json_body[:session_uuid]).to eq("session uuid efg")
+    end
+
+    it "previews an existing bot with collaborator session when bot has other from owner" do
+      another_user = create(:user)
+      another_bot = create(:bot, preview_uuid: 'a preview uuid', owner: another_user)
+      create(:collaborator, bot: another_bot, user: user)
+      create(:session, user: another_user, bot: another_bot, session_uuid: "session uuid a")
+      create(:session, user: user, bot: another_bot, session_uuid: "session uuid b")
+      expect(Backend).to receive(:update_bot)
+      post :preview, params: { id: another_bot.id, access_token: "an access token" }
+      expect(response).to be_success
+      expect(json_body[:result]).to eq("ok")
+      expect(json_body[:session_uuid]).to eq("session uuid b")
+    end
+
+  end
+
+
+  describe "set a session" do
+    it "creates a session from owner" do
+      expect do
+        post :set_session, params: { id: bot.id, session_uuid: 'session uuid ghi' }
+        expect(response).to be_success
+      end.to change(Session, :count).by(1)
+      expect(json_body[:result]).to eq("ok")
+      expect(json_body[:session_uuid]).to eq("session uuid ghi")
+      expect(bot.get_session(user)).to_not be_nil
+      expect(bot.get_session(user).session_uuid).to eq("session uuid ghi")
+    end
+
+    it "updates a session from owner" do
+      create(:session, user: user, bot: bot, session_uuid: "session uuid hij")
+      expect do
+        post :set_session, params: { id: bot.id, session_uuid: 'session uuid ijk' }
+        expect(response).to be_success
+      end.to_not change(Session, :count)
+      expect(json_body[:result]).to eq("ok")
+      expect(json_body[:session_uuid]).to eq("session uuid ijk")
+      expect(bot.get_session(user).session_uuid).to eq("session uuid ijk")
+    end
+
+    it "creates a session from collaborator" do
+      another_user = create(:user)
+      another_bot = create(:bot, owner: another_user)
+      create(:collaborator, bot: another_bot, user:user)
+      expect do
+        post :set_session, params: { id: another_bot.id, session_uuid: 'session uuid jkl' }
+        expect(response).to be_success
+      end.to change(Session, :count).by(1)
+      expect(json_body[:result]).to eq("ok")
+      expect(json_body[:session_uuid]).to eq("session uuid jkl")
+      expect(another_bot.get_session(user)).to_not be_nil
+      expect(another_bot.get_session(user).session_uuid).to eq("session uuid jkl")
+    end
+
+    it "updates a session from collaborator" do
+      another_user = create(:user)
+      another_bot = create(:bot, owner: another_user)
+      create(:collaborator, bot: another_bot, user:user)
+      create(:session, user: user, bot: another_bot, session_uuid: "session uuid klm")
+      expect do
+        post :set_session, params: { id: another_bot.id, session_uuid: 'session uuid lmn' }
+        expect(response).to be_success
+      end.to_not change(Session, :count)
+      expect(json_body[:result]).to eq("ok")
+      expect(json_body[:session_uuid]).to eq("session uuid lmn")
+      expect(another_bot.get_session(user).session_uuid).to eq("session uuid lmn")
+    end
+
+    it "does has access from unauthorized" do
+      another_user = create(:user)
+      another_bot = create(:bot, owner: another_user)
+      expect do
+        post :set_session, params: { id: another_bot.id, session_uuid: 'session uuid mno' }
+        expect(response).to_not be_success
+      end.to_not change(Session, :count)
+      expect(json_body[:error]).to eq("Forbidden")
+      expect(another_bot.get_session(user)).to be_nil
+    end
+
+    it "does not update a session of another user when it creates a session" do
+      another_user = create(:user)
+      create(:collaborator, bot: bot, user:another_user)
+      create(:session, user: another_user, bot: bot, session_uuid: "session uuid pqr")
+      expect do
+        post :set_session, params: { id: bot.id, session_uuid: 'session uuid rst' }
+        expect(response).to be_success
+      end.to change(Session, :count).by(1)
+      expect(json_body[:result]).to eq("ok")
+      expect(json_body[:session_uuid]).to eq("session uuid rst")
+      expect(bot.get_session(user)).to_not be_nil
+      expect(bot.get_session(user).session_uuid).to eq("session uuid rst")
+      expect(bot.get_session(another_user)).to_not be_nil
+      expect(bot.get_session(another_user).session_uuid).to eq("session uuid pqr")
+    end
+
+    it "does not update a session of another user when it updates a session" do
+      another_user = create(:user)
+      create(:collaborator, bot: bot, user:another_user)
+      create(:session, user: another_user, bot: bot, session_uuid: "session uuid stu")
+      create(:session, user: user, bot: bot, session_uuid: "session uuid tuv")
+      expect do
+        post :set_session, params: { id: bot.id, session_uuid: 'session uuid uvw' }
+        expect(response).to be_success
+      end.to_not change(Session, :count)
+      expect(json_body[:result]).to eq("ok")
+      expect(json_body[:session_uuid]).to eq("session uuid uvw")
+      expect(bot.get_session(user)).to_not be_nil
+      expect(bot.get_session(user).session_uuid).to eq("session uuid uvw")
+      expect(bot.get_session(another_user)).to_not be_nil
+      expect(bot.get_session(another_user).session_uuid).to eq("session uuid stu")
+    end
+
   end
 
   describe "create" do

@@ -39,10 +39,11 @@ export const _startPreview = (botId: number, accessToken: string) : T.ChatAction
   accessToken,
 })
 
-export const _startPreviewSuccess = (botId: number, previewUuid: string, accessToken: string) : T.ChatAction => ({
+export const _startPreviewSuccess = (botId: number, previewUuid: string, sessionId: string, accessToken: string) : T.ChatAction => ({
   type: START_PREVIEW_SUCCESS,
   botId,
   previewUuid,
+  sessionId,
   accessToken,
 })
 
@@ -74,7 +75,7 @@ export const startPreview = (bot: T.Bot) => (dispatch : T.Dispatch, getState : T
 
   api.previewBot(bot, accessToken)
     .then((result) => {
-      dispatch(_startPreviewSuccess(bot.id, result.preview_uuid, accessToken))
+      dispatch(_startPreviewSuccess(bot.id, result.preview_uuid, result.session_uuid, accessToken))
     })
     .catch(() => dispatch(pushNotification('Bot preview failed')))
 }

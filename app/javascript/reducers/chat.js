@@ -52,7 +52,7 @@ const startPreview = (state, action) => {
 }
 
 const startPreviewSuccess = (state, action) => {
-  const {botId, previewUuid, accessToken} = action
+  const {botId, previewUuid, sessionId, accessToken} = action
 
   if (state.scope.botId != botId) {
     state = {
@@ -62,12 +62,12 @@ const startPreviewSuccess = (state, action) => {
       pausePreview: false,
       previewUuid,
       accessToken,
-      sessionId: null,
+      sessionId,
     }
   } else {
     // if the bot to preview is the same as before,
     // better keep the messages
-    state = {...state, publishing: false, pausePreview: false, previewUuid, accessToken}
+    state = {...state, publishing: false, pausePreview: false, previewUuid, sessionId, accessToken}
   }
 
   return state

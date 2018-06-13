@@ -12,6 +12,7 @@ Rails.application.routes.draw do
         delete :publish, action: :unpublish
         post :duplicate
         post :preview
+        post :set_session
         get :stats
         get :data
         get :manifest

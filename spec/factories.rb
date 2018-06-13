@@ -1,4 +1,10 @@
 FactoryBot.define do
+  factory :session do
+    user
+    bot
+    sequence(:session_uuid) { |n| "session-uuid-#{n}" }
+  end
+
   factory :user, aliases: [:owner] do
     sequence(:email) { |n| "user-#{n}@example.com" }
   end

@@ -107,6 +107,7 @@ export type ChatAction = {
   type: 'START_PREVIEW_SUCCESS',
   botId: number,
   previewUuid: string,
+  sessionId: string,
   accessToken: string
 } | {
   type: 'PAUSE_PREVIEW',

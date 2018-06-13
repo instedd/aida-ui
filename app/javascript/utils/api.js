@@ -49,6 +49,10 @@ export const previewBot = (bot : T.Bot, accessToken : string) => {
   return apiPostJSON(`bots/${bot.id}/preview`, null, {access_token: accessToken})
 }
 
+export const setBotSession = (bot : T.Bot, session_uuid : string) => {
+  return apiPostJSON(`bots/${bot.id}/set_session`, null, {session_uuid: session_uuid})
+}
+
 export const fetchFrontDesk = (botId : number) => {
   return apiFetchJSON(`bots/${botId}/front_desk`)
 }
