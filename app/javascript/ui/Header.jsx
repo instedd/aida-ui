@@ -3,6 +3,7 @@ import { Tabs, Tab, ListItem, MenuButton, Toolbar, Button, FontIcon } from 'reac
 import { withRouter } from 'react-router'
 import { Link } from 'react-router-dom'
 import * as u from './UserMenu'
+import Aux from '../hoc/Aux'
 
 const nav = ({sectionNavLinks, userName, userMenuItems}) => {
   return (
@@ -62,6 +63,7 @@ class HeaderSubNav extends Component {
     })
 
     return (
+      <Aux>
         <nav className="mainTabs">
           {(() => {
             if (this.props.headerNav) {
@@ -81,17 +83,17 @@ class HeaderSubNav extends Component {
               )
             }
           })()}
-
-          {this.props.buttonIcon ? (
-             <Button
-               onClick={this.props.buttonAction}
-               floating
-               secondary
-               className="md-cell--right md-cell--bottom add-button">
-               {this.props.buttonIcon}
-             </Button>
-          ) : null}
         </nav>
+        {this.props.buttonIcon ? (
+            <Button
+              onClick={this.props.buttonAction}
+              floating
+              secondary
+              className="md-cell--right md-cell--bottom add-button">
+              {this.props.buttonIcon}
+            </Button>
+        ) : null}
+    </Aux>
     );
   }
 }

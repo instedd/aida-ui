@@ -8,7 +8,7 @@ body {
   font-size: 1rem;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 210px auto 50px;
+  grid-template-rows: minmax(162px, max-content) auto 50px;
   grid-template-areas:
     "header"
     "main"
