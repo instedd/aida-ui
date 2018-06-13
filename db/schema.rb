@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180326200002) do
+ActiveRecord::Schema.define(version: 20180611185102) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 20180326200002) do
     t.datetime "updated_at", null: false
     t.bigint "owner_id"
     t.string "uuid"
+    t.string "preview_uuid"
     t.index ["owner_id"], name: "index_bots_on_owner_id"
   end
 
@@ -103,6 +104,17 @@ ActiveRecord::Schema.define(version: 20180326200002) do
     t.index ["token"], name: "index_invitations_on_token", unique: true
   end
 
+  create_table "sessions", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "bot_id"
+    t.string "session_uuid"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bot_id", "user_id"], name: "index_sessions_on_bot_id_and_user_id", unique: true
+    t.index ["bot_id"], name: "index_sessions_on_bot_id"
+    t.index ["user_id"], name: "index_sessions_on_user_id"
+  end
+
   create_table "translations", force: :cascade do |t|
     t.bigint "behaviour_id"
     t.string "key", null: false
@@ -151,6 +163,8 @@ ActiveRecord::Schema.define(version: 20180326200002) do
   add_foreign_key "data_tables", "bots"
   add_foreign_key "invitations", "bots"
   add_foreign_key "invitations", "users", column: "creator_id"
+  add_foreign_key "sessions", "bots"
+  add_foreign_key "sessions", "users"
   add_foreign_key "translations", "behaviours"
   add_foreign_key "variable_assignments", "bots"
 end

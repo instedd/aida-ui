@@ -52,8 +52,26 @@ class Api::BotsController < ApplicationApiController
 
   def preview
     authorize @bot
-    if preview_uuid = PublishBot.preview(@bot, params[:preview_uuid], params[:access_token])
-      render json: {result: :ok, preview_uuid: preview_uuid}
+    if preview_uuid = PublishBot.preview(@bot, params[:access_token])
+      session = current_user.sessions.where(bot: @bot).take
+      session_uuid = session.session_uuid if session
+      render json: {result: :ok, preview_uuid: preview_uuid, session_uuid: session_uuid}
+    else
+      render json: {result: :error}, status: :bad_request
+    end
+  end
+
+  def set_session
+    authorize @bot
+    session = @bot.get_session current_user
+    if session
+      session.session_uuid = params[:session_uuid]
+      session.save!
+    else
+      session = Session.create user: current_user, bot: @bot, session_uuid: params[:session_uuid]
+    end
+    if session && session.session_uuid
+      render json: {result: :ok, session_uuid: session.session_uuid}
     else
       render json: {result: :error}, status: :bad_request
     end

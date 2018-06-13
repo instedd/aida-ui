@@ -8,6 +8,8 @@ class Bot < ApplicationRecord
   has_many :collaborators, dependent: :destroy
   has_many :invitations, dependent: :destroy
   has_many :collaborating_users, through: :collaborators, source: :user
+  has_many :sessions
+  has_many :users, through: :sessions
 
   validate :has_single_front_desk
 
@@ -106,6 +108,10 @@ class Bot < ApplicationRecord
     else
       []
     end
+  end
+
+  def get_session(user)
+    self.sessions.where(user: user).take
   end
 
   private

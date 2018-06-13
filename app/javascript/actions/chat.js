@@ -33,17 +33,17 @@ export const receiveMessage = (text: string) : T.ChatAction => ({
   timestamp: new Date()
 })
 
-export const _startPreview = (botId: number, previewUuid: ?string, accessToken: string) : T.ChatAction => ({
+export const _startPreview = (botId: number, accessToken: string) : T.ChatAction => ({
   type: START_PREVIEW,
   botId,
-  previewUuid,
   accessToken,
 })
 
-export const _startPreviewSuccess = (botId: number, previewUuid: string, accessToken: string) : T.ChatAction => ({
+export const _startPreviewSuccess = (botId: number, previewUuid: string, sessionId: string, accessToken: string) : T.ChatAction => ({
   type: START_PREVIEW_SUCCESS,
   botId,
   previewUuid,
+  sessionId,
   accessToken,
 })
 
@@ -60,27 +60,22 @@ export const updatePreviewIfActive = () => (dispatch : T.Dispatch, getState : T.
 export const startPreview = (bot: T.Bot) => (dispatch : T.Dispatch, getState : T.GetState) => {
   const state = getState()
 
-  let previewUuid = null
   let accessToken = ""
 
   if (state.chat.scope && state.chat.scope.botId == bot.id) {
     // if the bot to preview is the same as before,
-    // better keep the backend bot instance (and the access token)
-    previewUuid = state.chat.previewUuid
+    // better keep the access token
     accessToken = state.chat.accessToken
   } else {
-    // otherwise we need a new backend bot (and new random access token)
-    previewUuid = null
+    // otherwise we need a new random access token
     accessToken = uuidv4()
   }
 
-  dispatch(_startPreview(bot.id, previewUuid, accessToken))
+  dispatch(_startPreview(bot.id, accessToken))
 
-  // TODO if previewing of different bot, we could unpublish the preview of state.chat.previewUuid
-
-  api.previewBot(bot, previewUuid, accessToken)
+  api.previewBot(bot, accessToken)
     .then((result) => {
-      dispatch(_startPreviewSuccess(bot.id, result.preview_uuid, accessToken))
+      dispatch(_startPreviewSuccess(bot.id, result.preview_uuid, result.session_uuid, accessToken))
     })
     .catch(() => dispatch(pushNotification('Bot preview failed')))
 }

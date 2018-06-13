@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as actions from '../actions/chat'
+import * as api from '../utils/api'
 import * as notificationsActions from '../actions/notifications'
 import socket from '../utils/socket'
 
@@ -48,12 +49,17 @@ class ChatClient extends Component {
 
   getNewSession() {
     const { channel } = this.state
+    const { bot } = this.props
 
-    if (channel) {
+    if (channel && bot) {
       channel
         .push('new_session', {data: {first_name: 'John', last_name: 'Doe', gender: 'male'}})
         .receive('ok', resp => {
-          this.props.actions.newSession(this.props.bot, resp.session)
+          api.setBotSession(bot, resp.session)
+          .then((result) => {
+            this.props.actions.newSession(bot, result.session_uuid)
+          })
+          .catch(() => this.props.notificationsActions.pushNotification("Unable to persist session"))
         })
         .receive('error', resp => {
           if (this.props.visible) {
@@ -124,6 +130,7 @@ class ChatClient extends Component {
 
 const mapStateToProps = (state, { bot }) => {
   const { previewUuid, accessToken, publishing, sessionId, scope } = state.chat
+
   if (scope.botId == bot.id) {
     return {
       previewUuid,

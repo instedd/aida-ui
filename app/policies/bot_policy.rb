@@ -33,6 +33,10 @@ class BotPolicy < ApplicationPolicy
     has_access?
   end
 
+  def set_session?
+    has_access?
+  end
+
   def download_manifest?
     can_publish?
   end

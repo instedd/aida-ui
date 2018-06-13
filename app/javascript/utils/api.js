@@ -45,8 +45,12 @@ export const unpublishBot = (bot : T.Bot) => {
   return apiDelete(`bots/${bot.id}/publish`)
 }
 
-export const previewBot = (bot : T.Bot, previewUuid : ?string, accessToken : string) => {
-  return apiPostJSON(`bots/${bot.id}/preview`, null, {preview_uuid: previewUuid, access_token: accessToken})
+export const previewBot = (bot : T.Bot, accessToken : string) => {
+  return apiPostJSON(`bots/${bot.id}/preview`, null, {access_token: accessToken})
+}
+
+export const setBotSession = (bot : T.Bot, session_uuid : string) => {
+  return apiPostJSON(`bots/${bot.id}/set_session`, null, {session_uuid: session_uuid})
 }
 
 export const fetchFrontDesk = (botId : number) => {
