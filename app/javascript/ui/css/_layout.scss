@@ -4,7 +4,7 @@ body {
   min-width: 320px;
 }
 .grid {
-  height: 100vh;
+  min-height: 100vh;
   font-size: 1rem;
   display: grid;
   grid-template-columns: 1fr;

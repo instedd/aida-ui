@@ -94,7 +94,7 @@ class HeaderSubNav extends Component {
             </Button>
         ) : null}
     </Aux>
-    );
+    )
   }
 }
 

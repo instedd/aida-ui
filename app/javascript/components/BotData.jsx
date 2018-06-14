@@ -16,7 +16,7 @@ export class BotData extends Component {
 
     if (!bot.published) {
       return (
-        <EmptyContent icon='sentiment_neutral'>
+        <EmptyContent icon='storage'>
           <Headline>No data available</Headline>
           <Divider />
           <p>You’ll be able to download data once the bot is published.</p>

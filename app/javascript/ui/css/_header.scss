@@ -93,22 +93,25 @@
   }
 }
 
-@media #{$md-mobile-media} {
-  .mainTabs{
-    .md-tabs {
-      overflow: visible;
-    }
-    .material-icons.md-icon {
-      font-size: 20px;
-    }
-  }
-}
+// @media #{$md-mobile-media} {
+//   .mainTabs{
+//     .md-tabs {
+//       overflow: visible;
+//     }
+//     .material-icons.md-icon {
+//       font-size: 20px;
+//     }
+//   }
+// }
 
-@media #{$md-desktop-media} {
-  .mainTabs {
-    .md-tab-label {
-      font-size: inherit;
-      line-height: inherit;
-    }
-  }
-}
+// @media #{$md-desktop-media} {
+//   .mainTabs {
+//     .md-tabs {
+//       width: 900px;
+//     }
+//     .md-tab-label {
+//       font-size: inherit;
+//       line-height: inherit;
+//     }
+//   }
+// }

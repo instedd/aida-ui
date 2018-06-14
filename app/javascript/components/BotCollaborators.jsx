@@ -11,7 +11,6 @@ import moment from 'moment'
 import copy from 'clipboard-copy'
 
 import { MainGrey } from '../ui/MainGrey'
-import Title from '../ui/Title'
 import Headline from '../ui/Headline'
 import { EmptyLoader }  from '../ui/Loader'
 import { Listing, Column } from '../ui/Listing'
@@ -351,7 +350,7 @@ class BotCollaborators extends Component {
       )
     } else {
       return (
-        <MainGrey>
+        <MainGrey scrollX>
           <CollaboratorsList items={items}
                              currentUserEmail={currentUserEmail}
                              onRemoveCollaborator={removeCollaborator}
