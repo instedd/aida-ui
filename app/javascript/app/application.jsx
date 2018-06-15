@@ -20,6 +20,13 @@ let middleware = [
   createRavenMiddleware(window.Raven, {})
 ]
 
+if (process.env.NODE_ENV !== 'production') {
+  const { logger } = require('redux-logger')
+  console.log(logger)
+  debugger
+  middleware = [...middleware, logger]
+}
+
 export const createAppStore = () => {
   return createStore(reducers, applyMiddleware(...middleware))
 }
