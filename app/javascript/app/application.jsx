@@ -22,8 +22,6 @@ let middleware = [
 
 if (process.env.NODE_ENV !== 'production') {
   const { logger } = require('redux-logger')
-  console.log(logger)
-  debugger
   middleware = [...middleware, logger]
 }
 
