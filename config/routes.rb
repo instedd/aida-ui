@@ -15,6 +15,7 @@ Rails.application.routes.draw do
         post :set_session
         get :stats
         get :data
+        get :error_logs
         get :manifest
       end
       resource :front_desk, only: [:show, :update]

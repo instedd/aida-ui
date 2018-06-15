@@ -42,6 +42,10 @@ class Backend
       handle_response { get("/api/bots/#{uuid}/stats/users_per_skill", query: query) }
     end
 
+    def error_logs(uuid, query = {})
+      handle_response { get("/api/bots/#{uuid}/error_logs", query: query) }
+    end
+
     def sessions(uuid)
       handle_response { get("/api/bots/#{uuid}/sessions") }
     end
@@ -56,8 +60,8 @@ class Backend
 
     private
 
-    def handle_response(&block)
-      response = yield block
+    def handle_response(&request)
+      response = yield request
       if response.code >= 200 and response.code < 300
         if response.code == 204
           :ok

@@ -13,7 +13,7 @@ module AidaMatchers
     end
   end
 
-  %w(bot channel skill bot_stats translations_index data_table collaborator invitation).each do |noun|
+  %w(bot channel skill bot_stats translations_index data_table collaborator invitation bot_error_log).each do |noun|
     matcher "be_a_#{noun}_as_json".to_sym do
       define_method :fragment do
         "#/definitions/#{noun}"

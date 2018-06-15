@@ -26,13 +26,6 @@ export type Permission = 'can_admin'
                        | 'manages_variables'
                        | 'manages_results';
 
-export type ChatMessage = {
-  id: number,
-  text: string,
-  sent: boolean,
-  timestamp: Date
-}
-
 export type AuthAction = {
   type: 'AUTH_INIT',
   userEmail: string,
@@ -156,6 +149,17 @@ export type CollaboratorsAction = {
 } | {
   type: 'COLLABORATORS_UPDATE_ERROR',
 };
+
+export type ErrorLogsAction = {
+  type: 'ERROR_LOGS_FETCH',
+  scope: Scope,
+} | {
+  type: 'ERROR_LOGS_FETCH_SUCCESS',
+  scope: Scope,
+  items: Array<ErrorLog>,
+} | {
+  type: 'ERROR_LOGS_FETCH_ERROR',
+}
 
 export type InvitationsAction = {
   type: 'INVITATIONS_CANCEL',
@@ -356,8 +360,9 @@ export type Action = AuthAction
                    | ChannelsAction
                    | ChatAction
                    | CollaboratorsAction
-                   | InvitationsAction
+                   | ErrorLogsAction
                    | FrontDeskAction
+                   | InvitationsAction
                    | KeyPairAction
                    | NotificationsAction
                    | SkillAction
@@ -384,18 +389,39 @@ export type ChannelsState = {
   items: ?ById<T.Channel>
 };
 
+export type ChatMessage = {
+  id: number,
+  text: string,
+  sent: boolean,
+  timestamp: Date
+}
+
 export type ChatState = {
   scope: Scope,
   messages: Array<ChatMessage>,
   previewUuid: ?string,
   accessToken: string,
   sessionId: ?string,
-}
+};
 
 export type CollaboratorsState = {
   fetching: boolean,
   scope: ?Scope,
   data: ?T.CollaboratorsIndex,
+};
+
+export type ErrorLog = {
+  timestamp: string,
+  bot_id: string,
+  session_id: string,
+  skill_id: string,
+  message: string
+};
+
+export type ErrorLogsState = {
+  fetching: boolean,
+  scope: ?Scope,
+  items: ?Array<ErrorLog>,
 };
 
 export type FrontDeskState = {
@@ -462,6 +488,7 @@ export type State = {
   channels: ChannelsState,
   chat: ChatState,
   collaborators: CollaboratorsState,
+  errorLogs: ErrorLogsState,
   frontDesk: FrontDeskState,
   keypair: KeyPairState,
   invitation: InvitationState,

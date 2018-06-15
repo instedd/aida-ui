@@ -472,6 +472,23 @@
       "enum": [ "today", "this_week", "this_month" ]
     },
 
+    "bot_error_logs": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/bot_error_log" }
+    },
+
+    "bot_error_log": {
+      "type": "object",
+      "properties": {
+        "timestamp": { "type": "string" },
+        "bot_id": { "type": "string" },
+        "session_id": { "type": "string" },
+        "skill_id": { "type": "string" },
+        "message": { "type": "string" }
+      },
+      "required": [ "timestamp", "bot_id", "session_id", "skill_id", "message" ]
+    },
+
     "translation_behaviours": {
       "type": "array",
       "items": {
