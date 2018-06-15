@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { SidebarItem, SidebarMenuItem } from '../ui/SideBar'
 import { skillIcon, skillDnDType } from '../utils/skills_bar'
+import { blank } from '../utils/string'
 import includes from 'lodash/includes'
 import { DragSource, DropTarget } from 'react-dnd'
 import { connect } from 'react-redux'
