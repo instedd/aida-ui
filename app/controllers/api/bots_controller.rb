@@ -138,6 +138,15 @@ class Api::BotsController < ApplicationApiController
     render json: {error: e.message}, status: :bad_request
   end
 
+  def error_logs
+    authorize @bot, :read_error_logs?
+    data = []
+    data = GatherBotErrorLogs.run(@bot, params[:period]) if @bot.published?
+    render json: data
+  rescue RuntimeError => e
+    render json: {error: e.message}, status: :bad_request
+  end
+
   def manifest
     authorize @bot, :download_manifest?
     send_data JSON.pretty_generate(@bot.manifest),

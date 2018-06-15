@@ -49,6 +49,10 @@ class BotPolicy < ApplicationPolicy
     manages_results?
   end
 
+  def read_error_logs?
+    has_access?
+  end
+
   def read_channels?
     can_publish?
   end
