@@ -14,12 +14,14 @@ import InvitationView from '../components/InvitationView'
 import { SettingsApi } from '../components/SettingsApi'
 import { SettingsEncryption} from '../components/SettingsEncryption'
 
+let middleware = [
+  createDebounce(),
+  thunkMiddleware,
+  createRavenMiddleware(window.Raven, {})
+]
+
 export const createAppStore = () => {
-  return createStore(reducers, applyMiddleware(
-    createDebounce(),
-    thunkMiddleware,
-    createRavenMiddleware(window.Raven, {})
-  ))
+  return createStore(reducers, applyMiddleware(...middleware))
 }
 
 export const App = ({store}) => (
