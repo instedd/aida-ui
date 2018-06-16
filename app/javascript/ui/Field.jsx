@@ -3,7 +3,7 @@ import { TextField } from 'react-md';
 
 export class Field extends Component {
   render() {
-    const {label, value, onChange, id, helpText, leftIcon, placeholder, style, className, resize} = this.props
+    const {label, value, onChange, id, helpText, leftIcon, placeholder, style, className, resize, defaultValue, readOnly} = this.props
 
     return <TextField
       label={label}
@@ -17,6 +17,8 @@ export class Field extends Component {
       placeholder={placeholder}
       style={style}
       resize={resize}
+      defaultValue={defaultValue}
+      readOnly={readOnly || false}
     />
   }
 }

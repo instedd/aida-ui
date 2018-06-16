@@ -36,18 +36,45 @@ class BotChannelComponent extends Component {
     }
 
     if (channel) {
-      return <SingleColumn>
-        <Title>Setup a Facebook channel</Title>
-        <Headline>
-          In order to setup this channel you first need to
-          create a <a href="https://www.facebook.com/business/products/pages" target="_blank">Facebook page</a> and
-          then <a href="https://developers.facebook.com/docs/messenger-platform/getting-started/app-setup" target="_blank">subscribe a bot</a>.
-        </Headline>
+      let setupFields = <div>
+        <Field label="Page ID" value={channel.config.page_id} onChange={this.updateConfigField("page_id")} helpText="The Page ID under the More info section on your Facebook Page's About tab" />
+        <Field label="Access Token" value={channel.config.access_token} onChange={this.updateConfigField("access_token")} helpText="The Page Access Token you get on the Token Generation section of the Messenger > Settings tab of your Facebook Application" />
+      </div>
 
-        <Field label="Page ID" value={channel.config.page_id} onChange={this.updateConfigField("page_id")} />
-        <Field label="Verify Token" value={channel.config.verify_token} onChange={this.updateConfigField("verify_token")} />
-        <Field label="Access Token" value={channel.config.access_token} onChange={this.updateConfigField("access_token")} />
-      </SingleColumn>
+      if (bot.published) {
+        return <SingleColumn>
+            <Title>Subscribe channel to Aida</Title>
+            <Headline>
+              Finish the channel setup taking your callback URL and verify token to
+              the <a href="https://developers.facebook.com/docs/messenger-platform/getting-started/app-setup" target="_blank">subscribe bot page</a>.
+            </Headline>
+
+            <Field label="Callback URL" defaultValue={`${location.protocol}//${location.host}/callbacks/facebook/`} readOnly />
+            <Field label="Verify Token" value={channel.config.verify_token} onChange={this.updateConfigField("verify_token")} />
+            { /* TODO: replace `<br /><br />` with proper CSS spacing */ }
+            <br /><br />
+            <Title>Facebook channel configuration</Title>
+            <Headline>
+              You can fix your Facebook channel's configuration here in case you've found an error
+            </Headline>
+            {setupFields}
+          </SingleColumn>
+      } else {
+        return <SingleColumn>
+          <Title>Setup a Facebook channel</Title>
+          <Headline>
+            In order to setup this channel you first need
+            to <a href="https://www.facebook.com/business/products/pages" target="_blank">create a Facebook page</a> and
+            then paste your credentials here.
+            Follow <a href="https://developers.facebook.com/docs/messenger-platform/prelaunch-checklist" target="_blank">Facebook publishing requirements</a> to
+            avoid getting your channel banned.<br />
+
+            You will be able to subscribe the bot after you first publish it.
+          </Headline>
+
+          {setupFields}
+        </SingleColumn>
+      }
     } else {
       return <EmptyLoader>Loading channels for {bot.name}</EmptyLoader>
     }
