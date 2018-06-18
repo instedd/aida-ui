@@ -24,7 +24,7 @@ if [ $RSPEC -eq 0 ] && [ $FLOW -eq 0 ]; then
 else
   echo "${RED}----==== Oops! ====----${NC}"
   if [ $RSPEC -ne 0 ]; then
-  echo "${RED}Mix tests failed${NC}";
+  echo "${RED}Rspec tests failed${NC}";
   fi
   if [ $FLOW -ne 0 ]; then
     echo "${RED}Flow tests failed${NC}";
