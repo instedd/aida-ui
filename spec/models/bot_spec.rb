@@ -9,6 +9,11 @@ RSpec.describe Bot, type: :model do
     expect(bot).to be_valid
   end
 
+  it "defaults a bot's verify token" do
+    bot = Bot.create_prepared!(user)
+    expect(bot.channels.first.config["verify_token"]).to_not be_empty
+  end
+
   describe "manifest" do
     let!(:bot) { Bot.create_prepared! user }
     let!(:skill) { bot.skills.create_skill! 'keyword_responder' }
