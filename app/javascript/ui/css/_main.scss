@@ -13,7 +13,7 @@
   .main-content {
     grid-area: main-content;
     background: $md-white-base;
-    padding: 86px 100px 70px;
+    padding: 0 100px 70px;
   }
   .button-area {
     grid-area: button-area;
@@ -40,7 +40,7 @@
   grid-template-areas: "main-content";
   .main-content {
     grid-area: main-content;
-    padding: 86px 6% 70px;
+    padding: 0 6% 70px;
   }
 }
 
@@ -53,7 +53,7 @@
   .main-content {
     grid-area: main-content;
     background: $md-white-base;
-    padding: 86px 100px 70px;
+    padding: 0 100px 70px;
   }
   .button-area {
     grid-area: button-area;
@@ -70,7 +70,7 @@
     ". main-content .";
   .main-content {
     grid-area: main-content;
-    padding: 86px 0 70px;
+    padding: 0 0 70px;
   }
 }
 
@@ -83,7 +83,7 @@
     ". main-content .";
   .main-content {
     grid-area: main-content;
-    padding: 60px 0px 90px;
+    padding: 0 0px 90px;
 
     .md-paper {
       background-color: $md-white-base;

@@ -23,6 +23,9 @@ main {
   grid-area: main;
   display: flex;
   flex: 1;
+  > div:first-child {
+    padding-top: 108px;
+  }
 }
 
 footer {
