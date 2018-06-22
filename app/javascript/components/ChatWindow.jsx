@@ -8,6 +8,7 @@ import { Card,
          TextField,
          Button,
          FontIcon,
+         FileUpload,
          Paper } from 'react-md'
 import moment from 'moment'
 import { Loader } from '../ui/Loader'
@@ -26,6 +27,29 @@ let ChatHeader = ({ title, publishing }) => (
   </div>
 )
 
+const attachmentMessage = ({attachment}) => (
+  // TODO: this would probably not be a .content-text anymore
+  <div className="content-text">
+    <a href={`${backendContentUrl}/image/${attachment}`} target="_blank">
+      <FontIcon>photo</FontIcon>
+    </a>
+  </div>
+)
+
+const textMessage = ({text}) => (
+  <div className="content-text">
+    {text}
+  </div>
+)
+
+const messageContent = (message) => {
+  if (message.attachment) {
+    return attachmentMessage(message)
+  } else {
+    return textMessage(message)
+  }
+}
+
 const MessageBulk = ({ messages }) => {
   const sentMessages = messages[0].sent
   return (
@@ -34,9 +58,7 @@ const MessageBulk = ({ messages }) => {
       className={"message-bubble " + (sentMessages ? "message-sent" : "message-received")} >
       {messages.map(message =>
         (<li key={message.id}>
-          <div className="content-text">
-            {message.text}
-          </div>
+          {messageContent(message)}
           <div className="content-timestamp">
             {moment(message.timestamp).format("HH:mm")}
           </div>
@@ -112,7 +134,7 @@ class InputMessage extends Component {
   }
 
   render() {
-    const { onSend, disabled, newSession } = this.props
+    const { onSend, onSendAttachment, disabled, newSession } = this.props
 
     const sendMessageAndClearInput = () => {
       const text = this._textfield.value.trim()
@@ -121,6 +143,10 @@ class InputMessage extends Component {
         this.setState({ messageText: "" })
       }
       this.focus()
+    }
+
+    const sendAttachment = (file) => {
+      onSendAttachment(file)
     }
 
     const sendMessageIfEnterPressed = (ev) => {
@@ -149,6 +175,16 @@ class InputMessage extends Component {
             disabled={disabled}>
             send
           </Button>
+          <FileUpload
+            id="chat-attachment-upload"
+            disabled={disabled}
+            maxSize={25 * 1024 * 1024}
+            flat
+            label=""
+            onLoad={sendAttachment}
+            onSizeError={() => alert('File is too big. Maximum 25 MB allowed.')}>
+            file_upload
+          </FileUpload>
           <Button
             icon
             onClick={() => { newSession(); this.focus() }}
@@ -161,7 +197,7 @@ class InputMessage extends Component {
   }
 }
 
-const ChatWindowComponent = ({ sendMessage, newSession, bot, messages, publishing, disabled, inputRef }) => (
+const ChatWindowComponent = ({ sendMessage, sendAttachment, newSession, bot, messages, publishing, disabled, inputRef }) => (
   <Paper
     zDepth={5}
     className={"chat-window"}>
@@ -170,7 +206,7 @@ const ChatWindowComponent = ({ sendMessage, newSession, bot, messages, publishin
       <MessageList
         messages={messages} />
       <InputMessage
-        onSend={sendMessage} newSession={newSession} disabled={disabled} ref={inputRef}/>
+        onSend={sendMessage} onSendAttachment={sendAttachment} newSession={newSession} disabled={disabled} ref={inputRef}/>
   </Paper>
 )
 
@@ -183,6 +219,7 @@ class ChatWindow extends Component {
     visible: PropTypes.bool,
     sessionId: PropTypes.string,
     onSendMessage: PropTypes.func.isRequired,
+    onSendAttachment: PropTypes.func.isRequired,
     onNewSession: PropTypes.func.isRequired
   }
 
@@ -226,13 +263,14 @@ class ChatWindow extends Component {
   }
 
   render() {
-    const { bot, messages, connected, publishing, visible, sessionId, onSendMessage, onNewSession } = this.props
+    const { bot, messages, connected, publishing, visible, sessionId, onSendMessage, onSendAttachment, onNewSession } = this.props
 
     if (visible) {
       return (
         <ChatWindowComponent bot={bot}
                              messages={messages}
                              sendMessage={onSendMessage}
+                             sendAttachment={onSendAttachment}
                              newSession={onNewSession}
                              publishing={publishing}
                              inputRef={input => this._input = input}

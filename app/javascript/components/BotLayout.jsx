@@ -111,6 +111,13 @@ export class BotLayoutComponent extends Component {
         this._chatClient.sendMessage(message)
       }
     }
+
+    const sendChatAttachment = (file) => {
+      if (this._chatClient) {
+        this._chatClient.sendAttachment(file)
+      }
+    }
+
     const newChatSession = () => {
       if (this._chatClient) {
         this._chatClient.getNewSession()
@@ -168,6 +175,7 @@ export class BotLayoutComponent extends Component {
         <ChatWindow bot={bot}
                     visible={chatWindowVisible}
                     onSendMessage={sendChatMessage}
+                    onSendAttachment={sendChatAttachment}
                     onNewSession={newChatSession} />
 
     ) : null

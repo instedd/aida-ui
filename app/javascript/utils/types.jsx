@@ -93,6 +93,12 @@ export type ChatAction = {
   sent: boolean,
   timestamp: Date
 } | {
+  type: 'SEND_ATTACHMENT_SUCCESS',
+  id: number,
+  attachment: string,
+  sent: boolean,
+  timestamp: Date
+} | {
   type: 'START_PREVIEW',
   botId: number,
   accessToken: string
@@ -391,7 +397,8 @@ export type ChannelsState = {
 
 export type ChatMessage = {
   id: number,
-  text: string,
+  text?: string,
+  attachment?: string,
   sent: boolean,
   timestamp: Date
 }
