@@ -144,4 +144,21 @@
       background: transparent;
     }
   }
+  .md-file-input-container {
+    width: 40px;
+    height: 40px;
+    padding: 10px;
+    .md-btn--text {
+      color: rgba(0, 0, 0, .54);
+      display: inline;
+      min-width: auto;
+      padding: 0;
+      .md-icon-text {
+        display: none;
+      }
+    }
+    .md-text--disabled {
+      color: rgba(0, 0, 0, .38);
+    }
+  }
 }

@@ -21,6 +21,7 @@ export default (state : T.ChatState, action : T.ChatAction) : T.ChatState => {
     case actions.START_PREVIEW_SUCCESS: return startPreviewSuccess(state, action)
     case actions.SEND_MESSAGE: return sendMessage(state, action)
     case actions.RECEIVE_MESSAGE: return receiveMessage(state, action)
+    case actions.SEND_ATTACHMENT_SUCCESS: return attachmentSent(state, action)
     case actions.PAUSE_PREVIEW: return pausePreview(state, action)
     case actions.NEW_SESSION: return newSession(state, action)
     case actions.CONNECTED: return chatConnected(state, action)
@@ -97,6 +98,10 @@ const sendMessage = (state, action) => {
   return addMessage(state, action)
 }
 
+const attachmentSent = (state, action) => {
+  return addMessage(state, action)
+}
+
 const receiveMessage = (state, action) => {
   return addMessage(state, action)
 }
@@ -133,4 +138,7 @@ const chatDisconnected = (state, action) => {
   }
 }
 
-const createMessageWith = ({ id, text, sent, timestamp }) => ({ id, text, sent, timestamp})
+// TODO: the object that will be received is one of both actions: 'SEND_ATTACHMENT_SUCCESS', or 'SEND_MESSAGE'/'RECEIVE_MESSAGE'
+// So you have a `text` property, or an `attachment` one. I couldn't find a way to state that to flow, so that's why we have an
+// `any` here as a type. That Works™
+const createMessageWith = ({ id, text, attachment, sent, timestamp } : any) => ({ id, text, attachment, sent, timestamp})
