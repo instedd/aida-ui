@@ -53,7 +53,7 @@ RSpec.describe DuplicateBot, type: :service do
   end
 
   it "does not duplicate channel information" do
-    expect(duplicate.channels.count).to eq(1)
+    expect(duplicate.channels.count).to eq(2)
     expect(duplicate.channels.first).not_to eq(bot.channels.first)
   end
 

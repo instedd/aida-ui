@@ -2,7 +2,7 @@ class Channel < ApplicationRecord
   belongs_to :bot
 
   validates :name, presence: true
-  validates :kind, inclusion: { in: %w(facebook) }
+  validates :kind, inclusion: { in: %w(facebook websocket) }
 
   validate :config_must_match_schema
 
@@ -30,6 +30,8 @@ class Channel < ApplicationRecord
     case kind
     when "facebook"
       "#/definitions/facebookChannelConfig"
+    when "websocket"
+      "#/definitions/websocketChannelConfig"
     else
       fail "config schema not defined"
     end

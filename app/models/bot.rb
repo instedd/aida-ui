@@ -22,6 +22,9 @@ class Bot < ApplicationRecord
     bot.channels.create! kind: "facebook", name: "facebook", config: {
       "page_id" => "", "verify_token" => "", "access_token" => ""
     }
+    bot.channels.create! kind: "websocket", name: "websocket", config: {
+      "access_token" => ""
+    }
 
     bot.behaviours.create_front_desk!
 
