@@ -45,7 +45,7 @@ class Bot < ApplicationRecord
         skill.manifest_fragment
       end,
       variables: VariableAssignment.manifest(self.variable_assignments, self.default_language, self.other_languages),
-      channels: channels.map do |channel|
+      channels: Channel.setup_or_facebook(channels).map do |channel|
         channel.config.merge(type: channel.kind)
       end
     }.tap do |manifest|
