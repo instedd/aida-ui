@@ -2,16 +2,28 @@ class Channel < ApplicationRecord
   belongs_to :bot
 
   validates :name, presence: true
-  validates :kind, inclusion: { in: %w(facebook) }
+  validates :kind, inclusion: { in: %w(facebook websocket) }
 
   validate :config_must_match_schema
 
   scope :of_bots_owned_by, -> (user) { Channel.where(bot: user.bots) }
 
   def setup?
-    config["page_id"].present? &&
-    config["verify_token"].present? &&
-    config["access_token"].present?
+    if self.kind == "facebook"
+      config["page_id"].present? &&
+      config["verify_token"].present? &&
+      config["access_token"].present?
+    else
+      config["access_token"].present?
+    end
+  end
+
+  def self.setup_or_facebook(channel_list)
+    if channel_list.select{ |c| c.setup? }.length > 0
+      channel_list.select{ |c| c.setup? }
+    else
+      channel_list.select{ |c| c.kind == "facebook" }
+    end
   end
 
   private
@@ -30,6 +42,8 @@ class Channel < ApplicationRecord
     case kind
     when "facebook"
       "#/definitions/facebookChannelConfig"
+    when "websocket"
+      "#/definitions/websocketChannelConfig"
     else
       fail "config schema not defined"
     end

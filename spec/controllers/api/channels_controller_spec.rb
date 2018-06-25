@@ -6,6 +6,7 @@ RSpec.describe Api::ChannelsController, type: :controller do
 
   let!(:bot) { create(:bot, owner: user) }
   let!(:channel) { bot.channels.first }
+  let!(:websocket_channel) { bot.channels[1] }
   let!(:shared_bot) { create(:bot, shared_with: user, grants: %w(publish)) }
   let!(:other_shared_bot) { create(:bot, shared_with: user, grants: %w(results)) }
 
@@ -19,6 +20,12 @@ RSpec.describe Api::ChannelsController, type: :controller do
         name: channel.name,
         kind: channel.kind,
         config: channel.config
+      },
+      {
+        id: websocket_channel.id,
+        name: websocket_channel.name,
+        kind: websocket_channel.kind,
+        config: websocket_channel.config
       }])
     end
 

@@ -22,6 +22,9 @@ class Bot < ApplicationRecord
     bot.channels.create! kind: "facebook", name: "facebook", config: {
       "page_id" => "", "verify_token" => SecureRandom.base58, "access_token" => ""
     }
+    bot.channels.create! kind: "websocket", name: "websocket", config: {
+      "access_token" => ""
+    }
 
     bot.behaviours.create_front_desk!
 
@@ -42,7 +45,7 @@ class Bot < ApplicationRecord
         skill.manifest_fragment
       end,
       variables: VariableAssignment.manifest(self.variable_assignments, self.default_language, self.other_languages),
-      channels: channels.map do |channel|
+      channels: Channel.setup_or_facebook(channels).map do |channel|
         channel.config.merge(type: channel.kind)
       end
     }.tap do |manifest|
