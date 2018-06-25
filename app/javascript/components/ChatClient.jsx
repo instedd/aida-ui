@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as actions from '../actions/chat'
 import * as api from '../utils/api'
+import * as backend from '../utils/backend'
 import * as notificationsActions from '../actions/notifications'
 import socket from '../utils/socket'
 
@@ -80,6 +81,26 @@ class ChatClient extends Component {
       channel.push('utb_msg', { session: sessionId, text: text })
     } else {
       console.error('Attempted to send a message with no connection')
+    }
+  }
+
+  sendAttachment(file) {
+    const { actions, sessionId, bot, previewUuid } = this.props
+    const { channel } = this.state
+
+    if (channel) {
+      // TODO: trigger "uploadingAttachment" event to some hint in the UI
+      // stating there's an upload in progress
+      backend.uploadAttachment(previewUuid, sessionId, file)
+        .then((result) => {
+          const attachmentUuid = result.id
+          channel.push('utb_img', { session: sessionId, image: attachmentUuid })
+          actions.attachmentSent(attachmentUuid)
+        }).catch((error) => {
+          console.error('Error trying to upload an attachment', error)
+        })
+    } else {
+      console.error('Attempted to upload an attachment with no connection')
     }
   }
 

@@ -400,4 +400,35 @@ RSpec.describe Api::BotsController, type: :controller do
       expect(response).to be_denied
     end
   end
+
+  describe "error_logs" do
+    let(:sample_error_logs) {
+      [{
+        'timestamp' => '1234',
+        'bot_id' => '1234',
+        'session_id' => '1234',
+        'skill_id' => '1234',
+        'message' => '1234'
+      }]
+    }
+
+    it "fails if the bot is not yet published" do
+      get :stats, params: { id: bot.id }
+
+      expect(response.status).to eq(400)
+    end
+
+    it "returns the error logs for the bot" do
+      expect(Backend).to receive(:error_logs).with(published_bot.uuid, period: "this_week").and_return(sample_error_logs)
+
+      get :error_logs, params: { id: published_bot.id, period: "this_week" }
+
+      expect(response).to be_success
+      expect(json_body.first).to be_a_bot_error_log_as_json.matching(timestamp: '1234',
+                                                                bot_id: '1234',
+                                                                session_id: '1234',
+                                                                skill_id: '1234',
+                                                                message: '1234')
+    end
+  end
 end

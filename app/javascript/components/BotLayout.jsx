@@ -13,6 +13,7 @@ import * as botActions from '../actions/bot'
 import * as botsActions from '../actions/bots'
 import * as r from '../utils/routes'
 import AppLayout from './AppLayout'
+import BotErrorLogs from '../components/BotErrorLogs'
 import { BotChannel } from '../components/BotChannel'
 import { BotBehaviour } from '../components/BotBehaviour'
 import BotTranslations from '../components/BotTranslations'
@@ -110,6 +111,13 @@ export class BotLayoutComponent extends Component {
         this._chatClient.sendMessage(message)
       }
     }
+
+    const sendChatAttachment = (file) => {
+      if (this._chatClient) {
+        this._chatClient.sendAttachment(file)
+      }
+    }
+
     const newChatSession = () => {
       if (this._chatClient) {
         this._chatClient.getNewSession()
@@ -167,6 +175,7 @@ export class BotLayoutComponent extends Component {
         <ChatWindow bot={bot}
                     visible={chatWindowVisible}
                     onSendMessage={sendChatMessage}
+                    onSendAttachment={sendChatAttachment}
                     onNewSession={newChatSession} />
 
     ) : null
@@ -185,6 +194,7 @@ export class BotLayoutComponent extends Component {
             <HeaderNavLink label="Behaviour" to={r.botBehaviour(bot.id)} />,
             <HeaderNavLink label="Translations" to={r.botTranslations(bot.id)} />,
             <HeaderNavLink label="Collaborators" to={r.botCollaborators(bot.id)} />,
+            <HeaderNavLink label="Logs" to={r.botErrorLogs(bot.id)} />,
           ]}
           headerNavExtra={[
             // <HeaderNavAction label="Rename" />,
@@ -208,6 +218,8 @@ export class BotLayoutComponent extends Component {
                                                                                    dialogVisible={this.state.collaborators}
                                                                                    showDialog={showCollaborators}
                                                                                    hideDialog={hideCollaborators} />} />
+          <Route exact path="/b/:id/error_logs" render={() => <BotErrorLogs bot={bot}/>} />
+
           {confirmationDialog}
 
           <ChatClient bot={bot} visible={chatWindowVisible} clientRef={client => this._chatClient = client} />

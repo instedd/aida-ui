@@ -25,6 +25,7 @@ export const botTables = (botId) => `/b/${botId}/translations/tables`
 export const botTable = (botId, tableId) => `/b/${botId}/translations/tables/${tableId}`
 
 export const botCollaborators = (botId) => `/b/${botId}/collaborators`
+export const botErrorLogs = (botId) => `/b/${botId}/error_logs`
 
 export const absoluteUrl = (path) => {
   let baseUrl = window.baseUrl

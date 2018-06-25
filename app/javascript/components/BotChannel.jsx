@@ -33,30 +33,59 @@ class BotChannelComponent extends Component {
 
   render() {
     const { permitted, channelFacebook, channelWebsocket, bot } = this.props
-    console.log(this.props)
 
     if (!permitted) {
       return <ContentDenied />
     }
 
     if (channelFacebook || channelWebsocket) {
-      return <SingleColumn>
-        <Title>Setup a Facebook channel</Title>
-        <Headline>
-          In order to setup this channel you first need to
-          create a <a href="https://www.facebook.com/business/products/pages" target="_blank">Facebook page</a> and
-          then <a href="https://developers.facebook.com/docs/messenger-platform/getting-started/app-setup" target="_blank">subscribe a bot</a>.
-        </Headline>
+      let setupFields = <div>
+        <Field label="Page ID" value={channelFacebook.config.page_id} onChange={this.updateConfigField("page_id", "facebook")} helpText="The Page ID under the More info section on your Facebook Page's About tab" />
+        <Field label="Access Token" value={channelFacebook.config.access_token} onChange={this.updateConfigField("access_token", "facebook")} helpText="The Page Access Token you get on the Token Generation section of the Messenger > Settings tab of your Facebook Application" />
+      </div>
 
-        <Field label="Page ID" value={channelFacebook.config.page_id} onChange={this.updateConfigField("page_id", "facebook")} />
-        <Field label="Verify Token" value={channelFacebook.config.verify_token} onChange={this.updateConfigField("verify_token", "facebook")} />
-        <Field label="Access Token" value={channelFacebook.config.access_token} onChange={this.updateConfigField("access_token", "facebook")} />
+      let websocketSetup =  <div><br />
+          <Title>Setup a websocket channel</Title>
+          <Headline>If you don't need an extra websocket channel, leave this section empty</Headline>
+          <Field label="Access Token" value={channelWebsocket.config.access_token} onChange={this.updateConfigField("access_token", "websocket")} />
+        </div>
 
-        <br />
-        <Title>Setup a websocket channel</Title>
-        <Headline>If you don't need an extra websocket channel, leave this section empty</Headline>
-        <Field label="Access Token" value={channelWebsocket.config.access_token} onChange={this.updateConfigField("access_token", "websocket")} />
-      </SingleColumn>
+      if (bot.published) {
+        return <SingleColumn>
+            <Title>Subscribe channel to Aida</Title>
+            <Headline>
+              Finish the channel setup taking your callback URL and verify token to
+              the <a href="https://developers.facebook.com/docs/messenger-platform/getting-started/app-setup" target="_blank">subscribe bot page</a>.
+            </Headline>
+
+            <Field label="Callback URL" defaultValue={`${location.protocol}//${location.host}/callbacks/facebook/`} readOnly />
+            <Field label="Verify Token" value={channelFacebook.config.verify_token} onChange={this.updateConfigField("verify_token", "facebook")} />
+            { /* TODO: replace `<br /><br />` with proper CSS spacing */ }
+            <br /><br />
+            <Title>Facebook channel configuration</Title>
+            <Headline>
+              You can fix your Facebook channel's configuration here in case you've found an error
+            </Headline>
+            {setupFields}
+            {websocketSetup}
+          </SingleColumn>
+      } else {
+        return <SingleColumn>
+          <Title>Setup a Facebook channel</Title>
+          <Headline>
+            In order to setup this channel you first need
+            to <a href="https://www.facebook.com/business/products/pages" target="_blank">create a Facebook page</a> and
+            then paste your credentials here.
+            Follow <a href="https://developers.facebook.com/docs/messenger-platform/prelaunch-checklist" target="_blank">Facebook publishing requirements</a> to
+            avoid getting your channel banned.<br />
+
+            You will be able to subscribe the bot after you first publish it.
+          </Headline>
+
+          {setupFields}
+          {websocketSetup}
+        </SingleColumn>
+      }
     } else {
       return <EmptyLoader>Loading channels for {bot.name}</EmptyLoader>
     }
