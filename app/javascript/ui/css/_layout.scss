@@ -20,12 +20,10 @@ header {
 }
 
 main {
+  background: $md-grey-300;
   grid-area: main;
   display: flex;
   flex: 1;
-  > div:first-child {
-    padding-top: 108px;
-  }
 }
 
 footer {

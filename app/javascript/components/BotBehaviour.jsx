@@ -17,7 +17,13 @@ export class BotBehaviour extends Component {
       return <ContentDenied />
     }
 
-    const buttons = (<Button icon onClick={() => onToggleChatWindow()}>chat</Button>)
+    const buttons = (<Button 
+                      floating
+                      className="btn-mainTabs"
+                      icon onClick={() => onToggleChatWindow()}>
+                      chat
+                      </Button>)
+
 
     return (
       <MainWhite sidebar={<SkillsBar bot={bot} />} buttons={buttons}>

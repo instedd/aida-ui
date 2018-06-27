@@ -67,7 +67,7 @@ class SkillListItem extends Component {
                                  onClick={onRenameSkill} />)
     }
     actionItems.push(<SidebarMenuItem key={1}
-                               icon="close"
+                               icon="delete"
                                label="Delete"
                                onClick={onDeleteSkill} />)
 

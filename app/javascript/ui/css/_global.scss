@@ -138,3 +138,8 @@ input[type=number]:invalid {
 .hScroll {
   overflow-x: auto;
 }
+.btn-mainTabs {
+  position: absolute;
+  right: 5.3%;
+  transform: translateY(2.5rem) scale(.93);
+}

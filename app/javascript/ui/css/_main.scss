@@ -1,19 +1,13 @@
 .main-with-sidebar {
   width: 100%;
+  padding: 108px 5% 4rem;
   display: grid;
-  grid-template-columns: minmax(min-content, 320px) minmax(615px, auto) 90px;
+  grid-template-columns: minmax(min-content, 320px) minmax(615px, 1fr);
   grid-template-areas:
-    "sidebar main-content button-area";
+    "sidebar main-content";
+  column-gap: 8rem;
   .sidebar {
     grid-area: sidebar;
-    align-self: stretch;
-    background: $md-white-base;
-    border-right: 1px solid $md-grey-300;
-  }
-  .main-content {
-    grid-area: main-content;
-    background: $md-white-base;
-    padding: 0 100px 70px;
   }
   .button-area {
     grid-area: button-area;
@@ -33,32 +27,19 @@
 }
 
 .main-fullwidth {
-  background: $md-white-base;
   width: 100%;
   display: grid;
   grid-template-columns: 1fr;
   grid-template-areas: "main-content";
-  .main-content {
-    grid-area: main-content;
-    padding: 0 6% 70px;
-  }
+  margin-top: 108px;
+  padding: 0 5% 3rem;
 }
 
-.main-fullwidth-buttons {
-  width: 100%;
-  display: grid;
-  grid-template-columns: auto 90px;
-  grid-template-areas:
-  "main-content button-area";
-  .main-content {
-    grid-area: main-content;
-    background: $md-white-base;
-    padding: 0 100px 70px;
-  }
-  .button-area {
-    grid-area: button-area;
-    background: $md-grey-300;
-  }
+.main-content {
+  grid-area: main-content;
+  background: $md-white-base;
+  padding: 2rem 2rem;
+  border-radius: 4px;
 }
 
 .main-single-column {
@@ -75,13 +56,15 @@
 }
 
 .main-grey {
-  background: $md-grey-200;
+  background: $md-grey-300;
   width: 100%;
+  padding: 108px 5% 3rem;
   display: grid;
   grid-template-columns: 5% 1fr 5%;
   grid-template-areas:
     ". main-content .";
   .main-content {
+    background-color: transparent;
     grid-area: main-content;
     padding: 0 0px 90px;
 
@@ -101,6 +84,7 @@
   grid-template-columns: 1fr minmax(min-content, 320px) 1fr;
   grid-template-areas: ". main-content .";
   .main-content {
+    background-color: transparent;
     grid-area: main-content;
     height: 100%;
     align-self: center;

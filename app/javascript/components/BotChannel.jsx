@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
-import { SingleColumn } from '../ui/SingleColumn'
+import { MainWhite } from '../ui/MainWhite'
 import Title from '../ui/Title'
 import Headline from '../ui/Headline'
 import Field from '../ui/Field'
@@ -51,7 +51,7 @@ class BotChannelComponent extends Component {
         </div>
 
       if (bot.published) {
-        return <SingleColumn>
+        return <MainWhite>
             <Title>Subscribe channel to Aida</Title>
             <Headline>
               Finish the channel setup taking your callback URL and verify token to
@@ -68,9 +68,9 @@ class BotChannelComponent extends Component {
             </Headline>
             {setupFields}
             {websocketSetup}
-          </SingleColumn>
+          </MainWhite>
       } else {
-        return <SingleColumn>
+        return <MainWhite>
           <Title>Setup a Facebook channel</Title>
           <Headline>
             In order to setup this channel you first need
@@ -81,10 +81,9 @@ class BotChannelComponent extends Component {
 
             You will be able to subscribe the bot after you first publish it.
           </Headline>
-
           {setupFields}
           {websocketSetup}
-        </SingleColumn>
+        </MainWhite>
       }
     } else {
       return <EmptyLoader>Loading channels for {bot.name}</EmptyLoader>
