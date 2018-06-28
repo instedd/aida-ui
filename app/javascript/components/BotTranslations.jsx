@@ -120,18 +120,11 @@ class BotTranslations extends Component {
     }
     const rows = renderRows({ behaviours, firstLang, secondLang, defaultLang, onChange: onTranslationChange })
 
-    const buttons = (<Button 
-      floating
-      className="btn-mainTabs"
-      icon onClick={() => onToggleChatWindow()}>
-      chat
-      </Button>)
-
 
 
 
     return (
-      <MainWhite buttons={buttons}>
+      <MainWhite>
         <div className="translations-header">
           <div className="translations-title">
             <Title>Translations</Title>

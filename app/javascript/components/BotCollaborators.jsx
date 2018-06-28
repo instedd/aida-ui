@@ -10,7 +10,7 @@ import without from 'lodash/without'
 import moment from 'moment'
 import copy from 'clipboard-copy'
 
-import { MainGrey } from '../ui/MainGrey'
+import { MainWhite } from '../ui/MainWhite'
 import Headline from '../ui/Headline'
 import { EmptyLoader }  from '../ui/Loader'
 import { Listing, Column } from '../ui/Listing'
@@ -350,7 +350,7 @@ class BotCollaborators extends Component {
       )
     } else {
       return (
-        <MainGrey scrollX>
+        <MainWhite scrollX>
           <CollaboratorsList items={items}
                              currentUserEmail={currentUserEmail}
                              onRemoveCollaborator={removeCollaborator}
@@ -358,7 +358,7 @@ class BotCollaborators extends Component {
                              onResendInvitation={resendInvitation}
                              onToggleCollaboratorRole={toggleCollaboratorRole} />
           {inviteDialog}
-        </MainGrey>
+        </MainWhite>
       )
     }
   }

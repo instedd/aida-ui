@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 
-import { MainGrey } from '../ui/MainGrey'
+import { MainWhite } from '../ui/MainWhite'
 import { Listing, Column } from '../ui/Listing'
 import EmptyContent from '../ui/EmptyContent'
 import Headline from '../ui/Headline'
@@ -54,9 +54,9 @@ export class BotIndexComponent extends Component {
       }
 
       return <AppLayout title="Bots" buttonIcon="add" buttonAction={createBot}>
-        <MainGrey>
+        <MainWhite>
           {content}
-        </MainGrey>
+        </MainWhite>
       </AppLayout>
     }
   }
