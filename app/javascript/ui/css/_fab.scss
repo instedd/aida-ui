@@ -1,0 +1,41 @@
+.Fab {
+  display: inline-block;
+  text-align: center;
+  position: relative;
+  width: 56px;
+  height: 56px;
+  transition: height ease-in-out .25s;
+  .FabButton {
+    text-align: center;
+    width: 56px;
+    height: 56px;
+    z-index: 20;
+    .material-icons.md-icon {
+      font-size: 24px;
+      line-height: 1.2;
+    }
+  }
+  .FabButtonChild {
+    text-align: center;
+    width: 44px;
+    height: 44px;
+    position: absolute;
+    bottom: 0;
+    left: calc(50% - 22px);
+    transition: all ease-in-out .25s;
+    transform: scale(.5);
+    z-index: 10;
+    opacity: 0;
+    .material-icons.md-icon {
+      font-size: 18px;
+      line-height: .8;
+    }
+  }
+  &:hover {
+    height: 110px;
+    .FabButtonChild {
+      transform: scale(1);
+      opacity: 1;
+    }
+  } 
+}
