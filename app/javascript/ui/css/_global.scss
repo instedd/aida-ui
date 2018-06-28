@@ -140,6 +140,7 @@ input[type=number]:invalid {
 }
 .btn-mainTabs {
   position: absolute;
-  right: 5.3%;
-  transform: translateY(2.5rem) scale(.93);
+  right: 5%;
+  margin-top: -28px;
+  z-index: 1;
 }

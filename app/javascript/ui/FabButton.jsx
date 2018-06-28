@@ -4,6 +4,12 @@ import { Button } from 'react-md';
 
 const FabButton = (props) => {
 
+  let fabClass = ["Fab"];
+  if (props.fabClass) {
+    fabClass = ["Fab", props.fabClass];
+  }
+  fabClass = fabClass.join(' ');
+
   let buttonClasses = ["FabButton"];
   if (props.classes) {
     buttonClasses = ["FabButton", props.classes];
@@ -17,7 +23,7 @@ const FabButton = (props) => {
   buttonChildClasses = buttonChildClasses.join(' ');
 
   return (
-      <div className='Fab'>
+      <div className={fabClass}>
         <Button 
           floating
           {...props}

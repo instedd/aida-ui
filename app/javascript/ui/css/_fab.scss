@@ -1,7 +1,7 @@
 .Fab {
   display: inline-block;
   text-align: center;
-  position: relative;
+  position: absolute;
   width: 56px;
   height: 56px;
   transition: height ease-in-out .25s;
@@ -14,9 +14,14 @@
       font-size: 24px;
       line-height: 1.2;
     }
+    &:hover {
+      @extend .md-background--secondary;
+    }
   }
   .FabButtonChild {
+    background-color: $md-white-base;
     text-align: center;
+    padding: 0;
     width: 44px;
     height: 44px;
     position: absolute;
@@ -27,8 +32,8 @@
     z-index: 10;
     opacity: 0;
     .material-icons.md-icon {
-      font-size: 18px;
-      line-height: .8;
+      font-size: 24px;
+      line-height: 1;
     }
   }
   &:hover {

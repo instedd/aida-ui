@@ -157,8 +157,6 @@ export class BotLayoutComponent extends Component {
           } else {
             return ["", null]
           }
-        } else if (canPublish) {
-          return ["cloud", () => botActions.publishBot(bot)]
         } else {
           return ["", null]
         }
