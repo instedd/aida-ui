@@ -53,7 +53,7 @@ class BotTables extends Component {
 }
 
 const mapStateToProps = (state, { bot }) => {
-  const permitted = hasPermission(bot, 'manages_content')
+  const permitted = hasPermission(bot, 'manages_variables')
   return {
     permitted,
   }
