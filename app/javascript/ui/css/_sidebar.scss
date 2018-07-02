@@ -57,6 +57,12 @@
     @extend .md-text;
     font-size: 24px;
   }
+  .error-in-sidebar {
+    color: $error-red;
+    vertical-align: middle;
+    font-size: 90%;
+    padding: 0 5px;
+  }
   .md-tile-content {
     padding-left: 1em;
     .md-tile-text--primary {

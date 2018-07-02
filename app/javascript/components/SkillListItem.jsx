@@ -57,7 +57,7 @@ export const collectTarget = (connect, monitor) => {
 
 class SkillListItem extends Component {
   draggableSkill() {
-    const { skill, active, onClick, onToggleSkill, onDeleteSkill, onRenameSkill, connectDragSource, isDragging, isOver } = this.props
+    const { skill, active, onClick, onToggleSkill, onDeleteSkill, onRenameSkill, connectDragSource, isDragging, isOver, hasError } = this.props
     let actionItems = []
 
     if (isSkillRenameable(skill.kind)) {
@@ -79,7 +79,7 @@ class SkillListItem extends Component {
         icon={skillIcon(skill.kind)} label={skill.name}
         enabled={skill.enabled} active={active}
         className={`skill-item ${relevant ? "skill-item-relevant" : ""}`}
-        onClick={onClick} onToggle={onToggleSkill} menuItems={actionItems} />
+        onClick={onClick} onToggle={onToggleSkill} menuItems={actionItems} hasError={hasError} />
       </div>
     )
   }

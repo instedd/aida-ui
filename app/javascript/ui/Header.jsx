@@ -67,10 +67,11 @@ class HeaderSubNav extends Component {
         <nav className="mainTabs">
           {(() => {
             if (this.props.headerNav) {
-              let tabs = Children.map(this.props.headerNav, (e, index) =>
+              let tabs = Children.map(this.props.headerNav, (e, index) => {
                     // TODO allow HeaderNavAction to be used as headerNav
-                    <Tab label={e.props.label} key={index} component={Link} to={e.props.to} />
-                  )
+                    let errors = e.props.error ? (<FontIcon className="error-in-menu">panorama_fish_eye</FontIcon>) : ""
+                    return (<Tab label={<span>{e.props.label}{errors}</span>} key={index} component={Link} to={e.props.to} />)
+                  })
 
               if (items.length > 1) {
                 tabs.push(<Tab label={<FontIcon>more_vert</FontIcon>} key={"last"} flat component={MenuButton} menuItems={items} position={MenuButton.Positions.TOP_LEFT} listZDepth={4} />)
