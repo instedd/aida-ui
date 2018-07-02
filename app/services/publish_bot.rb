@@ -7,14 +7,14 @@ class PublishBot
       bot.uuid = uuid
       bot.save!
     end
-    bot.uuid
+    {status: :ok, bot: bot.uuid}
 
   rescue BackendError => e
     puts "Failed to publish bot: #{e}"
     e.errors.each do |error|
       puts " - #{error}"
     end
-    nil
+    {status: :error, errors: BackendError.parse_errors(e.errors)}
   end
 
   def self.preview(bot, access_token)

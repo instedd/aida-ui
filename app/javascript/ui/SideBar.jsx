@@ -8,8 +8,13 @@ export const SidebarMenuItem = ({icon, label, onClick}) => {
     onClick={onClick} />)
 }
 
-export const SidebarItem = ({id, className, icon, label, enabled, active, menuItems, onClick, onToggle}) => {
+export const SidebarItem = ({id, className, icon, label, enabled, active, menuItems, onClick, onToggle, hasError}) => {
   const itemClassActive = active ? "sidebar-item-active" : ""
+  let error = ""
+  if(hasError) {
+    error = (<FontIcon className="error-in-sidebar">lens</FontIcon>)
+  }
+  let labelWithError = (<span>{label}{error}</span>)
 
   if (enabled != null) {
     const itemClassDisabled = enabled ? "" : "sidebar-item-disabled"
@@ -39,7 +44,7 @@ export const SidebarItem = ({id, className, icon, label, enabled, active, menuIt
     return (<ListItem
       className={(className || "") + " " + itemClassActive + " " + itemClassDisabled}
       leftIcon={<FontIcon>{icon}</FontIcon>}
-      primaryText={label}
+      primaryText={labelWithError}
       rightIcon={append}
       onClick={onClick}
     />)
@@ -47,7 +52,7 @@ export const SidebarItem = ({id, className, icon, label, enabled, active, menuIt
     return (<ListItem
       className={(className || "") + " " + itemClassActive}
       leftIcon={<FontIcon>{icon}</FontIcon>}
-      primaryText={label}
+      primaryText={labelWithError}
       onClick={onClick}
     />)
   }

@@ -129,7 +129,8 @@ class SkillsBar extends Component {
                                        onClick={() => history.push(routes.botSkill(bot.id, skill.id))}
                                        onToggleSkill={() => skillActions.toggleSkill(skill)}
                                        onRenameSkill={() => openDialog(skill)}
-                                       onDeleteSkill={() => skillActions.deleteSkill(skill)} />
+                                       onDeleteSkill={() => skillActions.deleteSkill(skill)}
+                                       hasError={true} />
                       ))
                       : [<SidebarItem key="loading"
                                    icon={skillIcon('LOADING')}
@@ -175,7 +176,8 @@ class SkillsBar extends Component {
           bot={bot}
           skill={{"kind": "front_desk"}}
           icon={skillIcon("front_desk")}
-          onClick={() => history.push(routes.botFrontDesk(bot.id))}/>
+          onClick={() => history.push(routes.botFrontDesk(bot.id))}
+          hasError={true} />
         {skillsItems}
 
         <DropdownMenu id="add-skill-menu"

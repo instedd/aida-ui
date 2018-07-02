@@ -188,7 +188,7 @@ export class BotLayoutComponent extends Component {
             <HeaderNavLink label="Analytics" to={r.botAnalytics(bot.id)} />,
             <HeaderNavLink label="Data" to={r.botData(bot.id)} />,
             // TODO: use active="/b/:id/channel"  to allow deep linking
-            <HeaderNavLink label="Channel" to={r.botChannel(bot.id)} />,
+            <HeaderNavLink label="Channel" to={r.botChannel(bot.id)} error={true} />,
             <HeaderNavLink label="Behaviour" to={r.botBehaviour(bot.id)} />,
             <HeaderNavLink label="Translations" to={r.botTranslations(bot.id)} />,
             <HeaderNavLink label="Collaborators" to={r.botCollaborators(bot.id)} />,

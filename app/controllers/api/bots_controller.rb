@@ -28,10 +28,11 @@ class Api::BotsController < ApplicationApiController
 
   def publish
     authorize @bot
-    if PublishBot.run(@bot)
+    result = PublishBot.run(@bot)
+    if result[:status] == :ok
       render json: {result: :ok}
     else
-      render json: {result: :error}, status: :bad_request
+      render json: {result: result[:errors]}, status: :bad_request
     end
   end
 

@@ -9,6 +9,7 @@ import * as routes from '../utils/routes'
 export const UPDATE = 'BOT_UPDATE'
 export const PUBLISH = 'BOT_PUBLISH'
 export const PUBLISH_SUCCESS = 'BOT_PUBLISH_SUCCESS'
+export const PUBLISH_FAILURE = 'BOT_PUBLISH_FAILURE'
 export const UNPUBLISH = 'BOT_UNPUBLISH'
 export const UNPUBLISH_SUCCESS = 'BOT_UNPUBLISH_SUCCESS'
 export const DELETE = 'BOT_DELETE'
@@ -26,6 +27,12 @@ export const _botPublish = (botId : number) : T.BotAction => ({
 export const _botPublishSuccess = (botId : number) : T.BotAction => ({
   type: PUBLISH_SUCCESS,
   botId
+})
+
+export const _botPublishFailure = (botId : number, errors: any) : T.BotAction => ({
+  type: PUBLISH_FAILURE,
+  botId,
+  errors
 })
 
 export const _botUnpublish = (botId : number) : T.BotAction => ({
@@ -58,7 +65,10 @@ export const publishBot = (bot : T.Bot) => (dispatch : T.Dispatch) => {
               dispatch(pushNotification('The bot was published successfully'))
               dispatch(_botPublishSuccess(bot.id))
             })
-            .catch(() => dispatch(pushNotification('Bot publication failed')))
+            .catch((error) => {
+              dispatch(pushNotification('Bot publication failed'))
+              dispatch(_botPublishFailure(bot.id, error))
+            })
 }
 
 export const unpublishBot = (bot : T.Bot) => (dispatch : T.Dispatch) => {

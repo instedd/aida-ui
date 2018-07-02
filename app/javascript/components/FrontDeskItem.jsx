@@ -19,14 +19,15 @@ export const collectTarget = (connect, monitor) => {
 
 class FrontDeskItem extends Component {
   render() {
-    const { bot, icon, onClick, connectDropTarget, isOver, isDragging } = this.props
+    const { bot, icon, onClick, connectDropTarget, isOver, isDragging, hasError } = this.props
 
     return connectDropTarget(
       <div className={isOver ? 'drop-target' : ''} >
         <SidebarItem icon={icon}
           label="Front desk"
           active={location.pathname == routes.botFrontDesk(bot.id)}
-          onClick={onClick}/>
+          onClick={onClick}
+          hasError={hasError} />
       </div>
     )
   }
