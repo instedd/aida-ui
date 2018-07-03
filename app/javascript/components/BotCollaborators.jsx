@@ -350,7 +350,7 @@ class BotCollaborators extends Component {
       )
     } else {
       return (
-        <MainWhite scrollX>
+        <MainWhite scrolleable>
           <CollaboratorsList items={items}
                              currentUserEmail={currentUserEmail}
                              onRemoveCollaborator={removeCollaborator}

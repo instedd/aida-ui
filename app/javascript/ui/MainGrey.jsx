@@ -4,7 +4,7 @@ export const MainGrey = (props) => {
 
   let mainClasses = 'main-content'
 
-  if (props.scrollX) {
+  if (props.scrolleable) {
     mainClasses = 'main-content hScroll'
   }
   
