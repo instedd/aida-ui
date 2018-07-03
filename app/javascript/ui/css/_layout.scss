@@ -4,11 +4,11 @@ body {
   min-width: 320px;
 }
 .grid {
-  height: 100vh;
+  min-height: 100vh;
   font-size: 1rem;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 210px auto 50px;
+  grid-template-rows: minmax(162px, max-content) auto 50px;
   grid-template-areas:
     "header"
     "main"
@@ -20,6 +20,7 @@ header {
 }
 
 main {
+  background: $md-grey-300;
   grid-area: main;
   display: flex;
   flex: 1;

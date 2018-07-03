@@ -1,8 +1,8 @@
 import React, { Component, Children, cloneElement } from 'react'
 import { MainWhite } from '../ui/MainWhite'
+import FabButton from '../ui/FabButton'
 import { Route, Redirect } from 'react-router-dom'
-import { Button } from 'react-md'
-
+import * as botActions from '../actions/bot'
 import FrontDesk from './FrontDesk'
 import SkillsBar from './SkillsBar'
 import BotSkill from './BotSkill'
@@ -17,7 +17,15 @@ export class BotBehaviour extends Component {
       return <ContentDenied />
     }
 
-    const buttons = (<Button icon onClick={() => onToggleChatWindow()}>chat</Button>)
+    const buttons = (<FabButton
+                      onClick={() => onToggleChatWindow()}
+                      floating
+                      secondary
+                      icon='chat_bubble'
+                      fabClass="btn-mainTabs"
+                      iconChild='file_upload'
+                      buttonChildActions={() => botActions.publishBot(bot)}/>)
+
 
     return (
       <MainWhite sidebar={<SkillsBar bot={bot} />} buttons={buttons}>

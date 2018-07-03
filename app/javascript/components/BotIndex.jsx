@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 
-import { MainGrey } from '../ui/MainGrey'
+import { MainWhite } from '../ui/MainWhite'
 import { Listing, Column } from '../ui/Listing'
 import EmptyContent from '../ui/EmptyContent'
 import Headline from '../ui/Headline'
@@ -13,6 +13,8 @@ import * as actions from '../actions/bots'
 import * as routes from '../utils/routes'
 
 import AppLayout from './AppLayout'
+
+import imgIcon from '../../assets/images/front-desk-icon.svg'
 
 export class BotIndexComponent extends Component {
   componentDidMount() {
@@ -31,7 +33,7 @@ export class BotIndexComponent extends Component {
       let content
       if (botList.length == 0) {
         content = (
-           <EmptyContent icon='chat_bubble_outline'>
+           <EmptyContent imageSrc={imgIcon}>
              <Headline>
                You have no bots yet
                <span><a href="javascript:" onClick={createBot}>Create One</a></span>
@@ -52,9 +54,9 @@ export class BotIndexComponent extends Component {
       }
 
       return <AppLayout title="Bots" buttonIcon="add" buttonAction={createBot}>
-        <MainGrey>
+        <MainWhite>
           {content}
-        </MainGrey>
+        </MainWhite>
       </AppLayout>
     }
   }

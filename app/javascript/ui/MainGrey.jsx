@@ -1,10 +1,20 @@
 import React, { Component } from 'react'
 
-export const MainGrey = ({children}) =>
-  <div className='main-grey'>
-    <div className='main-content'>
-      {children}
-    </div> 
-  </div>
+export const MainGrey = (props) => {
+
+  let mainClasses = 'main-content'
+
+  if (props.scrollX) {
+    mainClasses = 'main-content hScroll'
+  }
+  
+  return (
+    <div className='main-grey'>
+      <div className={mainClasses}>
+        {props.children}
+      </div> 
+    </div>
+  )
+}
 
 export default MainGrey

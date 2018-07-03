@@ -1,34 +1,41 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { Paper } from 'react-md';
+import Aux from '../hoc/Aux';
+
+
 
 export const MainWhite = ({children, sidebar, buttons}) => {
+
   if (sidebar) {
-    return(
-      <div className='main-with-sidebar'>
-        {sidebar}
-        <div className='main-content'>
-          {children}
+    return (
+      <Aux>
+        {buttons}
+        <div className='main-with-sidebar'>
+          {sidebar}
+          <Paper className='main-content'>
+            {children}
+          </Paper>
         </div>
-        <div className='button-area'>
-          <div className="buttons">{buttons}</div>
-        </div>
-      </div>)
+      </Aux>)
   } else if (buttons) {
-    return(
-      <div className='main-fullwidth-buttons'>
-        <div className='main-content'>
-          {children}
+    return (
+      <Aux>
+        {buttons}
+        <div className='main-fullwidth'>
+          <Paper className='main-content'>
+            {children}
+          </Paper>
         </div>
-        <div className='button-area'>
-          <div className="buttons">{buttons}</div>
-        </div>
-      </div>)
+      </Aux>
+    )
   } else {
-    return(
+    return (
       <div className='main-fullwidth'>
-        <div className='main-content'>
+        <Paper className='main-content'>
           {children}
-        </div>
-      </div>)
+        </Paper>
+      </div>
+    )
   }
 }
 

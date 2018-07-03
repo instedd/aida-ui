@@ -1,13 +1,15 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { Grid, Cell, Paper, SelectField, Divider } from 'react-md'
+import { Grid, Cell, Paper, SelectField, Divider, Button } from 'react-md'
 import { FlexibleWidthXYPlot, YAxis, XAxis, HorizontalBarSeries, VerticalGridLines } from 'react-vis'
 
-import { MainGrey } from '../ui/MainGrey'
+import { MainWhite } from '../ui/MainWhite'
+import FabButton from '../ui/FabButton'
 import { EmptyContent } from '../ui/EmptyContent'
 import { Headline } from '../ui/Headline'
 import { Metric } from '../ui/Metric'
+import Aux from '../hoc/Aux'
 
 import * as actions from '../actions/stats'
 import { hasPermission } from '../utils'
@@ -25,7 +27,16 @@ class BotAnalyticsComponent extends Component {
   }
 
   render() {
-    const { bot, permitted, fetching, period, data, actions } = this.props
+    const { bot, permitted, fetching, period, data, actions, onToggleChatWindow } = this.props
+
+    const buttons = (<FabButton
+      onClick={() => onToggleChatWindow()}
+      floating
+      secondary
+      icon='chat_bubble'
+      fabClass="btn-mainTabs"
+      iconChild='file_upload'
+      buttonChildActions={() => botActions.publishBot(bot)}/>)
 
     if (!permitted) {
       return <ContentDenied />
@@ -33,18 +44,23 @@ class BotAnalyticsComponent extends Component {
 
     if (!bot.published) {
       return (
-        <EmptyContent icon='sentiment_neutral'>
-          <Headline>No analytics available</Headline>
-          <Divider />
-          <p>You’ll be able to view analytics once the bot is published.</p>
-        </EmptyContent>
+        <Aux>
+          {buttons}
+          <EmptyContent icon='sentiment_neutral'>
+            <Headline>No analytics available</Headline>
+            <Divider />
+            <p>You’ll be able to view analytics once the bot is published.</p>
+          </EmptyContent>
+        </Aux>
       )
-    }
 
+    }
+   
     const l = (value) => fetching ? "..." : value
 
-    return (
-      <MainGrey>
+
+    const sidebar = (
+      <div className='analyticsBar'>
         <SelectField
           id="period"
           menuItems={[
@@ -56,42 +72,36 @@ class BotAnalyticsComponent extends Component {
           position={SelectField.Positions.BELOW}
           sameWidth={false}
           value={period || DEFAULT_PERIOD}
-          onChange={value => actions.fetchStats(this.props.bot.id, value)}
-        />
+          onChange={value => actions.fetchStats(this.props.bot.id, value)}/>
+        <Metric label="active users" value={l(data.active_users)}/>
+        <Metric label="messages received" value={l(data.messages_received)}/>
+        <Metric label="messages sent" value={l(data.messages_sent)}/>
+      </div>
+    )
 
-        <Grid>
-          <Cell size={3}>
-            <Metric label="active users" value={l(data.active_users)}/>
-            <Metric label="messages received" value={l(data.messages_received)}/>
-            <Metric label="messages sent" value={l(data.messages_sent)}/>
-          </Cell>
-          <Cell size={9}>
-            <Paper style={{padding: 30}}>
-              <h4>Unique users per skill</h4>
 
-              {(() => {
-                if (data.behaviours == null) {
-                  return null
-                } else if (data.behaviours.length == 0) {
-                  return (<center>No data available</center>)
-                } else {
-                  const chart_data = data.behaviours.map(({label, users}) => ({x: users, y: label}))
+    return (
+      <MainWhite sidebar={sidebar} buttons={buttons}>
+        <h4>Unique users per skill</h4>
+        {(() => {
+          if (data.behaviours == null) {
+            return null
+          } else if (data.behaviours.length == 0) {
+            return (<center>No data available</center>)
+          } else {
+            const chart_data = data.behaviours.map(({label, users}) => ({x: users, y: label}))
 
-                  return (<FlexibleWidthXYPlot height={300}
-                      margin={{left: 140, right: 20, top: 10, bottom: 40}}
-                      yType="ordinal" xType="linear">
-                    <VerticalGridLines />
-                    <XAxis />
-                    <YAxis style={{text: { fontSize: "1em" }}} />
-                    <HorizontalBarSeries data={chart_data} color="#cedd36" />
-                  </FlexibleWidthXYPlot>)
-                }
-              })()}
-            </Paper>
-          </Cell>
-        </Grid>
-
-      </MainGrey>
+            return (<FlexibleWidthXYPlot height={300}
+                margin={{left: 140, right: 20, top: 10, bottom: 40}}
+                yType="ordinal" xType="linear">
+              <VerticalGridLines />
+              <XAxis />
+              <YAxis style={{text: { fontSize: "1em" }}} />
+              <HorizontalBarSeries data={chart_data} color="#cedd36" />
+            </FlexibleWidthXYPlot>)
+          }
+        })()}
+      </MainWhite>
     )
   }
 }

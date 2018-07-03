@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Paper, TableCardHeader, DataTable, TableHeader, TableBody, TableRow, TableColumn } from 'react-md';
+import { TableCardHeader, DataTable, TableHeader, TableBody, TableRow, TableColumn } from 'react-md';
 
 export const Listing = ({id, className, items, title, children, actions, onItemClick}) => {
   const columns = children
 
-  return <Paper id={id} className={className}>
+  return <div id={id} className={className}>
     <TableCardHeader title={title} visible={false} children={actions || []}/>
     <DataTable plain>
       <TableHeader>
@@ -25,13 +25,13 @@ export const Listing = ({id, className, items, title, children, actions, onItemC
         ))}
       </TableBody>
     </DataTable>
-  </Paper>
+  </div>
 }
 
 export const ListingLoading = ({ id, className, legend }) => {
-  return <Paper id={id} className={className}>
+  return <div id={id} className={className}>
     <TableCardHeader title={legend} visible={false} />
-  </Paper>
+  </div>
 }
 
 export class Column extends Component {

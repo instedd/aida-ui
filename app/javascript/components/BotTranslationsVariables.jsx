@@ -15,6 +15,7 @@ import map from 'lodash/map'
 
 import MainWhite from '../ui/MainWhite'
 import Title from '../ui/Title'
+import FabButton from '../ui/FabButton'
 import { EmptyLoader } from '../ui/Loader'
 import { hasPermission } from '../utils'
 import ContentDenied from './ContentDenied'
@@ -200,7 +201,16 @@ class BotTranslationsVariables extends Component {
       onRemove: (variableId, conditionId) => (actions.removeVariable(bot.id, variableId, conditionId)),
       onAddCondition: (variableId) => (actions.addVariableCondition(bot.id, variableId)) })
 
-    const buttons = (<Button icon onClick={() => onToggleChatWindow()}>chat</Button>)
+
+
+    const buttons = (<Button
+      onClick={() => actions.addVariable(defaultLang)}
+      className='btn-mainTabs'
+      floating
+      icon
+      secondary>
+      add</Button>)
+
 
     return (
       <MainWhite buttons={buttons}>
@@ -236,14 +246,6 @@ class BotTranslationsVariables extends Component {
             {rows}
           </TableBody>
         </DataTable>
-
-        <Button
-          flat
-          iconChildren="add"
-          className="btn-add-variable"
-          onClick={() => actions.addVariable(defaultLang)}>
-          Add variable
-        </Button>
       </MainWhite>
     )
   }

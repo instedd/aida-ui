@@ -8,7 +8,6 @@ import { Route } from 'react-router-dom'
 
 import MainWhite from '../ui/MainWhite'
 import Title from '../ui/Title'
-import Field from '../ui/Field'
 import { hasPermission } from '../utils'
 import ContentDenied from './ContentDenied'
 import TablesIndex from './TablesIndex'
@@ -16,7 +15,6 @@ import TableView from './TableView'
 
 import BotTranslationsMenu from './BotTranslationsMenu'
 import * as actions from '../actions/tables'
-import * as routes from '../utils/routes'
 
 
 class BotTables extends Component {
@@ -34,10 +32,8 @@ class BotTables extends Component {
       return <ContentDenied />
     }
 
-    const buttons = (<Button icon onClick={() => onToggleChatWindow()}>chat</Button>)
-
     return (
-      <MainWhite buttons={buttons}>
+      <MainWhite>
         <div className="translations-header">
           <div className="translations-title">
             <Title>Translations</Title>

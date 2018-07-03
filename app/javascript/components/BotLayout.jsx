@@ -157,8 +157,6 @@ export class BotLayoutComponent extends Component {
           } else {
             return ["", null]
           }
-        } else if (canPublish) {
-          return ["publish", () => botActions.publishBot(bot)]
         } else {
           return ["", null]
         }
@@ -169,7 +167,7 @@ export class BotLayoutComponent extends Component {
                                ? (<LeaveBotDialog visible={dialogVisible} onHide={hideDialog} onConfirm={leaveBot} />)
                                : (<DeleteBotDialog visible={dialogVisible} onHide={hideDialog} onConfirm={deleteBot} />)
 
-      const viewHasChat = location.pathname.startsWith(r.botTranslations(bot.id)) ||
+      const viewHasChat = location.pathname.startsWith(r.botAnalytics(bot.id)) ||
                           location.pathname.startsWith(r.botBehaviour(bot.id))
       const chatWindow = viewHasChat ? (
         <ChatWindow bot={bot}
@@ -207,13 +205,13 @@ export class BotLayoutComponent extends Component {
         >
           <Route exact path="/b/:id" render={() => <Redirect to={defaultTab} />} />
           <Route exact path="/b/:id/data" render={() => <BotData bot={bot} />} />
-          <Route exact path="/b/:id/analytics" render={() => <BotAnalytics bot={bot} />} />
+          <Route exact path="/b/:id/analytics" render={() => <BotAnalytics bot={bot}  onToggleChatWindow={toggleChatWindow} />} />
           <Route exact path="/b/:id/channel" render={() => <BotChannel bot={bot} />} />
           <Route path="/b/:id/behaviour" render={() => <BotBehaviour bot={bot} onToggleChatWindow={toggleChatWindow}/>} />
           <Route exact path="/b/:id/translations" render={() => <Redirect to={defaultTranslationsView}/>} />
-          <Route exact path="/b/:id/translations/content" render={() => <BotTranslations bot={bot} onToggleChatWindow={toggleChatWindow} />} />
-          <Route exact path="/b/:id/translations/variables" render={() => <BotTranslationsVariables bot={bot} onToggleChatWindow={toggleChatWindow} />} />
-          <Route path="/b/:id/translations/tables" render={() => <BotTables bot={bot} onToggleChatWindow={toggleChatWindow} />} />
+          <Route exact path="/b/:id/translations/content" render={() => <BotTranslations bot={bot} />} />
+          <Route exact path="/b/:id/translations/variables" render={() => <BotTranslationsVariables bot={bot} />} />
+          <Route path="/b/:id/translations/tables" render={() => <BotTables bot={bot} />} />
           <Route exact path="/b/:id/collaborators" render={() => <BotCollaborators bot={bot}
                                                                                    dialogVisible={this.state.collaborators}
                                                                                    showDialog={showCollaborators}
