@@ -78,6 +78,7 @@ Rails.application.routes.draw do
   get "/b(/*path)", to: 'welcome#index'
   get "/b/:bot_id/behaviour", to: 'welcome#index', as: 'bot_behaviour'
   get "/settings(/*path)", to: 'welcome#index'
+  get "/messages", to: 'welcome#index'
   get "/invitation/:token", to: 'welcome#index', as: 'invitation'
 
   post '/notifications/:notifications_secret', to: 'api/notifications#create', as: 'notifications_create'

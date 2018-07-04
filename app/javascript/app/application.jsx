@@ -13,6 +13,7 @@ import { BotLayout } from '../components/BotLayout'
 import InvitationView from '../components/InvitationView'
 import { SettingsApi } from '../components/SettingsApi'
 import { SettingsEncryption} from '../components/SettingsEncryption'
+import { Messages } from '../components/Messages'
 
 let middleware = [
   createDebounce(),
@@ -39,6 +40,7 @@ export const App = ({store}) => (
         <Route path="/invitation/:token" render={({match}) => <InvitationView token={match.params.token} />} />
         <Route exact path="/settings/api" component={SettingsApi} />
         <Route exact path="/settings/encryption" component={SettingsEncryption} />
+        <Route exact path="/messages" component={Messages} />
       </div>
     </BrowserRouter>
   </Provider>
