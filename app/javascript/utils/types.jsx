@@ -42,6 +42,10 @@ export type BotAction = {
   type: "BOT_PUBLISH_SUCCESS",
   botId: number,
 } | {
+  type: "BOT_PUBLISH_FAILURE",
+  botId: number,
+  errors: any
+} | {
   type: "BOT_UNPUBLISH",
   botId: number,
 } | {
