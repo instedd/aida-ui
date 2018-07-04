@@ -8,7 +8,7 @@ class Collaborator < ApplicationRecord
   validate :user_is_not_bot_owner
   validate :roles_are_valid
 
-  ROLES = %w(publish behaviour content variables results)
+  ROLES = %w(publish behaviour content variables results operator)
 
   def self.add_collaborator!(user, params = {})
     create! params.merge(user: user)

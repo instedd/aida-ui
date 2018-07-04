@@ -148,6 +148,7 @@ class CollaboratorsList extends Component {
         <Column title="Content"       render={renderCollaboratorColumn(roleContent('content'))} />
         <Column title="Variables and tables"     render={renderCollaboratorColumn(roleContent('variables'))} />
         <Column title="Results"       render={renderCollaboratorColumn(roleContent('results'))} />
+        <Column title="Operator"       render={renderCollaboratorColumn(roleContent('operator'))} />
         <Column title="Last activity" render={renderCollaboratorColumn(lastActivityContent)} />
         <Column title=""              render={renderCollaboratorAction} />
       </Listing>
@@ -250,6 +251,7 @@ class InviteDialog extends Component {
                roleCheckbox('content',   'Content',   'Can edit messages and translations'),
                roleCheckbox('variables', 'Variables and tables', 'Can modify variable values'),
                roleCheckbox('results',   'Results',   'Can view stats, conversation logs, survey results and feedback'),
+               roleCheckbox('operator', 'Operator', 'Can see and answer user messages'),
             ]}
           </div>
           <div className="action-buttons">

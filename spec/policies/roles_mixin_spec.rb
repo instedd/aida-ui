@@ -20,6 +20,7 @@ RSpec.describe RolesMixin do
 
     it { expect(subject.can_admin?).to be true }
     it { expect(subject.can_publish?).to be true }
+    it { expect(subject.can_message?).to be true }
     it { expect(subject.manages_behaviour?).to be true }
     it { expect(subject.manages_content?).to be true }
     it { expect(subject.manages_variables?).to be true }
@@ -35,6 +36,7 @@ RSpec.describe RolesMixin do
 
       it { expect(subject.can_admin?).to be false }
       it { expect(subject.can_publish?).to be true }
+      it { expect(subject.can_message?).to be false }
       it { expect(subject.manages_behaviour?).to be true }
       it { expect(subject.manages_content?).to be true }
       it { expect(subject.manages_variables?).to be true }
@@ -46,6 +48,7 @@ RSpec.describe RolesMixin do
 
       it { expect(subject.can_admin?).to be false }
       it { expect(subject.can_publish?).to be false }
+      it { expect(subject.can_message?).to be false }
       it { expect(subject.manages_behaviour?).to be true }
       it { expect(subject.manages_content?).to be true }
       it { expect(subject.manages_variables?).to be true }
@@ -57,6 +60,7 @@ RSpec.describe RolesMixin do
 
       it { expect(subject.can_admin?).to be false }
       it { expect(subject.can_publish?).to be false }
+      it { expect(subject.can_message?).to be false }
       it { expect(subject.manages_behaviour?).to be false }
       it { expect(subject.manages_content?).to be true }
       it { expect(subject.manages_variables?).to be false }
@@ -68,6 +72,7 @@ RSpec.describe RolesMixin do
 
       it { expect(subject.can_admin?).to be false }
       it { expect(subject.can_publish?).to be false }
+      it { expect(subject.can_message?).to be false }
       it { expect(subject.manages_behaviour?).to be false }
       it { expect(subject.manages_content?).to be false }
       it { expect(subject.manages_variables?).to be true }
@@ -79,10 +84,23 @@ RSpec.describe RolesMixin do
 
       it { expect(subject.can_admin?).to be false }
       it { expect(subject.can_publish?).to be false }
+      it { expect(subject.can_message?).to be false }
       it { expect(subject.manages_behaviour?).to be false }
       it { expect(subject.manages_content?).to be false }
       it { expect(subject.manages_variables?).to be false }
       it { expect(subject.manages_results?).to be true }
+    end
+
+    describe "with operator role" do
+      let(:roles) { %w(operator) }
+
+      it { expect(subject.can_admin?).to be false }
+      it { expect(subject.can_publish?).to be false }
+      it { expect(subject.can_message?).to be true }
+      it { expect(subject.manages_behaviour?).to be false }
+      it { expect(subject.manages_content?).to be false }
+      it { expect(subject.manages_variables?).to be false }
+      it { expect(subject.manages_results?).to be false }
     end
   end
 end

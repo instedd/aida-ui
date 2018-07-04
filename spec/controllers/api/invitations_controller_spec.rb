@@ -38,6 +38,25 @@ RSpec.describe Api::InvitationsController, type: :controller do
       expect(response).to be_denied
     end
 
+    it "is rejected for non-existent roles" do
+      email = generate(:email)
+      create(:invitation, bot: bot, email: email)
+
+      post :create, params: { bot_id: bot.id, email: email, roles: ['this-role-does-not-exist'] }
+
+      expect(response.status).to eq(400)
+    end
+
+    it "supports an 'operator' role" do
+      email = generate(:email)
+      post :create, params: { bot_id: bot.id, email: email, roles: ['operator'] }
+
+      expect(response).to be_success
+      expect(json_body).to be_a_invitation_as_json
+      expect(all_mail_deliveries.size).to eq(1)
+      expect(all_mail_destinations).to include(email)
+    end
+
     it "creates anonymous invitations provided a token" do
       token = Invitation.generate_token
       post :create, params: { bot_id: bot.id, token: token, roles: ['publish'] }

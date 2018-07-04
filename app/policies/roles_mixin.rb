@@ -27,6 +27,10 @@ module RolesMixin
     is_bot_owner? or roles.include?('publish')
   end
 
+  def can_message?
+    is_bot_owner? or roles.include?('operator')
+  end
+
   def manages_behaviour?
     is_bot_owner? or roles.include?('behaviour') or roles.include?('publish')
   end

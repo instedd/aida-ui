@@ -313,7 +313,7 @@ export type Invitation = {
   sent_at: string;
 };
 
-export type Role = "publish" | "behaviour" | "content" | "variables" | "results";
+export type Role = "publish" | "behaviour" | "content" | "variables" | "results" | "operator";
 
 export type RoleList = Array<Role>;
 

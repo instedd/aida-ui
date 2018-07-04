@@ -679,7 +679,7 @@
     },
 
     "role": {
-      "enum": [ "publish", "behaviour", "content", "variables", "results" ]
+      "enum": [ "publish", "behaviour", "content", "variables", "results", "operator" ]
     },
 
     "role_list": {
