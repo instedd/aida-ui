@@ -24,6 +24,10 @@ export type FacebookChannelConfig = {
   access_token: string;
 };
 
+export type WebsocketChannelConfig = {
+  access_token: string;
+};
+
 export type FrontDeskConfig = {
   greeting: Message;
   introduction: Message;
@@ -137,7 +141,7 @@ export type SurveyQuestion = {
   constraint_message?: Message;
   encrypt?: boolean;
 } | {
-  type: "integer" | "decimal" | "text" | "image";
+  type: "integer" | "decimal" | "text" | "image" | "note";
   name: string;
   message: Message;
   relevant?: string;
@@ -163,6 +167,11 @@ export type Channel = {
   name: string;
   kind: "facebook";
   config: FacebookChannelConfig;
+} | {
+  id: number;
+  name: string;
+  kind: "websocket";
+  config: WebsocketChannelConfig;
 };
 
 export type FrontDesk = {
@@ -220,6 +229,16 @@ export type BotStats = {
 };
 
 export type StatsPeriod = "today" | "this_week" | "this_month";
+
+export type BotErrorLogs = Array<BotErrorLog>;
+
+export type BotErrorLog = {
+  timestamp: string;
+  bot_id: string;
+  session_id: string;
+  skill_id: string;
+  message: string;
+};
 
 export type TranslationBehaviours = Array<{
   id: number;
