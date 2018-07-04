@@ -40,7 +40,6 @@
     padding: 0;
     bottom: -28px;
     right: 5%;
-    z-index: 1;
     &.md-btn--floating {
       height: 56px;
       width: 56px;
@@ -83,8 +82,10 @@
 
 .mainTabs {
   z-index: 1;
+  padding-right: 0;
   .md-tabs {
     transform: translateX(-56px);
+    overflow: visible !important;
   }
   .md-tab {
     min-width: initial;
@@ -108,26 +109,17 @@
     }
   }
 }
+.iconLabel {
 
-// @media #{$md-mobile-media} {
-//   .mainTabs{
-//     .md-tabs {
-//       overflow: visible;
-//     }
-//     .material-icons.md-icon {
-//       font-size: 20px;
-//     }
-//   }
-// }
+  .md-list-tile {
+    position: relative;
+    padding-left: 3rem;
+    .md-icon {
+      font-size: 1.6rem;
+      position: absolute;
+      left: .9rem;
+      top: .6rem;
+    }
+  }
+}
 
-// @media #{$md-desktop-media} {
-//   .mainTabs {
-//     .md-tabs {
-//       width: 900px;
-//     }
-//     .md-tab-label {
-//       font-size: inherit;
-//       line-height: inherit;
-//     }
-//   }
-// }

@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import { Route, Redirect } from 'react-router-dom'
-import { DialogContainer, Button } from 'react-md'
+import { DialogContainer, Button, FontIcon } from 'react-md'
 
 import EditableTitleLabel from '../ui/EditableTitleLabel'
 import { HeaderNavLink, HeaderNavAction } from '../ui/Header'
@@ -195,11 +195,10 @@ export class BotLayoutComponent extends Component {
             <HeaderNavLink label="Logs" to={r.botErrorLogs(bot.id)} />,
           ]}
           headerNavExtra={[
-            // <HeaderNavAction label="Rename" />,
-            <HeaderNavAction label="Unpublish" disabled={!canPublish} onClick={() => botActions.unpublishBot(bot)}/>,
-            <HeaderNavAction label="Duplicate" disabled={!canAdmin} onClick={duplicateBot} />,
-            <HeaderNavAction label={isCollaborator ? 'Leave' : 'Delete'} onClick={showDialog} />,
-            <HeaderNavAction label="Download Manifest" disabled={!canPublish} onClick={() => window.location = `/api/v1/bots/${bot.id}/manifest.json`} />,
+            <HeaderNavAction children={<FontIcon>get_app</FontIcon>} label="Download Manifest" disabled={!canPublish} onClick={() => window.location = `/api/v1/bots/${bot.id}/manifest.json`} />,
+            <HeaderNavAction children={<FontIcon>content_copy</FontIcon>} label="Duplicate" disabled={!canAdmin} onClick={duplicateBot} />,
+            <HeaderNavAction children={<FontIcon>remove_circle</FontIcon>} label="Unpublish" disabled={!canPublish} onClick={() => botActions.unpublishBot(bot)}/>,
+            <HeaderNavAction children={<FontIcon>delete</FontIcon>} label={isCollaborator ? 'Leave' : 'Delete'} onClick={showDialog} />,
           ]}
           buttonAction={buttonAction} buttonIcon={buttonIcon}
         >

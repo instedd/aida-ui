@@ -59,7 +59,7 @@ class HeaderSubNav extends Component {
 
     Children.forEach(this.props.headerNavExtra, (e, index) => {
       // TODO allow HeaderNavLink to be used as headerNavExtra
-      items.push(<ListItem key={index+1} primaryText={e.props.label} onClick={e.props.onClick} disabled={e.props.disabled} />)
+      items.push(<ListItem key={index+1} primaryText={e.props.label} onClick={e.props.onClick} disabled={e.props.disabled} children={e.props.children} className='iconLabel' />)
     })
 
     return (
