@@ -92,16 +92,14 @@ const publishSuccess = (state, action) => {
 const publishFailure = (state, action) => {
   const botId = action.botId
   const bot = state.items && state.items[botId.toString()]
-  const {errors} = action.errors
-  debugger
-  console.log("ACTION", errors)
+  const errors = action.errors
   return {
     ...state,
     items: {
       ...state.items,
-      ...{[botId]: bot},
-      ...{errors: errors}
-    }
+      ...{[botId]: bot}
+    },
+    ...{errors: errors}
   }
 }
 

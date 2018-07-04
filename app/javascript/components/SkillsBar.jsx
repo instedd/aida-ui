@@ -130,7 +130,7 @@ class SkillsBar extends Component {
                                        onToggleSkill={() => skillActions.toggleSkill(skill)}
                                        onRenameSkill={() => openDialog(skill)}
                                        onDeleteSkill={() => skillActions.deleteSkill(skill)}
-                                       hasError={true} />
+                                       hasError={this.props.errors.some((e) => e.path.indexOf(skill.id) > -1)} />
                       ))
                       : [<SidebarItem key="loading"
                                    icon={skillIcon('LOADING')}
@@ -177,7 +177,7 @@ class SkillsBar extends Component {
           skill={{"kind": "front_desk"}}
           icon={skillIcon("front_desk")}
           onClick={() => history.push(routes.botFrontDesk(bot.id))}
-          hasError={true} />
+          hasError={this.props.errors.some((e) => e.path.indexOf("front_desk") > -1)} />
         {skillsItems}
 
         <DropdownMenu id="add-skill-menu"
@@ -207,10 +207,11 @@ const mapStateToProps = (state, {bot}) => {
   if (scope && scope.botId == bot.id && items) {
     return {
       skills: sortBy(Object.values(items), 'order'),
-      creating
+      creating,
+      errors: state.bots.errors || []
     }
   } else {
-    return { skills: null }
+    return { skills: null, errors: [] }
   }
 }
 

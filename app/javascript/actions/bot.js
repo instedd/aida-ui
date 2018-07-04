@@ -67,7 +67,9 @@ export const publishBot = (bot : T.Bot) => (dispatch : T.Dispatch) => {
             })
             .catch((error) => {
               dispatch(pushNotification('Bot publication failed'))
-              dispatch(_botPublishFailure(bot.id, error))
+              error.json().then((json_error) => {
+                dispatch(_botPublishFailure(bot.id, json_error.result))
+              })
             })
 }
 

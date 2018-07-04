@@ -13,7 +13,7 @@
     height: 48px;
     align-items: center;
     min-width: $min-page-width;
-    
+
     .sections {
       flex-grow: 1;
     }
@@ -112,9 +112,14 @@
       line-height: 2
     }
   }
+  .error-in-menu {
+    color: $error-red;
+    vertical-align: text-bottom;
+    padding: 0 5px;
+  }
 }
-.iconLabel {
 
+.iconLabel {
   .md-list-tile {
     position: relative;
     padding-left: 3rem;
@@ -126,4 +131,3 @@
     }
   }
 }
-
