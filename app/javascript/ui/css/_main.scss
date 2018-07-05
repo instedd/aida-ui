@@ -1,6 +1,6 @@
 .main-with-sidebar {
   width: 100%;
-  padding: 108px 5% 4rem;
+  padding: 90px 5% 4rem;
   display: grid;
   grid-template-columns: minmax(min-content, 320px) minmax(615px, 1fr);
   grid-template-areas:
@@ -31,7 +31,7 @@
   display: grid;
   grid-template-columns: 1fr;
   grid-template-areas: "main-content";
-  margin-top: 108px;
+  margin-top: 90px;
   padding: 0 5% 3rem;
 }
 
@@ -58,7 +58,7 @@
 .main-grey {
   background: $md-grey-300;
   width: 100%;
-  padding: 108px 5% 3rem;
+  padding: 90px 5% 3rem;
   display: grid;
   grid-template-columns: 5% 1fr 5%;
   grid-template-areas:
