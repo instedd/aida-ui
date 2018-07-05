@@ -25,7 +25,7 @@ export const Listing = ({id, className, items, title, children, actions, onItemC
           </TableRow>
         ))}
         {times(5 - items.length).map((item, ri) => (
-          <TableRow key={ri}>
+          <TableRow key={ri} className='noHover'>
             <TableColumn colSpan='100'></TableColumn>
           </TableRow >
         ))}

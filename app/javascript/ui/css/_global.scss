@@ -163,6 +163,11 @@ input[type=number]:invalid {
     opacity: 1;
   }
 }
-tr.md-table-row:hover .btnHover {
-  display: block;
+tr.md-table-row {
+  &.noHover:hover {
+    background: none;
+  }
+  &:hover .btnHover {
+    display: block;
+  }
 }
