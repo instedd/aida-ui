@@ -53,9 +53,9 @@ class BotSkill extends Component {
 const mapStateToProps = (state, {skillId}) => {
   const { items } = state.skills
   if (items) {
-    return { loading: false, skill: items[skillId] }
+    return { loading: false, skill: items[skillId], errors: state.bots.errors || [] }
   } else {
-    return { loading: true }
+    return { loading: true, errors: [] }
   }
 }
 

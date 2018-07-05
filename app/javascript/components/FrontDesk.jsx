@@ -42,12 +42,14 @@ class FrontDesk extends Component {
         </Headline>
 
         <Field id="fd-greeting" label="Greeting"
-               value={config.greeting} onChange={updateConfig('greeting')} />
+               value={config.greeting} onChange={updateConfig('greeting')} error={this.props.errors.filter((e) => e.path.indexOf("greeting") > -1)} />
         <Field id="fd-introduction" label="Skills introduction"
                helpText="The usage explanation of each skill will be appended after this introduction"
-               value={config.introduction} onChange={updateConfig('introduction')} />
+               value={config.introduction} onChange={updateConfig('introduction')}
+               error={this.props.errors.filter((e) => e.path.indexOf("introduction") > -1)} />
         <Field id="fd-not-understood" label="Didn't understand message"
-               value={config.not_understood} onChange={updateConfig('not_understood')} />
+               value={config.not_understood} onChange={updateConfig('not_understood')}
+               error={this.props.errors.filter((e) => e.path.indexOf("not_understood") > -1)} />
         <h4>
           Show when there is less than &nbsp;
           <TextField id="fd-threshold"
@@ -61,15 +63,19 @@ class FrontDesk extends Component {
         </h4>
         <Field id="fd-clarification" label="Clarification message"
                helpText="Clarification messages for each matching skill will be appended after this message"
-               value={config.clarification} onChange={updateConfig('clarification')} />
+               value={config.clarification} onChange={updateConfig('clarification')}
+               error={this.props.errors.filter((e) => e.path.indexOf("clarification") > -1)} />
         <Field id="fd-unsubscribe-introduction" label="Unsubscribe introduction message"
                helpText="This message will be sent as the last message of the introduction to explain how to unsubscribe"
-               value={config.unsubscribe_introduction_message} onChange={updateConfig('unsubscribe_introduction_message')} />
+               value={config.unsubscribe_introduction_message} onChange={updateConfig('unsubscribe_introduction_message')}
+               error={this.props.errors.filter((e) => e.path.indexOf("unsubscribe_introduction_message") > -1)} />
         <Field id="fd-unsubscribe-keywords" label="Unsubscribe keywords (comma separated)"
-               value={config.unsubscribe_keywords} onChange={updateConfig('unsubscribe_keywords')} />
+               value={config.unsubscribe_keywords} onChange={updateConfig('unsubscribe_keywords')}
+               error={this.props.errors.filter((e) => e.path.indexOf("unsubscribe_keywords") > -1)} />
         <Field id="fd-unsubscribe-acknowledge" label="Unsubscribe acknowledge message"
                helpText="This message will be sent to confirm the unsubscription success"
-               value={config.unsubscribe_acknowledge_message} onChange={updateConfig('unsubscribe_acknowledge_message')} />
+               value={config.unsubscribe_acknowledge_message} onChange={updateConfig('unsubscribe_acknowledge_message')}
+               error={this.props.errors.filter((e) => e.path.indexOf("unsubscribe_acknowledge_message") > -1)} />
       </div>
     )
   }
@@ -81,13 +87,15 @@ const mapStateToProps = (state, {bot}) => {
     return {
       loaded: true,
       fetching: frontDesk.fetching,
-      data: frontDesk.data || {}
+      data: frontDesk.data || {},
+      errors: state.bots && state.bots.errors && state.bots.errors.filter((e) => e.path[0] == "front_desk") || []
     }
   } else {
     return {
       loaded: false,
       fetching: frontDesk.fetching,
-      data: {}
+      data: {},
+      errors: []
     }
   }
 }
