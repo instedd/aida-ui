@@ -43,20 +43,20 @@ export class BotIndexComponent extends Component {
       } else {
         const title = botList.length == 1 ? '1 bot' : `${botList.length} bots`
         content = (
-           <Listing items={botList} title={title}
-                    onItemClick={b => history.push(routes.bot(b.id))}>
-             <Column title="Name" render={b => b.name} />
-             <Column title="Type" render={b => "Facebook"} />
-             <Column title="Uses" render={b => null} />
-             <Column title="Last activity date" render={d => null} />
-           </Listing>
+          <MainWhite>
+            <Listing items={botList} title={title}
+                      onItemClick={b => history.push(routes.bot(b.id))}>
+              <Column title="Name" render={b => b.name} />
+              <Column title="Type" render={b => "Facebook"} />
+              <Column title="Uses" render={b => null} />
+              <Column title="Last activity date" render={d => null} />
+            </Listing>
+          </MainWhite>
         )
       }
 
       return <AppLayout title="Bots" buttonIcon="add" buttonAction={createBot}>
-        <MainWhite>
-          {content}
-        </MainWhite>
+        {content}
       </AppLayout>
     }
   }
