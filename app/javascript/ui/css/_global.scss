@@ -154,3 +154,15 @@ input[type=number]:invalid {
     }
   }
 }
+.btnHover {
+  background: none !important;
+  display: none;
+  color: #000000;
+  opacity: 0.6;
+  &:hover {
+    opacity: 1;
+  }
+}
+tr.md-table-row:hover .btnHover {
+  display: block;
+}

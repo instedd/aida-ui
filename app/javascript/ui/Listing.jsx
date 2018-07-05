@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { times } from 'lodash'
 import { TableCardHeader, DataTable, TableHeader, TableBody, TableRow, TableColumn } from 'react-md';
 
 export const Listing = ({id, className, items, title, children, actions, onItemClick}) => {
@@ -22,6 +23,11 @@ export const Listing = ({id, className, items, title, children, actions, onItemC
               <TableColumn key={ci}>{col.props.render(item)}</TableColumn>
             )}
           </TableRow>
+        ))}
+        {times(5 - items.length).map((item, ri) => (
+          <TableRow key={ri}>
+            <TableColumn colSpan='100'></TableColumn>
+          </TableRow >
         ))}
       </TableBody>
     </DataTable>

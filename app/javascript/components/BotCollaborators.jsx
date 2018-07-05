@@ -100,25 +100,29 @@ class CollaboratorsList extends Component {
     }
     const roleContent = (role) => (item) => {
       const isChecked = hasRole(item.roles, role)
-      const toggle = () => {
-        if (item.type == 'collaborator') {
-          // keep at least one role selected
-          if (item.roles.length > 1 || !isChecked) {
-            onToggleCollaboratorRole(item.data, role)
-          }
-        }
-      }
-      const id = `role-${role}-${item.type}-${item.data.id}`
+      // const toggle = () => {
+      //   if (item.type == 'collaborator') {
+      //     // keep at least one role selected
+      //     if (item.roles.length > 1 || !isChecked) {
+      //       onToggleCollaboratorRole(item.data, role)
+      //     }
+      //   }
+      // }
+      // const id = `role-${role}-${item.type}-${item.data.id}`
+
       return (
-        <Checkbox id={id}
-                  name={id}
-                  aria-label={`Toggle ${role} role`}
-                  onChange={toggle}
-                  checked={isChecked}
-                  disabled={item.type != 'collaborator'}
-                  checkedCheckboxIcon={<FontIcon>check</FontIcon>}
-                  uncheckedCheckboxIcon={null} />
+        isChecked ? <FontIcon className='black'>check</FontIcon> : null
       )
+      // return (
+      //   <Checkbox id={id}
+      //             name={id}
+      //             aria-label={`Toggle ${role} role`}
+      //             onChange={toggle}
+      //             checked={isChecked}
+      //             disabled={item.type != 'collaborator'}
+      //             checkedCheckboxIcon={<FontIcon>check</FontIcon>}
+      //             uncheckedCheckboxIcon={null} />
+      // )
     }
     const renderCollaboratorAction = (item) => {
       if (item.type == 'invitation' || item.type == 'anonymous-invitation') {
@@ -126,12 +130,14 @@ class CollaboratorsList extends Component {
                         className="invitation-row"
                         onClick={() => onCancelInvitation(item.data)}
                         tooltipLabel="Cancel invitation"
-                        tooltipPosition="left" />)
+                        tooltipPosition="left"
+                        className='btnHover' />)
       } else if (item.email != currentUserEmail) {
-        return (<Button icon iconChildren="close"
+        return (<Button icon iconChildren="delete"
                         onClick={() => onRemoveCollaborator(item.data)}
                         tooltipLabel="Remove collaborator"
-                        tooltipPosition="left" />)
+                        tooltipPosition="left"
+                        className='btnHover' />)
       }
     }
     return (
