@@ -36,7 +36,7 @@ export class BotIndexComponent extends Component {
            <EmptyContent imageSrc={imgIcon}>
              <Headline>
                You have no bots yet
-               <span><a href="javascript:" onClick={createBot}>Create One</a></span>
+               <span><a href="javascript:" onClick={createBot} className="hrefLink">Create One</a></span>
              </Headline>
            </EmptyContent>
         )

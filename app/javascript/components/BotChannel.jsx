@@ -55,7 +55,7 @@ class BotChannelComponent extends Component {
             <Title>Subscribe channel to Aida</Title>
             <Headline>
               Finish the channel setup taking your callback URL and verify token to
-              the <a href="https://developers.facebook.com/docs/messenger-platform/getting-started/app-setup" target="_blank">subscribe bot page</a>.
+              the <a href="https://developers.facebook.com/docs/messenger-platform/getting-started/app-setup" target="_blank" className="hrefLink">subscribe bot page</a>.
             </Headline>
 
             <Field label="Callback URL" defaultValue={`${location.protocol}//${location.host}/callbacks/facebook/`} readOnly />
@@ -74,9 +74,9 @@ class BotChannelComponent extends Component {
           <Title>Setup a Facebook channel</Title>
           <Headline>
             In order to setup this channel you first need
-            to <a href="https://www.facebook.com/business/products/pages" target="_blank">create a Facebook page</a> and
+            to <a href="https://www.facebook.com/business/products/pages" target="_blank" className="hrefLink">create a Facebook page</a> and
             then paste your credentials here.
-            Follow <a href="https://developers.facebook.com/docs/messenger-platform/prelaunch-checklist" target="_blank">Facebook publishing requirements</a> to
+            Follow <a href="https://developers.facebook.com/docs/messenger-platform/prelaunch-checklist" target="_blank" className="hrefLink">Facebook publishing requirements</a> to
             avoid getting your channel banned.<br />
 
             You will be able to subscribe the bot after you first publish it.

@@ -349,7 +349,7 @@ class BotCollaborators extends Component {
         <EmptyContent icon='folder_shared'>
           <Headline>
             You have no collaborators on this project
-            <span><a href="javascript:" onClick={showDialog}>Invite them</a></span>
+            <span><a href="javascript:" onClick={showDialog} className="hrefLink">Invite them</a></span>
           </Headline>
           {inviteDialog}
         </EmptyContent>

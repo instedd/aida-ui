@@ -27,7 +27,7 @@ export class BotData extends Component {
     return (
       <EmptyContent icon='file_download'>
         <Button flat secondary href={`/api/v1/bots/${bot.id}/data.csv`}>Download CSV</Button>
-        <p>or download as <a href={`/api/v1/bots/${bot.id}/data.json`} target="_blank">json</a></p>
+        <p>or download as <a href={`/api/v1/bots/${bot.id}/data.json`} target="_blank" className="hrefLink">json</a></p>
       </EmptyContent>
     )
   }

@@ -93,7 +93,7 @@ class Survey extends Component {
                       onSizeError={() => alert('File is too big. Maximum 1Mb allowed.')} />
           <p>
             Aida supports XLSForms, you can design your survey using any of&nbsp;
-            <a href="http://xlsform.org/#xlsform-tools">these tools</a>
+            <a href="http://xlsform.org/#xlsform-tools" className="hrefLink">these tools</a>
           </p>
         </div>
       </div>
