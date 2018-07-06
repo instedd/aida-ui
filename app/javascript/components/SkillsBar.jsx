@@ -136,6 +136,11 @@ class SkillsBar extends Component {
                                    icon={skillIcon('LOADING')}
                                    label="Loading skills..." />]
 
+    let missingSkill = ""
+    if(this.props.errors.some((e) => e.path.indexOf("skills") > -1)) {
+      missingSkill = (<ListItem className="missing-skill" primaryText="There needs to be at least one skill" />)
+    }
+
     const skillKindItems = SKILL_KINDS.map(kind => ({
       key: kind,
       primaryText: defaultSkillName(kind),
@@ -179,7 +184,7 @@ class SkillsBar extends Component {
           onClick={() => history.push(routes.botFrontDesk(bot.id))}
           hasError={this.props.errors.some((e) => e.path.indexOf("front_desk") > -1)} />
         {skillsItems}
-
+        {missingSkill}
         <DropdownMenu id="add-skill-menu"
                       cascading
                       block={true}

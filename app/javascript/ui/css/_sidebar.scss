@@ -84,6 +84,9 @@
       padding: 0 6em 0 1.1em;
     }
   }
+  .missing-skill .md-text {
+    color: $error-red;
+  }
 }
 
 .button-area {
