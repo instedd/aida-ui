@@ -34,6 +34,9 @@ export type FrontDeskConfig = {
   not_understood: Message;
   clarification: Message;
   threshold: number;
+  unsubscribe_introduction_message: Message;
+  unsubscribe_keywords: KeywordList;
+  unsubscribe_acknowledge_message: Message;
 };
 
 export type LanguageDetectorConfig = {
@@ -334,4 +337,3 @@ export type EncryptedKeyPair = {
   public_key: string;
   encrypted_secret_key: string;
 };
-
