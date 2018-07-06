@@ -34,7 +34,10 @@ class Behaviour < ApplicationRecord
         "introduction" => "",
         "not_understood" => "",
         "clarification" => "",
-        "threshold" => 0.5
+        "threshold" => 0.5,
+        "unsubscribe_introduction_message" => "Send UNSUBSCRIBE to stop receiving messages",
+        "unsubscribe_keywords" => "UNSUBSCRIBE",
+        "unsubscribe_acknowledge_message" => "I won't send you any further messages"
       }
     }
     create! default_params.merge(params)
@@ -119,7 +122,14 @@ class Behaviour < ApplicationRecord
         introduction: localized_message(:introduction),
         not_understood: localized_message(:not_understood),
         clarification: localized_message(:clarification),
-        threshold: config["threshold"]
+        threshold: config["threshold"],
+        unsubscribe: {
+          introduction_message: localized_message(:unsubscribe_introduction_message),
+          keywords: localized_value(:unsubscribe_keywords) do |keywords|
+            keywords.split(/,\s*/)
+              end,
+          acknowledge_message: localized_message(:unsubscribe_acknowledge_message)
+        }
       }
     when "keyword_responder"
       {
@@ -260,7 +270,10 @@ class Behaviour < ApplicationRecord
         translation_key("greeting",       "Greeting"),
         translation_key("introduction",   "Skills introduction"),
         translation_key("not_understood", "Didn't understand message"),
-        translation_key("clarification",  "Clarification message")
+        translation_key("clarification",  "Clarification message"),
+        translation_key("unsubscribe_introduction_message",  "Unsubscribe introduction message"),
+        translation_key("unsubscribe_keywords",  "Unsubscribe keywords (comma separated)"),
+        translation_key("unsubscribe_acknowledge_message",  "Unsubscribe acknowledge message")
       ]
     when "keyword_responder"
       [
