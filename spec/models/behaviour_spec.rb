@@ -62,16 +62,6 @@ RSpec.describe Behaviour, type: :model do
         acknowledge_message: { message: { en: 'ack_mess' }}
       })
     end
-
-    it "manifest returns unsubscribe settings with defaults" do
-      fragment = front_desk.manifest_fragment.with_indifferent_access
-        expect(fragment[:unsubscribe]).to match({
-        introduction_message: {message: { en: 'Send UNSUBSCRIBE to stop receiving messages' }},
-        keywords: { en: ['UNSUBSCRIBE'] },
-        acknowledge_message: { message: { en: "I won't send you any further messages" }}
-      })
-    end
-
   end
 
   describe "keyword_responder" do

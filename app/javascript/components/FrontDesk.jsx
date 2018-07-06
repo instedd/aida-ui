@@ -62,6 +62,14 @@ class FrontDesk extends Component {
         <Field id="fd-clarification" label="Clarification message"
                helpText="Clarification messages for each matching skill will be appended after this message"
                value={config.clarification} onChange={updateConfig('clarification')} />
+        <Field id="fd-unsubscribe-introduction" label="Unsubscribe introduction message"
+               helpText="This message will be sent as the last message of the introduction to explain how to unsubscribe"
+               value={config.unsubscribe_introduction_message} onChange={updateConfig('unsubscribe_introduction_message')} />
+        <Field id="fd-unsubscribe-keywords" label="Unsubscribe keywords (comma separated)"
+               value={config.unsubscribe_keywords} onChange={updateConfig('unsubscribe_keywords')} />
+        <Field id="fd-unsubscribe-acknowledge" label="Unsubscribe acknowledge message"
+               helpText="This message will be sent to confirm the unsubscription success"
+               value={config.unsubscribe_acknowledge_message} onChange={updateConfig('unsubscribe_acknowledge_message')} />
       </div>
     )
   }

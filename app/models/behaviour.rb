@@ -35,9 +35,9 @@ class Behaviour < ApplicationRecord
         "not_understood" => "",
         "clarification" => "",
         "threshold" => 0.5,
-        "unsubscribe_introduction_message" => "Send UNSUBSCRIBE to stop receiving messages",
-        "unsubscribe_keywords" => "UNSUBSCRIBE",
-        "unsubscribe_acknowledge_message" => "I won't send you any further messages"
+        "unsubscribe_introduction_message" => "",
+        "unsubscribe_keywords" => "",
+        "unsubscribe_acknowledge_message" => ""
       }
     }
     create! default_params.merge(params)
