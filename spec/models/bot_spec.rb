@@ -65,7 +65,10 @@ RSpec.describe Bot, type: :model do
                                             "introduction" => "I'm a bot",
                                             "not_understood" => "I don't understand",
                                             "clarification" => "Please repeat",
-                                            "threshold" => 0.5
+                                            "threshold" => 0.5,
+                                            "unsubscribe_introduction_message" => "send UNS to unsubscribe",
+                                            "unsubscribe_keywords" => "UNS",
+                                            "unsubscribe_acknowledge_message" => "Successfully unsubscribed"
                                           }
         bot.front_desk.translations.create! key: 'greeting', lang: 'es', value: 'Hola'
 

@@ -60,10 +60,22 @@
         "introduction": { "$ref": "#/definitions/message" },
         "not_understood": { "$ref": "#/definitions/message" },
         "clarification": { "$ref": "#/definitions/message" },
+        "unsubscribe_introduction_message": { "$ref": "#/definitions/message" },
+        "unsubscribe_keywords": { "$ref": "#/definitions/keywordList" },
+        "unsubscribe_acknowledge_message": { "$ref": "#/definitions/message" },
         "threshold": { "type": "number", "maximum": 0.5, "minimum": 0 }
       },
       "additionalProperties": false,
-      "required": [ "greeting", "introduction", "not_understood", "clarification", "threshold" ]
+      "required": [
+        "greeting",
+        "introduction",
+        "not_understood",
+        "clarification",
+        "threshold",
+        "unsubscribe_introduction_message",
+        "unsubscribe_keywords",
+        "unsubscribe_acknowledge_message"
+      ]
     },
 
     "languageDetectorConfig": {

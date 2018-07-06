@@ -23,13 +23,13 @@ RSpec.describe Behaviour, type: :model do
     it "generates manifest fragment" do
       fragment = front_desk.manifest_fragment
       expect(fragment).to_not be_nil
-      expect(fragment.keys).to match_array(%i(greeting introduction clarification not_understood threshold))
+      expect(fragment.keys).to match_array(%i(greeting introduction clarification not_understood threshold unsubscribe))
     end
 
     it "returns translation keys" do
       keys = front_desk.translation_keys
       expect(keys).to be_an(Array)
-      expect(keys.size).to eq(4)
+      expect(keys.size).to eq(7)
       expect(keys.first.keys).to match_array(%i(key label default_translation))
     end
 
@@ -48,6 +48,30 @@ RSpec.describe Behaviour, type: :model do
       fragment = front_desk.manifest_fragment.with_indifferent_access
       expect(fragment[:greeting]).to match({ message: { en: 'Hi', es: 'Hi', it: 'Hi' }})
     end
+
+    it "manifest returns unsubscribe settings" do
+      front_desk.config["unsubscribe_introduction_message"] = "intro_mess"
+      front_desk.config["unsubscribe_keywords"] = "keyw1, key2"
+      front_desk.config["unsubscribe_acknowledge_message"] = "ack_mess"
+
+      fragment = front_desk.manifest_fragment.with_indifferent_access
+
+      expect(fragment[:unsubscribe]).to match({
+        introduction_message: {message: { en: 'intro_mess' }},
+        keywords: { en: ['keyw1', 'key2'] },
+        acknowledge_message: { message: { en: 'ack_mess' }}
+      })
+    end
+
+    it "manifest returns unsubscribe settings with defaults" do
+      fragment = front_desk.manifest_fragment.with_indifferent_access
+        expect(fragment[:unsubscribe]).to match({
+        introduction_message: {message: { en: 'Send UNSUBSCRIBE to stop receiving messages' }},
+        keywords: { en: ['UNSUBSCRIBE'] },
+        acknowledge_message: { message: { en: "I won't send you any further messages" }}
+      })
+    end
+
   end
 
   describe "keyword_responder" do

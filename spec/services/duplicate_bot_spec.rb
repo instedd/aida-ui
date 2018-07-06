@@ -8,8 +8,11 @@ RSpec.describe DuplicateBot, type: :service do
                                           "introduction" => "I'm a bot",
                                           "not_understood" => "Wat?",
                                           "clarification" => "Say again",
-                                          "threshold" => 0.4
-                                        }
+                                          "threshold" => 0.4,
+                                          "unsubscribe_introduction_message" => "send UNS to unsubscribe",
+                                          "unsubscribe_keywords" => "UNS",
+                                          "unsubscribe_acknowledge_message" => "Successfully unsubscribed"
+                                      }
       bot.skills.create_skill! 'language_detector', config: {
                                  "explanation" => "Language?",
                                  "languages" => [

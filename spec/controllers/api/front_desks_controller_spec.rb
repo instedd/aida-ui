@@ -36,7 +36,10 @@ RSpec.describe Api::FrontDesksController, type: :controller do
         introduction: "i'm a bot",
         not_understood: "i didn't understand",
         clarification: "what do you mean?",
-        threshold: 0.5
+        threshold: 0.5,
+        unsubscribe_introduction_message: "send UNS to unsubscribe",
+        unsubscribe_keywords: "UNS",
+        unsubscribe_acknowledge_message: "Successfully unsubscribed"
       }
     }
 
