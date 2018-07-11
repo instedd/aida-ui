@@ -174,3 +174,23 @@ tr.md-table-row {
 .hrefLink {
   color: #CDDC39;
 }
+.roles {
+  font-size: 1.15rem;
+  text-align: center;
+  div {
+    display: inline;
+  }
+  span {
+    display: inline !important;
+    &:after {
+      content: ',';
+      display: inline;
+    }
+    &:last-child:after {
+      display: none;
+    }
+    &:nth-last-child(2):after {
+      display: none;
+    }
+  }
+}

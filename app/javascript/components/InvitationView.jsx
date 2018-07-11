@@ -6,7 +6,6 @@ import { Button, Divider } from 'react-md'
 import map from 'lodash/map'
 import compact from 'lodash/compact'
 
-import { MainGrey } from '../ui/MainGrey'
 import EmptyContent from '../ui/EmptyContent'
 import Headline from '../ui/Headline'
 import { EmptyLoader } from '../ui/Loader'
@@ -30,13 +29,11 @@ class InvitationView extends Component {
     } else if (!invitation) {
       return (
         <AppLayout title="Invitation">
-          <MainGrey>
-           <EmptyContent icon='folder_shared'>
-             <Headline>
-               Invitation not found
-             </Headline>
-           </EmptyContent>
-          </MainGrey>
+          <EmptyContent icon='folder_shared'>
+            <Headline>
+              Invitation not found
+            </Headline>
+          </EmptyContent>
         </AppLayout>
       )
     } else {
@@ -44,17 +41,10 @@ class InvitationView extends Component {
         actions.acceptInvitation(token, history)
       }
       const roleDescriptions = compact(map(invitation.roles, role => {
-        switch(role) {
-          case 'publish':
-            return 'publish the bot and change channel configuration'
-          case 'behaviour':
-            return 'change skills configuration'
-          case 'content':
-            return 'edit messages and translations'
-          case 'variables':
-            return 'modify variables'
-          case 'results':
-            return 'view stats, conversation logs, survey results and feedback'
+        if(role == 'variables') {
+          return 'variables and tables'
+        } else {
+          return role 
         }
       }))
       const roleNode = (() => {
@@ -63,26 +53,27 @@ class InvitationView extends Component {
         } else if (roleDescriptions.length == 1) {
           return (<p>You will be able to {roleDescriptions[0]}.</p>)
         } else {
-          return (<div>
-            <p>You will be able to:</p>
-            <ul>
-              {map(roleDescriptions, (description, index) => (<li key={index}>{description}</li>))}
-            </ul>
+          const last = _.last(roleDescriptions)
+          const roles = _.initial(roleDescriptions, roleDescriptions.length - 1)
+          return (<div className="roles">
+            You will be able to manage 
+            <div>
+              {map(roles, (description, index) => (<span key={index}> {description}</span>))}
+              <span key={roleDescriptions.length}> and {last}</span>
+            </div>
           </div>)
         }
       })()
       return (
         <AppLayout title={invitation.bot_name}>
-          <MainGrey>
-           <EmptyContent icon='folder_shared'>
-             <Headline>
-               {invitation.inviter} has invited you to collaborate on <b>{invitation.bot_name}</b>
-             </Headline>
-             <Divider className="empty-divider" />
-             {roleNode}
-             <Button primary raised onClick={acceptInvitation}>Accept invitation</Button>
-           </EmptyContent>
-          </MainGrey>
+          <EmptyContent icon='folder_shared'>
+            <Headline>
+              {invitation.inviter} has invited you to collaborate on <b>{invitation.bot_name}</b>
+            </Headline>
+            <Divider className="empty-divider" />
+            {roleNode}
+            <Button secondary raised onClick={acceptInvitation}>Accept invitation</Button>
+          </EmptyContent>
         </AppLayout>
       )
     }
