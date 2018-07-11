@@ -2,10 +2,10 @@
   width: 100%;
   padding: 90px 5% 4rem;
   display: grid;
-  grid-template-columns: minmax(min-content, 320px) minmax(615px, 1fr);
+  grid-template-columns: 340px 1fr;
   grid-template-areas:
     "sidebar main-content";
-  column-gap: 8rem;
+  column-gap: 6rem;
   .sidebar {
     grid-area: sidebar;
   }

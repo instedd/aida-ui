@@ -7,6 +7,15 @@
 
   &.blank {
     background: inherit;
-    border: 1px dashed $md-grey-200;
+  }
+  i.material-icons {
+    font-size: 24px !important;
+  }
+  .md-divider {
+    background: transparent;
+  }
+  input::placeholder {
+    font-style: italic;
+    color: #cccccc;
   }
 }

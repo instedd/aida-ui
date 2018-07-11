@@ -1,11 +1,12 @@
 body {
   margin: 0;
   padding: 0;
-  min-width: 320px;
+  min-width: $min-page-width;
 }
 .grid {
   min-height: 100vh;
   font-size: 1rem;
+  min-width: $min-page-width;
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: minmax(162px, max-content) auto 50px;
@@ -13,10 +14,12 @@ body {
     "header"
     "main"
     "footer";
+
 }
 
 header {
   grid-area: header;
+  min-width: $min-page-width;
 }
 
 main {
@@ -24,6 +27,8 @@ main {
   grid-area: main;
   display: flex;
   flex: 1;
+  position: relative;
+  min-width: $min-page-width;
 }
 
 footer {
@@ -32,6 +37,7 @@ footer {
   color: $md-grey-500;
   padding: 17px 20px;
   border-top: 1px solid $md-grey-300;
+  min-width: $min-page-width;
 }
 
 .date-time-picker {
