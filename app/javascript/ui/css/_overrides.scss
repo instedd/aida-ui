@@ -55,3 +55,6 @@ input[type="checkbox"] + .md-btn--icon {
 #user-menu-list {
   min-width: 100%;
 }
+.md-divider--text-field::after {
+  background: #00BBD3;
+}
