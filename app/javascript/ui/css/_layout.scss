@@ -14,12 +14,16 @@ body {
     "header"
     "main"
     "footer";
+  > header,
+  > main,
+  > footer {
+    min-width: $min-page-width;
+  }
 
 }
 
 header {
   grid-area: header;
-  min-width: $min-page-width;
 }
 
 main {
@@ -28,7 +32,6 @@ main {
   display: flex;
   flex: 1;
   position: relative;
-  min-width: $min-page-width;
 }
 
 footer {
