@@ -9,7 +9,7 @@ import Field from '../ui/Field'
 import { EmptyLoader }  from '../ui/Loader'
 import { hasPermission } from '../utils'
 import ContentDenied from './ContentDenied'
-import { Checkbox } from 'react-md'
+import TooltipFontIcon from './TooltipFontIcon';
 
 import * as channelActions from '../actions/channel'
 import * as channelsActions from '../actions/channels'
@@ -33,6 +33,12 @@ class BotChannelComponent extends Component {
 
   render() {
     const { permitted, channelFacebook, channelWebsocket, bot } = this.props
+
+    const styles = {
+      multiline_tooltip: {
+        "white-space": "pre"
+      }
+    }
 
     if (!permitted) {
       return <ContentDenied />
@@ -77,9 +83,13 @@ class BotChannelComponent extends Component {
             to <a href="https://www.facebook.com/business/products/pages" target="_blank" className="hrefLink">create a Facebook page</a> and
             then paste your credentials here.
             Follow <a href="https://developers.facebook.com/docs/messenger-platform/prelaunch-checklist" target="_blank" className="hrefLink">Facebook publishing requirements</a> to
-            avoid getting your channel banned.<br />
-
-            You will be able to subscribe the bot after you first publish it.
+            avoid getting your channel banned&nbsp;
+            <TooltipFontIcon
+              tooltipLabel="Facebook Page must provide customer support contact information.&#013;&#010;Don’t facilitate direct conversations between people and healthcare providers.&#013;&#010;Prevent receiving large amounts of negative feedback or violate Facebook policies."
+              tooltipStyle={styles.multiline_tooltip}
+              tooltipPosition="top">info_outline
+            </TooltipFontIcon>
+            .<br />You will be able to subscribe the bot after you first publish it.
           </Headline>
           {setupFields}
           {websocketSetup}
