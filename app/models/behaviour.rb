@@ -159,7 +159,6 @@ class Behaviour < ApplicationRecord
         type: kind,
         id: id.to_s,
         name: name,
-        schedule: config["schedule"],
         questions: config["questions"].map.with_index do |question, i|
           {
             type: question["type"],
@@ -191,6 +190,7 @@ class Behaviour < ApplicationRecord
         end
       }.tap do |manifest_fragment|
         manifest_fragment[:relevant] = config["relevant"] if config["relevant"].present?
+        manifest_fragment[:schedule] = config["schedule"] if config["schedule"].present?
         if config["keywords"].present?
           manifest_fragment[:keywords] =
             localized_value(:keywords) do |keywords|
