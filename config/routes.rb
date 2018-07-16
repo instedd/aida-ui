@@ -79,5 +79,7 @@ Rails.application.routes.draw do
   get "/settings(/*path)", to: 'welcome#index'
   get "/invitation/:token", to: 'welcome#index', as: 'invitation'
 
+  post '/notifications/:notifications_secret', to: 'api/notifications#create', as: 'notifications_create'
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
