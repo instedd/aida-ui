@@ -10,6 +10,7 @@ class Bot < ApplicationRecord
   has_many :collaborating_users, through: :collaborators, source: :user
   has_many :sessions
   has_many :users, through: :sessions
+  has_many :notifications, dependent: :destroy
 
   validate :has_single_front_desk
 

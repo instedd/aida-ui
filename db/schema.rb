@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180713173426) do
+ActiveRecord::Schema.define(version: 20180713214007) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -105,6 +105,15 @@ ActiveRecord::Schema.define(version: 20180713173426) do
     t.index ["token"], name: "index_invitations_on_token", unique: true
   end
 
+  create_table "notifications", force: :cascade do |t|
+    t.bigint "bot_id"
+    t.string "notification_type"
+    t.json "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bot_id"], name: "index_notifications_on_bot_id"
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "bot_id"
@@ -164,6 +173,7 @@ ActiveRecord::Schema.define(version: 20180713173426) do
   add_foreign_key "data_tables", "bots"
   add_foreign_key "invitations", "bots"
   add_foreign_key "invitations", "users", column: "creator_id"
+  add_foreign_key "notifications", "bots"
   add_foreign_key "sessions", "bots"
   add_foreign_key "sessions", "users"
   add_foreign_key "translations", "behaviours"
