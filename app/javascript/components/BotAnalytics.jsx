@@ -30,12 +30,10 @@ class BotAnalyticsComponent extends Component {
     const { bot, permitted, fetching, period, data, actions, onToggleChatWindow } = this.props
 
     const buttons = (<FabButton
-      onClick={() => onToggleChatWindow()}
-      floating
-      secondary
       icon='chat_bubble'
       fabClass="btn-mainTabs"
       iconChild='file_upload'
+      buttonActions={() => onToggleChatWindow()}
       buttonChildActions={() => botActions.publishBot(bot)}/>)
 
     if (!permitted) {
@@ -55,7 +53,7 @@ class BotAnalyticsComponent extends Component {
       )
 
     }
-   
+
     const l = (value) => fetching ? "..." : value
 
 
