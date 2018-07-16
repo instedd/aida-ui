@@ -18,12 +18,10 @@ export class BotBehaviour extends Component {
     }
 
     const buttons = (<FabButton
-                      onClick={() => onToggleChatWindow()}
-                      floating
-                      secondary
                       icon='chat_bubble'
                       fabClass="btn-mainTabs"
                       iconChild='file_upload'
+                      buttonActions={() => onToggleChatWindow()}
                       buttonChildActions={() => botActions.publishBot(bot)}/>)
 
 

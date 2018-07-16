@@ -1,14 +1,22 @@
 import React, { Component } from 'react';
 import { Button } from 'react-md';
 
-
 const FabButton = (props) => {
 
-  let fabClass = ["Fab"];
-  if (props.fabClass) {
-    fabClass = ["Fab", props.fabClass];
+  const {
+    fabClass,
+    icon,
+    buttonActions,
+    buttonChildActions,
+    iconChild,
+    classesChild
+  } = props
+
+  let localFabClass = ["Fab"];
+  if (fabClass) {
+    localFabClass = ["Fab", fabClass];
   }
-  fabClass = fabClass.join(' ');
+  localFabClass = localFabClass.join(' ');
 
   let buttonClasses = ["FabButton"];
   if (props.classes) {
@@ -17,29 +25,28 @@ const FabButton = (props) => {
   buttonClasses = buttonClasses.join(' ');
 
   let buttonChildClasses = ["FabButtonChild"];
-  if (props.classesChild) {
-    buttonClasses = ["FabButtonChild", props.classesChild];
+  if (classesChild) {
+    buttonClasses = ["FabButtonChild", classesChild];
   }
   buttonChildClasses = buttonChildClasses.join(' ');
 
   return (
-      <div className={fabClass}>
-        <Button 
+    <div className={localFabClass}>
+      <Button
+        floating
+        secondary
+        className={buttonClasses}
+        onClick={buttonActions}>
+          {icon}
+      </Button>
+      {iconChild ? (
+        <Button
           floating
-          {...props}
-          className={buttonClasses}
-          icon={props.icon} >
-              {props.icon}
-        </Button>
-        {props.iconChild ? (
-          <Button
-            floating
-            className={buttonChildClasses}
-            onClick={props.buttonChildActions}
-            icon={props.iconChild} >
-                {props.iconChild}
-          </Button>) : null }
-      </div>
+          className={buttonChildClasses}
+          onClick={buttonChildActions}>
+              {iconChild}
+        </Button>) : null }
+    </div>
   )
 }
 
