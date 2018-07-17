@@ -23,7 +23,7 @@ RSpec.describe Bot, type: :model do
         manifest = bot.manifest
         expect(manifest).to_not be_nil
         expect(manifest[:version]).to eq("1")
-        expect(manifest.keys).to match_array(%i(version languages front_desk skills variables channels))
+        expect(manifest.keys).to match_array(%i(version languages front_desk skills variables channels notifications_url))
       end
 
       it "has a public_keys section if the owner has a key pair" do
@@ -34,6 +34,10 @@ RSpec.describe Bot, type: :model do
       it "has a data_tables section if the bot has tables" do
         create(:data_table, bot: bot)
         expect(bot.manifest.keys).to include(:data_tables)
+      end
+
+      it "has a proper notifications_url" do
+        expect(bot.manifest[:notifications_url]).to eq("http://test.host/notifications/#{bot.notifications_secret}")
       end
     end
 

@@ -43,6 +43,7 @@ class Bot < ApplicationRecord
     {
       version: "1",
       languages: available_languages,
+      notifications_url: notifications_url,
       front_desk: front_desk.manifest_fragment,
       skills: skills.enabled.map do |skill|
         skill.manifest_fragment
@@ -122,6 +123,10 @@ class Bot < ApplicationRecord
 
   def generate_notifications_secret!
     self.notifications_secret = SecureRandom.hex(40)
+  end
+
+  def notifications_url
+    "#{Settings.base_url}notifications/#{notifications_secret}"
   end
 
   private
