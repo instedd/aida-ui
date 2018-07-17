@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180706130248) do
+ActiveRecord::Schema.define(version: 20180713173426) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(version: 20180706130248) do
     t.bigint "owner_id"
     t.string "uuid"
     t.string "preview_uuid"
+    t.string "notifications_secret"
     t.index ["owner_id"], name: "index_bots_on_owner_id"
   end
 
