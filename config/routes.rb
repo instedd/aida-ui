@@ -76,6 +76,7 @@ Rails.application.routes.draw do
 
   root to: 'welcome#index'
   get "/b(/*path)", to: 'welcome#index'
+  get "/b/:bot_id/behaviour", to: 'welcome#index', as: 'bot_behaviour'
   get "/settings(/*path)", to: 'welcome#index'
   get "/invitation/:token", to: 'welcome#index', as: 'invitation'
 

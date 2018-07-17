@@ -1,0 +1,12 @@
+<h1>Your bot <%= @bot.name %> has been <b>blocked by Policy Enforcement</b>.</h1>
+<p>
+  The alleged reason is:
+</p>
+<p>
+  <%= @reason %>
+</p>
+<p>
+  Your bot won't work until you fix this issues and gets reviewed.
+
+  You can <a href="<%= @bot_url %>">edit your bot</a> to fix it.
+</p>
