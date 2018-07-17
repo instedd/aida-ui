@@ -4,12 +4,15 @@ RSpec.describe Api::NotificationsController, type: :controller do
   let!(:user) { create(:user) }
   let!(:bot) { create(:bot, owner: user) }
 
+  let(:policy_enforcement_block_notification_reason) {
+    'The bot violated our Platform Policies (https://developers.facebook.com/policy/#messengerplatform). Common violations include sending out excessive spammy messages or being non-functional.'
+  }
   let(:policy_enforcement_block_notification) {
     {
       type: "policy_enforcement",
       data: {
         "action": "block",
-        "reason": "The bot violated our Platform Policies (https://developers.facebook.com/policy/#messengerplatform). Common violations include sending out excessive spammy messages or being non-functional."
+        "reason": policy_enforcement_block_notification_reason
       }
     }
   }
@@ -35,6 +38,53 @@ RSpec.describe Api::NotificationsController, type: :controller do
         expect(Notification.last.data).to be_empty
       end
 
+      it "emails block notifications" do
+        expect {
+          post :create, params: {notifications_secret: bot.notifications_secret, notification: policy_enforcement_block_notification}
+        }.to change(ActionMailer::Base.deliveries, :count).by(1)
+        expect(response).to be_success
+        email = ActionMailer::Base.deliveries.last
+        expect(email).not_to be_nil
+        expect(email.to).to match_array([user.email])
+        expect(email.from).to match_array(['aida@instedd.org'])
+        expect(email.subject).to include('blocked by Policy Enforcement')
+        expect(email.body.encoded).to include(policy_enforcement_block_notification_reason)
+      end
+
+      it "doesn't email unblock notifications" do
+        expect {
+          post :create, params: {notifications_secret: bot.notifications_secret, notification: {
+            type: "policy_enforcement",
+            data: { "action": "unblock" }
+            }
+          }
+        }.not_to change(ActionMailer::Base.deliveries, :count)
+        expect(response).to be_success
+      end
+
+      it "doesn't email unknown action notifications" do
+        expect {
+          post :create, params: {notifications_secret: bot.notifications_secret, notification: {
+            type: "policy_enforcement",
+            data: { "action": "unknown-action" }
+            }
+          }
+        }.not_to change(ActionMailer::Base.deliveries, :count)
+        expect(response).to be_success
+      end
+
+      it "doesn't email unknown notifications" do
+        expect {
+          post :create, params: {notifications_secret: bot.notifications_secret, notification: {
+            type: "unknown-type"
+            }
+          }
+        }.not_to change(ActionMailer::Base.deliveries, :count)
+        expect(response).to be_success
+      end
+    end
+
+    context "error handling" do
       it "rejects notifications with unknown bot secrets" do
         expect {
           post :create, params: {notifications_secret: 'unknown-bot-notifications-secret', notification: policy_enforcement_block_notification}

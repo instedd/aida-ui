@@ -9,9 +9,18 @@ class Api::NotificationsController < ActionController::Base
     @notification = bot.notifications.create! notification_params
 
     if @notification.save
+      alert_by_email_if_needed
       render json: {result: :ok}
     else
       render json: @notification.errors, status: :unprocessable_entity
+    end
+  end
+
+  def alert_by_email_if_needed
+    mailer = PolicyEnforcementMailer.with(notification: @notification)
+    if @notification.notification_type == 'policy_enforcement'
+      action = @notification.data['action']
+      mailer.bot_blocked.deliver_later if action == 'block'
     end
   end
 
