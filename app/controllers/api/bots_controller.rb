@@ -81,7 +81,7 @@ class Api::BotsController < ApplicationApiController
     authorize @bot, :read_session_data?
 
     data = []
-    data = Backend.session_data(@bot.uuid) if @bot.published?
+    data = Backend.session_data(@bot.uuid, params[:period]) if @bot.published?
 
     data.each do |row|
       row_data = row["data"]
@@ -95,33 +95,7 @@ class Api::BotsController < ApplicationApiController
 
     respond_to do |format|
       format.csv do
-        cols = []
-        cols = data.flat_map { |elem| elem["data"].keys }.uniq
-
-        csv_data = CSV.generate do |csv|
-          csv << ["id", *cols]
-          data.each do |r|
-            row = [r["id"]]
-            cols.each do |c|
-              value = r["data"][c]
-              if value.is_a?(Array)
-                row << value.join(", ")
-              elsif value.is_a?(Hash) && value["type"] == "image"
-                row << value["url"]
-              elsif value.is_a?(Hash) && value["type"] == "encrypted"
-                row << "** encrypted **"
-              elsif value.is_a?(Hash)
-                row << value.to_json
-              else
-                row << value
-              end
-            end
-
-            csv << row
-          end
-        end
-
-        send_data csv_data
+        send_data build_data_csv(data, params[:period])
       end
 
       format.json do
@@ -181,5 +155,90 @@ class Api::BotsController < ApplicationApiController
       manages_variables: bot_policy.manages_variables?,
       manages_results: bot_policy.manages_results?
     }
+  end
+
+  def extract_asset_columns(sessions)
+    sessions.map do |session|
+      grouped_assets = session["assets"].group_by {|asset| asset["skill_id"]}
+
+      grouped_assets.keys.inject([]) do |result, skill_id|
+        grouped_assets[skill_id].each_with_index do |asset, i|
+          result << asset["data"].keys.map do | key |
+            {
+              column_name: key + "_" + i.to_s,
+              skill_id: skill_id,
+              index: i,
+              key: key
+            }
+          end
+        end
+
+        result
+      end
+    end.flatten.uniq
+  end
+
+  def build_data_csv(sessions, period)
+    cols = []
+    cols = sessions.flat_map { |elem| elem["data"].keys }.uniq
+
+    csv_data = unless period == "none"
+      asset_cols = extract_asset_columns(sessions)
+
+      CSV.generate do |csv|
+        csv << ["id", *cols, *asset_cols.map {|col| col[:column_name]}]
+        sessions.each do |r|
+          row = [r["id"]]
+          cols.each do |c|
+            value = r["data"][c]
+            row << extract(value)
+          end
+
+          asset_cols.each do |c|
+            value = r["assets"].select do |asset|
+
+              asset["skill_id"] == c[:skill_id]
+            end
+            row << if value != [] && asset = value[c[:index]]
+              extract(asset["data"][c[:key]])
+            else
+              ""
+            end
+          end
+
+          csv << row
+        end
+      end
+    else
+      CSV.generate do |csv|
+        csv << ["id", *cols]
+        sessions.each do |r|
+          row = [r["id"]]
+          cols.each do |c|
+            value = r["data"][c]
+            row << extract(value)
+          end
+
+          csv << row
+        end
+      end
+    end
+
+
+    csv_data
+  end
+
+  def extract(value)
+    if value.is_a?(Array)
+      value.join(", ")
+    elsif value.is_a?(Hash) && value["type"] == "image"
+      value["url"]
+    elsif value.is_a?(Hash) && value["type"] == "encrypted"
+      "** encrypted **"
+    elsif value.is_a?(Hash)
+      value.to_json
+    else
+      value
+    end
   end
 end

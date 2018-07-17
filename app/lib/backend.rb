@@ -28,8 +28,12 @@ class Backend
       handle_response { delete("/api/bots/#{uuid}") }
     end
 
-    def session_data(uuid)
-      handle_response { get("/api/bots/#{uuid}/session_data") }
+    def session_data(uuid, period)
+      if period == "none"
+        handle_response { get("/api/bots/#{uuid}/session_data") }
+      else
+        handle_response { get("/api/bots/#{uuid}/session_data?period=#{period}") }
+      end
     end
 
     def usage_summary(uuid, params = {})
