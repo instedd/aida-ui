@@ -327,6 +327,96 @@ RSpec.describe Api::BotsController, type: :controller do
   end
 
   describe "data" do
+    let(:sample_session_data) {
+      [
+        {
+          'id' => 'ecbb5615-04d4-4733-a030-770f84efca39',
+          'data' => {
+            'survey/20/pizza' => [
+              'cheese',
+              'pepperoni'
+            ],
+            'survey/20/likes_pizza' => 'yes',
+            'survey/19/pizza' => [
+              'cheese'
+            ],
+            'survey/19/likes_pizza' => 'yes',
+            'language' => 'en'
+          },
+          'assets' => [
+            {
+              'timestamp' => '2018-07-16T22:24:05.579900',
+              'skill_id' => '19',
+              'data' => {
+                'survey/19/pizza' => [
+                  'cheese'
+                ],
+                'survey/19/likes_pizza' => 'yes'
+              }
+            },
+            {
+              'timestamp' => '2018-07-16T22:24:22.511015',
+              'skill_id' => '20',
+              'data' => {
+                'survey/20/pizza' => [
+                  'cheese',
+                  'other'
+                ],
+                'survey/20/likes_pizza' => 'yes'
+              }
+            },
+            {
+              'timestamp' => '2018-07-16T22:25:21.910896',
+              'skill_id' => '20',
+              'data' => {
+                'survey/20/pizza' => [
+                  'cheese',
+                  'pepperoni'
+                ],
+                'survey/20/likes_pizza' => 'yes'
+              }
+            }
+          ]
+        },
+        {
+          'id' => 'b97a5222-4c4f-41c9-bcf2-ff126b06e402',
+          'data' => {
+            'survey/19/pizza' => [
+              "other"
+            ],
+            'survey/19/likes_pizza' => 'no',
+            'language' => 'en'
+          },
+          'assets' => [
+            {
+              'timestamp' => '2018-07-16T22:16:18.073170',
+              'skill_id' => '19',
+              'data' => {
+                'survey/19/pizza' => [
+                  'other'
+                ],
+                'survey/19/likes_pizza' => 'yes'
+              }
+            },
+            {
+              'timestamp' => '2018-07-16T22:23:31.744635',
+              'skill_id' => '19',
+              'data' => {
+                'survey/19/pizza' => [
+                  'other'
+                ],
+                'survey/19/likes_pizza' => 'no'
+              }
+            }
+          ]
+        }
+      ]
+    }
+
+    let(:result_csv) {
+      "id,survey/20/pizza,survey/20/likes_pizza,survey/19/pizza,survey/19/likes_pizza,language,survey/19/pizza_0,survey/19/likes_pizza_0,survey/20/pizza_0,survey/20/likes_pizza_0,survey/20/pizza_1,survey/20/likes_pizza_1,survey/19/pizza_1,survey/19/likes_pizza_1\necbb5615-04d4-4733-a030-770f84efca39,\"cheese, pepperoni\",yes,cheese,yes,en,cheese,yes,\"cheese, other\",yes,\"cheese, pepperoni\",yes,\"\",\"\"\nb97a5222-4c4f-41c9-bcf2-ff126b06e402,,,other,no,en,other,yes,\"\",\"\",\"\",\"\",other,no\n"
+    }
+
     it "returns a CSV file" do
       get :data, params: { id: bot.id }, format: 'csv'
       expect(response).to be_success
@@ -347,6 +437,13 @@ RSpec.describe Api::BotsController, type: :controller do
       shared_bot = create(:bot, shared_with: user, grants: %w(content))
       get :data, params: { id: shared_bot.id }, format: 'csv'
       expect(response).to be_denied
+    end
+
+    it "builds a csv with assets" do
+      expect(Backend).to receive(:session_data).with(published_bot.uuid, 'all').and_return(sample_session_data)
+
+      get :data, params: { id: published_bot.id, period: 'all' }, format: 'csv'
+      expect(response.body).to eq(result_csv)
     end
   end
 
