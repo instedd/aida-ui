@@ -28,6 +28,8 @@ class Bot < ApplicationRecord
 
     bot.behaviours.create_front_desk!
 
+    bot.generate_notifications_secret!
+
     bot.save!
     bot
   end
@@ -115,6 +117,10 @@ class Bot < ApplicationRecord
 
   def get_session(user)
     self.sessions.where(user: user).take
+  end
+
+  def generate_notifications_secret!
+    self.notifications_secret = SecureRandom.hex(40)
   end
 
   private
