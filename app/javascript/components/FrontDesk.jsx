@@ -49,7 +49,7 @@ class FrontDesk extends Component {
         <Field id="fd-not-understood" label="Didn't understand message"
                value={config.not_understood} onChange={updateConfig('not_understood')} />
         <h4>
-          Show when no skill claims more than &nbsp;
+          Show when there is less than &nbsp;
           <TextField id="fd-threshold"
                      type="number"
                      value={Math.round(config.threshold * 100) || 0}
@@ -57,7 +57,7 @@ class FrontDesk extends Component {
                      style={{width: "4em"}}
                      onChange={(value) => { updateConfig('threshold')(parseFloat(value) / 100) }}
                      fullWidth={false} inlineIndicator={<p>%</p>} />
-          &nbsp; confidence
+          &nbsp; confidence to tell two matching skills apart
         </h4>
         <Field id="fd-clarification" label="Clarification message"
                helpText="Clarification messages for each matching skill will be appended after this message"
