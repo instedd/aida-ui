@@ -188,8 +188,8 @@ export class BotLayoutComponent extends Component {
             <HeaderNavLink label="Analytics" to={r.botAnalytics(bot.id)} />,
             <HeaderNavLink label="Data" to={r.botData(bot.id)} />,
             // TODO: use active="/b/:id/channel"  to allow deep linking
-            <HeaderNavLink label="Channel" to={r.botChannel(bot.id)} error={this.props.errors.some((e) => e.path[0] === "channels")} />,
-            <HeaderNavLink label="Behaviour" to={r.botBehaviour(bot.id)} error={this.props.errors.some((e) => e.path[0] !== "channels")} />,
+            <HeaderNavLink label="Channel" to={r.botChannel(bot.id)} error={this.props.errors.some((e) => e.path[0].startsWith("channels"))} />,
+            <HeaderNavLink label="Behaviour" to={r.botBehaviour(bot.id)} error={this.props.errors.some((e) => !e.path[0].startsWith("channels"))} />,
             <HeaderNavLink label="Translations" to={r.botTranslations(bot.id)} />,
             <HeaderNavLink label="Collaborators" to={r.botCollaborators(bot.id)} />,
             <HeaderNavLink label="Logs" to={r.botErrorLogs(bot.id)} />,
@@ -242,7 +242,7 @@ const mapStateToProps = (state, {match}) => {
   return {
     botsLoaded: state.bots.items != null,
     bot: bot,
-    errors: (state.bots.errors || [])
+    errors: (state.bots.errors || state.chat.errors || [])
   }
 }
 

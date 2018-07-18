@@ -182,7 +182,7 @@ class SkillsBar extends Component {
           skill={{"kind": "front_desk"}}
           icon={skillIcon("front_desk")}
           onClick={() => history.push(routes.botFrontDesk(bot.id))}
-          hasError={this.props.errors.some((e) => e.path.indexOf("front_desk") > -1)} />
+          hasError={this.props.errors.some((e) => e.path[0].startsWith("front_desk"))} />
         {skillsItems}
         {missingSkill}
         <DropdownMenu id="add-skill-menu"
@@ -213,7 +213,7 @@ const mapStateToProps = (state, {bot}) => {
     return {
       skills: sortBy(Object.values(items), 'order'),
       creating,
-      errors: state.bots.errors || []
+      errors: state.bots.errors || state.chat.errors || []
     }
   } else {
     return { skills: null, errors: [] }

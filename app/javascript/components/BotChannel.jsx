@@ -46,8 +46,8 @@ class BotChannelComponent extends Component {
 
     if (channelFacebook || channelWebsocket) {
       let setupFields = <div>
-        <Field label="Page ID" value={channelFacebook.config.page_id} onChange={this.updateConfigField("page_id", "facebook")} helpText="The Page ID under the More info section on your Facebook Page's About tab" />
-        <Field label="Access Token" value={channelFacebook.config.access_token} onChange={this.updateConfigField("access_token", "facebook")} helpText="The Page Access Token you get on the Token Generation section of the Messenger > Settings tab of your Facebook Application" />
+        <Field label="Page ID" value={channelFacebook.config.page_id} onChange={this.updateConfigField("page_id", "facebook")} helpText="The Page ID under the More info section on your Facebook Page's About tab" error={this.props.errors.filter((e) => e.path[1] == "page_id")} />
+        <Field label="Access Token" value={channelFacebook.config.access_token} onChange={this.updateConfigField("access_token", "facebook")} helpText="The Page Access Token you get on the Token Generation section of the Messenger > Settings tab of your Facebook Application" error={this.props.errors.filter((e) => e.path[1] == "access_token")} />
       </div>
 
       let websocketSetup =  <div><br />
@@ -121,7 +121,9 @@ const mapStateToProps = (state, {bot}) => {
     permitted: hasPermission(bot, 'can_publish'),
     channelLoaded: channelLoaded,
     channelFacebook: channelFacebook,
-    channelWebsocket: channelWebsocket
+    channelWebsocket: channelWebsocket,
+    errors: state.bots && state.bots.errors && state.bots.errors.filter((e) => e.path[0].startsWith("channel"))
+      || state.chat && state.chat.errors && state.chat.errors.filter((e) => e.path[0].startsWith("channel")) || []
   }
 }
 

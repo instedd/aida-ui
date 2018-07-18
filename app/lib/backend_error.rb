@@ -17,9 +17,21 @@ class BackendError < HTTParty::ResponseError
 
   def self.parse_errors(errors)
     errors.map do |error|
-      if error =~ /([\w\.:,\s]+)\[(.+)\]/
-        {message: $1, path: $2.split(",").map{|s| s.gsub("\"","").strip}}
+      if /\"(path)\"=>\"#\/(\w+)/ =~ error.to_s
+        matches = error.to_s.scan(/\"path\"=>\"#\/(\w+[\/\w]*)/)
+        {message: get_message(error), path: matches.map {|match| match[0]}}
       end
     end
   end
+
+  private
+
+  def self.get_message(error)
+    message = ""
+    if /\"error\"=>{\"expected\"=>1, \"actual\"=>0}}/ =~ error.to_s
+      message = "required"
+    end
+    message
+  end
+
 end

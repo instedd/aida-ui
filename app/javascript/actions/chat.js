@@ -8,6 +8,7 @@ import uuidv4 from 'uuid/v4'
 
 export const START_PREVIEW = 'START_PREVIEW'
 export const START_PREVIEW_SUCCESS = 'START_PREVIEW_SUCCESS'
+export const START_PREVIEW_FAILURE = 'START_PREVIEW_FAILURE'
 export const SEND_MESSAGE = 'SEND_MESSAGE'
 export const RECEIVE_MESSAGE = 'RECEIVE_MESSAGE'
 export const SEND_ATTACHMENT_SUCCESS = 'SEND_ATTACHMENT_SUCCESS'
@@ -54,6 +55,13 @@ export const _startPreviewSuccess = (botId: number, previewUuid: string, session
   previewUuid,
   sessionId,
   accessToken,
+  errors: null
+})
+
+export const _startPreviewFailure = (botId : number, errors: any) : T.ChatAction => ({
+  type: START_PREVIEW_FAILURE,
+  botId,
+  errors
 })
 
 export const updatePreviewIfActive = () => (dispatch : T.Dispatch, getState : T.GetState) => {
@@ -86,7 +94,12 @@ export const startPreview = (bot: T.Bot) => (dispatch : T.Dispatch, getState : T
     .then((result) => {
       dispatch(_startPreviewSuccess(bot.id, result.preview_uuid, result.session_uuid, accessToken))
     })
-    .catch(() => dispatch(pushNotification('Bot preview failed')))
+    .catch((error) => {
+      dispatch(pushNotification('Bot preview failed'))
+      error.json().then((json_error) => {
+        dispatch(_startPreviewFailure(bot.id, json_error.result))
+      })
+    })
 }
 
 export const pausePreview = (bot : T.Bot) : T.ChatAction => ({

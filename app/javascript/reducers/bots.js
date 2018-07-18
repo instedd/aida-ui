@@ -82,7 +82,8 @@ const publishSuccess = (state, action) => {
       items: {
         ...state.items,
         ...{[botId]: {...bot, published: true}}
-      }
+      },
+      ...{errors: null}
     }
   } else {
     return state
