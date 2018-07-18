@@ -26,7 +26,8 @@ export const _botPublish = (botId : number) : T.BotAction => ({
 
 export const _botPublishSuccess = (botId : number) : T.BotAction => ({
   type: PUBLISH_SUCCESS,
-  botId
+  botId,
+  errors: null
 })
 
 export const _botPublishFailure = (botId : number, errors: any) : T.BotAction => ({

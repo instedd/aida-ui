@@ -19,6 +19,7 @@ export default (state : T.ChatState, action : T.ChatAction) : T.ChatState => {
   switch (action.type) {
     case actions.START_PREVIEW: return startPreview(state, action)
     case actions.START_PREVIEW_SUCCESS: return startPreviewSuccess(state, action)
+    case actions.START_PREVIEW_FAILURE: return startPreviewFailure(state, action)
     case actions.SEND_MESSAGE: return sendMessage(state, action)
     case actions.RECEIVE_MESSAGE: return receiveMessage(state, action)
     case actions.SEND_ATTACHMENT_SUCCESS: return attachmentSent(state, action)
@@ -68,10 +69,18 @@ const startPreviewSuccess = (state, action) => {
   } else {
     // if the bot to preview is the same as before,
     // better keep the messages
-    state = {...state, publishing: false, pausePreview: false, previewUuid, sessionId, accessToken}
+    state = {...state, publishing: false, pausePreview: false, previewUuid, sessionId, accessToken, ...{errors: null}}
   }
 
   return state
+}
+
+const startPreviewFailure = (state, action) => {
+  const errors = action.errors
+  return {
+    ...state,
+    ...{errors: errors}
+  }
 }
 
 const pausePreview = (state, action) => {

@@ -32,6 +32,6 @@ class PublishBot
     e.errors.each do |error|
       puts " - #{error}"
     end
-    nil
+    {status: :error, errors: BackendError.parse_errors(e.errors)}
   end
 end

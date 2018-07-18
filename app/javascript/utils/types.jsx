@@ -113,6 +113,10 @@ export type ChatAction = {
   sessionId: string,
   accessToken: string
 } | {
+  type: 'START_PREVIEW_FAILURE',
+  botId: number,
+  errors: any
+} | {
   type: 'PAUSE_PREVIEW',
   botId: number,
 } | {

@@ -42,14 +42,14 @@ class FrontDesk extends Component {
         </Headline>
 
         <Field id="fd-greeting" label="Greeting"
-               value={config.greeting} onChange={updateConfig('greeting')} error={this.props.errors.filter((e) => e.path.indexOf("greeting") > -1)} />
+               value={config.greeting} onChange={updateConfig('greeting')} error={this.props.errors.filter((e) => e.path[0].indexOf("greeting") > -1)} />
         <Field id="fd-introduction" label="Skills introduction"
                helpText="The usage explanation of each skill will be appended after this introduction"
                value={config.introduction} onChange={updateConfig('introduction')}
-               error={this.props.errors.filter((e) => e.path.indexOf("introduction") > -1)} />
+               error={this.props.errors.filter((e) => e.path[0].indexOf("introduction") > -1)} />
         <Field id="fd-not-understood" label="Didn't understand message"
                value={config.not_understood} onChange={updateConfig('not_understood')}
-               error={this.props.errors.filter((e) => e.path.indexOf("not_understood") > -1)} />
+               error={this.props.errors.filter((e) => e.path[0].indexOf("not_understood") > -1)} />
         <h4>
           Show when there is less than &nbsp;
           <TextField id="fd-threshold"
@@ -64,7 +64,7 @@ class FrontDesk extends Component {
         <Field id="fd-clarification" label="Clarification message"
                helpText="Clarification messages for each matching skill will be appended after this message"
                value={config.clarification} onChange={updateConfig('clarification')}
-               error={this.props.errors.filter((e) => e.path.indexOf("clarification") > -1)} />
+               error={this.props.errors.filter((e) => e.path[0].indexOf("clarification") > -1)} />
         <Field id="fd-unsubscribe-introduction" label="Unsubscribe introduction message"
                helpText="This message will be sent as the last message of the introduction to explain how to unsubscribe"
                value={config.unsubscribe_introduction_message} onChange={updateConfig('unsubscribe_introduction_message')}
@@ -88,7 +88,8 @@ const mapStateToProps = (state, {bot}) => {
       loaded: true,
       fetching: frontDesk.fetching,
       data: frontDesk.data || {},
-      errors: state.bots && state.bots.errors && state.bots.errors.filter((e) => e.path[0] == "front_desk") || []
+      errors: state.bots && state.bots.errors && state.bots.errors.filter((e) => e.path[0].startsWith("front_desk"))
+        || state.chat && state.chat.errors && state.chat.errors.filter((e) => e.path[0].startsWith("front_desk")) || []
     }
   } else {
     return {
