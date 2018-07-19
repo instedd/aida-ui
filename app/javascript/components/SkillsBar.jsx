@@ -123,14 +123,14 @@ class SkillsBar extends Component {
     const dialogVisible = !!dialogSkill
 
     const skillsItems = skills
-                      ? skills.map(skill => (
+                      ? skills.map((skill, index) => (
                         <SkillListItem skill={skill} key={skill.id} botId={bot.id}
                                        active={location.pathname == routes.botSkill(bot.id, skill.id)}
                                        onClick={() => history.push(routes.botSkill(bot.id, skill.id))}
                                        onToggleSkill={() => skillActions.toggleSkill(skill)}
                                        onRenameSkill={() => openDialog(skill)}
                                        onDeleteSkill={() => skillActions.deleteSkill(skill)}
-                                       hasError={this.props.errors.some((e) => e.path.indexOf(skill.id) > -1)} />
+                                       hasError={this.props.errors.some((e) => e.path.indexOf(`skills/${index}`) > -1)} />
                       ))
                       : [<SidebarItem key="loading"
                                    icon={skillIcon('LOADING')}

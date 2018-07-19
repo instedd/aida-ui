@@ -4,6 +4,8 @@ import omit from 'lodash/omit'
 
 import * as actions from '../actions/bots'
 import * as botActions from '../actions/bot'
+import * as skillsActions from '../actions/skills'
+import * as skillActions from '../actions/skill'
 
 const initialState = {
   fetching: false,
@@ -21,6 +23,8 @@ export default (state : T.BotsState, action : T.Action) : T.BotsState => {
     case botActions.PUBLISH_SUCCESS: return publishSuccess(state, action)
     case botActions.PUBLISH_FAILURE: return publishFailure(state, action)
     case botActions.UNPUBLISH_SUCCESS: return unpublishSuccess(state, action)
+    case skillsActions.REORDER: return clearErrors(state, action)
+    case skillActions.DELETE: return clearErrors(state, action)
     default: return state
   }
 }
@@ -73,6 +77,13 @@ const createSuccess = (state, action) => {
   }
 }
 
+const clearErrors = (state, action) => {
+  return {
+    ...state,
+    errors: null
+  }
+}
+
 const publishSuccess = (state, action) => {
   const {botId} = action
   const bot = state.items && state.items[botId.toString()]
@@ -83,7 +94,7 @@ const publishSuccess = (state, action) => {
         ...state.items,
         ...{[botId]: {...bot, published: true}}
       },
-      ...{errors: null}
+      errors: null
     }
   } else {
     return state
@@ -100,7 +111,7 @@ const publishFailure = (state, action) => {
       ...state.items,
       ...{[botId]: bot}
     },
-    ...{errors: errors}
+    errors: errors
   }
 }
 
