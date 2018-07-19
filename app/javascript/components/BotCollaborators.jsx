@@ -141,7 +141,7 @@ class CollaboratorsList extends Component {
       }
     }
     return (
-      <Listing items={items} title={title}>
+      <Listing items={items} title={title} className={'collaborators'}>
         <Column title="Email"         render={renderCollaboratorColumn(emailContent)} />
         <Column title="Publish"       render={renderCollaboratorColumn(roleContent('publish'))} />
         <Column title="Behaviour"     render={renderCollaboratorColumn(roleContent('behaviour'))} />

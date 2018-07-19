@@ -2,6 +2,12 @@
   color: $md-grey-500;
 }
 
+.collaborators {
+  td:last-child {
+    min-width: 65px;
+  }
+}
+
 .invitation-activity {
   white-space: nowrap;
   position: relative;
