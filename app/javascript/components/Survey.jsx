@@ -69,16 +69,19 @@ class Survey extends Component {
                       fullwidth={false}
                       value={date}
                       timeZone={getLocalTimezone()}
-                      onChange={(_, value) => updateConfig('schedule')(value)} />
+                      onChange={(_, value) => updateConfig('schedule')(value)}
+                      error={this.props.errors.filter((e) => e.path[0] == `skills/${skill.order}` && e.path[1] == "schedule")} />
           <TimePicker id="survey-time"
                       label="at"
                       inline
                       value={date}
-                      onChange={(_, value) => updateConfig('schedule')(value)} />
+                      onChange={(_, value) => updateConfig('schedule')(value)}
+                      error={this.props.errors.filter((e) => e.path[0] == `skills/${skill.order}` && e.path[1] == "schedule")} />
         </div>
 
         <Field id="survey-keywords" label="Valid keywords (comma separated)"
-          value={config.keywords} onChange={updateConfig('keywords')} />
+          value={config.keywords} onChange={updateConfig('keywords')}
+          error={this.props.errors.filter((e) => e.path[0] == `skills/${skill.order}` && e.path[1] == "keywords")} />
 
         <div className="file-upload-field">
           <label htmlFor="survey-xlsform-upload">Survey form</label>
@@ -90,7 +93,8 @@ class Survey extends Component {
                       allowDuplicates flat iconBefore
                       className={`file-upload-control ${formExtraClass}`}
                       onLoad={uploadFormFile}
-                      onSizeError={() => alert('File is too big. Maximum 1Mb allowed.')} />
+                      onSizeError={() => alert('File is too big. Maximum 1Mb allowed.')}
+                      error={this.props.errors.filter((e) => e.path[0] == `skills/${skill.order}` && e.path[1] == "questions")} />
           <p>
             Aida supports XLSForms, you can design your survey using any of&nbsp;
             <a href="http://xlsform.org/#xlsform-tools" className="hrefLink">these tools</a>
@@ -102,7 +106,9 @@ class Survey extends Component {
 }
 
 const mapStateToProps = (state, {skill}) => ({
-  uploadStatus: state.xlsForms.uploadStatus[skill.id] || { uploading: false }
+  uploadStatus: state.xlsForms.uploadStatus[skill.id] || { uploading: false },
+  errors: state.bots && state.bots.errors && state.bots.errors.filter((e) => e.path[0].startsWith("skills"))
+    || state.chat && state.chat.errors && state.chat.errors.filter((e) => e.path[0].startsWith("skills")) || []
 })
 
 const mapDispatchToProps = (dispatch) => ({
