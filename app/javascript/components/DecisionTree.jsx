@@ -4,6 +4,7 @@ import Title from '../ui/Title'
 import Headline from '../ui/Headline'
 import Field from '../ui/Field'
 import uuidv4 from 'uuid/v4'
+import { connect } from 'react-redux'
 
 import {
   Button,
@@ -13,7 +14,7 @@ import {
 
 import RelevanceField from './RelevanceField'
 
-export default class DecisionTree extends Component {
+class DecisionTree extends Component {
 
   render() {
     const { skill, actions } = this.props
@@ -41,17 +42,29 @@ export default class DecisionTree extends Component {
         <RelevanceField value={config.relevant} onChange={updateConfig('relevant')} />
 
         <Field id="tree-explanation" label="Skill explanation"
-               value={config.explanation} onChange={updateConfig('explanation')} />
+               value={config.explanation} onChange={updateConfig('explanation')}
+               error={this.props.errors.filter((e) => e.path[0] == `skills/${skill.order}` && e.path[1] == "explanation/en")} />
         <Field id="tree-clarification" label="Skill clarification"
-               value={config.clarification} onChange={updateConfig('clarification')} />
+               value={config.clarification} onChange={updateConfig('clarification')}
+               error={this.props.errors.filter((e) => e.path[0] == `skills/${skill.order}` && e.path[1] == "clarification/en")} />
         <Field id="tree-clarification" label="Valid keywords (comma separated)"
-          value={config.keywords} onChange={updateConfig('keywords')} />
+          value={config.keywords} onChange={updateConfig('keywords')}
+          error={this.props.errors.filter((e) => e.path[0] == `skills/${skill.order}` && e.path[1] == "keywords/en")} />
         <DecisionTreeComponent tree={config.tree} onChange={updateConfig('tree')} />
       </div>
     )
   }
 }
 
+const mapStateToProps = (state, {skill}) => ({
+  errors: state.bots && state.bots.errors && state.bots.errors.filter((e) => e.path[0].startsWith("skills"))
+    || state.chat && state.chat.errors && state.chat.errors.filter((e) => e.path[0].startsWith("skills")) || []
+})
+
+const mapDispatchToProps = (dispatch) => ({
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(DecisionTree)
 class DecisionTreeComponent extends Component {
 
   constructor(props) {

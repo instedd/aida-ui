@@ -24,6 +24,7 @@ export default (state : T.BotsState, action : T.Action) : T.BotsState => {
     case botActions.PUBLISH_FAILURE: return publishFailure(state, action)
     case botActions.UNPUBLISH_SUCCESS: return unpublishSuccess(state, action)
     case skillsActions.REORDER: return clearErrors(state, action)
+    case skillsActions.CREATE_SUCCESS: return clearErrors(state, action)
     case skillActions.DELETE: return clearErrors(state, action)
     default: return state
   }

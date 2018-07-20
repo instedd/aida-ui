@@ -138,7 +138,7 @@ class SkillsBar extends Component {
 
     let missingSkill = ""
     if(this.props.errors.some((e) => e.path.indexOf("skills") > -1)) {
-      missingSkill = (<ListItem className="missing-skill" primaryText="There needs to be at least one skill" />)
+      missingSkill = (<ListItem className="missing-skill" primaryText={this.props.errors.filter((e) => e.path.indexOf("skills") > -1)[0].message} />)
     }
 
     const skillKindItems = SKILL_KINDS.map(kind => ({
