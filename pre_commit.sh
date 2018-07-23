@@ -3,6 +3,10 @@ NC='\033[0m'
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 
+echo "${GREEN}----==== Updating flow schema ====----${NC}"
+docker-compose run --rm ui ./bin/yarn expand-schema
+echo "${GREEN}----==== Schema updated, don't forget to commit it ====----${NC}"
+
 echo "${GREEN}----==== Running RSpec ====----${NC}"
 docker-compose run --rm ui rspec
 RSPEC=$?
