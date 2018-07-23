@@ -10,6 +10,7 @@ import * as routes from '../utils/routes'
 import * as actions from '../actions/skill'
 
 import KeywordResponder from './KeywordResponder'
+import HumanOverride from './HumanOverride'
 import LanguageDetector from './LanguageDetector'
 import Survey from './Survey'
 import ScheduledMessages from './ScheduledMessages'
@@ -21,6 +22,8 @@ const SkillComponent = ({skill, actions}) => {
   switch (kind) {
     case 'keyword_responder':
       return (<KeywordResponder skill={skill} actions={actions} />)
+    case 'human_override':
+      return (<HumanOverride skill={skill} actions={actions} />)
     case 'language_detector':
       return (<LanguageDetector skill={skill} actions={actions} />)
     case 'survey':

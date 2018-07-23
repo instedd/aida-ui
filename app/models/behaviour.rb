@@ -3,7 +3,7 @@ class Behaviour < ApplicationRecord
 
   has_many :translations, dependent: :destroy
 
-  validates :kind, inclusion: { in: %w(front_desk language_detector keyword_responder survey scheduled_messages decision_tree) }
+  validates :kind, inclusion: { in: %w(front_desk language_detector keyword_responder survey scheduled_messages decision_tree human_override) }
 
   validate :config_must_match_schema
 
@@ -67,6 +67,18 @@ class Behaviour < ApplicationRecord
                            "response" => ""
                          }
                        }
+                     when "human_override"
+                        {
+                          kind: "human_override",
+                          name: "Human override",
+                          config: {
+                            "explanation" => "",
+                            "clarification" => "",
+                            "keywords" => "",
+                            "in_hours_response" => "",
+                            "off_hours_response" => ""
+                          }
+                        }
                      when "survey"
                        {
                          kind: "survey",
@@ -139,6 +151,21 @@ class Behaviour < ApplicationRecord
         explanation: localized_value(:explanation),
         clarification: localized_value(:clarification),
         response: localized_value(:response),
+        keywords: localized_value(:keywords) do |keywords|
+          keywords.split(/,\s*/)
+        end
+      }.tap do |manifest_fragment|
+        manifest_fragment[:relevant] = config["relevant"] if config["relevant"].present?
+      end
+    when "human_override"
+      {
+        type: kind,
+        id: id.to_s,
+        name: name,
+        explanation: localized_value(:explanation),
+        clarification: localized_value(:clarification),
+        in_hours_response: localized_value(:in_hours_response),
+        off_hours_response: localized_value(:off_hours_response),
         keywords: localized_value(:keywords) do |keywords|
           keywords.split(/,\s*/)
         end
@@ -280,6 +307,14 @@ class Behaviour < ApplicationRecord
         translation_key("explanation",   "Skill explanation"),
         translation_key("clarification", "Clarification message"),
         translation_key("response",      "Response message"),
+        translation_key("keywords",      "Valid keywords (comma separated)")
+      ]
+    when "human_override"
+      [
+        translation_key("explanation",   "Skill explanation"),
+        translation_key("clarification", "Clarification message"),
+        translation_key("in_hours_response",      "Within schedule message"),
+        translation_key("off_hours_response",      "Outside schedule message"),
         translation_key("keywords",      "Valid keywords (comma separated)")
       ]
     when "language_detector"
@@ -437,6 +472,8 @@ class Behaviour < ApplicationRecord
       "#/definitions/languageDetectorConfig"
     when "keyword_responder"
       "#/definitions/keywordResponderConfig"
+    when "human_override"
+      "#/definitions/humanOverrideConfig"
     when "survey"
       "#/definitions/surveyConfig"
     when "scheduled_messages"

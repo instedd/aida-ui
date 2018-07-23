@@ -113,6 +113,20 @@
       "required": [ "explanation", "clarification", "keywords", "response" ]
     },
 
+    "humanOverrideConfig": {
+      "type": "object",
+      "properties": {
+        "relevant": { "type": "string" },
+        "explanation": { "$ref": "#/definitions/message" },
+        "clarification": { "$ref": "#/definitions/message" },
+        "keywords": { "$ref": "#/definitions/keywordList" },
+        "in_hours_response": { "$ref": "#/definitions/message" },
+        "off_hours_response": { "$ref": "#/definitions/message" }
+      },
+      "additionalProperties": false,
+      "required": [ "explanation", "clarification", "keywords", "in_hours_response", "off_hours_response" ]
+    },
+
     "surveyConfig": {
       "type": "object",
       "properties": {
@@ -431,6 +445,18 @@
           "type": "object",
           "properties": {
             "id": { "type": "integer" },
+            "kind": { "enum": [ "human_override" ] },
+            "name": { "type": "string" },
+            "enabled": { "type": "boolean" },
+            "order": { "type": "integer" },
+            "config": { "$ref": "#/definitions/humanOverrideConfig" }
+          },
+          "required": [ "id", "kind", "name", "enabled", "order", "config" ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer" },
             "kind": { "enum": [ "survey" ] },
             "name": { "type": "string" },
             "enabled": { "type": "boolean" },
@@ -486,6 +512,7 @@
               "label": { "type": "string" },
               "kind": { "enum": [
                 "keyword_responder",
+                "human_override",
                 "survey",
                 "scheduled_messages",
                 "front_desk",

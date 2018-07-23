@@ -6,7 +6,7 @@ import Field from '../ui/Field'
 
 import RelevanceField from './RelevanceField'
 
-export default class KeywordResponder extends Component {
+export default class HumanOverride extends Component {
   render() {
     const { skill, actions } = this.props
     const { name, config } = skill
@@ -25,10 +25,10 @@ export default class KeywordResponder extends Component {
 
     return (
       <div>
-        <Title>Keyword responder</Title>
+        <Title>Human override</Title>
         <Headline>
-          When a message sent by the user contains one of the keywords, this
-          skill responds with the predefined message
+          When a message contains one of the keywords, this skill will forward
+          the conversation to a human operator
         </Headline>
 
         <RelevanceField value={config.relevant} onChange={updateConfig('relevant')} />
@@ -39,8 +39,10 @@ export default class KeywordResponder extends Component {
                value={config.clarification} onChange={updateConfig('clarification')} />
         <Field id="kr-keywords" label="Valid keywords (comma separated)"
                value={config.keywords} onChange={updateConfig('keywords')} />
-        <Field id="kr-response" label="Message"
-               value={config.response} onChange={updateConfig('response')} />
+        <Field id="kr-in-hours-response" label="Within schedule message"
+               value={config.response} onChange={updateConfig('in_hours_response')} />
+        <Field id="kr-off-hours-response" label="Outside schedule message"
+               value={config.response} onChange={updateConfig('off_hours_response')} />
       </div>
     )
   }

@@ -25,8 +25,8 @@ import { skillIcon } from '../utils/skills_bar'
 import * as actions from '../actions/skills'
 import * as skillActions from '../actions/skill'
 
-const SKILL_KINDS = ['language_detector', 'keyword_responder', 'survey', 'scheduled_messages', 'decision_tree']
-const RENAMEABLE_SKILLS = ['keyword_responder', 'survey', 'scheduled_messages', 'decision_tree']
+const SKILL_KINDS = ['language_detector', 'keyword_responder', 'survey', 'scheduled_messages', 'decision_tree', 'human_override']
+const RENAMEABLE_SKILLS = ['keyword_responder', 'survey', 'scheduled_messages', 'decision_tree', 'human_override']
 
 const defaultSkillName = (kind) => {
   switch (kind) {
@@ -34,6 +34,8 @@ const defaultSkillName = (kind) => {
       return 'Language detector'
     case 'keyword_responder':
       return 'Keyword responder'
+    case 'human_override':
+      return 'Human override'
     case 'survey':
       return 'Survey'
     case 'scheduled_messages':
@@ -47,6 +49,8 @@ const skillDescription = (kind) => {
   switch (kind) {
     case 'keyword_responder':
       return 'This skill will let your users query for information using simple keywords'
+    case 'human_override':
+      return 'This skill will let your users contact operators using simple keywords'
     case 'survey':
       return 'This skill will let you examine users opinions'
     case 'scheduled_messages':

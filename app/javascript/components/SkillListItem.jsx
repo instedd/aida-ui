@@ -9,7 +9,7 @@ import { bindActionCreators } from 'redux'
 import * as actions from '../actions/skills'
 import sortBy from 'lodash/sortBy'
 
-const RENAMEABLE_SKILLS = ['keyword_responder', 'survey', 'scheduled_messages', 'decision_tree']
+const RENAMEABLE_SKILLS = ['keyword_responder', 'survey', 'scheduled_messages', 'decision_tree', 'human_override']
 const isSkillRenameable = (kind) => includes(RENAMEABLE_SKILLS, kind)
 
 const skillItemSource = {

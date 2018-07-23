@@ -33,10 +33,10 @@ export type FrontDeskConfig = {
   introduction: Message;
   not_understood: Message;
   clarification: Message;
-  threshold: number;
   unsubscribe_introduction_message: Message;
   unsubscribe_keywords: KeywordList;
   unsubscribe_acknowledge_message: Message;
+  threshold: number;
 };
 
 export type LanguageDetectorConfig = {
@@ -54,6 +54,15 @@ export type KeywordResponderConfig = {
   clarification: Message;
   keywords: KeywordList;
   response: Message;
+};
+
+export type HumanOverrideConfig = {
+  relevant?: string;
+  explanation: Message;
+  clarification: Message;
+  keywords: KeywordList;
+  in_hours_response: Message;
+  off_hours_response: Message;
 };
 
 export type SurveyConfig = {
@@ -198,6 +207,13 @@ export type Skill = {
   config: KeywordResponderConfig;
 } | {
   id: number;
+  kind: "human_override";
+  name: string;
+  enabled: boolean;
+  order: number;
+  config: HumanOverrideConfig;
+} | {
+  id: number;
   kind: "survey";
   name: string;
   enabled: boolean;
@@ -226,7 +242,7 @@ export type BotStats = {
   behaviours: Array<{
     id: "front_desk" | "language_detector" | number;
     label: string;
-    kind: "keyword_responder" | "survey" | "scheduled_messages" | "front_desk" | "language_detector";
+    kind: "keyword_responder" | "human_override" | "survey" | "scheduled_messages" | "front_desk" | "language_detector";
     users: number;
   }>;
 };
@@ -337,3 +353,4 @@ export type EncryptedKeyPair = {
   public_key: string;
   encrypted_secret_key: string;
 };
+

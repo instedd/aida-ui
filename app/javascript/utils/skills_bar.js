@@ -6,6 +6,8 @@ export const skillIcon = (kind) => {
       return 'language'
     case 'keyword_responder':
       return 'reply'
+    case 'human_override':
+      return 'person'
     case 'survey':
       return 'assignment_turned_in'
     case 'scheduled_messages':
