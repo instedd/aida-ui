@@ -46,14 +46,14 @@ class BotChannelComponent extends Component {
 
     if (channelFacebook || channelWebsocket) {
       let setupFields = <div>
-        <Field label="Page ID" value={channelFacebook.config.page_id} onChange={this.updateConfigField("page_id", "facebook")} helpText="The Page ID under the More info section on your Facebook Page's About tab" error={this.props.errors.filter((e) => e.path[1] == "page_id")} />
-        <Field label="Access Token" value={channelFacebook.config.access_token} onChange={this.updateConfigField("access_token", "facebook")} helpText="The Page Access Token you get on the Token Generation section of the Messenger > Settings tab of your Facebook Application" error={this.props.errors.filter((e) => e.path[1] == "access_token")} />
+        <Field label="Page ID" value={channelFacebook.config.page_id} onChange={this.updateConfigField("page_id", "facebook")} helpText="The Page ID under the More info section on your Facebook Page's About tab" error={this.props.errors.filter((e) => e.path[0] == "channels/0" && e.path[1] == "page_id")} />
+        <Field label="Access Token" value={channelFacebook.config.access_token} onChange={this.updateConfigField("access_token", "facebook")} helpText="The Page Access Token you get on the Token Generation section of the Messenger > Settings tab of your Facebook Application" error={this.props.errors.filter((e) => e.path[0] == "channels/0" && e.path[1] == "access_token")} />
       </div>
 
       let websocketSetup =  <div><br />
           <Title>Setup a websocket channel</Title>
           <Headline>If you don't need an extra websocket channel, leave this section empty</Headline>
-          <Field label="Access Token" value={channelWebsocket.config.access_token} onChange={this.updateConfigField("access_token", "websocket")} />
+          <Field label="Access Token" value={channelWebsocket.config.access_token} onChange={this.updateConfigField("access_token", "websocket")} error={this.props.errors.filter((e) => e.path[0] == "channels/1" && e.path[1] == "access_token")} />
         </div>
 
       if (bot.published) {
@@ -65,7 +65,7 @@ class BotChannelComponent extends Component {
             </Headline>
 
             <Field label="Callback URL" defaultValue={`${location.protocol}//${location.host}/callback/facebook/`} readOnly />
-            <Field label="Verify Token" value={channelFacebook.config.verify_token} onChange={this.updateConfigField("verify_token", "facebook")} />
+            <Field label="Verify Token" value={channelFacebook.config.verify_token} onChange={this.updateConfigField("verify_token", "facebook")}  error={this.props.errors.filter((e) => e.path[0] == "channels/0" && e.path[1] == "verify_token")} />
             { /* TODO: replace `<br /><br />` with proper CSS spacing */ }
             <br /><br />
             <Title>Facebook channel configuration</Title>
