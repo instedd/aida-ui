@@ -6,10 +6,11 @@ import Field from '../ui/Field'
 import { connect } from 'react-redux'
 
 import RelevanceField from './RelevanceField'
+import sortBy from 'lodash/sortBy'
 
 class KeywordResponder extends Component {
   render() {
-    const { skill, actions } = this.props
+    const { skill, actions, index } = this.props
     const { name, config } = skill
 
     const updateConfig = (key) => {
@@ -36,29 +37,26 @@ class KeywordResponder extends Component {
 
         <Field id="kr-explanation" label="Skill explanation"
                value={config.explanation} onChange={updateConfig('explanation')}
-               error={this.props.errors.filter((e) => e.path[0] == `skills/${skill.order}` && e.path[1] == "explanation/en")} />
+               error={this.props.errors.filter((e) => e.path[0] == `skills/${index}` && e.path[1] == "explanation/en")} />
         <Field id="kr-clarification" label="Skill clarification"
                value={config.clarification} onChange={updateConfig('clarification')}
-               error={this.props.errors.filter((e) => `skills/${skill.order}` && e.path[1] == "clarification/en")} />
+               error={this.props.errors.filter((e) => e.path[0] == `skills/${index}` && e.path[1] == "clarification/en")} />
         <Field id="kr-keywords" label="Valid keywords (comma separated)"
                value={config.keywords} onChange={updateConfig('keywords')}
-               error={this.props.errors.filter((e) => `skills/${skill.order}` && e.path[1] == "keywords/en")} />
+               error={this.props.errors.filter((e) => e.path[0] == `skills/${index}` && e.path[1] == "keywords/en")} />
         <Field id="kr-response" label="Message"
                value={config.response} onChange={updateConfig('response')}
-               error={this.props.errors.filter((e) => `skills/${skill.order}` && e.path[1] == "response/en")} />
+               error={this.props.errors.filter((e) => e.path[0] == `skills/${index}` && e.path[1] == "response/en")} />
       </div>
     )
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, {skill}) => {
   return {
-    errors: state.bots && state.bots.errors && state.bots.errors.filter((e) => e.path[0].startsWith("skills"))
-      || state.chat && state.chat.errors && state.chat.errors.filter((e) => e.path[0].startsWith("skills")) || []
+    errors: state.bots && state.bots.errors && state.bots.errors.filter((e) => e.path[0].startsWith("skills")) || [],
+    index: sortBy(Object.values(state.skills.items), 'order').findIndex(s => s.id == skill.id)
   }
 }
 
-const mapDispatchToProps = (dispatch) => ({
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(KeywordResponder)
+export default connect(mapStateToProps)(KeywordResponder)

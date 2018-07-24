@@ -42,9 +42,9 @@ class BackendError < HTTParty::ResponseError
   def self.parse_skill_error(error)
     parsed_errors = []
 
-    if error.to_s == "{\"path\"=>\"#/skills\", \"error\"=>{\"expected\"=>1, \"actual\"=>0}}"
+    if error == {'path' => '#/skills', 'error' => {'expected' => 1, 'actual' => 0}}
       parsed_errors = [{:message=>"There needs to be at least one skill", :path=>["skills"]}]
-    elsif error.to_s == "{\"path\"=>[\"#/skills/1\", \"#/skills/0\"], \"message\"=>\"Duplicated skills (language_detector)\"}"
+    elsif error == {'path' => ['#/skills/1', '#/skills/0'], 'message' => 'Duplicated skills (language_detector)'}
       parsed_errors = [{:message=>"Language detector is duplicated", :path=>["skills", "skills/1", "skills/0"]}]
     else
       parsed_errors = parse_invalid_error(error)
@@ -86,7 +86,7 @@ class BackendError < HTTParty::ResponseError
 
   def self.get_message(error)
     message = ''
-    message = 'required' if /\"error\"=>{\"expected\"=>1, \"actual\"=>0}}/ =~ error.to_s
+    message = 'required' if error['error'] == {'expected' => 1, 'actual' => 0}
     message
   end
 end

@@ -65,7 +65,7 @@ class BotChannelComponent extends Component {
             </Headline>
 
             <Field label="Callback URL" defaultValue={`${location.protocol}//${location.host}/callback/facebook/`} readOnly />
-            <Field label="Verify Token" value={channelFacebook.config.verify_token} onChange={this.updateConfigField("verify_token", "facebook")}  error={this.props.errors.filter((e) => e.path[0] == "channels/0" && e.path[1] == "verify_token")} />
+            <Field label="Verify Token" value={channelFacebook.config.verify_token} onChange={this.updateConfigField("verify_token", "facebook")} error={this.props.errors.filter((e) => e.path[0] == "channels/0" && e.path[1] == "verify_token")} />
             { /* TODO: replace `<br /><br />` with proper CSS spacing */ }
             <br /><br />
             <Title>Facebook channel configuration</Title>
@@ -122,8 +122,7 @@ const mapStateToProps = (state, {bot}) => {
     channelLoaded: channelLoaded,
     channelFacebook: channelFacebook,
     channelWebsocket: channelWebsocket,
-    errors: state.bots && state.bots.errors && state.bots.errors.filter((e) => e.path[0].startsWith("channel"))
-      || state.chat && state.chat.errors && state.chat.errors.filter((e) => e.path[0].startsWith("channel")) || []
+    errors: state.bots && state.bots.errors && state.bots.errors.filter((e) => e.path[0].startsWith("channel")) || []
   }
 }
 

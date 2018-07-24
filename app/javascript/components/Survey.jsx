@@ -11,10 +11,11 @@ import Headline from '../ui/Headline'
 import { getLocalTimezone } from '../utils'
 
 import RelevanceField from './RelevanceField'
+import sortBy from 'lodash/sortBy'
 
 class Survey extends Component {
   render() {
-    const { uploadStatus, skill, actions, xlsFormsActions } = this.props
+    const { uploadStatus, skill, actions, xlsFormsActions, index } = this.props
     const { uploading, error: uploadError } = uploadStatus
     const { name, config } = skill
 
@@ -38,14 +39,23 @@ class Survey extends Component {
     const surveyLoaded = config.questions.length > 0
     let formLabel, formIcon, formExtraClass
 
+    let auxUploadError
+
+    if(this.props.errors.some((e) => e.path[0] == `skills/${index}` && e.path[1] == "questions")) {
+      auxUploadError = this.props.errors.filter((e) => e.path[0] == `skills/${index}` && e.path[1] == "questions")[0].message
+    }
+    else {
+      auxUploadError = uploadError
+    }
+
     if (uploading) {
       formLabel = "Uploading form"
       formIcon = (<FontIcon>hourglass_empty</FontIcon>)
     } else if (surveyLoaded) {
       formLabel = config.questions.length == 1 ? '1 question' : `${config.questions.length} questions`
       formIcon = (<FontIcon>check</FontIcon>)
-    } else if (uploadError) {
-      formLabel = `Error in uploaded form: ${uploadError}`
+    } else if (auxUploadError) {
+      formLabel = `Error in uploaded form: ${auxUploadError}`
       formIcon = (<FontIcon>close</FontIcon>)
       formExtraClass = 'upload-error'
     } else {
@@ -70,18 +80,18 @@ class Survey extends Component {
                       value={date}
                       timeZone={getLocalTimezone()}
                       onChange={(_, value) => updateConfig('schedule')(value)}
-                      error={this.props.errors.filter((e) => e.path[0] == `skills/${skill.order}` && e.path[1] == "schedule")} />
+                      error={this.props.errors.some((e) => e.path[0] == `skills/${index}` && e.path[1] == "schedule")} />
           <TimePicker id="survey-time"
                       label="at"
                       inline
                       value={date}
                       onChange={(_, value) => updateConfig('schedule')(value)}
-                      error={this.props.errors.filter((e) => e.path[0] == `skills/${skill.order}` && e.path[1] == "schedule")} />
+                      error={this.props.errors.some((e) => e.path[0] == `skills/${index}` && e.path[1] == "schedule")} />
         </div>
 
         <Field id="survey-keywords" label="Valid keywords (comma separated)"
           value={config.keywords} onChange={updateConfig('keywords')}
-          error={this.props.errors.filter((e) => e.path[0] == `skills/${skill.order}` && e.path[1] == "keywords")} />
+          error={this.props.errors.filter((e) => e.path[0] == `skills/${index}` && e.path[1] == "keywords")} />
 
         <div className="file-upload-field">
           <label htmlFor="survey-xlsform-upload">Survey form</label>
@@ -93,8 +103,7 @@ class Survey extends Component {
                       allowDuplicates flat iconBefore
                       className={`file-upload-control ${formExtraClass}`}
                       onLoad={uploadFormFile}
-                      onSizeError={() => alert('File is too big. Maximum 1Mb allowed.')}
-                      error={this.props.errors.filter((e) => e.path[0] == `skills/${skill.order}` && e.path[1] == "questions")} />
+                      onSizeError={() => alert('File is too big. Maximum 1Mb allowed.')} />
           <p>
             Aida supports XLSForms, you can design your survey using any of&nbsp;
             <a href="http://xlsform.org/#xlsform-tools" className="hrefLink">these tools</a>
@@ -107,8 +116,8 @@ class Survey extends Component {
 
 const mapStateToProps = (state, {skill}) => ({
   uploadStatus: state.xlsForms.uploadStatus[skill.id] || { uploading: false },
-  errors: state.bots && state.bots.errors && state.bots.errors.filter((e) => e.path[0].startsWith("skills"))
-    || state.chat && state.chat.errors && state.chat.errors.filter((e) => e.path[0].startsWith("skills")) || []
+  errors: state.bots && state.bots.errors && state.bots.errors.filter((e) => e.path[0].startsWith("skills")) || [],
+  index: sortBy(Object.values(state.skills.items), 'order').findIndex(s => s.id == skill.id)
 })
 
 const mapDispatchToProps = (dispatch) => ({
