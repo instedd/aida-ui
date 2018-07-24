@@ -16,34 +16,53 @@ class BackendError < HTTParty::ResponseError
   end
 
   def self.parse_errors(errors)
-    skills_errors = errors.select{ |error| error['path'][2..7] == 'skills' }
-    other_errors = errors - skills_errors
+    skill_errors = errors.select{ |error| error['path'][2..7] == 'skills' || (error['path'].is_a?(Array) && error['path'].any? {|path| path[2..7] == 'skills'}) }
+    channel_errors = errors.select{ |error| error['path'][2..9] == 'channels' || (error['path'].is_a?(Array) && error['path'].any? {|path| path[2..9] == 'channels'}) }
+
+    other_errors = errors - skill_errors
+    other_errors -= channel_errors
     out_errors = []
 
-    skills_errors.each do |error|
-      out_errors.concat(parse_skill_invalid_error(error))
+    channel_errors.each do |error|
+      out_errors.concat(parse_invalid_error(error))
+    end
+
+    skill_errors.each do |error|
+      out_errors.concat(parse_skill_error(error))
     end
 
     out_errors.concat(other_errors.map do |error|
-      if %r{"path"=>"#/\w+[/\w]*"} =~ error.to_s
-        matches = error.to_s.scan(%r{"path"=>"#/(\w+[/\w]*)"})
-        {message: get_message(error), path: matches.map {|match| match[0]}}
-      end
+        parse_error(error)
     end)
 
   end
 
-  def self.parse_skill_invalid_error(error)
+  private_class_method
+
+  def self.parse_skill_error(error)
     parsed_errors = []
 
     if error.to_s == "{\"path\"=>\"#/skills\", \"error\"=>{\"expected\"=>1, \"actual\"=>0}}"
       parsed_errors = [{:message=>"There needs to be at least one skill", :path=>["skills"]}]
+    elsif error.to_s == "{\"path\"=>[\"#/skills/1\", \"#/skills/0\"], \"message\"=>\"Duplicated skills (language_detector)\"}"
+      parsed_errors = [{:message=>"Language detector is duplicated", :path=>["skills", "skills/1", "skills/0"]}]
     else
-      skill_path = error['path'][2..-1]
-      skill_invalid_errors = error['error']['invalid']
-      skill_invalid_errors = skill_invalid_errors.select{ |error| include_invalid_error(error) }
-      parsed_errors = skill_invalid_errors[0]['errors'].map {|error| get_skill_error(skill_path, error)} if skill_invalid_errors.any?
+      parsed_errors = parse_invalid_error(error)
     end
+    parsed_errors
+  end
+
+  def self.parse_invalid_error(error)
+    parsed_errors = []
+
+    parent_path = error['path'][2..-1]
+    invalid_errors = error['error']['invalid']
+    invalid_errors = invalid_errors.select{ |error| include_invalid_error(error) }
+
+    invalid_errors.each do |error|
+      parsed_errors.concat(error['errors'].map {|error| parse_child_error(parent_path, error)})
+    end
+
     parsed_errors
   end
 
@@ -51,10 +70,17 @@ class BackendError < HTTParty::ResponseError
     error['errors'].all? { |sub_error| ['#/type', '#'].exclude?(sub_error['path']) }
   end
 
-  def self.get_skill_error(skill_path, error)
+  def self.parse_child_error(parent_path, error)
     {
       message: get_message(error),
-      path: [skill_path, error['path'][2..-1]]
+      path: [parent_path, error['path'][2..-1]]
+    }
+  end
+
+  def self.parse_error(error)
+    {
+      message: get_message(error),
+      path: [error['path'][2..-1]]
     }
   end
 
@@ -63,6 +89,4 @@ class BackendError < HTTParty::ResponseError
     message = 'required' if /\"error\"=>{\"expected\"=>1, \"actual\"=>0}}/ =~ error.to_s
     message
   end
-
-  private_class_method :method
 end

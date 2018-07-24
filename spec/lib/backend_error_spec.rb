@@ -598,6 +598,13 @@ RSpec.describe BackendError, :type => :helper do
       errors_out = [{:message=>"There needs to be at least one skill", :path=>["skills"]}]
       expect(BackendError.parse_errors(errors_in)).to eq(errors_out)
     end
+
+    it "returns errors when language detector is duplicated" do
+      errors_in = [{"path"=>["#/skills/1", "#/skills/0"], "message"=>"Duplicated skills (language_detector)"}]
+      errors_out = [{:message=>"Language detector is duplicated", :path=>["skills", "skills/1", "skills/0"]}]
+      expect(BackendError.parse_errors(errors_in)).to eq(errors_out)
+    end
+
   end
 
   describe "front desk errors" do
@@ -652,4 +659,48 @@ RSpec.describe BackendError, :type => :helper do
       expect(BackendError.parse_errors(errors_in)).to eq(errors_out)
     end
   end
+
+  describe "channel errors" do
+    it "returns errors" do
+      errors_in =
+      [{
+        "path" => "#/channels/0",
+        "error" => {
+          "valid_indices" => [], "invalid" => [{
+            "index" => 0,
+            "errors" => [{
+              "path" => "#/access_token",
+              "error" => {
+                "expected" => 1, "actual" => 0
+              }
+            }, {
+              "path" => "#/page_id",
+              "error" => {
+                "expected" => 1, "actual" => 0
+              }
+            }, {
+              "path" => "#/verify_token",
+              "error" => {
+                "expected" => 1, "actual" => 0
+              }
+            }]
+          }, {
+            "index" => 1,
+            "errors" => [{
+              "path" => "#/access_token",
+              "error" => {
+                "expected" => 1, "actual" => 0
+              }
+            }, {
+              "path" => "#/type",
+              "error" => {}
+            }]
+          }]
+        }
+      }]
+      errors_out = [{:message=>"required", :path=>["channels/0", "access_token"]}, {:message=>"required", :path=>["channels/0", "page_id"]}, {:message=>"required", :path=>["channels/0", "verify_token"]}]
+      expect(BackendError.parse_errors(errors_in)).to eq(errors_out)
+    end
+  end
+
 end
