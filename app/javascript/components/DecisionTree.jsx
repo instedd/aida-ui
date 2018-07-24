@@ -13,11 +13,12 @@ import {
 } from 'react-md'
 
 import RelevanceField from './RelevanceField'
+import sortBy from 'lodash/sortBy'
 
 class DecisionTree extends Component {
 
   render() {
-    const { skill, actions } = this.props
+    const { skill, actions, index } = this.props
     const { name, config } = skill
 
     const updateConfig = (key) => {
@@ -43,13 +44,13 @@ class DecisionTree extends Component {
 
         <Field id="tree-explanation" label="Skill explanation"
                value={config.explanation} onChange={updateConfig('explanation')}
-               error={this.props.errors.filter((e) => e.path[0] == `skills/${skill.order}` && e.path[1] == "explanation/en")} />
+               error={this.props.errors.filter((e) => e.path[0] == `skills/${index}` && e.path[1] == "explanation/en")} />
         <Field id="tree-clarification" label="Skill clarification"
                value={config.clarification} onChange={updateConfig('clarification')}
-               error={this.props.errors.filter((e) => e.path[0] == `skills/${skill.order}` && e.path[1] == "clarification/en")} />
+               error={this.props.errors.filter((e) => e.path[0] == `skills/${index}` && e.path[1] == "clarification/en")} />
         <Field id="tree-clarification" label="Valid keywords (comma separated)"
           value={config.keywords} onChange={updateConfig('keywords')}
-          error={this.props.errors.filter((e) => e.path[0] == `skills/${skill.order}` && e.path[1] == "keywords/en")} />
+          error={this.props.errors.filter((e) => e.path[0] == `skills/${index}` && e.path[1] == "keywords/en")} />
         <DecisionTreeComponent tree={config.tree} onChange={updateConfig('tree')} />
       </div>
     )
@@ -57,14 +58,11 @@ class DecisionTree extends Component {
 }
 
 const mapStateToProps = (state, {skill}) => ({
-  errors: state.bots && state.bots.errors && state.bots.errors.filter((e) => e.path[0].startsWith("skills"))
-    || state.chat && state.chat.errors && state.chat.errors.filter((e) => e.path[0].startsWith("skills")) || []
+  errors: state.bots && state.bots.errors && state.bots.errors.filter((e) => e.path[0].startsWith("skills")) || [],
+  index: sortBy(Object.values(state.skills.items), 'order').findIndex(s => s.id == skill.id)
 })
 
-const mapDispatchToProps = (dispatch) => ({
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(DecisionTree)
+export default connect(mapStateToProps)(DecisionTree)
 class DecisionTreeComponent extends Component {
 
   constructor(props) {

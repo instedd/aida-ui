@@ -213,7 +213,7 @@ const mapStateToProps = (state, {bot}) => {
     return {
       skills: sortBy(Object.values(items), 'order'),
       creating,
-      errors: state.bots.errors || state.chat.errors || []
+      errors: state.bots.errors || []
     }
   } else {
     return { skills: null, errors: [] }

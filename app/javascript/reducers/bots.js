@@ -6,6 +6,7 @@ import * as actions from '../actions/bots'
 import * as botActions from '../actions/bot'
 import * as skillsActions from '../actions/skills'
 import * as skillActions from '../actions/skill'
+import * as chatActions from '../actions/chat'
 
 const initialState = {
   fetching: false,
@@ -21,10 +22,12 @@ export default (state : T.BotsState, action : T.Action) : T.BotsState => {
     case botActions.UPDATE: return update(state, action)
     case botActions.DELETE: return deleteBot(state, action)
     case botActions.PUBLISH_SUCCESS: return publishSuccess(state, action)
-    case botActions.PUBLISH_FAILURE: return publishFailure(state, action)
-    case botActions.UNPUBLISH_SUCCESS: return unpublishSuccess(state, action)
+    case botActions.PUBLISH_FAILURE: return pushErrors(state, action)
+    case chatActions.START_PREVIEW_FAILURE: return pushErrors(state, action)
+    case chatActions.START_PREVIEW_SUCCESS: return clearErrors(state, action)
     case skillsActions.REORDER: return clearErrors(state, action)
     case skillsActions.CREATE_SUCCESS: return clearErrors(state, action)
+    case botActions.UNPUBLISH_SUCCESS: return unpublishSuccess(state, action)
     case skillActions.DELETE: return clearErrors(state, action)
     default: return state
   }
@@ -78,6 +81,13 @@ const createSuccess = (state, action) => {
   }
 }
 
+const pushErrors = (state, action) => {
+  return {
+    ...state,
+    errors: action.errors
+  }
+}
+
 const clearErrors = (state, action) => {
   return {
     ...state,
@@ -99,20 +109,6 @@ const publishSuccess = (state, action) => {
     }
   } else {
     return state
-  }
-}
-
-const publishFailure = (state, action) => {
-  const botId = action.botId
-  const bot = state.items && state.items[botId.toString()]
-  const errors = action.errors
-  return {
-    ...state,
-    items: {
-      ...state.items,
-      ...{[botId]: bot}
-    },
-    errors: errors
   }
 }
 

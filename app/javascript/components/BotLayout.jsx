@@ -242,7 +242,7 @@ const mapStateToProps = (state, {match}) => {
   return {
     botsLoaded: state.bots.items != null,
     bot: bot,
-    errors: (state.bots.errors || state.chat.errors || [])
+    errors: (state.bots.errors || [])
   }
 }
 
