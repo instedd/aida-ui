@@ -40,9 +40,9 @@ export default class HumanOverride extends Component {
         <Field id="kr-keywords" label="Valid keywords (comma separated)"
                value={config.keywords} onChange={updateConfig('keywords')} />
         <Field id="kr-in-hours-response" label="Within schedule message"
-               value={config.response} onChange={updateConfig('in_hours_response')} />
+               value={config.in_hours_response} onChange={updateConfig('in_hours_response')} />
         <Field id="kr-off-hours-response" label="Outside schedule message"
-               value={config.response} onChange={updateConfig('off_hours_response')} />
+               value={config.off_hours_response} onChange={updateConfig('off_hours_response')} />
       </div>
     )
   }
