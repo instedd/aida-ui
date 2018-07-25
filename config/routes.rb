@@ -65,6 +65,12 @@ Rails.application.routes.draw do
 
     get :encryption_keys, to: 'encryption_keys#fetch'
     post :encryption_keys, to: 'encryption_keys#update'
+
+    resources :messages, only: [:index] do
+      member do
+        post :answer
+      end
+    end
   end
 
   get "/_design(/*path)", to: 'welcome#design'

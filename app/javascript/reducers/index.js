@@ -8,6 +8,7 @@ import errorLogs from './errorLogs'
 import frontDesk from './frontDesk'
 import invitation from './invitation'
 import keypair from './keypair'
+import messages from './messages'
 import notifications from './notifications'
 import skills from './skills'
 import stats from './stats'
@@ -25,6 +26,7 @@ export default combineReducers({
   frontDesk,
   invitation,
   keypair,
+  messages,
   notifications,
   skills,
   stats,

@@ -6,7 +6,9 @@ class Api::NotificationsController < ActionController::Base
     bot = Bot.find_by_notifications_secret(params[:notifications_secret])
     return render json: {error: "Unknown notification secret"}, status: :unauthorized unless bot
 
-    @notification = bot.notifications.create! notification_params
+    content = JSON.parse(request.raw_post) rescue notification_params
+
+    @notification = bot.notifications.create(content)
 
     if @notification.save
       alert_by_email_if_needed

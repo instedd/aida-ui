@@ -8,6 +8,7 @@ const channelSchema = new schema.Entity('channels')
 const frontDeskSchema = new schema.Entity('front_desks')
 const skillSchema = new schema.Entity('skills')
 const dataTableSchema = new schema.Entity('data_tables')
+const messageSchema = new schema.Entity('messages')
 
 export const fetchBots = () => {
   return (apiFetchJSON(`bots`, new schema.Array(botSchema)) : Promise<{entities: {bots: T.ById<T.Bot>}}>)
@@ -205,4 +206,12 @@ export const updateEncryptionKeys = (publicKey : string, encryptedSecretKey : st
 
 export const fetchEncryptionKeys = () => {
   return apiFetchJSON(`encryption_keys`)
+}
+
+export const fetchMessages = () => {
+  return (apiFetchJSON(`messages`, new schema.Array(messageSchema)) : Promise<{entities: {messages: T.ById<T.Message>}}>)
+}
+
+export const answerMessage = (messageId : number, answer : string) => {
+  return apiPostJSON(`messages/${messageId}/answer`, null, {answer})
 }

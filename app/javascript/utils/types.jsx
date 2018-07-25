@@ -216,6 +216,19 @@ export type FrontDeskAction = {
   config: T.FrontDeskConfig
 };
 
+export type HumanOverrideMessageAction = {
+  type: 'MESSAGES_FETCH',
+} | {
+  type: 'MESSAGES_ANSWER',
+  messageId: number,
+  answer: string
+} | {
+  type: 'MESSAGES_RECEIVE',
+  items: ById<HumanOverrideMessage>,
+} | {
+  type: 'MESSAGES_RECEIVE_ERROR',
+};
+
 export type KeyPairAction = {
   type: 'KEYPAIR_FETCH'
 } | {
@@ -376,6 +389,7 @@ export type Action = AuthAction
                    | CollaboratorsAction
                    | ErrorLogsAction
                    | FrontDeskAction
+                   | HumanOverrideMessageAction
                    | InvitationsAction
                    | KeyPairAction
                    | NotificationsAction
@@ -456,6 +470,21 @@ export type InvitationState = {
   invitation: ?T.InvitationData
 };
 
+export type HumanOverrideMessage = {
+  id: number;
+  created_at: Date;
+  data: {
+    sessionId: string;
+    message: string;
+    name: string
+  }
+};
+
+export type HumanOverrideMessagesState = {
+  fetching: boolean,
+  items: ?ById<HumanOverrideMessage>
+};
+
 export type NotifState = {
   toasts: Array<{text: string, action: any}>
 };
@@ -507,6 +536,7 @@ export type State = {
   frontDesk: FrontDeskState,
   keypair: KeyPairState,
   invitation: InvitationState,
+  messages: HumanOverrideMessagesState,
   notifications: NotifState,
   skills: SkillsState,
   stats: StatsState,
