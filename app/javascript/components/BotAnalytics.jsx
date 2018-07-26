@@ -14,6 +14,7 @@ import Aux from '../hoc/Aux'
 import * as actions from '../actions/stats'
 import { hasPermission } from '../utils'
 import ContentDenied from './ContentDenied'
+import * as botActions from '../actions/bot'
 
 const DEFAULT_PERIOD = "this_week"
 
@@ -27,7 +28,7 @@ class BotAnalyticsComponent extends Component {
   }
 
   render() {
-    const { bot, permitted, fetching, period, data, actions, onToggleChatWindow } = this.props
+    const { bot, permitted, fetching, period, data, actions, onToggleChatWindow, botActions } = this.props
 
     const buttons = (<FabButton
       icon='chat_bubble'
@@ -116,6 +117,7 @@ const mapStateToProps = (state, { bot }) => {
 
 const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(actions, dispatch),
+  botActions: bindActionCreators(botActions, dispatch)
 })
 
 export const BotAnalytics = connect(mapStateToProps, mapDispatchToProps)(BotAnalyticsComponent)
