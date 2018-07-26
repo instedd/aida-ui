@@ -85,8 +85,12 @@ class BackendError < HTTParty::ResponseError
   end
 
   def self.get_message(error)
-    message = ''
-    message = 'required' if error['error'] == {'expected' => 1, 'actual' => 0}
-    message
+    case error['error']
+    when { 'expected' => 1, 'actual' => 0 },
+      { 'missing' => %w[question responses] }
+      'required'
+    else
+      ''
+    end
   end
 end
