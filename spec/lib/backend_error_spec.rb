@@ -478,7 +478,7 @@ RSpec.describe BackendError, :type => :helper do
           }]
         }
       }]
-      errors_out = [{:message=>"required", :path=>["skills/0", "keywords/en"]}, {:message=>"", :path=>["skills/0", "tree/answer"]}, {:message=>"required", :path=>["skills/0", "tree"]}]
+      errors_out = [{:message=>"required", :path=>["skills/0", "keywords/en"]}, {:message=>"required", :path=>["skills/0", "tree"]}]
       expect(BackendError.parse_errors(errors_in)).to eq(errors_out)
     end
 

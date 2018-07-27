@@ -57,10 +57,12 @@ class BackendError < HTTParty::ResponseError
 
     parent_path = error['path'][2..-1]
     invalid_errors = error['error']['invalid']
-    invalid_errors = invalid_errors.select{ |error| include_invalid_error(error) }
+    invalid_errors = invalid_errors.select { |e| include_invalid_error(e) }
 
-    invalid_errors.each do |error|
-      parsed_errors.concat(error['errors'].map {|error| parse_child_error(parent_path, error)})
+    invalid_errors.each do |invalid_error|
+      parsed_errors.concat(invalid_error['errors']
+        .reject { |e| e['error'] == {} }
+        .map { |e| parse_child_error(parent_path, e) })
     end
 
     parsed_errors
