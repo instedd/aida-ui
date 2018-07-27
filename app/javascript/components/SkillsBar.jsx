@@ -118,27 +118,30 @@ class SkillsBar extends Component {
   }
 
   render() {
-    const { bot, skills, creating, history, location, actions, skillActions } = this.props
+    const { bot, skills, creating, history, location, actions, skillActions, errors } = this.props
     const { dialogSkill } = this.state
     const dialogVisible = !!dialogSkill
 
     const skillsItems = skills
-                      ? skills.map((skill, index) => (
-                        <SkillListItem skill={skill} key={skill.id} botId={bot.id}
-                                       active={location.pathname == routes.botSkill(bot.id, skill.id)}
-                                       onClick={() => history.push(routes.botSkill(bot.id, skill.id))}
-                                       onToggleSkill={() => skillActions.toggleSkill(skill)}
-                                       onRenameSkill={() => openDialog(skill)}
-                                       onDeleteSkill={() => skillActions.deleteSkill(skill)}
-                                       hasError={this.props.errors.some((e) => e.path.indexOf(`skills/${index}`) > -1)} />
-                      ))
+                      ? skills.map(skill => {
+                          const skillErrorIndex = skills.filter(s => s.enabled).findIndex(s => s.id == skill.id)
+                          return (
+                            <SkillListItem skill={skill} key={skill.id} botId={bot.id}
+                              active={location.pathname == routes.botSkill(bot.id, skill.id)}
+                              onClick={() => history.push(routes.botSkill(bot.id, skill.id))}
+                              onToggleSkill={() => skillActions.toggleSkill(skill)}
+                              onRenameSkill={() => openDialog(skill)}
+                              onDeleteSkill={() => skillActions.deleteSkill(skill)}
+                              hasError={errors.some(e => e.path[0] == `skills/${skillErrorIndex}`)} />
+                          )
+                        })
                       : [<SidebarItem key="loading"
                                    icon={skillIcon('LOADING')}
                                    label="Loading skills..." />]
 
     let missingSkill = ""
-    if(this.props.errors.some((e) => e.path.indexOf("skills") > -1)) {
-      missingSkill = (<ListItem className="missing-skill" primaryText={this.props.errors.filter((e) => e.path.indexOf("skills") > -1)[0].message} />)
+    if(errors.some(e => e.path[0] == "skills")) {
+      missingSkill = (<ListItem className="missing-skill" primaryText={errors.filter(e => e.path[0] == "skills")[0].message} />)
     }
 
     const skillKindItems = SKILL_KINDS.map(kind => ({
@@ -182,7 +185,7 @@ class SkillsBar extends Component {
           skill={{"kind": "front_desk"}}
           icon={skillIcon("front_desk")}
           onClick={() => history.push(routes.botFrontDesk(bot.id))}
-          hasError={this.props.errors.some((e) => e.path[0].startsWith("front_desk"))} />
+          hasError={errors.some(e => e.path[0].startsWith("front_desk"))} />
         {skillsItems}
         {missingSkill}
         <DropdownMenu id="add-skill-menu"
@@ -212,11 +215,10 @@ const mapStateToProps = (state, {bot}) => {
   if (scope && scope.botId == bot.id && items) {
     return {
       skills: sortBy(Object.values(items), 'order'),
-      creating,
-      errors: state.bots.errors || []
+      creating
     }
   } else {
-    return { skills: null, errors: [] }
+    return { skills: null }
   }
 }
 

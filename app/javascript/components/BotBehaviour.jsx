@@ -28,7 +28,7 @@ export class BotBehaviourComponent extends Component {
 
 
     return (
-      <MainWhite sidebar={<SkillsBar bot={bot} />} buttons={buttons}>
+      <MainWhite sidebar={<SkillsBar bot={bot}  errors={errors} />} buttons={buttons}>
         <Route exact path="/b/:id/behaviour" render={() => <FrontDesk bot={bot} errors={errors.filter(e => e.path[0].startsWith("front_desk"))} />} />
         <Route exact path="/b/:id/behaviour/:skill_id" render={({match}) => <BotSkill bot={bot} skillId={match.params.skill_id} errors={errors.filter(e => e.path[0].startsWith("skills"))} />} />
       </MainWhite>
