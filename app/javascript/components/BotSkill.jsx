@@ -15,23 +15,24 @@ import LanguageDetector from './LanguageDetector'
 import Survey from './Survey'
 import ScheduledMessages from './ScheduledMessages'
 import DecisionTree from './DecisionTree'
+import sortBy from 'lodash/sortBy'
 
-const SkillComponent = ({skill, actions}) => {
+const SkillComponent = ({skill, actions, errors}) => {
   const { kind } = skill
 
   switch (kind) {
     case 'keyword_responder':
-      return (<KeywordResponder skill={skill} actions={actions} />)
+      return (<KeywordResponder skill={skill} actions={actions} errors={errors} />)
     case 'human_override':
-      return (<HumanOverride skill={skill} actions={actions} />)
+      return (<HumanOverride skill={skill} actions={actions} errors={errors} />)
     case 'language_detector':
-      return (<LanguageDetector skill={skill} actions={actions} />)
+      return (<LanguageDetector skill={skill} actions={actions} errors={errors} />)
     case 'survey':
-      return (<Survey skill={skill} actions={actions} />)
+      return (<Survey skill={skill} actions={actions} errors={errors} />)
     case 'scheduled_messages':
-      return (<ScheduledMessages skill={skill} actions={actions} />)
+      return (<ScheduledMessages skill={skill} actions={actions} errors={errors} />)
     case 'decision_tree':
-      return (<DecisionTree skill={skill} actions={actions} />)
+      return (<DecisionTree skill={skill} actions={actions} errors={errors} />)
     default:
       return (<Title>{skill.name} #{skill.id}</Title>)
   }
@@ -39,23 +40,29 @@ const SkillComponent = ({skill, actions}) => {
 
 class BotSkill extends Component {
   render() {
-    const { bot, skill, actions, loading } = this.props
+    const { bot, skill, actions, loading, errors } = this.props
+
     if (loading) {
       return <Loader>Loading skill</Loader>
     } else if (skill) {
-      return <SkillComponent skill={skill} actions={actions}/>
+      return <SkillComponent skill={skill} actions={actions} errors={errors}/>
     } else {
       return <Redirect to={routes.botFrontDesk(bot.id)} />
     }
   }
 }
 
-const mapStateToProps = (state, {skillId}) => {
+const mapStateToProps = (state, {skillId, errors}) => {
   const { items } = state.skills
   if (items) {
-    return { loading: false, skill: items[skillId], errors: state.bots.errors || [] }
+    const errorIndex = sortBy(Object.values(items).filter(skill => skill.enabled), 'order').findIndex(skill => skill.id == skillId)
+    return {
+      loading: false,
+      skill: items[skillId],
+      errors: errors.filter(e => e.path[0] == `skills/${errorIndex}`)
+    }
   } else {
-    return { loading: true, errors: [] }
+    return { loading: true }
   }
 }
 
