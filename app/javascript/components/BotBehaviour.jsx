@@ -13,7 +13,7 @@ import { connect } from 'react-redux'
 
 export class BotBehaviourComponent extends Component {
   render() {
-    const { bot, onToggleChatWindow, botActions } = this.props
+    const { bot, onToggleChatWindow, botActions, errors } = this.props
 
     if (!hasPermission(bot, 'manages_behaviour')) {
       return <ContentDenied />
@@ -29,15 +29,20 @@ export class BotBehaviourComponent extends Component {
 
     return (
       <MainWhite sidebar={<SkillsBar bot={bot} />} buttons={buttons}>
-        <Route exact path="/b/:id/behaviour" render={() => <FrontDesk bot={bot} />} />
+        <Route exact path="/b/:id/behaviour" render={() => <FrontDesk bot={bot} errors={errors.filter((e) => e.path[0].startsWith("front_desk"))} />} />
         <Route exact path="/b/:id/behaviour/:skill_id" render={({match}) => <BotSkill bot={bot} skillId={match.params.skill_id} />} />
       </MainWhite>
     )
   }
 }
 
+const mapStateToProps = (state) => ({
+  errors: state.bots && state.bots.errors || []
+})
+
+
 const mapDispatchToProps = (dispatch) => ({
   botActions: bindActionCreators(botActions, dispatch)
 })
 
-export const BotBehaviour = connect(null, mapDispatchToProps)(BotBehaviourComponent)
+export const BotBehaviour = connect(mapStateToProps, mapDispatchToProps)(BotBehaviourComponent)
