@@ -614,7 +614,7 @@ RSpec.describe BackendError, :type => :helper do
 
     it "returns errors when language detector is duplicated" do
       errors_in = [{"path"=>["#/skills/1", "#/skills/0"], "message"=>"Duplicated skills (language_detector)"}]
-      errors_out = [{:message=>"Language detector is duplicated", :path=>["skills", "skills/1", "skills/0"]}]
+      errors_out =[{:message=>"Duplicated skills (language_detector)", :path=>["skills", "skills/1", "skills/0"]}]
       expect(BackendError.parse_errors(errors_in)).to eq(errors_out)
     end
 
