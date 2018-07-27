@@ -11,11 +11,10 @@ import Headline from '../ui/Headline'
 import { getLocalTimezone } from '../utils'
 
 import RelevanceField from './RelevanceField'
-import sortBy from 'lodash/sortBy'
 
 class Survey extends Component {
   render() {
-    const { uploadStatus, skill, actions, xlsFormsActions, index } = this.props
+    const { uploadStatus, skill, actions, xlsFormsActions, errors } = this.props
     const { uploading, error: uploadError } = uploadStatus
     const { name, config } = skill
 
@@ -41,8 +40,8 @@ class Survey extends Component {
 
     let auxUploadError
 
-    if(this.props.errors.some((e) => e.path[0] == `skills/${index}` && e.path[1] == "questions")) {
-      auxUploadError = this.props.errors.filter((e) => e.path[0] == `skills/${index}` && e.path[1] == "questions")[0].message
+    if(errors.some(e => e.path[1] == "questions")) {
+      auxUploadError = errors.filter(e => e.path[1] == "questions")[0].message
     }
     else {
       auxUploadError = uploadError
@@ -80,18 +79,18 @@ class Survey extends Component {
                       value={date}
                       timeZone={getLocalTimezone()}
                       onChange={(_, value) => updateConfig('schedule')(value)}
-                      error={this.props.errors.some((e) => e.path[0] == `skills/${index}` && e.path[1] == "schedule")} />
+                      error={errors.some(e => e.path[1] == "schedule")} />
           <TimePicker id="survey-time"
                       label="at"
                       inline
                       value={date}
                       onChange={(_, value) => updateConfig('schedule')(value)}
-                      error={this.props.errors.some((e) => e.path[0] == `skills/${index}` && e.path[1] == "schedule")} />
+                      error={errors.some(e => e.path[1] == "schedule")} />
         </div>
 
         <Field id="survey-keywords" label="Valid keywords (comma separated)"
           value={config.keywords} onChange={updateConfig('keywords')}
-          error={this.props.errors.filter((e) => e.path[0] == `skills/${index}` && e.path[1] == "keywords")} />
+          error={errors.filter(e => e.path[1] == "keywords")} />
 
         <div className="file-upload-field">
           <label htmlFor="survey-xlsform-upload">Survey form</label>
@@ -115,9 +114,7 @@ class Survey extends Component {
 }
 
 const mapStateToProps = (state, {skill}) => ({
-  uploadStatus: state.xlsForms.uploadStatus[skill.id] || { uploading: false },
-  errors: state.bots && state.bots.errors && state.bots.errors.filter((e) => e.path[0].startsWith("skills")) || [],
-  index: sortBy(Object.values(state.skills.items), 'order').findIndex(s => s.id == skill.id)
+  uploadStatus: state.xlsForms.uploadStatus[skill.id] || { uploading: false }
 })
 
 const mapDispatchToProps = (dispatch) => ({

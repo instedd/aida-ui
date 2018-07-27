@@ -88,15 +88,13 @@ const mapStateToProps = (state, {bot}) => {
     return {
       loaded: true,
       fetching: frontDesk.fetching,
-      data: frontDesk.data || {},
-      errors: state.bots && state.bots.errors && state.bots.errors.filter((e) => e.path[0].startsWith("front_desk")) || []
+      data: frontDesk.data || {}
     }
   } else {
     return {
       loaded: false,
       fetching: frontDesk.fetching,
-      data: {},
-      errors: []
+      data: {}
     }
   }
 }
