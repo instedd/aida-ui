@@ -41,11 +41,20 @@ class BackendError < HTTParty::ResponseError
 
   def self.parse_skill_error(error)
     parsed_errors = []
-
-    if error == {'path' => '#/skills', 'error' => {'expected' => 1, 'actual' => 0}}
-      parsed_errors = [{:message=>"There needs to be at least one skill", :path=>["skills"]}]
-    elsif error == {'path' => ['#/skills/1', '#/skills/0'], 'message' => 'Duplicated skills (language_detector)'}
-      parsed_errors = [{:message=>"Language detector is duplicated", :path=>["skills", "skills/1", "skills/0"]}]
+    if error == { 'path' => '#/skills', 'error' => { 'expected' => 1, 'actual' => 0 } }
+      parsed_errors = [
+        {
+          :message => 'There needs to be at least one skill',
+          :path => ['skills']
+        }
+      ]
+    elsif error['message'] && (error['message'].start_with? 'Duplicated skills')
+      parsed_errors = [
+        {
+          :message => error['message'],
+          :path => ['skills'].concat(error['path'].map { |e| e[2..-1] })
+        }
+      ]
     else
       parsed_errors = parse_invalid_error(error)
     end
@@ -57,10 +66,12 @@ class BackendError < HTTParty::ResponseError
 
     parent_path = error['path'][2..-1]
     invalid_errors = error['error']['invalid']
-    invalid_errors = invalid_errors.select{ |error| include_invalid_error(error) }
+    invalid_errors = invalid_errors.select { |e| include_invalid_error(e) }
 
-    invalid_errors.each do |error|
-      parsed_errors.concat(error['errors'].map {|error| parse_child_error(parent_path, error)})
+    invalid_errors.each do |invalid_error|
+      parsed_errors.concat(invalid_error['errors']
+        .reject { |e| e['error'] == {} }
+        .map { |e| parse_child_error(parent_path, e) })
     end
 
     parsed_errors
@@ -85,8 +96,12 @@ class BackendError < HTTParty::ResponseError
   end
 
   def self.get_message(error)
-    message = ''
-    message = 'required' if error['error'] == {'expected' => 1, 'actual' => 0}
-    message
+    case error['error']
+    when { 'expected' => 1, 'actual' => 0 },
+      { 'missing' => %w[question responses] }
+      'required'
+    else
+      ''
+    end
   end
 end

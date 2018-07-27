@@ -284,183 +284,202 @@ RSpec.describe BackendError, :type => :helper do
     end
 
     it "returns errors for decision tree" do
-        errors_in =
-        [{
-            "path" => "#/skills/0",
-            "error" => {
-              "valid_indices" => [], "invalid" => [{
-                "index" => 0,
-                "errors" => [{
-                  "path" => "#/keywords/en",
-                  "error" => {
-                    "expected" => 1, "actual" => 0
-                  }
+      errors_in =
+      [{
+        "path" => "#/skills/0",
+        "error" => {
+          "valid_indices" => [], "invalid" => [{
+            "index" => 0,
+            "errors" => [{
+              "path" => "#/keywords/en",
+              "error" => {
+                "expected" => 1, "actual" => 0
+              }
+            }, {
+              "path" => "#/type",
+              "error" => {}
+            }, {
+              "path" => "#/tree",
+              "error" => {}
+            }, {
+              "path" => "#",
+              "error" => {
+                "missing" => ["response"]
+              }
+            }]
+          }, {
+            "index" => 1,
+            "errors" => [{
+              "path" => "#/explanation",
+              "error" => {
+                "expected" => ["string"], "actual" => "object"
+              }
+            }, {
+              "path" => "#/type",
+              "error" => {}
+            }, {
+              "path" => "#/clarification",
+              "error" => {}
+            }, {
+              "path" => "#/id",
+              "error" => {}
+            }, {
+              "path" => "#/keywords",
+              "error" => {}
+            }, {
+              "path" => "#/name",
+              "error" => {}
+            }, {
+              "path" => "#/tree",
+              "error" => {}
+            }, {
+              "path" => "#",
+              "error" => {
+                "missing" => ["languages"]
+              }
+            }]
+          }, {
+            "index" => 2,
+            "errors" => [{
+              "path" => "#",
+              "error" => {
+                "valid_indices" => [], "invalid" => [{
+                  "index" => 0,
+                  "errors" => [{
+                    "path" => "#/type",
+                    "error" => {}
+                  }, {
+                    "path" => "#/clarification",
+                    "error" => {}
+                  }, {
+                    "path" => "#/explanation",
+                    "error" => {}
+                  }, {
+                    "path" => "#/keywords",
+                    "error" => {}
+                  }, {
+                    "path" => "#/tree",
+                    "error" => {}
+                  }, {
+                    "path" => "#",
+                    "error" => {
+                      "missing" => ["schedule_type", "messages"]
+                    }
+                  }]
                 }, {
-                  "path" => "#/type",
-                  "error" => {}
+                  "index" => 1,
+                  "errors" => [{
+                    "path" => "#/type",
+                    "error" => {}
+                  }, {
+                    "path" => "#/clarification",
+                    "error" => {}
+                  }, {
+                    "path" => "#/explanation",
+                    "error" => {}
+                  }, {
+                    "path" => "#/keywords",
+                    "error" => {}
+                  }, {
+                    "path" => "#/tree",
+                    "error" => {}
+                  }, {
+                    "path" => "#",
+                    "error" => {
+                      "missing" => ["schedule_type", "messages"]
+                    }
+                  }]
                 }, {
-                  "path" => "#/tree",
-                  "error" => {}
-                }, {
-                  "path" => "#",
-                  "error" => {
-                    "missing" => ["response"]
-                  }
+                  "index" => 2,
+                  "errors" => [{
+                    "path" => "#/type",
+                    "error" => {}
+                  }, {
+                    "path" => "#/clarification",
+                    "error" => {}
+                  }, {
+                    "path" => "#/explanation",
+                    "error" => {}
+                  }, {
+                    "path" => "#/keywords",
+                    "error" => {}
+                  }, {
+                    "path" => "#/tree",
+                    "error" => {}
+                  }, {
+                    "path" => "#",
+                    "error" => {
+                      "missing" => ["schedule_type", "messages"]
+                    }
+                  }]
                 }]
-              }, {
-                "index" => 1,
-                "errors" => [{
-                  "path" => "#/explanation",
-                  "error" => {
-                    "expected" => ["string"], "actual" => "object"
-                  }
-                }, {
-                  "path" => "#/type",
-                  "error" => {}
-                }, {
-                  "path" => "#/clarification",
-                  "error" => {}
-                }, {
-                  "path" => "#/id",
-                  "error" => {}
-                }, {
-                  "path" => "#/keywords",
-                  "error" => {}
-                }, {
-                  "path" => "#/name",
-                  "error" => {}
-                }, {
-                  "path" => "#/tree",
-                  "error" => {}
-                }, {
-                  "path" => "#",
-                  "error" => {
-                    "missing" => ["languages"]
-                  }
-                }]
-              }, {
-                "index" => 2,
-                "errors" => [{
-                  "path" => "#",
-                  "error" => {
-                    "valid_indices" => [], "invalid" => [{
-                      "index" => 0,
-                      "errors" => [{
-                        "path" => "#/type",
-                        "error" => {}
-                      }, {
-                        "path" => "#/clarification",
-                        "error" => {}
-                      }, {
-                        "path" => "#/explanation",
-                        "error" => {}
-                      }, {
-                        "path" => "#/keywords",
-                        "error" => {}
-                      }, {
-                        "path" => "#/tree",
-                        "error" => {}
-                      }, {
-                        "path" => "#",
-                        "error" => {
-                          "missing" => ["schedule_type", "messages"]
-                        }
-                      }]
-                    }, {
-                      "index" => 1,
-                      "errors" => [{
-                        "path" => "#/type",
-                        "error" => {}
-                      }, {
-                        "path" => "#/clarification",
-                        "error" => {}
-                      }, {
-                        "path" => "#/explanation",
-                        "error" => {}
-                      }, {
-                        "path" => "#/keywords",
-                        "error" => {}
-                      }, {
-                        "path" => "#/tree",
-                        "error" => {}
-                      }, {
-                        "path" => "#",
-                        "error" => {
-                          "missing" => ["schedule_type", "messages"]
-                        }
-                      }]
-                    }, {
-                      "index" => 2,
-                      "errors" => [{
-                        "path" => "#/type",
-                        "error" => {}
-                      }, {
-                        "path" => "#/clarification",
-                        "error" => {}
-                      }, {
-                        "path" => "#/explanation",
-                        "error" => {}
-                      }, {
-                        "path" => "#/keywords",
-                        "error" => {}
-                      }, {
-                        "path" => "#/tree",
-                        "error" => {}
-                      }, {
-                        "path" => "#",
-                        "error" => {
-                          "missing" => ["schedule_type", "messages"]
-                        }
-                      }]
-                    }]
-                  }
-                }]
-              }, {
-                "index" => 3,
-                "errors" => [{
-                  "path" => "#/keywords/en",
-                  "error" => {
-                    "expected" => 1, "actual" => 0
-                  }
-                }, {
-                  "path" => "#/tree/answer",
-                  "error" => {}
-                }, {
-                  "path" => "#/tree",
-                  "error" => {
-                    "missing" => ["question", "responses"]
-                  }
-                }]
-              }, {
-                "index" => 4,
-                "errors" => [{
-                  "path" => "#/keywords/en",
-                  "error" => {
-                    "expected" => 1, "actual" => 0
-                  }
-                }, {
-                  "path" => "#/type",
-                  "error" => {}
-                }, {
-                  "path" => "#/clarification",
-                  "error" => {}
-                }, {
-                  "path" => "#/explanation",
-                  "error" => {}
-                }, {
-                  "path" => "#/tree",
-                  "error" => {}
-                }, {
-                  "path" => "#",
-                  "error" => {
-                    "missing" => ["questions", "choice_lists"]
-                  }
-                }]
-              }]
-            }
+              }
+            }]
+          }, {
+            "index" => 3,
+            "errors" => [{
+              "path" => "#/keywords/en",
+              "error" => {
+                "expected" => 1, "actual" => 0
+              }
+            }, {
+              "path" => "#/tree/answer",
+              "error" => {}
+            }, {
+              "path" => "#/tree",
+              "error" => {
+                "missing" => ["question", "responses"]
+              }
+            }]
+          }, {
+            "index" => 4,
+            "errors" => [{
+              "path" => "#/keywords/en",
+              "error" => {
+                "expected" => 1, "actual" => 0
+              }
+            }, {
+              "path" => "#/type",
+              "error" => {}
+            }, {
+              "path" => "#/clarification",
+              "error" => {}
+            }, {
+              "path" => "#/explanation",
+              "error" => {}
+            }, {
+              "path" => "#/tree",
+              "error" => {}
+            }, {
+              "path" => "#",
+              "error" => {
+                "missing" => ["questions", "choice_lists"]
+              }
+            }]
+          }, {
+            "index" => 5,
+            "errors" => [{
+              "path" => "#/keywords/en",
+              "error" => {
+                "expected" => 1, "actual" => 0
+              }
+            }, {
+              "path" => "#/type",
+              "error" => {}
+            }, {
+              "path" => "#/tree",
+              "error" => {}
+            }, {
+              "path" => "#",
+              "error" => {
+                "missing" => ["in_hours_response", "off_hours_response"]
+              }
+            }]
           }]
-        errors_out = [{:message=>"required", :path=>["skills/0", "keywords/en"]}, {:message=>"", :path=>["skills/0", "tree/answer"]}, {:message=>"", :path=>["skills/0", "tree"]}]
-        expect(BackendError.parse_errors(errors_in)).to eq(errors_out)
+        }
+      }]
+      errors_out = [{:message=>"required", :path=>["skills/0", "keywords/en"]}, {:message=>"required", :path=>["skills/0", "tree"]}]
+      expect(BackendError.parse_errors(errors_in)).to eq(errors_out)
     end
 
     it "returns empty for scheduled messages" do
@@ -595,7 +614,7 @@ RSpec.describe BackendError, :type => :helper do
 
     it "returns errors when language detector is duplicated" do
       errors_in = [{"path"=>["#/skills/1", "#/skills/0"], "message"=>"Duplicated skills (language_detector)"}]
-      errors_out = [{:message=>"Language detector is duplicated", :path=>["skills", "skills/1", "skills/0"]}]
+      errors_out =[{:message=>"Duplicated skills (language_detector)", :path=>["skills", "skills/1", "skills/0"]}]
       expect(BackendError.parse_errors(errors_in)).to eq(errors_out)
     end
 

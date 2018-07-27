@@ -49,7 +49,8 @@ export default class DecisionTree extends Component {
         <Field id="tree-clarification" label="Valid keywords (comma separated)"
           value={config.keywords} onChange={updateConfig('keywords')}
           error={errors.filter(e => e.path[1] == "keywords/en")} />
-        <DecisionTreeComponent tree={config.tree} onChange={updateConfig('tree')} />
+        <DecisionTreeComponent tree={config.tree} onChange={updateConfig('tree')} errors={errors.filter(e => e.path[1].startsWith("tree"))} />
+
       </div>
     )
   }
@@ -120,7 +121,7 @@ class DecisionTreeComponent extends Component {
   }
 
   render() {
-    const { onChange } = this.props
+    const { onChange, errors } = this.props
     const { initial, nodes } = this.props.tree
 
     return (
@@ -135,6 +136,7 @@ class DecisionTreeComponent extends Component {
             <TreeNode
               key={`tree-node-${currentId}`}
               node={currentNode}
+              errors={errors.filter(e => e.path[1] == `tree/${currentId}` || e.path[1] == "tree")}
               nextNodeId={this.state.path[pathIx+1]}
               triggerFocusOnOptionToNode={this.state.triggerFocusOnOptionToNode}
               updateMessage={(value) => {
@@ -210,7 +212,13 @@ class TreeNode extends Component {
 
   render() {
     const { node, nextNodeId, triggerFocusOnOptionToNode, updateMessage,
-      addOption, updateOption, selectOption, deleteOption, focusedOption } = this.props
+      addOption, updateOption, selectOption, deleteOption, focusedOption, errors } = this.props
+
+    let optionError = ""
+
+    if(errors.some(e => e.path[1] == "tree" || e.path[2] == `options/${ix}`)) {
+      optionError = (<label className="error-message">{errors.filter(e => e.path[1] == "tree" || e.path[2] == `options/${ix}`)[0].message}</label>)
+    }
 
     return (
       <Paper
@@ -221,7 +229,8 @@ class TreeNode extends Component {
           className="tree-node-message"
           placeholder="Message"
           value={node.message}
-          onChange={updateMessage} />
+          onChange={updateMessage}
+          error={errors.filter(e =>  e.path[1] == "tree" || ["message", "answer"].includes(e.path[2]))} />
         <ul>
           {
             node.options.map((option, ix) => (
@@ -234,7 +243,8 @@ class TreeNode extends Component {
                   onChange={(value) => updateOption(ix, value)}
                   onSelect={() => selectOption(ix)}
                   onDelete={() => deleteOption(ix)}
-                  onFocused={(ix) => focusedOption(ix)} />
+                  onFocused={(ix) => focusedOption(ix)}
+                  error={errors.filter(e => e.path[1] == "tree" || e.path[2] == `options/${ix}`)} />
               </li>
             ))
           }
@@ -247,6 +257,7 @@ class TreeNode extends Component {
             onClick={addOption}>
             Add option
           </Button>
+          <br/>{optionError}
         </div>
       </Paper>
     )
@@ -261,7 +272,8 @@ const TreeNodeOption = ({
   onChange,
   onSelect,
   onDelete,
-  onFocused
+  onFocused,
+  error
 }) => {
   return (
     <div className={`tree-node-option ${selected ? 'selected' : ''}`}>
@@ -274,6 +286,8 @@ const TreeNodeOption = ({
         default={false}
         onChange={onChange}
         onClick={onSelect}
+        error={error && error.length > 0}
+        errorText={error && error[0] && error[0].message}
         ref={
           focused
           ? (el) => {
