@@ -126,7 +126,7 @@ class Bot < ApplicationRecord
   end
 
   def notifications_url
-    "#{Settings.base_url}notifications/#{notifications_secret}"
+    URI::join(Settings.base_url, "notifications/#{notifications_secret}")
   end
 
   private
