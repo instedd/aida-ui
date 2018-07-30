@@ -21,7 +21,9 @@ class Api::BotsController < ApplicationApiController
 
   def destroy
     authorize @bot
-    UnpublishBot.run(@bot) if @bot.published?
+    UnpublishBot.run(@bot)
+    UnpublishBotPreview.run(@bot)
+
     @bot.destroy
     head :no_content
   end

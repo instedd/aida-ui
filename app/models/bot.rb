@@ -8,7 +8,7 @@ class Bot < ApplicationRecord
   has_many :collaborators, dependent: :destroy
   has_many :invitations, dependent: :destroy
   has_many :collaborating_users, through: :collaborators, source: :user
-  has_many :sessions
+  has_many :sessions, dependent: :destroy
   has_many :users, through: :sessions
   has_many :notifications, dependent: :destroy
 
