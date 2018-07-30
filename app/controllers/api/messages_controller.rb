@@ -17,7 +17,7 @@ class Api::MessagesController < ApplicationApiController
 
   def answer
     bot = @notification.bot
-    authorize bot, :read_session_data?
+    authorize bot, :can_message?
 
     result = Backend.sessions_send_message(bot.uuid, @notification.data["session_id"], {message: params[:answer]})
 
