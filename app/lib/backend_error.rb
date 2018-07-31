@@ -24,7 +24,7 @@ class BackendError < HTTParty::ResponseError
     out_errors = []
 
     channel_errors.each do |error|
-      out_errors.concat(parse_invalid_error(error))
+      out_errors.concat(parse_invalid_error([], error))
     end
 
     skill_errors.each do |error|
@@ -32,7 +32,7 @@ class BackendError < HTTParty::ResponseError
     end
 
     out_errors.concat(other_errors.map do |error|
-        parse_error(error)
+      parse_error(error)
     end)
 
   end
@@ -52,40 +52,58 @@ class BackendError < HTTParty::ResponseError
       parsed_errors = [
         {
           :message => error['message'],
-          :path => ['skills'].concat(error['path'].map { |e| e[2..-1] })
+          :path => ['skills'] + error['path'].map { |e| e[2..-1] }
         }
       ]
     else
-      parsed_errors = parse_invalid_error(error)
+      parsed_errors = parse_invalid_error([], error)
     end
     parsed_errors
   end
 
-  def self.parse_invalid_error(error)
+  def self.parse_invalid_error(parent_path, error)
     parsed_errors = []
 
-    parent_path = error['path'][2..-1]
+    parent_path = (parent_path + [error['path'][2..-1]]).reject { |i| i == nil }
     invalid_errors = error['error']['invalid']
     invalid_errors = invalid_errors.select { |e| include_invalid_error(e) }
 
     invalid_errors.each do |invalid_error|
       parsed_errors.concat(invalid_error['errors']
         .reject { |e| e['error'] == {} }
-        .map { |e| parse_child_error(parent_path, e) })
-    end
-
+        .map { |e| parse_child_error(parent_path, e) }
+        .flatten)
+      end
     parsed_errors
   end
 
   def self.include_invalid_error(error)
-    error['errors'].all? { |sub_error| ['#/type', '#'].exclude?(sub_error['path']) }
+    if error['errors']
+      error['errors'].all? { |sub_error| include_invalid_sub_error(sub_error) }
+    end
+  end
+
+  def self.include_invalid_sub_error(sub_error)
+    ret = true
+    if  ['#/type', '#/schedule_type'].include? sub_error['path']
+      ret = false
+    elsif sub_error['path'] == '#'
+      ret = sub_error['error']['invalid'].all? { |e| include_invalid_sub_error(e) }
+    end
+    ret
   end
 
   def self.parse_child_error(parent_path, error)
-    {
-      message: get_message(error),
-      path: [parent_path, error['path'][2..-1]]
-    }
+    parsed_errors = []
+    if error['path'] == '#'
+      parsed_errors = parse_invalid_error(parent_path, error)
+    else
+      parsed_errors = [{
+        message: get_message(error),
+        path: parent_path + [error['path'][2..-1]]
+      }]
+    end
+    parsed_errors
   end
 
   def self.parse_error(error)
@@ -98,7 +116,8 @@ class BackendError < HTTParty::ResponseError
   def self.get_message(error)
     case error['error']
     when { 'expected' => 1, 'actual' => 0 },
-      { 'missing' => %w[question responses] }
+      { 'missing' => %w[question responses] },
+      { 'expected' => '^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})(\\.(\\d{3})){0,1}([+-](\\d{2}):(\\d{2})|Z)$'}
       'required'
     else
       ''

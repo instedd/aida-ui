@@ -219,7 +219,7 @@ class InactivityMessages extends Component {
   }
 
   render() {
-    const { messages, onAdd, onChange, onRemove } = this.props
+    const { messages, onAdd, onChange, onRemove, errors } = this.props
 
     // keep in sync with behaviour.rb
     const delayUnits = [
@@ -258,19 +258,29 @@ class InactivityMessages extends Component {
                      fullWidth={false} />
       </span>)
     }
+
     const renderMessage = (item, index) => {
       return (<Field id={`schedule-message-#{index}`}
-                     className="editable-field"
-                     value={item.message}
-                     onChange={value => onChange(index, 'message', value)} />)
+      className="editable-field"
+      value={item.message}
+      onChange={value => onChange(index, 'message', value)}
+      error={errors.filter(e => e.path[1].startsWith(`messages/${index}`))} />)
     }
 
-    return (<KeyValueListField label="Messages"
+    let messageError = ""
+
+    if(errors.some(e => e.path[1] == "messages")) {
+      messageError = (<label className="error-message">{errors.filter(e => e.path[1] == "messages")[0].message}</label>)
+    }
+
+    return (<div> <KeyValueListField label="Messages"
                                items={messages}
                                createItemLabel="Add message" onCreateItem={addMessage}
                                canRemoveItem={canRemoveItem} onRemoveItem={removeMessage}
                                renderKey={renderDelay}
-                               renderValue={renderMessage} />)
+                               renderValue={renderMessage} />
+              <br/>{messageError}</div>
+            )
   }
 }
 
@@ -281,8 +291,11 @@ class FixedTimeMessages extends Component {
   }
 
   render() {
-    const { messages, onChange } = this.props
+    const { messages, onChange, errors } = this.props
     const date = messages[0].schedule ? new Date(messages[0].schedule) : undefined
+
+
+    let scheduleError = errors.filter(e => e.path[1] == 'messages/0/schedule')
 
     return (<div>
       <div className="date-time-picker ui-field">
@@ -292,17 +305,22 @@ class FixedTimeMessages extends Component {
                     fullwidth={false}
                     value={date}
                     timeZone={getLocalTimezone()}
-                    onChange={(_, value) => onChange(0, 'schedule', value)} />
+                    onChange={(_, value) => onChange(0, 'schedule', value)}
+                    error={scheduleError && scheduleError.length > 0}
+                    errorText={scheduleError && scheduleError[0] && scheduleError[0].message} />
         <TimePicker id="schedule-time"
                     label="at"
                     inline
                     value={date}
-                    onChange={(_, value) => onChange(0, 'schedule', value)} />
+                    onChange={(_, value) => onChange(0, 'schedule', value)}
+                    error={scheduleError && scheduleError.length > 0}
+                    errorText={scheduleError && scheduleError[0] && scheduleError[0].message} />
       </div>
 
       <Field id="message" label="Message"
              value={messages[0].message}
-             onChange={value => onChange(0, 'message', value)} />
+             onChange={value => onChange(0, 'message', value)}
+             error={errors.filter(e => e.path[1] == 'messages/0/message/en')} />
     </div>)
   }
 }
@@ -324,7 +342,7 @@ class RecurrentMessages extends Component {
   }
 
   render() {
-    const { startDate, onChangeStartDate, messages, onAdd, onChange, onRemove } = this.props
+    const { startDate, onChangeStartDate, messages, onAdd, onChange, onRemove, errors } = this.props
 
     const date = startDate ? new Date(startDate) : undefined
 
@@ -361,7 +379,8 @@ class RecurrentMessages extends Component {
       return (<Field id={`recurrent-message-#{index}`}
                      className="editable-field"
                      value={item.message}
-                     onChange={value => onChange(index, 'message', value)} />)
+                     onChange={value => onChange(index, 'message', value)}
+                     error={errors.filter(e => e.path[1].startsWith(`messages/${index}`))} />)
     }
 
     const changeStartDate = (_, value) => {
@@ -369,6 +388,12 @@ class RecurrentMessages extends Component {
       value.setMinutes(0)
       value.setSeconds(0)
       onChangeStartDate(formatTimeISOWithTimezone(value))
+    }
+
+    let messageError = ""
+
+    if(errors.some(e => e.path[1] == "messages")) {
+      messageError = (<label className="error-message">{errors.filter(e => e.path[1] == "messages")[0].message}</label>)
     }
 
     return (<div>
@@ -383,6 +408,7 @@ class RecurrentMessages extends Component {
                          canRemoveItem={canRemoveItem} onRemoveItem={removeMessage}
                          renderKey={renderRecurrence}
                          renderValue={renderMessage} />
+      <br/>{messageError}
       <RecurrenceDialog visible={this.state.dialogVisible}
                         onCancel={hideDialog}
                         onConfirm={saveRecurrence}
@@ -394,7 +420,7 @@ class RecurrentMessages extends Component {
 
 class ScheduledMessages extends Component {
   render() {
-    const { skill, actions } = this.props
+    const { skill, actions, errors } = this.props
     const { name, config } = skill
 
     const updateConfig = (key) => {
@@ -489,17 +515,20 @@ class ScheduledMessages extends Component {
                return (<InactivityMessages messages={config.messages}
                                            onAdd={addMessage}
                                            onChange={updateMessage}
-                                           onRemove={removeMessage} />)
+                                           onRemove={removeMessage}
+                                           errors={errors} />)
              case 'fixed_time':
                return (<FixedTimeMessages messages={config.messages}
-                                          onChange={updateMessage} />)
+                                          onChange={updateMessage}
+                                          errors={errors} />)
              case 'recurrent':
                return (<RecurrentMessages startDate={config.start_date}
                                           onChangeStartDate={updateConfig('start_date')}
                                           messages={config.messages}
                                           onAdd={addMessage}
                                           onChange={updateMessage}
-                                          onRemove={removeMessage} />)
+                                          onRemove={removeMessage}
+                                          errors={errors} />)
            }
         })()}
 
