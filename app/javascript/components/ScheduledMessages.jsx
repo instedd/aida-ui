@@ -219,7 +219,7 @@ class InactivityMessages extends Component {
   }
 
   render() {
-    const { messages, onAdd, onChange, onRemove } = this.props
+    const { messages, onAdd, onChange, onRemove, errors } = this.props
 
     // keep in sync with behaviour.rb
     const delayUnits = [
@@ -258,19 +258,29 @@ class InactivityMessages extends Component {
                      fullWidth={false} />
       </span>)
     }
+
     const renderMessage = (item, index) => {
       return (<Field id={`schedule-message-#{index}`}
-                     className="editable-field"
-                     value={item.message}
-                     onChange={value => onChange(index, 'message', value)} />)
+      className="editable-field"
+      value={item.message}
+      onChange={value => onChange(index, 'message', value)}
+      error={errors.filter(e => e.path[1].startsWith(`messages/${index}`))} />)
     }
 
-    return (<KeyValueListField label="Messages"
+    let messageError = ""
+
+    if(errors.some(e => e.path[1] == "messages")) {
+      messageError = (<label className="error-message">{errors.filter(e => e.path[1] == "messages")[0].message}</label>)
+    }
+
+    return (<div> <KeyValueListField label="Messages"
                                items={messages}
                                createItemLabel="Add message" onCreateItem={addMessage}
                                canRemoveItem={canRemoveItem} onRemoveItem={removeMessage}
                                renderKey={renderDelay}
-                               renderValue={renderMessage} />)
+                               renderValue={renderMessage} />
+              <br/>{messageError}</div>
+            )
   }
 }
 
@@ -394,7 +404,7 @@ class RecurrentMessages extends Component {
 
 class ScheduledMessages extends Component {
   render() {
-    const { skill, actions } = this.props
+    const { skill, actions, errors } = this.props
     const { name, config } = skill
 
     const updateConfig = (key) => {
@@ -489,17 +499,20 @@ class ScheduledMessages extends Component {
                return (<InactivityMessages messages={config.messages}
                                            onAdd={addMessage}
                                            onChange={updateMessage}
-                                           onRemove={removeMessage} />)
+                                           onRemove={removeMessage}
+                                           errors={errors} />)
              case 'fixed_time':
                return (<FixedTimeMessages messages={config.messages}
-                                          onChange={updateMessage} />)
+                                          onChange={updateMessage}
+                                          errors={errors} />)
              case 'recurrent':
                return (<RecurrentMessages startDate={config.start_date}
                                           onChangeStartDate={updateConfig('start_date')}
                                           messages={config.messages}
                                           onAdd={addMessage}
                                           onChange={updateMessage}
-                                          onRemove={removeMessage} />)
+                                          onRemove={removeMessage}
+                                          errors={errors} />)
            }
         })()}
 
