@@ -291,8 +291,11 @@ class FixedTimeMessages extends Component {
   }
 
   render() {
-    const { messages, onChange } = this.props
+    const { messages, onChange, errors } = this.props
     const date = messages[0].schedule ? new Date(messages[0].schedule) : undefined
+
+
+    let scheduleError = errors.filter(e => e.path[1] == 'messages/0/schedule')
 
     return (<div>
       <div className="date-time-picker ui-field">
@@ -302,17 +305,22 @@ class FixedTimeMessages extends Component {
                     fullwidth={false}
                     value={date}
                     timeZone={getLocalTimezone()}
-                    onChange={(_, value) => onChange(0, 'schedule', value)} />
+                    onChange={(_, value) => onChange(0, 'schedule', value)}
+                    error={scheduleError && scheduleError.length > 0}
+                    errorText={scheduleError && scheduleError[0] && scheduleError[0].message} />
         <TimePicker id="schedule-time"
                     label="at"
                     inline
                     value={date}
-                    onChange={(_, value) => onChange(0, 'schedule', value)} />
+                    onChange={(_, value) => onChange(0, 'schedule', value)}
+                    error={scheduleError && scheduleError.length > 0}
+                    errorText={scheduleError && scheduleError[0] && scheduleError[0].message} />
       </div>
 
       <Field id="message" label="Message"
              value={messages[0].message}
-             onChange={value => onChange(0, 'message', value)} />
+             onChange={value => onChange(0, 'message', value)}
+             error={errors.filter(e => e.path[1] == 'messages/0/message/en')} />
     </div>)
   }
 }
