@@ -129,8 +129,62 @@ class DecisionTreeComponent extends Component {
   }
 
   render() {
-    const { onChange, errors } = this.props
-    const { initial, nodes } = this.props.tree
+    const { onChange, tree } = this.props
+    const { initial, nodes } = tree
+
+    const isParent = (initial, nodeId, childId) => {
+      if (!initial.nodes[nodeId].options)
+        return false
+      else if (initial.nodes[nodeId].options.some(o => o.next == childId))
+        return true
+      else
+        return initial.nodes[nodeId].options.some(o => isParent(initial, o.next, childId))
+    }
+
+    const getParents = (initial, nodeId, childId, optionIx) => {
+      let parents = []
+      if (isParent(initial, nodeId, childId)) {
+        parents = parents.concat({nodeId: nodeId, optionIx: optionIx})
+        if (initial.nodes[nodeId].options) {
+          initial.nodes[nodeId].options.map((o, ix) => (
+            parents = parents.concat(getParents(initial, o.next, childId, ix))
+          ))
+        }
+      }
+      return parents
+    }
+
+    const getNodeId = error => {
+      if (error.path[1].split('/')[0] == 'node') {
+        return error.path[1].split('/')[1]
+      }
+      if (error.path[1].endsWith('keywords/en') || error.path[1].endsWith('children'))
+        return initial
+      else if (nodes[initial].options[error.path[1].split('/')[2]] != undefined)
+        return nodes[initial].options[error.path[1].split('/')[2]].next
+      else
+        return initial
+    }
+
+    const getOptionIx = error => {
+      if (error.path[1].split('/')[2])
+        return error.path[1].split('/')[2]
+      else
+        return 0
+    }
+
+    const getChildrenErrors = errors => {
+      let childrenErrors = []
+      errors.forEach(error => {
+        const parents = getParents(tree, initial, getNodeId(error), getOptionIx(error))
+        parents.forEach((parent) => {
+            childrenErrors = childrenErrors.concat([{message: "children", path: [error.path[0], `node/${parent.nodeId}/${parent.optionIx}/children`]}])
+        })
+      })
+      return childrenErrors
+    }
+
+    let errors = this.props.errors.concat(getChildrenErrors(this.props.errors))
 
     return (
       <div className="decision-tree-container">
@@ -144,7 +198,7 @@ class DecisionTreeComponent extends Component {
             <TreeNode
               key={`tree-node-${currentId}`}
               node={currentNode}
-              errors={errors.filter(e => e.path[1] == `tree/${currentId}` || e.path[1] == "tree")}
+              errors={errors.filter(e => e.path[1] == "tree" || getNodeId(e) == currentId)}
               nextNodeId={this.state.path[pathIx+1]}
               triggerFocusOnOptionToNode={this.state.triggerFocusOnOptionToNode}
               updateMessage={(value) => {
@@ -224,9 +278,24 @@ class TreeNode extends Component {
 
     let optionError = ""
 
-    if(errors.some(e => e.path[1] == "tree" || e.path[2] == `options/${ix}`)) {
-      optionError = (<label className="error-message">{errors.filter(e => e.path[1] == "tree" || e.path[2] == `options/${ix}`)[0].message}</label>)
+    if(errors.some(e => e.path[1] == "tree")) {
+      optionError = (<label className="error-message">{errors.filter(e => e.path[1] == "tree")[0].message}</label>)
     }
+
+    const showableMessageError = (error) => (
+      !(error.message == 'required' && node.message && error.path[1] == "tree")
+      && (
+        error.path[1] == "tree" ||
+        error.path[1].endsWith('question/en') ||
+        ["answer/en"].includes(error.path[2])
+      )
+    )
+
+    const showableOptionError = (error, ix, nodeId, selected) => (
+      error.path[1] == "tree" ||
+      (error.path[1] == `node/${nodeId}/${ix}/children` && !selected) ||
+      error.path[1].endsWith(`responses/${ix}/keywords/en`)
+    )
 
     return (
       <Paper
@@ -238,7 +307,7 @@ class TreeNode extends Component {
           placeholder="Message"
           value={node.message}
           onChange={updateMessage}
-          error={errors.filter(e =>  e.path[1] == "tree" || ["message", "answer"].includes(e.path[2]))} />
+          error= {errors.filter(e => showableMessageError(e, node.message))} />
         <ul>
           {
             node.options.map((option, ix) => (
@@ -252,7 +321,7 @@ class TreeNode extends Component {
                   onSelect={() => selectOption(ix)}
                   onDelete={() => deleteOption(ix)}
                   onFocused={(ix) => focusedOption(ix)}
-                  error={errors.filter(e => e.path[1] == "tree" || e.path[2] == `options/${ix}`)} />
+                  error={errors.filter(e => showableOptionError(e, ix, node.id, nextNodeId == option.next))} />
               </li>
             ))
           }
