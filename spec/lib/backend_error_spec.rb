@@ -483,127 +483,310 @@ RSpec.describe BackendError, :type => :helper do
     end
 
     it "returns empty for scheduled messages" do
-        errors_in =
-        [{
-            "path" => "#/skills/0",
-            "error" => {
-              "valid_indices" => [], "invalid" => [{
-                "index" => 0,
-                "errors" => [{
-                  "path" => "#/type",
-                  "error" => {}
+      errors_in =
+      [{
+        "path" => "#/skills/0",
+        "error" => {
+          "valid_indices" => [], "invalid" => [{
+            "index" => 0,
+            "errors" => [{
+              "path" => "#/type",
+              "error" => {}
+            }, {
+              "path" => "#/messages",
+              "error" => {}
+            }, {
+              "path" => "#/schedule_type",
+              "error" => {}
+            }, {
+              "path" => "#",
+              "error" => {
+                "missing" => ["explanation", "clarification", "keywords", "response"]
+              }
+            }]
+          }, {
+            "index" => 1,
+            "errors" => [{
+              "path" => "#/type",
+              "error" => {}
+            }, {
+              "path" => "#/id",
+              "error" => {}
+            }, {
+              "path" => "#/messages",
+              "error" => {}
+            }, {
+              "path" => "#/name",
+              "error" => {}
+            }, {
+              "path" => "#/schedule_type",
+              "error" => {}
+            }, {
+              "path" => "#",
+              "error" => {
+                "missing" => ["explanation", "languages"]
+              }
+            }]
+          }, {
+            "index" => 2,
+            "errors" => [{
+              "path" => "#",
+              "error" => {
+                "valid_indices" => [], "invalid" => [{
+                  "index" => 0,
+                  "errors" => [{
+                    "path" => "#/messages",
+                    "error" => {
+                      "expected" => 1, "actual" => 0
+                    }
+                  }]
                 }, {
-                  "path" => "#/messages",
-                  "error" => {}
+                  "index" => 1,
+                  "errors" => [{
+                    "path" => "#/messages",
+                    "error" => {
+                      "expected" => 1, "actual" => 0
+                    }
+                  }, {
+                    "path" => "#/schedule_type",
+                    "error" => {}
+                  }]
                 }, {
-                  "path" => "#/schedule_type",
-                  "error" => {}
-                }, {
-                  "path" => "#",
-                  "error" => {
-                    "missing" => ["explanation", "clarification", "keywords", "response"]
-                  }
+                  "index" => 2,
+                  "errors" => [{
+                    "path" => "#/messages",
+                    "error" => {
+                      "expected" => 1, "actual" => 0
+                    }
+                  }, {
+                    "path" => "#/schedule_type",
+                    "error" => {}
+                  }]
                 }]
-              }, {
-                "index" => 1,
-                "errors" => [{
-                  "path" => "#/type",
-                  "error" => {}
-                }, {
-                  "path" => "#/id",
-                  "error" => {}
-                }, {
-                  "path" => "#/messages",
-                  "error" => {}
-                }, {
-                  "path" => "#/name",
-                  "error" => {}
-                }, {
-                  "path" => "#/schedule_type",
-                  "error" => {}
-                }, {
-                  "path" => "#",
-                  "error" => {
-                    "missing" => ["explanation", "languages"]
-                  }
-                }]
-              }, {
-                "index" => 2,
-                "errors" => [{
-                  "path" => "#",
-                  "error" => {
-                    "valid_indices" => [], "invalid" => [{
-                      "index" => 0,
-                      "errors" => [{
-                        "path" => "#/messages",
-                        "error" => {
-                          "expected" => 1, "actual" => 0
-                        }
-                      }]
-                    }, {
-                      "index" => 1,
-                      "errors" => [{
-                        "path" => "#/messages",
-                        "error" => {
-                          "expected" => 1, "actual" => 0
-                        }
-                      }, {
-                        "path" => "#/schedule_type",
-                        "error" => {}
-                      }]
-                    }, {
-                      "index" => 2,
-                      "errors" => [{
-                        "path" => "#/messages",
-                        "error" => {
-                          "expected" => 1, "actual" => 0
-                        }
-                      }, {
-                        "path" => "#/schedule_type",
-                        "error" => {}
-                      }]
-                    }]
-                  }
-                }]
-              }, {
-                "index" => 3,
-                "errors" => [{
-                  "path" => "#/type",
-                  "error" => {}
-                }, {
-                  "path" => "#/messages",
-                  "error" => {}
-                }, {
-                  "path" => "#/schedule_type",
-                  "error" => {}
-                }, {
-                  "path" => "#",
-                  "error" => {
-                    "missing" => ["explanation", "clarification", "keywords", "tree"]
-                  }
-                }]
-              }, {
-                "index" => 4,
-                "errors" => [{
-                  "path" => "#/type",
-                  "error" => {}
-                }, {
-                  "path" => "#/messages",
-                  "error" => {}
-                }, {
-                  "path" => "#/schedule_type",
-                  "error" => {}
-                }, {
-                  "path" => "#",
-                  "error" => {
-                    "missing" => ["questions", "choice_lists"]
-                  }
-                }]
-              }]
-            }
+              }
+            }]
+          }, {
+            "index" => 3,
+            "errors" => [{
+              "path" => "#/type",
+              "error" => {}
+            }, {
+              "path" => "#/messages",
+              "error" => {}
+            }, {
+              "path" => "#/schedule_type",
+              "error" => {}
+            }, {
+              "path" => "#",
+              "error" => {
+                "missing" => ["explanation", "clarification", "keywords", "tree"]
+              }
+            }]
+          }, {
+            "index" => 4,
+            "errors" => [{
+              "path" => "#/type",
+              "error" => {}
+            }, {
+              "path" => "#/messages",
+              "error" => {}
+            }, {
+              "path" => "#/schedule_type",
+              "error" => {}
+            }, {
+              "path" => "#",
+              "error" => {
+                "missing" => ["questions", "choice_lists"]
+              }
+            }]
+          }, {
+            "index" => 5,
+            "errors" => [{
+              "path" => "#/type",
+              "error" => {}
+            }, {
+              "path" => "#/messages",
+              "error" => {}
+            }, {
+              "path" => "#/schedule_type",
+              "error" => {}
+            }, {
+              "path" => "#",
+              "error" => {
+                "missing" => ["explanation", "clarification", "keywords", "in_hours_response", "off_hours_response"]
+              }
+            }]
           }]
-        errors_out = []
-        expect(BackendError.parse_errors(errors_in)).to eq(errors_out)
+        }
+      }]
+      errors_out = [{:message=>"required", :path=>["skills/0", "messages"]}]
+      expect(BackendError.parse_errors(errors_in)).to eq(errors_out)
+    end
+
+    it "returns empty for scheduled messages when fixed_time selected" do
+      errors_in =
+      [{
+        "path" => "#/skills/0",
+        "error" => {
+          "valid_indices" => [], "invalid" => [{
+            "index" => 0,
+            "errors" => [{
+              "path" => "#/type",
+              "error" => {}
+            }, {
+              "path" => "#/messages",
+              "error" => {}
+            }, {
+              "path" => "#/schedule_type",
+              "error" => {}
+            }, {
+              "path" => "#",
+              "error" => {
+                "missing" => ["explanation", "clarification", "keywords", "response"]
+              }
+            }]
+          }, {
+            "index" => 1,
+            "errors" => [{
+              "path" => "#/type",
+              "error" => {}
+            }, {
+              "path" => "#/id",
+              "error" => {}
+            }, {
+              "path" => "#/messages",
+              "error" => {}
+            }, {
+              "path" => "#/name",
+              "error" => {}
+            }, {
+              "path" => "#/schedule_type",
+              "error" => {}
+            }, {
+              "path" => "#",
+              "error" => {
+                "missing" => ["explanation", "languages"]
+              }
+            }]
+          }, {
+            "index" => 2,
+            "errors" => [{
+              "path" => "#",
+              "error" => {
+                "valid_indices" => [], "invalid" => [{
+                  "index" => 0,
+                  "errors" => [{
+                    "path" => "#/messages/0/message/en",
+                    "error" => {
+                      "expected" => 1, "actual" => 0
+                    }
+                  }, {
+                    "path" => "#/messages/0/schedule",
+                    "error" => {}
+                  }, {
+                    "path" => "#/messages/0",
+                    "error" => {
+                      "missing" => ["delay"]
+                    }
+                  }, {
+                    "path" => "#/schedule_type",
+                    "error" => {}
+                  }]
+                }, {
+                  "index" => 1,
+                  "errors" => [{
+                    "path" => "#/messages/0/message/en",
+                    "error" => {
+                      "expected" => 1, "actual" => 0
+                    }
+                  }, {
+                    "path" => "#/messages/0/schedule",
+                    "error" => {
+                      "expected" => "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})(\\.(\\d{3})){0,1}([+-](\\d{2}):(\\d{2})|Z)$"
+                    }
+                  }]
+                }, {
+                  "index" => 2,
+                  "errors" => [{
+                    "path" => "#/messages/0/message/en",
+                    "error" => {
+                      "expected" => 1, "actual" => 0
+                    }
+                  }, {
+                    "path" => "#/messages/0/schedule",
+                    "error" => {}
+                  }, {
+                    "path" => "#/messages/0",
+                    "error" => {
+                      "missing" => ["recurrence"]
+                    }
+                  }, {
+                    "path" => "#/schedule_type",
+                    "error" => {}
+                  }]
+                }]
+              }
+            }]
+          }, {
+            "index" => 3,
+            "errors" => [{
+              "path" => "#/type",
+              "error" => {}
+            }, {
+              "path" => "#/messages",
+              "error" => {}
+            }, {
+              "path" => "#/schedule_type",
+              "error" => {}
+            }, {
+              "path" => "#",
+              "error" => {
+                "missing" => ["explanation", "clarification", "keywords", "tree"]
+              }
+            }]
+          }, {
+            "index" => 4,
+            "errors" => [{
+              "path" => "#/type",
+              "error" => {}
+            }, {
+              "path" => "#/messages",
+              "error" => {}
+            }, {
+              "path" => "#/schedule_type",
+              "error" => {}
+            }, {
+              "path" => "#",
+              "error" => {
+                "missing" => ["questions", "choice_lists"]
+              }
+            }]
+          }, {
+            "index" => 5,
+            "errors" => [{
+              "path" => "#/type",
+              "error" => {}
+            }, {
+              "path" => "#/messages",
+              "error" => {}
+            }, {
+              "path" => "#/schedule_type",
+              "error" => {}
+            }, {
+              "path" => "#",
+              "error" => {
+                "missing" => ["explanation", "clarification", "keywords", "in_hours_response", "off_hours_response"]
+              }
+            }]
+          }]
+        }
+      }]
+      errors_out =
+      [
+        {:message=>"required", :path=>["skills/0", "messages/0/message/en"]},
+        {:message=>"required", :path=>["skills/0", "messages/0/schedule"]}
+      ]
+      expect(BackendError.parse_errors(errors_in)).to eq(errors_out)
     end
 
     it "returns errors when it has no skills" do
