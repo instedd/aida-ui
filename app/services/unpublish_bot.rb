@@ -3,6 +3,7 @@ class UnpublishBot
     if bot.published?
       Backend.destroy_bot(bot.uuid)
       bot.uuid = nil
+      bot.notifications.where(notification_type: "human_override").destroy_all
       bot.save!
     end
 
