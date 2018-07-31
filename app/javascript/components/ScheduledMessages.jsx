@@ -334,7 +334,7 @@ class RecurrentMessages extends Component {
   }
 
   render() {
-    const { startDate, onChangeStartDate, messages, onAdd, onChange, onRemove } = this.props
+    const { startDate, onChangeStartDate, messages, onAdd, onChange, onRemove, errors } = this.props
 
     const date = startDate ? new Date(startDate) : undefined
 
@@ -371,7 +371,8 @@ class RecurrentMessages extends Component {
       return (<Field id={`recurrent-message-#{index}`}
                      className="editable-field"
                      value={item.message}
-                     onChange={value => onChange(index, 'message', value)} />)
+                     onChange={value => onChange(index, 'message', value)}
+                     error={errors.filter(e => e.path[1].startsWith(`messages/${index}`))} />)
     }
 
     const changeStartDate = (_, value) => {
@@ -379,6 +380,12 @@ class RecurrentMessages extends Component {
       value.setMinutes(0)
       value.setSeconds(0)
       onChangeStartDate(formatTimeISOWithTimezone(value))
+    }
+
+    let messageError = ""
+
+    if(errors.some(e => e.path[1] == "messages")) {
+      messageError = (<label className="error-message">{errors.filter(e => e.path[1] == "messages")[0].message}</label>)
     }
 
     return (<div>
@@ -393,6 +400,7 @@ class RecurrentMessages extends Component {
                          canRemoveItem={canRemoveItem} onRemoveItem={removeMessage}
                          renderKey={renderRecurrence}
                          renderValue={renderMessage} />
+      <br/>{messageError}
       <RecurrenceDialog visible={this.state.dialogVisible}
                         onCancel={hideDialog}
                         onConfirm={saveRecurrence}
