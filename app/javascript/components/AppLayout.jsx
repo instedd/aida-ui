@@ -1,5 +1,4 @@
 import React, { Component, Children } from 'react'
-// import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Snackbar } from 'react-md'
@@ -46,7 +45,12 @@ class SectionNavCounterComponent extends Component {
   }
 
   render() {
-    return <span>Messages ({Object.values(this.props.messages).length})</span>
+    const messageCount = Object.values(this.props.messages).length
+    if(messageCount > 0) {
+      return <span>Messages ({messageCount})</span>
+    } else {
+      return <span>Messages</span>
+    }
   }
 }
 
