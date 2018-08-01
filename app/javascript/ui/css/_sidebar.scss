@@ -20,6 +20,12 @@
     .md-icon {
       color: $md-grey-500;
     }
+    .md-icon.error-in-sidebar {
+      color: $error-red;
+      vertical-align: middle;
+      font-size: 90%;
+      padding: 0 5px;
+    }
     button {
       visibility: hidden;
     }
@@ -56,12 +62,6 @@
   .md-icon {
     @extend .md-text;
     font-size: 24px;
-  }
-  .error-in-sidebar {
-    color: $error-red;
-    vertical-align: middle;
-    font-size: 90%;
-    padding: 0 5px;
   }
   .md-tile-content {
     padding-left: 1em;
