@@ -14,11 +14,11 @@ export const SidebarItem = ({id, className, icon, label, enabled, active, menuIt
   if(hasError) {
     error = (<FontIcon className="error-in-sidebar">lens</FontIcon>)
   }
-  let labelWithError = (<span>{label}{error}</span>)
 
   if (enabled != null) {
     const itemClassDisabled = enabled ? "" : "sidebar-item-disabled"
     const append = (<div className="sidebar-item-append">
+      {error}
       <Switch
         id={id}
         name="skills"
@@ -44,7 +44,7 @@ export const SidebarItem = ({id, className, icon, label, enabled, active, menuIt
     return (<ListItem
       className={(className || "") + " " + itemClassActive + " " + itemClassDisabled}
       leftIcon={<FontIcon>{icon}</FontIcon>}
-      primaryText={labelWithError}
+      primaryText={label}
       rightIcon={append}
       onClick={onClick}
     />)
@@ -52,7 +52,7 @@ export const SidebarItem = ({id, className, icon, label, enabled, active, menuIt
     return (<ListItem
       className={(className || "") + " " + itemClassActive}
       leftIcon={<FontIcon>{icon}</FontIcon>}
-      primaryText={labelWithError}
+      primaryText={label}
       onClick={onClick}
     />)
   }
