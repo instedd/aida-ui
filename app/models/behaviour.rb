@@ -75,6 +75,8 @@ class Behaviour < ApplicationRecord
                             "explanation" => "",
                             "clarification" => "",
                             "keywords" => "",
+                            "hours" => default_hours_matrix,
+                            "timezone" => "Etc/UTC",
                             "in_hours_response" => "",
                             "off_hours_response" => ""
                           }
@@ -164,6 +166,7 @@ class Behaviour < ApplicationRecord
         name: name,
         explanation: localized_value(:explanation),
         clarification: localized_value(:clarification),
+        in_hours: hour_intervals
         in_hours_response: localized_value(:in_hours_response),
         off_hours_response: localized_value(:off_hours_response),
         keywords: localized_value(:keywords) do |keywords|
@@ -522,5 +525,40 @@ class Behaviour < ApplicationRecord
     end
 
     result
+  end
+
+  # An array with 7 days a week, and 48 "half hour buckets" a day
+  def default_hour_matrix
+    (1..7).map do
+      (1..48).map do
+        false
+      end
+    end
+  end
+
+  def hour_intervals
+    # config["hours"]
+    # config["timezone"]
+    {
+      "hours": [
+        {
+          "day": "mon",
+          "since": "9:30",
+          "until": "18:00"
+        },
+        {
+          "day": "mon",
+          "since": "20:00"
+        },
+        {
+          "day": "tue",
+          "until": "03:00"
+        },
+        {
+          "day": "wed"
+        }
+      ],
+      "timezone": "America/Buenos_Aires"
+    }
   end
 end
