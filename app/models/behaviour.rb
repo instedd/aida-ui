@@ -537,28 +537,29 @@ class Behaviour < ApplicationRecord
   end
 
   def hour_intervals
-    # config["hours"]
-    # config["timezone"]
+    weekdays = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"]
+    hours = []
+    input_hours = config["hours"]
+    input_hours.each_with_index { |slots, day_index|
+      day = weekdays[day_index]
+      hour = 0
+      minute = 0
+      hours.push(*slots.each_with_index.map{ |enabled, index| (enabled ? timeslot(index, day) : nil) }.compact)
+    }
+
     {
-      "hours": [
-        {
-          "day": "mon",
-          "since": "9:30",
-          "until": "18:00"
-        },
-        {
-          "day": "mon",
-          "since": "20:00"
-        },
-        {
-          "day": "tue",
-          "until": "03:00"
-        },
-        {
-          "day": "wed"
-        }
-      ],
-      "timezone": "America/Buenos_Aires"
+      "hours": hours,
+      "timezone": config["timezone"]
+    }
+  end
+
+  def timeslot(index, weekday)
+    hour = index / 2
+    half_hour = (index % 2) == 1
+    {
+      "day": weekday,
+      "since": "#{hour}:#{half_hour ? "30" : "00" }",
+      "until": "#{half_hour ? hour + 1 : hour}:#{half_hour ? "00" : "30" }"
     }
   end
 end
