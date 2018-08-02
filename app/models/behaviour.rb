@@ -166,7 +166,7 @@ class Behaviour < ApplicationRecord
         name: name,
         explanation: localized_value(:explanation),
         clarification: localized_value(:clarification),
-        in_hours: hour_intervals
+        in_hours: hour_intervals,
         in_hours_response: localized_value(:in_hours_response),
         off_hours_response: localized_value(:off_hours_response),
         keywords: localized_value(:keywords) do |keywords|

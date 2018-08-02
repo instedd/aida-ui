@@ -1,22 +1,21 @@
 import React, { PropTypes, PureComponent } from 'react'
-import { fetchTimezones } from '../actions/timezones'
 import { DropdownMenu, ListItem, TextField } from 'react-md'
 import timezones from 'tzdata'
 
 class TimezoneDropdown extends PureComponent {
   constructor(props) {
     super(props)
-    this.state = stateFor(props.value)
+    this.state = this.stateFor(props.value)
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.value != this.props.value) {
-      this.setState(stateFor(nextProps.value))
+      this.setState(this.stateFor(nextProps.value))
     }
   }
 
   stateFor(timezone) {
-    return { query: timezone ? formatTimezone(timezone) : "", timezone }
+    return { query: timezone ? this.formatTimezone(timezone) : "", timezone }
   }
 
   formatTimezone(tz) {
@@ -32,22 +31,23 @@ class TimezoneDropdown extends PureComponent {
   }
 
   render() {
-    const { onChange } = this.props
+    const { onChange, className, readOnly } = this.props
     const { query } = this.state
+
+    const timezoneList = _.without(Object.keys(timezones.zones), ["Factory"])
 
     const lowerQuery = (query || '').toLowerCase()
 
-    const filtered = filter(timezones, tz => {
-      return tz.includes(lowerQuery)
+    const filtered = _.filter(timezoneList, tz => {
+      return this.formatTimezone(tz).toLowerCase().includes(lowerQuery)
     })
 
-    const items = map(filtered, tz => {
+    const items = _.map(filtered, tz => {
       return {
         key: tz,
-        primaryText: formatTimezone(tz),
-        secondaryText: tz,
+        primaryText: this.formatTimezone(tz),
         onClick: () => {
-          this.setState({ query: formatTimezone(tz), timezone: tz })
+          this.setState({ query: this.formatTimezone(tz), timezone: tz })
           if (onChange) {
             onChange(tz)
           }
@@ -56,14 +56,18 @@ class TimezoneDropdown extends PureComponent {
     })
 
     return (
-      <DropdownMenu id="lang-menu"
+      <DropdownMenu id="timezone-menu"
                     toggleQuery=".md-text-field-container"
                     anchor={{ x: DropdownMenu.HorizontalAnchors.INNER_LEFT,
                               y: DropdownMenu.VerticalAnchors.BOTTOM }}
                     position={DropdownMenu.Positions.BELOW}
+                    className="md-text-field ui-field"
                     menuItems={items}>
-        <TextField id="lang-query"
-                   placeholder="Contact hours"
+        <TextField id="timezone-query"
+                   className={`${className || ""}`}
+                   label="Contact hours"
+                   lineDirection="center"
+                   readOnly={readOnly || false}
                    value={this.state.query}
                    onChange={query => this.setState({ query })} />
       </DropdownMenu>
