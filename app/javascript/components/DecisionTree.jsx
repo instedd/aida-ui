@@ -4,6 +4,7 @@ import Title from '../ui/Title'
 import Headline from '../ui/Headline'
 import Field from '../ui/Field'
 import uuidv4 from 'uuid/v4'
+import { isEqual } from 'lodash'
 
 import {
   Button,
@@ -154,31 +155,64 @@ class DecisionTreeComponent extends Component {
       return parents
     }
 
+    const getNodeIdRecursively = (nodeId, pathIndex, error) => {
+      let path = error.path[pathIndex].replace(/tree\//, '')
+      if (error.path[pathIndex + 2]) {
+        return getNodeIdRecursively(nodes[nodeId].options[path.split('/')[1]].next, pathIndex + 1, error)
+      }
+      else {
+        if (path.endsWith('keywords/en') || path.endsWith('children'))
+          return nodeId
+        else if (nodes[nodeId].options[path.split('/')[1]] != undefined)
+          return nodes[nodeId].options[path.split('/')[1]].next
+        else
+          return nodeId
+      }
+    }
+
     const getNodeId = error => {
       if (error.path[1].split('/')[0] == 'node') {
         return error.path[1].split('/')[1]
       }
-      if (error.path[1].endsWith('keywords/en') || error.path[1].endsWith('children'))
-        return initial
-      else if (nodes[initial].options[error.path[1].split('/')[2]] != undefined)
-        return nodes[initial].options[error.path[1].split('/')[2]].next
-      else
-        return initial
+      else {
+        return getNodeIdRecursively(initial, 1, error)
+      }
     }
 
-    const getOptionIx = error => {
-      if (error.path[1].split('/')[2])
-        return error.path[1].split('/')[2]
-      else
-        return 0
+    const getOptionIxRecursively = (nodeId, parentId, optionId) => {
+      if (nodes[nodeId].options) {
+        if (nodes[nodeId].options.findIndex(option => option.next == optionId) > -1) {
+          return nodes[nodeId].options.findIndex(option => option.next == optionId)
+        }
+        else {
+          let ret = -1
+          nodes[nodeId].options.some((option, ix) => {
+            if (ret == -1) {
+              ret = getOptionIxRecursively(option.next, parentId, optionId)
+            }
+            if (ret > -1 && parentId == nodeId) {
+              ret = ix
+              return true
+            }
+          })
+          return ret
+        }
+      }
+      return -1
     }
 
+    const getOptionIx = (error, parentId) => (
+      getOptionIxRecursively(initial, parentId, getNodeId(error))
+    )
     const getChildrenErrors = errors => {
       let childrenErrors = []
       errors.forEach(error => {
-        const parents = getParents(tree, initial, getNodeId(error), getOptionIx(error))
+        const parents = getParents(tree, initial, getNodeId(error), 0)
         parents.forEach((parent) => {
-            childrenErrors = childrenErrors.concat([{message: "children", path: [error.path[0], `node/${parent.nodeId}/${parent.optionIx}/children`]}])
+          let path = [error.path[0], `node/${parent.nodeId}/${getOptionIx(error, parent.nodeId)}/children`]
+          if (!childrenErrors.some(e => isEqual(e.path, path))) {
+            childrenErrors = childrenErrors.concat([{message: "children", path: path}])
+          }
         })
       })
       return childrenErrors
@@ -286,16 +320,16 @@ class TreeNode extends Component {
       !(error.message == 'required' && node.message && error.path[1] == "tree")
       && (
         error.path[1] == "tree" ||
-        error.path[1].endsWith('question/en') ||
-        ["answer/en"].includes(error.path[2])
+        error.path[error.path.length - 1].endsWith('question/en') ||
+        ["answer/en"].includes(error.path[error.path.length - 1])
       )
     )
 
-    const showableOptionError = (error, ix, nodeId, selected) => (
-      error.path[1] == "tree" ||
+    const showableOptionError = (error, ix, nodeId, selected) => {
+      return (error.path[1] == "tree" ||
       (error.path[1] == `node/${nodeId}/${ix}/children` && !selected) ||
-      error.path[1].endsWith(`responses/${ix}/keywords/en`)
-    )
+      error.path[error.path.length - 1].endsWith(`responses/${ix}/keywords/en`)
+    )}
 
     return (
       <Paper
