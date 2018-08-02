@@ -3,6 +3,8 @@ import React, { Component } from 'react'
 import Title from '../ui/Title'
 import Headline from '../ui/Headline'
 import Field from '../ui/Field'
+import TimezoneDropdown from '../ui/TimezoneDropdown'
+import WeeklySchedule from '../ui/WeeklySchedule'
 
 import RelevanceField from './RelevanceField'
 
@@ -42,6 +44,10 @@ export default class HumanOverride extends Component {
         <Field id="kr-keywords" label="Valid keywords (comma separated)"
                value={config.keywords} onChange={updateConfig('keywords')}
                error={errors.filter(e => e.path[1] == "keywords/en")} />
+
+        <TimezoneDropdown value={config.timezone} onChange={updateConfig('timezone')} />
+        <WeeklySchedule hours={config.hours} onChange={updateConfig('hours')}/>
+
         <Field id="kr-in-hours-response" label="Within schedule message"
                value={config.in_hours_response} onChange={updateConfig('in_hours_response')}
                error={errors.filter(e => e.path[1] == "in_hours_response/en")} />

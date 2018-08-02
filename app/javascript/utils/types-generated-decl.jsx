@@ -61,6 +61,8 @@ export type HumanOverrideConfig = {
   explanation: Message;
   clarification: Message;
   keywords: KeywordList;
+  hours: Array<Array<boolean>>;
+  timezone: string;
   in_hours_response: Message;
   off_hours_response: Message;
 };

@@ -75,6 +75,8 @@ class Behaviour < ApplicationRecord
                             "explanation" => "",
                             "clarification" => "",
                             "keywords" => "",
+                            "hours" => default_hour_matrix,
+                            "timezone" => "Etc/UTC",
                             "in_hours_response" => "",
                             "off_hours_response" => ""
                           }
@@ -164,6 +166,7 @@ class Behaviour < ApplicationRecord
         name: name,
         explanation: localized_value(:explanation),
         clarification: localized_value(:clarification),
+        in_hours: hour_intervals,
         in_hours_response: localized_value(:in_hours_response),
         off_hours_response: localized_value(:off_hours_response),
         keywords: localized_value(:keywords) do |keywords|
@@ -522,5 +525,40 @@ class Behaviour < ApplicationRecord
     end
 
     result
+  end
+
+  # An array with 7 days a week, and 24 "hour buckets" a day
+  def self.default_hour_matrix
+    (1..7).map do
+      (1..24).map do
+        false
+      end
+    end
+  end
+
+  def hour_intervals
+    weekdays = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"]
+    hours = []
+    input_hours = config["hours"]
+    input_hours.each_with_index { |slots, day_index|
+      day = weekdays[day_index]
+      hour = 0
+      minute = 0
+      hours.push(*slots.each_with_index.map{ |enabled, index| (enabled ? timeslot(index, day) : nil) }.compact)
+    }
+
+    {
+      "hours": hours,
+      "timezone": config["timezone"]
+    }
+  end
+
+  def timeslot(index, weekday)
+    hour = index
+    {
+      "day": weekday,
+      "since": "#{hour}:00",
+      "until": "#{hour + 1}:00"
+    }
   end
 end

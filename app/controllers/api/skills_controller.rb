@@ -30,6 +30,9 @@ class Api::SkillsController < ApplicationApiController
     skill = Behaviour.skills.find(params[:id])
     authorize skill
     skill_params = params.require(:skill).permit(policy(skill).permitted_attributes)
+    if skill.kind == 'human_override'
+      skill_params["config"]["hours"] = params["skill"]["config"]["hours"]
+    end
     skill.update_attributes!(skill_params)
     render json: skill_api_json(skill)
   end

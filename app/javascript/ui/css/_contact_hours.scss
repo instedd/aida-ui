@@ -1,0 +1,54 @@
+#ContactHoursContainer {
+  display: grid;
+  grid-template-columns: 4rem repeat(7, 1fr);
+  grid-template-rows: 30px 1fr;
+  grid-gap: 2px;
+  margin-top: 2rem;
+}
+
+.days-of-the-week {
+  grid-column: 1/-1;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin: 0 0 0 4rem;
+  padding: 0;
+  li {
+    font-size: .9rem;
+    line-height: 2;
+    color: $md-grey-600;
+    display: block;
+    text-align: center;
+  }
+}
+.day-hours {
+  padding: 0 .5rem 0 0;
+  margin: 0;
+  li {
+    font-size: .9rem;
+    color: $md-grey-600;
+    display: block;
+    text-align: right;
+    padding: 0;
+    margin: 0;
+    height: 3rem;
+  }
+}
+
+.contactHours {
+  display: grid;
+  grid-template-columns: 1fr;
+  > a {
+    background-color: $md-grey-200;
+    color: $md-secondary-color;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,.3);
+    height: 1.5rem;
+    text-decoration: none !important;
+    cursor: pointer;
+    &.on {
+      background-color: $md-secondary-color;
+      border-color: $md-secondary-color;
+      color: $md-white-base;
+    }
+  }
+}
