@@ -45,7 +45,7 @@ export default class HumanOverride extends Component {
                value={config.keywords} onChange={updateConfig('keywords')}
                error={errors.filter(e => e.path[1] == "keywords/en")} />
         <TimezoneDropdown value={config.timezone} onChange={updateConfig('timezone')} />
-        <WeeklySchedule value={config.hours} onChange={updateConfig('hours')}/>
+        <WeeklySchedule hours={config.hours} onChange={updateConfig('hours')}/>
         <Field id="kr-in-hours-response" label="Within schedule message"
                value={config.in_hours_response} onChange={updateConfig('in_hours_response')}
                error={errors.filter(e => e.path[1] == "in_hours_response/en")} />

@@ -1,27 +1,25 @@
 import React, { Component } from 'react';
 import { TextField } from 'react-md';
+import classNames from 'classnames/bind'
 
 export class WeeklySchedule extends Component {
   render() {
-    const {label, value, onChange, id, helpText, leftIcon, placeholder, style, className, resize, defaultValue, readOnly, error} = this.props
+    const {label, hours, onChange, id, helpText, leftIcon, placeholder, style, className, resize, defaultValue, readOnly, error} = this.props
 
-    return <TextField
-      label={label}
-      className={`ui-field ${className || ""}`}
-      id={id || label}
-      lineDirection="center"
-      value={value}
-      onChange={onChange}
-      helpText={helpText}
-      leftIcon={leftIcon}
-      placeholder={placeholder}
-      style={style}
-      resize={resize}
-      defaultValue={defaultValue}
-      readOnly={readOnly || false}
-      error={error && error.length > 0}
-      errorText={error && error[0] && error[0].message}
-    />
+    const onClick = (dayIndex, hourIndex) => {
+      console.log(dayIndex, hourIndex)
+      // onChange(hours)
+    }
+
+    return <div>
+      {_.map(hours, (day, dayIndex) =>
+        <div key={`${dayIndex}`} style={{display: "inline"}}>
+          {_.map(day, (hour, hourIndex) =>
+              <a key={`${dayIndex}-${hourIndex}`} className={classNames({'hour-block': true, 'on': hour})} onClick={() => onClick(dayIndex, hourIndex)}>enabled: {`${hour}`}</a>
+          )}
+        </div>
+      )}
+    </div>
   }
 }
 
