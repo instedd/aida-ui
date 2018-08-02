@@ -3,7 +3,7 @@ class AddDefaultHourMatrixAndTimezoneToHumanOverride < ActiveRecord::Migration[5
   end
   def default_hour_matrix
     (1..7).map do
-      (1..48).map do
+      (1..24).map do
         false
       end
     end

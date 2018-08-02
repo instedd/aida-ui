@@ -33,12 +33,12 @@ export class WeeklySchedule extends Component {
     return <div id='ContactHoursContainer'>
       <ul className='days-of-the-week'>
         <li>SUN</li>
-        <li>MON</li>  
-        <li>TUE</li>  
-        <li>WED</li>  
-        <li>THU</li>  
-        <li>FRI</li>  
-        <li>SAT</li>  
+        <li>MON</li>
+        <li>TUE</li>
+        <li>WED</li>
+        <li>THU</li>
+        <li>FRI</li>
+        <li>SAT</li>
       </ul>
       <ul className='day-hours'>
         <li>12 AM</li>
@@ -57,7 +57,7 @@ export class WeeklySchedule extends Component {
       {_.map(hours, (day, dayIndex) =>
         <div key={`${dayIndex}`} className='contactHours'>
           {_.map(day, (hour, hourIndex) =>
-              <a key={`${dayIndex}-${hourIndex}`} className={classNames({'hour-block': true, 'on': hour})} onClick={() => onClick(dayIndex, hourIndex)}>{`${hour}`}</a>
+              <a key={`${dayIndex}-${hourIndex}`} className={classNames({'hour-block': true, 'on': hour})} onClick={() => onClick(dayIndex, hourIndex)} />
           )}
         </div>
       )}

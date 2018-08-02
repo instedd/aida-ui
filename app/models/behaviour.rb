@@ -527,10 +527,10 @@ class Behaviour < ApplicationRecord
     result
   end
 
-  # An array with 7 days a week, and 48 "half hour buckets" a day
+  # An array with 7 days a week, and 24 "hour buckets" a day
   def self.default_hour_matrix
     (1..7).map do
-      (1..48).map do
+      (1..24).map do
         false
       end
     end
@@ -554,12 +554,11 @@ class Behaviour < ApplicationRecord
   end
 
   def timeslot(index, weekday)
-    hour = index / 2
-    half_hour = (index % 2) == 1
+    hour = index
     {
       "day": weekday,
-      "since": "#{hour}:#{half_hour ? "30" : "00" }",
-      "until": "#{half_hour ? hour + 1 : hour}:#{half_hour ? "00" : "30" }"
+      "since": "#{hour}:00",
+      "until": "#{hour + 1}:00"
     }
   end
 end

@@ -126,8 +126,8 @@
           "maxItems": 7,
           "items": {
             "type": "array",
-            "minItems": 48,
-            "maxItems": 48,
+            "minItems": 24,
+            "maxItems": 24,
             "items": { "type": "boolean" }
           }
         },
