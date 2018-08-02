@@ -23,6 +23,14 @@ export class WeeklySchedule extends Component {
     ])
   }
 
+  hourLabel(dayIndex, hourIndex, hour, hours){
+    const am = hourIndex < 12
+    const beforeNoon = hourIndex <= 12
+    const label = `${beforeNoon ? (hourIndex == 0 ? 12 : hourIndex) : hourIndex - 12} ${am ? "AM" : "PM"}`
+
+    return (hour & !hours[dayIndex][hourIndex-1]) || (!hour & hours[dayIndex][hourIndex-1])? label : ""
+  }
+
   render() {
     const {hours, onChange} = this.props
 
@@ -57,7 +65,7 @@ export class WeeklySchedule extends Component {
       {_.map(hours, (day, dayIndex) =>
         <div key={`${dayIndex}`} className='contactHours'>
           {_.map(day, (hour, hourIndex) =>
-              <a key={`${dayIndex}-${hourIndex}`} className={classNames({'hour-block': true, 'on': hour})} onClick={() => onClick(dayIndex, hourIndex)} />
+              <a key={`${dayIndex}-${hourIndex}`} className={classNames({'hour-block': true, 'on': hour})} onClick={() => onClick(dayIndex, hourIndex)}>{this.hourLabel(dayIndex, hourIndex, hour, hours)}</a>
           )}
         </div>
       )}
