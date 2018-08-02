@@ -30,11 +30,34 @@ export class WeeklySchedule extends Component {
       onChange(this.toggle(hours, dayIndex, hourIndex))
     }
 
-    return <div>
+    return <div id='ContactHoursContainer'>
+      <ul className='days-of-the-week'>
+        <li>SUN</li>
+        <li>MON</li>  
+        <li>TUE</li>  
+        <li>WED</li>  
+        <li>THU</li>  
+        <li>FRI</li>  
+        <li>SAT</li>  
+      </ul>
+      <ul className='day-hours'>
+        <li>12 AM</li>
+        <li>2 AM</li>
+        <li>4 AM</li>
+        <li>6 AM</li>
+        <li>8 AM</li>
+        <li>10 AM</li>
+        <li>12 PM</li>
+        <li>2 PM</li>
+        <li>4 PM</li>
+        <li>6 PM</li>
+        <li>8 PM</li>
+        <li>10 PM</li>
+      </ul>
       {_.map(hours, (day, dayIndex) =>
-        <div key={`${dayIndex}`} style={{display: "inline"}}>
+        <div key={`${dayIndex}`} className='contactHours'>
           {_.map(day, (hour, hourIndex) =>
-              <a key={`${dayIndex}-${hourIndex}`} className={classNames({'hour-block': true, 'on': hour})} onClick={() => onClick(dayIndex, hourIndex)}>enabled: {`${hour}`}</a>
+              <a key={`${dayIndex}-${hourIndex}`} className={classNames({'hour-block': true, 'on': hour})} onClick={() => onClick(dayIndex, hourIndex)}>{`${hour}`}</a>
           )}
         </div>
       )}
