@@ -85,9 +85,9 @@ class BackendError < HTTParty::ResponseError
 
   def self.include_invalid_sub_error(sub_error)
     ret = true
-    if  ['#/type', '#/schedule_type', '#/answer'].include? sub_error['path']
+    if  ['#/type', '#/schedule_type', '#/answer', '#/question', '#/responses'].include? sub_error['path']
       ret = false
-    elsif sub_error['path'] == '#'
+    elsif sub_error['error'] && sub_error['error']['invalid']
       ret = sub_error['error']['invalid'].all? { |e| include_invalid_sub_error(e) }
     end
     ret

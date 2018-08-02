@@ -677,6 +677,223 @@ RSpec.describe BackendError, :type => :helper do
       expect(BackendError.parse_errors(errors_in)).to eq(errors_out)
     end
 
+    it "returns errors for decision tree when missing answer in the second level" do
+      errors_in =
+      [{
+        "path" => "#/skills/0",
+        "error" => {
+          "valid_indices" => [], "invalid" => [{
+            "index" => 0,
+            "errors" => [{
+              "path" => "#/type",
+              "error" => {}
+            }, {
+              "path" => "#/tree",
+              "error" => {}
+            }, {
+              "path" => "#",
+              "error" => {
+                "missing" => ["response"]
+              }
+            }]
+          }, {
+            "index" => 1,
+            "errors" => [{
+              "path" => "#/explanation",
+              "error" => {
+                "expected" => ["string"], "actual" => "object"
+              }
+            }, {
+              "path" => "#/type",
+              "error" => {}
+            }, {
+              "path" => "#/clarification",
+              "error" => {}
+            }, {
+              "path" => "#/id",
+              "error" => {}
+            }, {
+              "path" => "#/keywords",
+              "error" => {}
+            }, {
+              "path" => "#/name",
+              "error" => {}
+            }, {
+              "path" => "#/tree",
+              "error" => {}
+            }, {
+              "path" => "#",
+              "error" => {
+                "missing" => ["languages"]
+              }
+            }]
+          }, {
+            "index" => 2,
+            "errors" => [{
+              "path" => "#",
+              "error" => {
+                "valid_indices" => [], "invalid" => [{
+                  "index" => 0,
+                  "errors" => [{
+                    "path" => "#/type",
+                    "error" => {}
+                  }, {
+                    "path" => "#/clarification",
+                    "error" => {}
+                  }, {
+                    "path" => "#/explanation",
+                    "error" => {}
+                  }, {
+                    "path" => "#/keywords",
+                    "error" => {}
+                  }, {
+                    "path" => "#/tree",
+                    "error" => {}
+                  }, {
+                    "path" => "#",
+                    "error" => {
+                      "missing" => ["schedule_type", "messages"]
+                    }
+                  }]
+                }, {
+                  "index" => 1,
+                  "errors" => [{
+                    "path" => "#/type",
+                    "error" => {}
+                  }, {
+                    "path" => "#/clarification",
+                    "error" => {}
+                  }, {
+                    "path" => "#/explanation",
+                    "error" => {}
+                  }, {
+                    "path" => "#/keywords",
+                    "error" => {}
+                  }, {
+                    "path" => "#/tree",
+                    "error" => {}
+                  }, {
+                    "path" => "#",
+                    "error" => {
+                      "missing" => ["schedule_type", "messages"]
+                    }
+                  }]
+                }, {
+                  "index" => 2,
+                  "errors" => [{
+                    "path" => "#/type",
+                    "error" => {}
+                  }, {
+                    "path" => "#/clarification",
+                    "error" => {}
+                  }, {
+                    "path" => "#/explanation",
+                    "error" => {}
+                  }, {
+                    "path" => "#/keywords",
+                    "error" => {}
+                  }, {
+                    "path" => "#/tree",
+                    "error" => {}
+                  }, {
+                    "path" => "#",
+                    "error" => {
+                      "missing" => ["schedule_type", "messages"]
+                    }
+                  }]
+                }]
+              }
+            }]
+          }, {
+            "index" => 3,
+            "errors" => [{
+              "path" => "#/tree/responses/0/next",
+              "error" => {
+                "valid_indices" => [], "invalid" => [{
+                  "index" => 0,
+                  "errors" => [{
+                    "path" => "#/responses/0/next",
+                    "error" => {
+                      "valid_indices" => [], "invalid" => [{
+                        "index" => 0,
+                        "errors" => [{
+                          "path" => "#/answer",
+                          "error" => {}
+                        }, {
+                          "path" => "#",
+                          "error" => {
+                            "missing" => ["question", "responses"]
+                          }
+                        }]
+                      }, {
+                        "index" => 1,
+                        "errors" => [{
+                          "path" => "#/answer/en",
+                          "error" => {
+                            "expected" => 1, "actual" => 0
+                          }
+                        }]
+                      }]
+                    }
+                  }]
+                }, {
+                  "index" => 1,
+                  "errors" => [{
+                    "path" => "#/question",
+                    "error" => {}
+                  }, {
+                    "path" => "#/responses",
+                    "error" => {}
+                  }, {
+                    "path" => "#",
+                    "error" => {
+                      "missing" => ["answer"]
+                    }
+                  }]
+                }]
+              }
+            }]
+          }, {
+            "index" => 4,
+            "errors" => [{
+              "path" => "#/type",
+              "error" => {}
+            }, {
+              "path" => "#/clarification",
+              "error" => {}
+            }, {
+              "path" => "#/explanation",
+              "error" => {}
+            }, {
+              "path" => "#/tree",
+              "error" => {}
+            }, {
+              "path" => "#",
+              "error" => {
+                "missing" => ["questions", "choice_lists"]
+              }
+            }]
+          }, {
+            "index" => 5,
+            "errors" => [{
+              "path" => "#/type",
+              "error" => {}
+            }, {
+              "path" => "#/tree",
+              "error" => {}
+            }, {
+              "path" => "#",
+              "error" => {
+                "missing" => ["in_hours_response", "off_hours_response"]
+              }
+            }]
+          }]
+        }
+      }]
+      errors_out = [{:message=>"required", :path=>["skills/0", "tree/responses/0/next", "responses/0/next", "answer/en"]}]
+      expect(BackendError.parse_errors(errors_in)).to eq(errors_out)
+    end
+
     it "returns empty for scheduled messages" do
       errors_in =
       [{
