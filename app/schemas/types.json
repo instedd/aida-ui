@@ -120,11 +120,23 @@
         "explanation": { "$ref": "#/definitions/message" },
         "clarification": { "$ref": "#/definitions/message" },
         "keywords": { "$ref": "#/definitions/keywordList" },
+        "hours": {
+          "type": "array",
+          "minItems": 7,
+          "maxItems": 7,
+          "items": {
+            "type": "array",
+            "minItems": 48,
+            "maxItems": 48,
+            "items": { "type": "boolean" }
+          }
+        },
+        "timezone": { "type": "string" },
         "in_hours_response": { "$ref": "#/definitions/message" },
         "off_hours_response": { "$ref": "#/definitions/message" }
       },
       "additionalProperties": false,
-      "required": [ "explanation", "clarification", "keywords", "in_hours_response", "off_hours_response" ]
+      "required": [ "explanation", "clarification", "keywords", "in_hours_response", "off_hours_response", "hours", "timezone" ]
     },
 
     "surveyConfig": {

@@ -75,7 +75,7 @@ class Behaviour < ApplicationRecord
                             "explanation" => "",
                             "clarification" => "",
                             "keywords" => "",
-                            "hours" => default_hours_matrix,
+                            "hours" => default_hour_matrix,
                             "timezone" => "Etc/UTC",
                             "in_hours_response" => "",
                             "off_hours_response" => ""
@@ -528,7 +528,7 @@ class Behaviour < ApplicationRecord
   end
 
   # An array with 7 days a week, and 48 "half hour buckets" a day
-  def default_hour_matrix
+  def self.default_hour_matrix
     (1..7).map do
       (1..48).map do
         false
