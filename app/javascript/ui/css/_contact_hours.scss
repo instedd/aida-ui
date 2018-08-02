@@ -43,6 +43,7 @@
     text-align: center;
     border-bottom: 1px solid rgba(255,255,255,.3);
     height: 1.5rem;
+    text-decoration: none !important;
     cursor: pointer;
     &.on {
       background-color: $md-secondary-color;
