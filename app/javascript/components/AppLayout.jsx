@@ -41,7 +41,7 @@ export const AppLayout = ({title, headerNav, headerNavExtra, userName, children,
 
 class SectionNavCounterComponent extends Component {
   componentDidMount() {
-    messageActions.fetchMessages()
+    this.props.messageActions.fetchMessages()
   }
 
   render() {

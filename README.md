@@ -78,6 +78,14 @@ by the following command.
 $ docker-compose run --rm ui ./bin/yarn expand-schema
 ```
 
+* on script to run them all: pre_commit.sh
+
+To run all that before making a commit, you can run
+
+```
+$ ./pre_commit.sh
+```
+
 ## Production environment
 
 The `docker-compose.production.yml` file describes a stack to use the published
