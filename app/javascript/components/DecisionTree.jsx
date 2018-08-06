@@ -4,6 +4,7 @@ import Title from '../ui/Title'
 import Headline from '../ui/Headline'
 import Field from '../ui/Field'
 import uuidv4 from 'uuid/v4'
+import { isEqual } from 'lodash'
 
 import {
   Button,
@@ -129,8 +130,95 @@ class DecisionTreeComponent extends Component {
   }
 
   render() {
-    const { onChange, errors } = this.props
-    const { initial, nodes } = this.props.tree
+    const { onChange, tree } = this.props
+    const { initial, nodes } = tree
+
+    const isParent = (initial, nodeId, childId) => {
+      if (!initial.nodes[nodeId].options)
+        return false
+      else if (initial.nodes[nodeId].options.some(o => o.next == childId))
+        return true
+      else
+        return initial.nodes[nodeId].options.some(o => isParent(initial, o.next, childId))
+    }
+
+    const getParents = (initial, nodeId, childId, optionIx) => {
+      let parents = []
+      if (isParent(initial, nodeId, childId)) {
+        parents = parents.concat({nodeId: nodeId, optionIx: optionIx})
+        if (initial.nodes[nodeId].options) {
+          initial.nodes[nodeId].options.map((o, ix) => (
+            parents = parents.concat(getParents(initial, o.next, childId, ix))
+          ))
+        }
+      }
+      return parents
+    }
+
+    const getNodeIdRecursively = (nodeId, pathIndex, error) => {
+      let path = error.path[pathIndex].replace(/tree\//, '')
+      if (error.path[pathIndex + 2]) {
+        return getNodeIdRecursively(nodes[nodeId].options[path.split('/')[1]].next, pathIndex + 1, error)
+      }
+      else {
+        if (path.endsWith('keywords/en') || path.endsWith('children'))
+          return nodeId
+        else if (nodes[nodeId].options[path.split('/')[1]] != undefined)
+          return nodes[nodeId].options[path.split('/')[1]].next
+        else
+          return nodeId
+      }
+    }
+
+    const getNodeId = error => {
+      if (error.path[1].split('/')[0] == 'node') {
+        return error.path[1].split('/')[1]
+      }
+      else {
+        return getNodeIdRecursively(initial, 1, error)
+      }
+    }
+
+    const getOptionIxRecursively = (nodeId, parentId, optionId) => {
+      if (nodes[nodeId].options) {
+        if (nodes[nodeId].options.findIndex(option => option.next == optionId) > -1) {
+          return nodes[nodeId].options.findIndex(option => option.next == optionId)
+        }
+        else {
+          let ret = -1
+          nodes[nodeId].options.some((option, ix) => {
+            if (ret == -1) {
+              ret = getOptionIxRecursively(option.next, parentId, optionId)
+            }
+            if (ret > -1 && parentId == nodeId) {
+              ret = ix
+              return true
+            }
+          })
+          return ret
+        }
+      }
+      return -1
+    }
+
+    const getOptionIx = (error, parentId) => (
+      getOptionIxRecursively(initial, parentId, getNodeId(error))
+    )
+    const getChildrenErrors = errors => {
+      let childrenErrors = []
+      errors.forEach(error => {
+        const parents = getParents(tree, initial, getNodeId(error), 0)
+        parents.forEach((parent) => {
+          let path = [error.path[0], `node/${parent.nodeId}/${getOptionIx(error, parent.nodeId)}/children`]
+          if (!childrenErrors.some(e => isEqual(e.path, path))) {
+            childrenErrors = childrenErrors.concat([{message: "children", path: path}])
+          }
+        })
+      })
+      return childrenErrors
+    }
+
+    let errors = this.props.errors.concat(getChildrenErrors(this.props.errors))
 
     return (
       <div className="decision-tree-container">
@@ -144,7 +232,7 @@ class DecisionTreeComponent extends Component {
             <TreeNode
               key={`tree-node-${currentId}`}
               node={currentNode}
-              errors={errors.filter(e => e.path[1] == `tree/${currentId}` || e.path[1] == "tree")}
+              errors={errors.filter(e => e.path[1] == "tree" || getNodeId(e) == currentId)}
               nextNodeId={this.state.path[pathIx+1]}
               triggerFocusOnOptionToNode={this.state.triggerFocusOnOptionToNode}
               updateMessage={(value) => {
@@ -224,9 +312,24 @@ class TreeNode extends Component {
 
     let optionError = ""
 
-    if(errors.some(e => e.path[1] == "tree" || e.path[2] == `options/${ix}`)) {
-      optionError = (<label className="error-message">{errors.filter(e => e.path[1] == "tree" || e.path[2] == `options/${ix}`)[0].message}</label>)
+    if(errors.some(e => e.path[1] == "tree")) {
+      optionError = (<label className="error-message">{errors.filter(e => e.path[1] == "tree")[0].message}</label>)
     }
+
+    const showableMessageError = (error) => (
+      !(error.message == 'required' && node.message && error.path[1] == "tree")
+      && (
+        error.path[1] == "tree" ||
+        error.path[error.path.length - 1].endsWith('question/en') ||
+        ["answer/en"].includes(error.path[error.path.length - 1])
+      )
+    )
+
+    const showableOptionError = (error, ix, nodeId, selected) => {
+      return (error.path[1] == "tree" ||
+      (error.path[1] == `node/${nodeId}/${ix}/children` && !selected) ||
+      error.path[error.path.length - 1].endsWith(`responses/${ix}/keywords/en`)
+    )}
 
     return (
       <Paper
@@ -238,7 +341,7 @@ class TreeNode extends Component {
           placeholder="Message"
           value={node.message}
           onChange={updateMessage}
-          error={errors.filter(e =>  e.path[1] == "tree" || ["message", "answer"].includes(e.path[2]))} />
+          error= {errors.filter(e => showableMessageError(e, node.message))} />
         <ul>
           {
             node.options.map((option, ix) => (
@@ -252,7 +355,7 @@ class TreeNode extends Component {
                   onSelect={() => selectOption(ix)}
                   onDelete={() => deleteOption(ix)}
                   onFocused={(ix) => focusedOption(ix)}
-                  error={errors.filter(e => e.path[1] == "tree" || e.path[2] == `options/${ix}`)} />
+                  error={errors.filter(e => showableOptionError(e, ix, node.id, nextNodeId == option.next))} />
               </li>
             ))
           }
