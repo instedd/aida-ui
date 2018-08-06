@@ -1292,7 +1292,7 @@ RSpec.describe BackendError, :type => :helper do
       expect(BackendError.parse_errors(errors_in)).to eq(errors_out)
     end
 
-    it "returns empty for scheduled messages" do
+    it "returns errors for scheduled messages" do
       errors_in =
       [{
         "path" => "#/skills/0",
@@ -1433,7 +1433,7 @@ RSpec.describe BackendError, :type => :helper do
       expect(BackendError.parse_errors(errors_in)).to eq(errors_out)
     end
 
-    it "returns empty for scheduled messages when fixed_time selected" do
+    it "returns errors for scheduled messages when fixed_time selected" do
       errors_in =
       [{
         "path" => "#/skills/0",
