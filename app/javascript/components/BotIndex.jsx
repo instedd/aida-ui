@@ -42,12 +42,19 @@ export class BotIndexComponent extends Component {
         )
       } else {
         const title = botList.length == 1 ? '1 bot' : `${botList.length} bots`
+
+        const commaSeparatedChannels = channels => (
+          channels.sort().map((channel, ix) => (
+            ix > 0 ? `, ${channel}` : channel
+          ))
+        )
+
         content = (
           <MainWhite>
             <Listing items={botList} title={title}
                       onItemClick={b => history.push(routes.bot(b.id))}>
               <Column title="Name" render={b => b.name} />
-              <Column title="Type" render={b => "Facebook"} />
+              <Column title="Type" render={b => commaSeparatedChannels(b.channels)} />
               <Column title="Uses" render={b => null} />
               <Column title="Last activity date" render={d => null} />
             </Listing>
