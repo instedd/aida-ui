@@ -312,7 +312,7 @@ class TreeNode extends Component {
 
     let optionError = ""
 
-    if(errors.some(e => e.path[1] == "tree")) {
+    if(errors && errors.some(e => e.path[1] == "tree")) {
       optionError = (<label className="error-message">{errors.filter(e => e.path[1] == "tree")[0].message}</label>)
     }
 
@@ -387,7 +387,7 @@ const TreeNodeOption = ({
   error
 }) => {
   return (
-    <div className={`tree-node-option ${selected ? 'selected' : ''}`}>
+    <div className={`tree-node-option ${selected ? 'selected' : ''} ${error && error.length > 0 ? 'error-tree' : ''}`}>
       <TextField
         id={`option-${id}`}
         className="tree-node-option-value"
@@ -397,8 +397,8 @@ const TreeNodeOption = ({
         default={false}
         onChange={onChange}
         onClick={onSelect}
-        error={error && error.length > 0}
-        errorText={error && error[0] && error[0].message}
+        error={error && error.length > 0 && error[0].message != 'children'}
+        errorText={error && error[0] && error[0].message != 'children' && error[0].message}
         ref={
           focused
           ? (el) => {

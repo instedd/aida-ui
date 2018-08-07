@@ -198,3 +198,11 @@ tr.md-table-row {
 .error-message {
   color: $error-red;
 }
+.error-tree {
+  border-color: $error-red !important;
+  
+  .md-text--error {
+    position: absolute;
+    margin-top: .4rem;
+  }
+}
