@@ -64,7 +64,7 @@ class BotChannelComponent extends Component {
               the <a href="https://developers.facebook.com/docs/messenger-platform/getting-started/app-setup" target="_blank" className="hrefLink">subscribe bot page</a>.
             </Headline>
 
-            <Field label="Callback URL" defaultValue={`${location.protocol}//${location.host}/callback/facebook/`} readOnly />
+            <Field label="Callback URL" defaultValue={`${location.protocol}//${location.host}/callback/facebook/${bot.uuid}`} readOnly />
             <Field label="Verify Token" value={channelFacebook.config.verify_token} onChange={this.updateConfigField("verify_token", "facebook")} error={this.props.errors.filter((e) => e.path[0] == "channels/0" && e.path[1] == "verify_token")} />
             { /* TODO: replace `<br /><br />` with proper CSS spacing */ }
             <br /><br />

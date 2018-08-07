@@ -9,6 +9,12 @@
         "name": { "type": "string" },
         "published": { "type": "boolean" },
         "channel_setup": { "type": "boolean" },
+        "uuid": {
+          "oneOf": [
+            { "type": "string" },
+            { "type": "null" }
+          ]
+        },
         "permissions": { "$ref": "#/definitions/permissions" },
         "collaborator_id": {
           "oneOf": [
