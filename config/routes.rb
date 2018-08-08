@@ -73,7 +73,6 @@ Rails.application.routes.draw do
     end
   end
 
-  get "/_design(/*path)", to: 'welcome#design'
   get "/login", to: 'welcome#login'
   get "/logout", to: 'welcome#logout'
 

@@ -26,7 +26,4 @@ class WelcomeController < ApplicationController
   def generate_token
     render json: { token: Guisso.generate_bearer_token(current_user.email) }
   end
-
-  def design
-  end
 end
