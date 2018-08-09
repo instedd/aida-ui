@@ -21,6 +21,7 @@
             { "type": "null" }
           ]
         },
+        "updated_at": { "type": "string" },
         "permissions": { "$ref": "#/definitions/permissions" },
         "collaborator_id": {
           "oneOf": [

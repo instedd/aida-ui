@@ -146,6 +146,19 @@ class Api::BotsController < ApplicationApiController
       channel_setup: bot.channels.any?{|c| c.setup? },
       uuid: bot.uuid,
       channels: bot.channels.select{|c| c.setup? }.map{|c| c.name.capitalize },
+      updated_at: [
+        bot.updated_at,
+        bot.channels.any? ? bot.channels.maximum(:updated_at) : Time.at(0),
+        bot.behaviours.any? ? bot.behaviours.maximum(:updated_at) : Time.at(0),
+        bot.translations.any? ? bot.translations.maximum(:updated_at) : Time.at(0),
+        bot.variable_assignments.any? ? bot.variable_assignments.maximum(:updated_at) : Time.at(0),
+        bot.data_tables.any? ? bot.data_tables.maximum(:updated_at) : Time.at(0),
+        bot.collaborators.any? ? bot.collaborators.maximum(:updated_at) : Time.at(0),
+        bot.invitations.any? ? bot.invitations.maximum(:updated_at) : Time.at(0),
+        bot.sessions.any? ? bot.sessions.maximum(:updated_at) : Time.at(0),
+        bot.users.any? ? bot.users.maximum(:updated_at) : Time.at(0),
+        bot.notifications.any? ? bot.notifications.maximum(:updated_at) : Time.at(0)
+      ].max,
       permissions: bot_permissions(bot),
       collaborator_id: bot.collaborators.find { |c| c.user_id == current_user.id }.try(:id)
     }

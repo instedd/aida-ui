@@ -7,6 +7,7 @@ export type Bot = {
   channel_setup: boolean;
   channels?: Array<string>;
   uuid?: string | null;
+  updated_at?: string;
   permissions: Permissions;
   collaborator_id?: number | null;
 };

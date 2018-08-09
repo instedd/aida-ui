@@ -49,6 +49,8 @@ export class BotIndexComponent extends Component {
           ))
         )
 
+        const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' }
+
         content = (
           <MainWhite>
             <Listing items={botList} title={title}
@@ -56,7 +58,7 @@ export class BotIndexComponent extends Component {
               <Column title="Name" render={b => b.name} />
               <Column title="Type" render={b => commaSeparatedChannels(b.channels)} />
               <Column title="Uses" render={b => null} />
-              <Column title="Last activity date" render={d => null} />
+              <Column title="Last activity date" render={b => new Date(b.updated_at).toLocaleDateString('en-US', dateOptions)} />
             </Listing>
           </MainWhite>
         )
