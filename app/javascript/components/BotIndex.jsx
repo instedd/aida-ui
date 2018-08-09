@@ -57,7 +57,7 @@ export class BotIndexComponent extends Component {
                       onItemClick={b => history.push(routes.bot(b.id))}>
               <Column title="Name" render={b => b.name} />
               <Column title="Type" render={b => commaSeparatedChannels(b.channels)} />
-              <Column title="Uses" render={b => null} />
+              <Column title="Uses" render={b => b.active_users} />
               <Column title="Last activity date" render={b => new Date(b.updated_at).toLocaleDateString('en-US', dateOptions)} />
             </Listing>
           </MainWhite>

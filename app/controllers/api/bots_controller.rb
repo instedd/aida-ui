@@ -159,6 +159,7 @@ class Api::BotsController < ApplicationApiController
         bot.users.any? ? bot.users.maximum(:updated_at) : Time.at(0),
         bot.notifications.any? ? bot.notifications.maximum(:updated_at) : Time.at(0)
       ].max,
+      active_users: bot.published? ? GatherBotStats.run(bot, 'this_month')[:active_users] : 0,
       permissions: bot_permissions(bot),
       collaborator_id: bot.collaborators.find { |c| c.user_id == current_user.id }.try(:id)
     }
