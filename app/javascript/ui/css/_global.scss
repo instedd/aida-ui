@@ -89,34 +89,7 @@ main {
   background: $md-secondary-color;
 }
 
-.file-upload-control {
-  padding: 0;
-  margin: 4px 0;
-  border: 1px dashed $md-grey-500;
-  .md-btn--text {
-    text-transform: none;
-  }
-  &.upload-error {
-    border-color: red;
-    .md-icon-text {
-      color: red;
-    }
-  }
-}
 
-//Turn off webkit's number input spinners
-input[type=number]::-webkit-outer-spin-button,
-input[type=number]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-input[type=number] {
-    -moz-appearance:textfield;
-}
-
-input[type=number]:invalid {
-  color: $md-red-400;
-}
 
 /* ========== Helper classes ============ */
 
@@ -195,14 +168,3 @@ tr.md-table-row {
   }
 }
 
-.error-message {
-  color: $error-red;
-}
-.error-tree {
-  border-color: $error-red !important;
-  
-  .md-text--error {
-    position: absolute;
-    margin-top: .4rem;
-  }
-}

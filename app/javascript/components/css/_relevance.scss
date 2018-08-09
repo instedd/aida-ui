@@ -4,12 +4,17 @@
   padding-right: 20px;
   background: $md-grey-200;
   border: 1px solid $md-grey-200;
+  padding-left: 8rem;
+  position: relative;
 
   &.blank {
     background: inherit;
   }
   i.material-icons {
     font-size: 24px !important;
+    position: absolute;
+    left: .5rem;
+    top: .7rem;
   }
   .md-divider {
     background: transparent;
@@ -17,5 +22,13 @@
   input::placeholder {
     font-style: italic;
     color: #cccccc;
+  }
+  &:before {
+    content: 'RELEVANCE';
+    font-size: 1rem;
+    color: $md-grey-500;
+    position: absolute;
+    top: 1rem;
+    left: 2.5rem;
   }
 }
