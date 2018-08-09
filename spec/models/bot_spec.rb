@@ -37,7 +37,7 @@ RSpec.describe Bot, type: :model do
       end
 
       it "has a proper notifications_url" do
-        expect(bot.manifest[:notifications_url]).to eq(URI::parse("http://test.host/notifications/#{bot.notifications_secret}"))
+        expect(bot.manifest[:notifications_url]).to eq(URI::parse("http://ui.aidaui.lvh.me:3000/notifications/#{bot.notifications_secret}"))
       end
     end
 
