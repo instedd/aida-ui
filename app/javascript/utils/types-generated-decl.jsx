@@ -314,6 +314,7 @@ export type Collaborator = {
   id: number;
   roles: RoleList;
   user_email: string;
+  display_name: string;
   last_activity: string | null;
 };
 

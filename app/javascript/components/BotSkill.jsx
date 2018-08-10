@@ -17,14 +17,14 @@ import ScheduledMessages from './ScheduledMessages'
 import DecisionTree from './DecisionTree'
 import sortBy from 'lodash/sortBy'
 
-const SkillComponent = ({skill, actions, errors}) => {
+const SkillComponent = ({skill, actions, errors, bot}) => {
   const { kind } = skill
 
   switch (kind) {
     case 'keyword_responder':
       return (<KeywordResponder skill={skill} actions={actions} errors={errors} />)
     case 'human_override':
-      return (<HumanOverride skill={skill} actions={actions} errors={errors} />)
+      return (<HumanOverride skill={skill} actions={actions} errors={errors} bot={bot} />)
     case 'language_detector':
       return (<LanguageDetector skill={skill} actions={actions} errors={errors} />)
     case 'survey':
@@ -45,7 +45,7 @@ class BotSkill extends Component {
     if (loading) {
       return <Loader>Loading skill</Loader>
     } else if (skill) {
-      return <SkillComponent skill={skill} actions={actions} errors={errors}/>
+      return <SkillComponent skill={skill} actions={actions} errors={errors} bot={bot} />
     } else {
       return <Redirect to={routes.botFrontDesk(bot.id)} />
     }
