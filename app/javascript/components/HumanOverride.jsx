@@ -12,6 +12,9 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { hasPermission } from '../utils'
 import * as collaboratorsActions from '../actions/collaborators'
+import * as r from '../utils/routes'
+import { Button } from 'react-md'
+import { Link } from 'react-router-dom'
 
 class HumanOverride extends Component {
   componentDidMount() {
@@ -22,7 +25,7 @@ class HumanOverride extends Component {
   }
 
   render() {
-    const { skill, actions, errors, permitted, operators } = this.props
+    const { skill, actions, errors, permitted, operators, bot } = this.props
     const { name, config } = skill
 
     const updateConfig = (key) => {
@@ -48,8 +51,19 @@ class HumanOverride extends Component {
       )
 
       if (permitted && operators.length) {
-        return <Field id="kr-operators" label="Operators" readOnly={true}
-                value={spaceSeparatedOperators()} />
+        return (
+          <div>
+            <Field id="kr-operators" label="Operators" readOnly={true} value={spaceSeparatedOperators()} />
+            <Button
+              flat
+              iconChildren="edit"
+              className="hrefLink"
+              to={r.botCollaborators(bot.id)}
+              component={Link} >
+              Manage permissions
+            </Button>
+          </div>
+        )
       }
     }
 
