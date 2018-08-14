@@ -13,6 +13,7 @@ export const PUBLISH_FAILURE = 'BOT_PUBLISH_FAILURE'
 export const UNPUBLISH = 'BOT_UNPUBLISH'
 export const UNPUBLISH_SUCCESS = 'BOT_UNPUBLISH_SUCCESS'
 export const DELETE = 'BOT_DELETE'
+export const SELECT = 'BOT_SELECT'
 
 export const _botUpdate = (bot : T.Bot) : T.BotAction => ({
   type: UPDATE,
@@ -48,6 +49,11 @@ export const _botUnpublishSuccess = (botId : number) : T.BotAction => ({
 
 export const _botDelete = (botId : number) : T.BotAction => ({
   type: DELETE,
+  botId
+})
+
+export const _botSelect = (botId : number) : T.BotAction => ({
+  type: SELECT,
   botId
 })
 
@@ -88,6 +94,10 @@ export const unpublishBot = (bot : T.Bot) => (dispatch : T.Dispatch) => {
 export const deleteBot = (bot : T.Bot) => (dispatch : T.Dispatch) => {
   return api.deleteBot(bot)
             .then(() => dispatch(_botDelete(bot.id)))
+}
+
+export const selectBot = (bot : T.Bot) => (dispatch : T.Dispatch) => {
+  dispatch(_botSelect(bot.id))
 }
 
 export const leaveBot = (bot : T.Bot) => (dispatch : T.Dispatch) => {
