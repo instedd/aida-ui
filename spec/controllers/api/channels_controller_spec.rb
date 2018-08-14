@@ -38,6 +38,14 @@ RSpec.describe Api::ChannelsController, type: :controller do
     end
   end
 
+  describe "destroy" do
+    it "delete a bot channel" do
+      expect do
+        delete :destroy, params: { id: channel.id }
+      end.to change(Channel, :count).by(-1)
+    end
+  end
+
   describe "index" do
     it "list bot channel" do
       get :index, params: { bot_id: bot.id }

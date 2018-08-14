@@ -28,6 +28,13 @@ class Api::ChannelsController < ApplicationApiController
     render json: channel_api_json(channel)
   end
 
+  def destroy
+    channel = Channel.find(params[:id])
+    authorize channel
+    channel.destroy
+    head :no_content
+  end
+
   def update
     channel = Channel.find(params[:id])
     authorize channel
