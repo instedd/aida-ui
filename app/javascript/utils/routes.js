@@ -12,7 +12,8 @@ export const botData = (botId) => `/b/${botId}/data`
 
 export const botAnalytics = (botId) => `/b/${botId}/analytics`
 
-export const botChannel = (botId) => `/b/${botId}/channel`
+export const botChannelIndex = (botId) => `/b/${botId}/c`
+export const botChannel = (botId, channelId) => `/b/${botId}/c/${channelId}`
 
 export const botBehaviour = (botId) => `/b/${botId}/behaviour`
 

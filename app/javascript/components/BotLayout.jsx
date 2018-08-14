@@ -27,6 +27,7 @@ import { hasPermission } from '../utils'
 import ChatClient from './ChatClient'
 import ChatWindow from './ChatWindow'
 import * as chatActions from '../actions/chat'
+import { BotChannelIndex } from '../components/BotChannelIndex'
 
 const DeleteBotDialog = ({ onHide, onConfirm, visible }) => {
   const dialogActions = [
@@ -141,7 +142,7 @@ export class BotLayoutComponent extends Component {
         } else if (managesBehaviour && bot.channel_setup) {
           return r.botBehaviour(bot.id)
         } else if (canPublish) {
-          return r.botChannel(bot.id)
+          return r.botChannelIndex(bot.id)
         } else {
           return defaultTranslationsView
         }
@@ -188,7 +189,7 @@ export class BotLayoutComponent extends Component {
             <HeaderNavLink label="Analytics" to={r.botAnalytics(bot.id)} />,
             <HeaderNavLink label="Data" to={r.botData(bot.id)} />,
             // TODO: use active="/b/:id/channel"  to allow deep linking
-            <HeaderNavLink label="Channel" to={r.botChannel(bot.id)} error={this.props.errors.some((e) => e.path[0].startsWith("channels"))} />,
+            <HeaderNavLink label="Channel" to={r.botChannelIndex(bot.id)} error={this.props.errors.some((e) => e.path[0].startsWith("channels"))} />,
             <HeaderNavLink label="Behaviour" to={r.botBehaviour(bot.id)} error={this.props.errors.some((e) => !e.path[0].startsWith("channels"))} />,
             <HeaderNavLink label="Translations" to={r.botTranslations(bot.id)} />,
             <HeaderNavLink label="Collaborators" to={r.botCollaborators(bot.id)} />,
@@ -205,7 +206,8 @@ export class BotLayoutComponent extends Component {
           <Route exact path="/b/:id" render={() => <Redirect to={defaultTab} />} />
           <Route exact path="/b/:id/data" render={() => <BotData bot={bot} />} />
           <Route exact path="/b/:id/analytics" render={() => <BotAnalytics bot={bot}  onToggleChatWindow={toggleChatWindow} />} />
-          <Route exact path="/b/:id/channel" render={() => <BotChannel bot={bot} />} />
+          <Route exact path="/b/:id/c/:c_id" render={() => <BotChannel bot={bot} />} />
+          <Route exact path="/b/:id/c" render={() => <BotChannelIndex bot={bot} />} />
           <Route path="/b/:id/behaviour" render={() => <BotBehaviour bot={bot} onToggleChatWindow={toggleChatWindow}/>} />
           <Route exact path="/b/:id/translations" render={() => <Redirect to={defaultTranslationsView}/>} />
           <Route exact path="/b/:id/translations/content" render={() => <BotTranslations bot={bot} />} />
