@@ -85,6 +85,14 @@ export type ChannelsAction = {
 } | {
   type: 'CHANNELS_FETCH',
   scope: ?any,
+} | {
+  type: 'CHANNELS_CREATE',
+  scope: ?any,
+} | {
+  type: 'CHANNELS_CREATE_SUCCESS',
+  channel: T.Channel,
+} | {
+  type: 'CHANNELS_CREATE_FAILURE',
 };
 
 export type ChatAction = {
@@ -416,6 +424,7 @@ export type BotsState = {
 
 export type ChannelsState = {
   fetching: boolean,
+  creating: boolean,
   scope: ?any,
   items: ?ById<T.Channel>
 };

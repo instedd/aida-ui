@@ -10,9 +10,13 @@ import { EmptyLoader } from '../ui/Loader'
 import * as actions from '../actions/channels'
 import * as routes from '../utils/routes'
 import { hasPermission } from '../utils'
-import { Button } from 'react-md'
+import { Button, DialogContainer, List, ListItem } from 'react-md';
 
 export class BotChannelIndexComponent extends Component {
+  state = {
+    createDialogVisible: false
+  }
+
   componentDidMount() {
     const { actions, permitted, fetching, bot } = this.props
     if (permitted && !fetching) {
@@ -21,52 +25,69 @@ export class BotChannelIndexComponent extends Component {
   }
 
   render() {
-    const { channels, history, bot, fetching } = this.props
+    const { channels, history, bot, fetching, actions } = this.props
+    const { createDialogVisible } = this.state
+
+    const showCreateDialog = () => this.setState({ createDialogVisible: true })
+    const hideCreateDialog = () => this.setState({ createDialogVisible: false })
+
+    const CreateChannelDialog = ({ onHide, visible }) => {
+      const createChannel = kind => actions.createChannel({botId : bot.id}, kind, history)
+
+      return (
+        <DialogContainer
+          id="create-channel-dialog"
+          visible={visible}
+          title="Choose a channel type"
+          onHide={onHide}
+        >
+          <List>
+            <ListItem primaryText="Facebook" onClick={() => createChannel('facebook')} />
+            <ListItem primaryText="Web Socket" onClick={() => createChannel('websocket')} />
+          </List>
+        </DialogContainer>
+      )
+    }
+
+    const createChannelDialog = <CreateChannelDialog visible={createDialogVisible} onHide={hideCreateDialog} />
 
     if (!channels || fetching) {
       return <EmptyLoader>Loading channels for {bot.name}</EmptyLoader>
     } else {
       const channelList = Object.values(channels)
-      const createChannel = () => {}
 
       const button = <Button
         floating
         secondary
         className='btn-mainTabs'
-        onClick={createChannel}>
+        onClick={showCreateDialog}>
           add
       </Button>
 
       if (channelList.length == 0) {
-        return <EmptyContent icon='settings_input_component'>
-            <Headline>
-              You have no channels yet
-              <span><a href="javascript:" onClick={createChannel} className="hrefLink">Create One</a></span>
-            </Headline>
-          </EmptyContent>
+        return  <EmptyContent icon='settings_input_component'>
+                  {createChannelDialog}
+                  <Headline>
+                    You have no channels yet
+                    <span><a href="javascript:" onClick={showCreateDialog} className="hrefLink">Create One</a></span>
+                  </Headline>
+                </EmptyContent>
       }
 
       const content = () => {
-        if (channelList.length == 0) {
-          return <EmptyContent icon='settings_input_component'>
-              <Headline>
-                You have no channels yet
-                <span><a href="javascript:" onClick={createChannel} className="hrefLink">Create One</a></span>
-              </Headline>
-            </EmptyContent>
-        } else {
-          const title = channelList.length == 1 ? '1 channel' : `${channelList.length} channels`
-          return <Listing items={channelList} title={title}
-                  onItemClick={c => history.push(routes.botChannel(bot.id, c.id))}>
-                <Column title="Name" render={c => c.name} />
-                <Column title="Type" render={c => c.kind} />
-                <Column title="Uses" render={c => null} />
-                <Column title="Last activity date" render={c => null} />
-              </Listing>
-        }
+        const title = channelList.length == 1 ? '1 channel' : `${channelList.length} channels`
+          return  <Listing items={channelList} title={title}
+                    onItemClick={c => history.push(routes.botChannel(bot.id, c.id))}
+                  >
+                    <Column title="Name" render={c => c.name} />
+                    <Column title="Type" render={c => c.kind} />
+                    <Column title="Uses" render={c => null} />
+                    <Column title="Last activity date" render={c => null} />
+                  </Listing>
       }
 
       return <MainWhite buttons={button}>
+        {createChannelDialog}
         {content()}
       </MainWhite>
     }

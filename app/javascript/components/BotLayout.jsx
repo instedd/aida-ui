@@ -206,8 +206,8 @@ export class BotLayoutComponent extends Component {
           <Route exact path="/b/:id" render={() => <Redirect to={defaultTab} />} />
           <Route exact path="/b/:id/data" render={() => <BotData bot={bot} />} />
           <Route exact path="/b/:id/analytics" render={() => <BotAnalytics bot={bot}  onToggleChatWindow={toggleChatWindow} />} />
-          <Route exact path="/b/:id/c/:c_id" render={() => <BotChannel bot={bot} />} />
           <Route exact path="/b/:id/c" render={() => <BotChannelIndex bot={bot} />} />
+          <Route exact path="/b/:id/c/:c_id" render={() => <BotChannel bot={bot} />} />
           <Route path="/b/:id/behaviour" render={() => <BotBehaviour bot={bot} onToggleChatWindow={toggleChatWindow}/>} />
           <Route exact path="/b/:id/translations" render={() => <Redirect to={defaultTranslationsView}/>} />
           <Route exact path="/b/:id/translations/content" render={() => <BotTranslations bot={bot} />} />
