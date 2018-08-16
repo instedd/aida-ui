@@ -88,7 +88,25 @@ main {
 #lang-menu .md-divider--text-field::after {
   background: $md-secondary-color;
 }
-
+.lang-text-input {
+  hr {
+    opacity: 0;
+  }
+}
+.md-table-row:hover {
+  .lang-text-input hr {
+    opacity: 1;
+  }
+}
+.lang-code {
+  font-size: 1.1rem;
+  color: $md-grey-500;
+  text-transform: uppercase;
+  margin-left: 1rem;
+  padding-bottom: .6rem;
+  display: inline-block;
+  vertical-align: bottom;
+}
 .file-upload-control {
   padding: 0;
   margin: 4px 0;

@@ -21,7 +21,7 @@ export class KeyValueListField extends Component {
       return (
         <TableRow key={index}>
           <TableColumn>
-            { canRemoveItem(item, index) ? <Button icon iconChildren="close" onClick={() => onRemoveItem(item, index)} /> : null}
+            { canRemoveItem(item, index) ? <Button className='remove-item' icon iconChildren="close" onClick={() => onRemoveItem(item, index)} /> : null}
           </TableColumn>
           <TableColumn>
             {renderKey(item, index)}
