@@ -35,7 +35,8 @@ class Api::CollaboratorsController < ApplicationApiController
       id: collaborator.id,
       roles: collaborator.roles,
       user_email: collaborator.user.email,
-      last_activity: (collaborator.user.updated_at.to_s(:iso8601) rescue nil)
+      display_name: collaborator.user.display_name,
+      last_activity: (collaborator.user.updated_at.to_s(:iso8601) rescue nil),
     }
   end
 end

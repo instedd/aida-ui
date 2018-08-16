@@ -4,15 +4,15 @@ class WelcomeController < ApplicationController
   def index
     if user_signed_in?
       render :index
-    else
+    elsif request.path == '/'
       render :landing, layout: false
-      #redirect_to login_path
+    else
+      redirect_to root_path
     end
   end
 
   def login
     redirect_to login_path
-    #redirect_to root_path
   end
 
   def logout
@@ -25,8 +25,5 @@ class WelcomeController < ApplicationController
 
   def generate_token
     render json: { token: Guisso.generate_bearer_token(current_user.email) }
-  end
-
-  def design
   end
 end

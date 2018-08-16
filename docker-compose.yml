@@ -20,6 +20,12 @@ services:
     ports:
       - "3000:3000"
     command: /bin/sh -c './bin/update && bundle exec ./bin/rails s'
+    environment:
+      SETTINGS__BACKEND__URL: http://app.aida.lvh.me/
+      SETTINGS__BACKEND__PUBLIC_SOCKET_URL: ws://app.aida.lvh.me/socket
+      SETTINGS__BACKEND__PUBLIC_CONTENT_URL: http://app.aida.lvh.me/content
+      SETTINGS__BASE_URL: http://ui.aidaui.lvh.me:3000/
+    stdin_open: true
 
   webpack:
     <<: *base

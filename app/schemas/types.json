@@ -9,6 +9,12 @@
         "name": { "type": "string" },
         "published": { "type": "boolean" },
         "channel_setup": { "type": "boolean" },
+        "uuid": {
+          "oneOf": [
+            { "type": "string" },
+            { "type": "null" }
+          ]
+        },
         "permissions": { "$ref": "#/definitions/permissions" },
         "collaborator_id": {
           "oneOf": [
@@ -668,6 +674,7 @@
         "id": { "type": "integer" },
         "roles": { "$ref": "#/definitions/role_list" },
         "user_email": { "type": "string" },
+        "display_name": { "type": "string" },
         "last_activity": {
           "oneOf": [
             { "type": "string" },
@@ -675,7 +682,7 @@
           ]
         }
       },
-      "required": [ "id", "roles", "user_email", "last_activity" ]
+      "required": [ "id", "roles", "user_email", "display_name", "last_activity" ]
     },
 
     "collaborators_index": {

@@ -6,6 +6,7 @@ import filter from 'lodash/filter'
 import sortBy from 'lodash/sortBy'
 import find from 'lodash/find'
 import iso6393 from 'iso-639-3'
+import AUX from '../../javascript/hoc/Aux'
 
 import { LANGUAGES, findLanguageByCode } from '../utils/lang'
 
@@ -36,7 +37,7 @@ export default class LanguageSelector extends Component {
         primaryText: lang.name,
         secondaryText: lang.code.toUpperCase(),
         onClick: () => {
-          this.setState({ query: lang.name, lang: lang })
+          this.setState({ query: lang.name, lang: lang})
           if (onChange) {
             onChange(lang.code)
           }
@@ -45,17 +46,22 @@ export default class LanguageSelector extends Component {
     })
 
     return (
-      <DropdownMenu id="lang-menu"
-                    toggleQuery=".md-text-field-container"
-                    anchor={{ x: DropdownMenu.HorizontalAnchors.INNER_LEFT,
-                              y: DropdownMenu.VerticalAnchors.BOTTOM }}
-                    position={DropdownMenu.Positions.BELOW}
-                    menuItems={items}>
-        <TextField id="lang-query"
-                   placeholder="Language"
-                   value={this.state.query}
-                   onChange={query => this.setState({ query })} />
-      </DropdownMenu>
+      <AUX>
+        <DropdownMenu id="lang-menu"
+                      toggleQuery=".md-text-field-container"
+                      anchor={{ x: DropdownMenu.HorizontalAnchors.INNER_LEFT,
+                                y: DropdownMenu.VerticalAnchors.BOTTOM }}
+                      position={DropdownMenu.Positions.BELOW}
+                      menuItems={items}>
+          <TextField id="lang-query"
+                    className="lang-text-input"
+                    placeholder="Language"
+                    value={this.state.query}
+                    onChange={query => this.setState({ query })} />
+        </DropdownMenu>
+        <span className='lang-code'>{this.state.lang.code}</span>
+      </AUX>
+
     )
   }
 }

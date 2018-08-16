@@ -30,6 +30,7 @@ export default (state : T.BotsState, action : T.Action) : T.BotsState => {
     case botActions.UNPUBLISH_SUCCESS: return unpublishSuccess(state, action)
     case skillActions.UPDATE: return clearErrors(state, action)
     case skillActions.DELETE: return clearErrors(state, action)
+    case botActions.SELECT: return clearErrors(state, action)
     default: return state
   }
 }

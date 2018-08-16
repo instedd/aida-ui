@@ -5,6 +5,7 @@ export type Bot = {
   name: string;
   published: boolean;
   channel_setup: boolean;
+  uuid?: string | null;
   permissions: Permissions;
   collaborator_id?: number | null;
 };
@@ -313,6 +314,7 @@ export type Collaborator = {
   id: number;
   roles: RoleList;
   user_email: string;
+  display_name: string;
   last_activity: string | null;
 };
 

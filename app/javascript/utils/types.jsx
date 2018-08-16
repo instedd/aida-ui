@@ -54,6 +54,9 @@ export type BotAction = {
 } | {
   type: "BOT_DELETE",
   botId: number,
+} | {
+  type: "BOT_SELECT",
+  botId: number,
 };
 
 export type BotsAction = {

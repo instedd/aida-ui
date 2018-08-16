@@ -144,6 +144,7 @@ class Api::BotsController < ApplicationApiController
       name: bot.name,
       published: bot.published?,
       channel_setup: bot.channels.first.setup?,
+      uuid: bot.uuid,
       permissions: bot_permissions(bot),
       collaborator_id: bot.collaborators.find { |c| c.user_id == current_user.id }.try(:id)
     }
