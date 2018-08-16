@@ -42,6 +42,10 @@ export const updateChannel = (channel : T.Channel) => {
   return apiPutJSON(`channels/${channel.id}`, channelSchema, {channel})
 }
 
+export const deleteChannel = (channel : T.Channel) => {
+  return apiDelete(`channels/${channel.id}`)
+}
+
 export const publishBot = (bot : T.Bot) => {
   return apiPostJSON(`bots/${bot.id}/publish`)
 }

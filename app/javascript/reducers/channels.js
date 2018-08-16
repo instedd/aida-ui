@@ -1,8 +1,8 @@
 /* @flow */
 import * as T from '../utils/types'
-
 import * as actions from '../actions/channels'
 import * as channelActions from '../actions/channel'
+import omit from 'lodash/omit'
 
 const initialState = {
   fetching: false,
@@ -20,6 +20,7 @@ export default (state : T.ChannelsState, action : T.Action) : T.ChannelsState =>
     case actions.CREATE_SUCCESS: return createSuccess(state, action)
     case actions.CREATE: return create(state, action)
     case actions.CREATE_FAILURE: return createFailure(state, action)
+    case channelActions.DELETE: return deleteChannel(state, action)
     default: return state
   }
 }
@@ -81,5 +82,14 @@ const update = (state, action) => {
       ...state.items,
       ...{[channel.id]: channel}
     }
+  }
+}
+
+const deleteChannel = (state, action) => {
+  const { channelId } = action
+
+  return {
+    ...state,
+    items: omit(state.items, [channelId])
   }
 }

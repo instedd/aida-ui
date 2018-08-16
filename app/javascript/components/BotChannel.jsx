@@ -10,8 +10,14 @@ import { BotChannelWebSocket } from '../components/BotChannelWebSocket'
 import { withRouter } from 'react-router'
 import { BotChannelFacebook } from './BotChannelFacebook';
 import { MainWhite } from '../ui/MainWhite';
+import { Button, DialogContainer } from 'react-md'
+import * as routes from '../utils/routes'
 
 class BotChannelComponent extends Component {
+  state = {
+    deleteDialogVisible: false
+  }
+
   componentDidMount() {
     const { permitted, channel, bot } = this.props
     if (permitted && !channel) {
@@ -20,11 +26,47 @@ class BotChannelComponent extends Component {
   }
 
   render() {
-    const { permitted, channel, bot, channelActions } = this.props
+    const { permitted, channel, bot, channelActions, history } = this.props
+    const { deleteDialogVisible } = this.state
 
     const styles = {
       multiline_tooltip: {
         "white-space": "pre"
+      }
+    }
+    const showDeleteDialog = () => this.setState({ deleteDialogVisible: true })
+    const hideDeleteDialog = () => this.setState({ deleteDialogVisible: false })
+
+    const DeleteChannelDialog = ({ onHide, onConfirm, visible }) => {
+      const dialogActions = [
+        { primary: true, children: 'Cancel', onClick: onHide },
+        (<Button flat secondary onClick={onConfirm}>Delete</Button>)
+      ]
+      return (
+        <DialogContainer
+          id="delete-channel-dialog"
+          visible={visible}
+          onHide={onHide}
+          actions={dialogActions}
+          title="Delete channel?">
+          <h4>This will destroy the channel and all its associated data. Are you sure?</h4>
+          <b>This action cannot be undone.</b>
+        </DialogContainer>
+      )
+    }
+
+    const deleteButton = () => {
+      if (channel) {
+        return <Button
+          floating
+          secondary
+          className='btn-mainTabs'
+          onClick={showDeleteDialog}>
+            delete
+        </Button>
+      }
+      else {
+        return null
       }
     }
 
@@ -34,19 +76,32 @@ class BotChannelComponent extends Component {
       }
 
       if (channel) {
+        const deleteChannel = () => {
+          channelActions.deleteChannel(channel)
+          history.push(routes.botChannelIndex(bot.id))
+        }
+
+        const deleteChannelDialog = <DeleteChannelDialog visible={deleteDialogVisible} onHide={hideDeleteDialog} onConfirm={deleteChannel} />
+
         switch (channel.kind) {
           case 'websocket':
-            return <BotChannelWebSocket channel={channel} errors={this.props.errors.filter((e) => e.path[0] == "channels/1")}
-                      channelActions={channelActions} ></BotChannelWebSocket>
+            return  <div>
+                      {deleteChannelDialog}
+                      <BotChannelWebSocket channel={channel} errors={this.props.errors.filter((e) => e.path[0] == "channels/1")}
+                        channelActions={channelActions} ></BotChannelWebSocket>
+                    </div>
           case 'facebook':
-            return <BotChannelFacebook channel={channel} errors={this.props.errors.filter((e) => e.path[0] == "channels/0")}
-                      channelActions={channelActions} bot={bot} ></BotChannelFacebook>
+            return  <div>
+                      {deleteChannelDialog}
+                      <BotChannelFacebook channel={channel} errors={this.props.errors.filter((e) => e.path[0] == "channels/0")}
+                        channelActions={channelActions} bot={bot} ></BotChannelFacebook>
+                    </div>
         }
       }
-      return <EmptyLoader>Loading channels for {bot.name}</EmptyLoader>
+      return <EmptyLoader>Loading channel</EmptyLoader>
     }
 
-    return <MainWhite>{content()}</MainWhite>
+    return <MainWhite buttons={deleteButton()}>{content()}</MainWhite>
   }
 }
 

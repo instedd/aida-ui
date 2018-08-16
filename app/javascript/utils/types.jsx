@@ -74,6 +74,9 @@ export type BotsAction = {
 export type ChannelAction = {
   type: "CHANNEL_UPDATE",
   channel: T.Channel,
+} | {
+  type: "CHANNEL_DELETE",
+  channelId: number,
 };
 
 export type ChannelsAction = {
