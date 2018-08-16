@@ -10,6 +10,7 @@ import Headline from '../ui/Headline'
 import { EmptyLoader } from '../ui/Loader'
 
 import * as actions from '../actions/bots'
+import * as botActions from '../actions/bot'
 import * as routes from '../utils/routes'
 
 import AppLayout from './AppLayout'
@@ -22,13 +23,17 @@ export class BotIndexComponent extends Component {
   }
 
   render() {
-    const { bots, history, actions } = this.props
+    const { bots, history, actions, botActions } = this.props
 
     if (!bots) {
       return <AppLayout title="Bots"><EmptyLoader>Loading bots</EmptyLoader></AppLayout>
     } else {
       const botList = Object.values(bots)
       const createBot = () => actions.createBot(history)
+      const botClicked = (bot) => {
+        history.push(routes.bot(bot.id))
+        botActions.selectBot(bot)
+      }
 
       let content
       if (botList.length == 0) {
@@ -45,7 +50,7 @@ export class BotIndexComponent extends Component {
         content = (
           <MainWhite>
             <Listing items={botList} title={title}
-                      onItemClick={b => history.push(routes.bot(b.id))}>
+                      onItemClick={b => botClicked(b)}>
               <Column title="Name" render={b => b.name} />
               <Column title="Type" render={b => "Facebook"} />
               <Column title="Uses" render={b => null} />
@@ -68,6 +73,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(actions, dispatch),
+  botActions: bindActionCreators(botActions, dispatch),
 })
 
 export const BotIndex = withRouter(connect(mapStateToProps, mapDispatchToProps)(BotIndexComponent))
