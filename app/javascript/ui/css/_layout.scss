@@ -41,15 +41,3 @@ footer {
   padding: 17px 20px;
   border-top: 1px solid $md-grey-300;
 }
-
-.date-time-picker {
-  display: grid;
-  grid-template-columns: 50% 50%;
-  grid-column-gap: 1em;
-}
-
-.file-upload-field {
-  margin-top: 3rem;
-  display: grid;
-  grid-template-columns: 100%;
-}

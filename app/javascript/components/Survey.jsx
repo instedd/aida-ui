@@ -58,7 +58,7 @@ class Survey extends Component {
       formIcon = (<FontIcon>close</FontIcon>)
       formExtraClass = 'upload-error'
     } else {
-      formLabel = "Upload form"
+      formLabel = <div className='md-icon-separator'>Upload your <span>CSV file</span></div>
       formIcon = (<FontIcon>file_upload</FontIcon>)
     }
 
@@ -71,19 +71,23 @@ class Survey extends Component {
 
         <RelevanceField value={config.relevant} onChange={updateConfig('relevant')} />
 
-        <div className="date-time-picker ui-field">
+        <div className="date-time-picker ui-field survey-picker">
+          <label className="md-floating-label md-floating-label--floating md-text--secondary">Schedule this survey for</label>
           <DatePicker id="survey-date"
-                      label="Schedule this survey for"
                       inline
                       fullwidth={false}
+                      rightIcon={<FontIcon className='overlapped-icon'>date_range</FontIcon>}
+                      icon={false}
                       value={date}
                       timeZone={getLocalTimezone()}
                       onChange={(_, value) => updateConfig('schedule')(value)}
                       error={errors.some(e => e.path[1] == "schedule")} />
+          <label className='at-label'>at</label>
           <TimePicker id="survey-time"
-                      label="at"
+                      textFieldClassName='survey-time-picker'
                       inline
                       value={date}
+                      icon={false}
                       onChange={(_, value) => updateConfig('schedule')(value)}
                       error={errors.some(e => e.path[1] == "schedule")} />
         </div>
@@ -93,7 +97,7 @@ class Survey extends Component {
           error={errors.filter(e => e.path[1] == "keywords")} />
 
         <div className="file-upload-field">
-          <label htmlFor="survey-xlsform-upload">Survey form</label>
+          <label htmlFor="survey-xlsform-upload" className='label'>Survey form</label>
           <FileUpload id="survey-xlsform-upload"
                       label={formLabel}
                       icon={formIcon}

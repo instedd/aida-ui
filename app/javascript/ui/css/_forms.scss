@@ -1,0 +1,114 @@
+
+.file-upload-field {
+  margin-top: 3rem;
+  .label {
+    font-size: .95rem;
+    color: $md-grey-700;
+    display: block;
+  }
+  .file-upload-control {
+    text-align: center;
+    margin: 1rem 0;
+    border: 2px solid $md-grey-300;
+    .md-icon-separator {
+      color: $md-grey-500;
+      font-weight: 400;
+      padding: .5rem 1rem;
+      text-align: center;
+      span {
+        color: #CDDC39;
+      }
+      > i,
+      > .md-icon-text {
+        display: inline-block;
+        vertical-align: middle;
+        padding: .2rem;
+      }
+    }
+    label {
+      height: auto;
+      padding: 0;
+      &:hover,
+      &.md-btn--hover {
+        background: none;
+      }
+    }
+    .md-btn--text {
+      text-transform: none;
+    }
+    &.upload-error {
+      border-color: red;
+      .md-icon-text {
+        color: red;
+      }
+    }
+    &:hover {
+      border-color: $md-grey-500;
+    }
+  }
+}
+
+//Turn off webkit's number input spinners
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type=number] {
+    -moz-appearance:textfield;
+}
+
+input[type=number]:invalid {
+  color: $md-red-400;
+}
+
+
+.date-time-picker {
+  position: relative;
+  .md-picker-container {
+    display: inline-flex;
+  }
+  label {
+    transform: translate3d(0, -15px, 0); 
+  }
+}
+
+
+
+
+
+.survey-picker {
+  .md-text-field-icon-container {
+    position: relative;
+    width: 10rem;
+  }
+  .overlapped-icon {
+    position: absolute;
+    right: .5rem;
+    top: 1rem;
+  }
+  .at-label {
+    line-height: 1;
+    text-align: center;
+    display: inline-block;
+    vertical-align: bottom;
+    width: 3rem;
+  }
+  .survey-time-picker {
+    width: 4rem;
+  }
+}
+
+
+
+.error-message {
+  color: $error-red;
+}
+.error-tree {
+  border-color: $error-red !important;
+  
+  .md-text--error {
+    position: absolute;
+    margin-top: .4rem;
+  }
+}
