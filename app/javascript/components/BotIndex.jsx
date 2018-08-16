@@ -47,14 +47,23 @@ export class BotIndexComponent extends Component {
         )
       } else {
         const title = botList.length == 1 ? '1 bot' : `${botList.length} bots`
+
+        const commaSeparatedChannels = channels => (
+          channels.sort().map((channel, ix) => (
+            ix > 0 ? `, ${channel}` : channel
+          ))
+        )
+
+        const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' }
+
         content = (
           <MainWhite>
             <Listing items={botList} title={title}
                       onItemClick={b => botClicked(b)}>
               <Column title="Name" render={b => b.name} />
-              <Column title="Type" render={b => "Facebook"} />
-              <Column title="Uses" render={b => null} />
-              <Column title="Last activity date" render={d => null} />
+              <Column title="Type" render={b => commaSeparatedChannels(b.channels)} />
+              <Column title="Uses" render={b => b.active_users} />
+              <Column title="Last activity date" render={b => new Date(b.updated_at).toLocaleDateString('en-US', dateOptions)} />
             </Listing>
           </MainWhite>
         )

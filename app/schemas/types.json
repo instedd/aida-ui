@@ -9,12 +9,20 @@
         "name": { "type": "string" },
         "published": { "type": "boolean" },
         "channel_setup": { "type": "boolean" },
+        "channels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "uuid": {
           "oneOf": [
             { "type": "string" },
             { "type": "null" }
           ]
         },
+        "updated_at": { "type": "string" },
+        "active_users": {"type": "integer" },
         "permissions": { "$ref": "#/definitions/permissions" },
         "collaborator_id": {
           "oneOf": [

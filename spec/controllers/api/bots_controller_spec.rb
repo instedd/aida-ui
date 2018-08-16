@@ -11,6 +11,7 @@ RSpec.describe Api::BotsController, type: :controller do
 
   describe "index" do
     it "returns a list of bots" do
+      allow(GatherBotStats).to receive(:run) { { :active_users => 0 } }
       get :index
 
       expect(response).to be_success
@@ -20,6 +21,7 @@ RSpec.describe Api::BotsController, type: :controller do
     it "lists only the user accessible bots" do
       shared_bot = create(:bot, shared_with: user)
 
+      allow(GatherBotStats).to receive(:run) { { :active_users => 0 } }
       get :index
 
       bot_ids = json_pluck(json_body, :id)
