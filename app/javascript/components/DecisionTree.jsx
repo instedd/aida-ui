@@ -68,12 +68,14 @@ class DecisionTreeComponent extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      path: this._buildDefaultPath(nextProps.tree.nodes, nextProps.tree.initial),
-      triggerFocusOnOptionToNode: null // Node (uuid) pointed by the new added
-                                       // option, so it can be focused.
-    })
+  componentWillReceiveProps(nextProps, currentProps) {
+    if(_.some(this.state.path, (nodeId) => !nextProps.tree.nodes[nodeId])) {
+      this.setState({
+        path: this._buildDefaultPath(nextProps.tree.nodes, nextProps.tree.initial),
+        triggerFocusOnOptionToNode: null // Node (uuid) pointed by the new added
+                                         // option, so it can be focused.
+      })
+    }
   }
 
   _buildDefaultPath(nodes, nodeId) {
