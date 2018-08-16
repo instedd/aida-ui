@@ -132,6 +132,18 @@ class Api::BotsController < ApplicationApiController
       disposition: "attachment; filename= manifest-#{@bot.id}-#{DateTime.now.utc.to_s(:iso8601)}.json"
   end
 
+  def check_wit_ai_credentials
+    authorize @bot, :update?
+
+    data = Backend.check_wit_ai_credentials(params["wit_ai_auth_token"])
+    @bot.update_attributes!(params.permit(["wit_ai_auth_token"]))
+
+    render json: data
+
+  rescue BackendError => e
+    render json: {error: e.message}, status: :bad_request
+  end
+
   private
 
   def load_bot
@@ -142,6 +154,7 @@ class Api::BotsController < ApplicationApiController
     {
       id: bot.id,
       name: bot.name,
+      wit_ai_auth_token: bot.wit_ai_auth_token,
       published: bot.published?,
       channel_setup: bot.channels.any?{|c| c.setup? },
       uuid: bot.uuid,

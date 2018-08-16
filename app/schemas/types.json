@@ -7,6 +7,12 @@
       "properties": {
         "id": { "type": "integer" },
         "name": { "type": "string" },
+        "wit_ai_auth_token": {
+          "oneOf": [
+            { "type": "string" },
+            { "type": "null" }
+          ]
+        },
         "published": { "type": "boolean" },
         "channel_setup": { "type": "boolean" },
         "channels": {

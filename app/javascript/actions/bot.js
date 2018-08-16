@@ -27,8 +27,7 @@ export const _botPublish = (botId : number) : T.BotAction => ({
 
 export const _botPublishSuccess = (botId : number) : T.BotAction => ({
   type: PUBLISH_SUCCESS,
-  botId,
-  errors: null
+  botId
 })
 
 export const _botPublishFailure = (botId : number, errors: any) : T.BotAction => ({
@@ -64,7 +63,23 @@ export const updateBot = (bot : T.Bot) => (dispatch : T.Dispatch, getState : T.G
   api.updateBot(bot)
 }
 
+export const checkWitAICredentials = (bot : T.Bot, authToken: string) =>
+  (dispatch : T.Dispatch, getState : T.GetState) => {
+    api.checkWitAICredentials(bot.id, authToken)
+      .then(() => {
+        dispatch(_botUpdate({...bot, wit_ai_auth_token: authToken}))
+      })
+      .catch((error) => {
+        dispatch(pushNotification('Invalid credentials'))
+        dispatch(_botPublishFailure(bot.id, [{
+          'message': 'Invalid credentials',
+          'path': ['wit_ai']
+        }]))
+      })
+  }
+
 export const publishBot = (bot : T.Bot) => (dispatch : T.Dispatch) => {
+  // TODO actually handle this action to show the publish is in progress, or just remove it
   dispatch(_botPublish(bot.id))
 
   return api.publishBot(bot)

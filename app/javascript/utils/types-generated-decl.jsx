@@ -3,6 +3,7 @@
 export type Bot = {
   id: number;
   name: string;
+  wit_ai_auth_token?: string | null;
   published: boolean;
   channel_setup: boolean;
   channels?: Array<string>;

@@ -223,3 +223,7 @@ export const fetchMessages = () => {
 export const answerMessage = (messageId : number, answer : string) => {
   return apiPostJSON(`messages/${messageId}/answer`, null, {answer})
 }
+
+export const checkWitAICredentials = (botId : number, authToken : string) => {
+  return apiFetchJSON(`bots/${botId}/check_wit_ai_credentials/${authToken}`)
+}

@@ -8,6 +8,7 @@ import { Loader } from '../ui/Loader'
 
 import * as routes from '../utils/routes'
 import * as actions from '../actions/skill'
+import * as botActions from '../actions/bot'
 
 import KeywordResponder from './KeywordResponder'
 import HumanOverride from './HumanOverride'
@@ -17,12 +18,12 @@ import ScheduledMessages from './ScheduledMessages'
 import DecisionTree from './DecisionTree'
 import sortBy from 'lodash/sortBy'
 
-const SkillComponent = ({skill, actions, errors, bot}) => {
+const SkillComponent = ({skill, actions, botActions, errors, bot}) => {
   const { kind } = skill
 
   switch (kind) {
     case 'keyword_responder':
-      return (<KeywordResponder skill={skill} actions={actions} errors={errors} />)
+      return (<KeywordResponder skill={skill} actions={actions} errors={errors} bot={bot} botActions={botActions}/>)
     case 'human_override':
       return (<HumanOverride skill={skill} actions={actions} errors={errors} bot={bot} />)
     case 'language_detector':
@@ -40,12 +41,12 @@ const SkillComponent = ({skill, actions, errors, bot}) => {
 
 class BotSkill extends Component {
   render() {
-    const { bot, skill, actions, loading, errors } = this.props
+    const { bot, skill, actions, botActions, loading, errors } = this.props
 
     if (loading) {
       return <Loader>Loading skill</Loader>
     } else if (skill) {
-      return <SkillComponent skill={skill} actions={actions} errors={errors} bot={bot} />
+      return <SkillComponent skill={skill} actions={actions} botActions={botActions} errors={errors} bot={bot} />
     } else {
       return <Redirect to={routes.botFrontDesk(bot.id)} />
     }
@@ -67,7 +68,8 @@ const mapStateToProps = (state, {skillId, errors}) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  actions: bindActionCreators(actions, dispatch)
+  actions: bindActionCreators(actions, dispatch),
+  botActions: bindActionCreators(botActions, dispatch)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(BotSkill)

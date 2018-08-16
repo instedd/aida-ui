@@ -62,6 +62,11 @@ class Backend
       handle_response { post("/api/bots/#{uuid}/sessions/#{session_id}/send_message", body: body) }
     end
 
+    def check_wit_ai_credentials(auth_token)
+      query = { provider: :wit_ai, auth_token: auth_token }
+      handle_response { get("/api/check_credentials", query: query) }
+    end
+
     private
 
     def handle_response(&request)

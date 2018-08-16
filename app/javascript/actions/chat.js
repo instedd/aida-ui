@@ -54,8 +54,7 @@ export const _startPreviewSuccess = (botId: number, previewUuid: string, session
   botId,
   previewUuid,
   sessionId,
-  accessToken,
-  errors: null
+  accessToken
 })
 
 export const _startPreviewFailure = (botId : number, errors: any) : T.ChatAction => ({

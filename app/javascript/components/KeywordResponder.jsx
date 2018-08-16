@@ -3,12 +3,13 @@ import React, { Component } from 'react'
 import Title from '../ui/Title'
 import Headline from '../ui/Headline'
 import Field from '../ui/Field'
+import KeywordInput from '../ui/KeywordInput'
 
 import RelevanceField from './RelevanceField'
 
 export default class KeywordResponder extends Component {
   render() {
-    const { skill, actions, errors } = this.props
+    const { skill, actions, errors, bot, botActions } = this.props
     const { name, config } = skill
 
     const updateConfig = (key) => {
@@ -42,6 +43,7 @@ export default class KeywordResponder extends Component {
         <Field id="kr-keywords" label="Valid keywords (comma separated)"
                value={config.keywords} onChange={updateConfig('keywords')}
                error={errors.filter(e => e.path[1].startsWith("keywords/en"))} />
+        <KeywordInput actions={botActions} bot={bot} />
         <Field id="kr-response" label="Message"
                value={config.response} onChange={updateConfig('response')}
                error={errors.filter(e => e.path[1] == "response/en")} />

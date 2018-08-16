@@ -1,4 +1,4 @@
-import React, { PropTypes, PureComponent } from 'react'
+import React, { PureComponent } from 'react'
 import { DropdownMenu, ListItem, TextField } from 'react-md'
 import timezones from 'tzdata'
 

@@ -14,6 +14,7 @@ Rails.application.routes.draw do
         post :preview
         post :set_session
         get :stats
+        get "check_wit_ai_credentials/:wit_ai_auth_token", to: "bots#check_wit_ai_credentials"
         get :data
         get :error_logs
         get :manifest

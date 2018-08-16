@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180802064630) do
+ActiveRecord::Schema.define(version: 20180815205100) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(version: 20180802064630) do
     t.string "uuid"
     t.string "preview_uuid"
     t.string "notifications_secret"
+    t.string "wit_ai_auth_token"
     t.index ["owner_id"], name: "index_bots_on_owner_id"
   end
 
