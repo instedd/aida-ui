@@ -51,15 +51,17 @@ export default class LanguageDetector extends Component {
           detect the user preference
         </Headline>
 
-        <Field id="ld-explanation" label="Language message"
-               value={config.explanation} onChange={updateConfig('explanation')} />
+        <Field id="ld-explanation" 
+               label="Language message"
+               value={config.explanation} 
+               onChange={updateConfig('explanation')} />
 
         <KeyValueListField
           label="Available languages"
           items={config.languages}
           createItemLabel="Add language" onCreateItem={addLanguage}
           canRemoveItem={(item, index) => index > 0} onRemoveItem={(item, index) => removeLanguage(index)}
-          renderKey={({code, keywords}, index) => <Field className="editable-field" id="ld-key" value={keywords} onChange={updateLanguage(index, 'keywords')} resize={{min: 100, max: 200}} />}
+          renderKey={({code, keywords}, index) => <Field className="editable-field lang-text-input" id="ld-key" value={keywords} onChange={updateLanguage(index, 'keywords')} resize={{min: 100, max: 200}} />}
           renderValue={({code, keywords}, index) => <LanguageSelector code={code} onChange={updateLanguage(index, 'code')} />}
         />
 

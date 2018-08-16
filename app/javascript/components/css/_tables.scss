@@ -95,3 +95,14 @@ tbody .md-table-row:last-child {
 .md-table-column--plain {
   height: 72px;
 }
+.md-table-row {
+  .remove-item {
+    background-color: transparent;
+    visibility: hidden
+  }
+  &:hover {
+    .remove-item {
+      visibility: visible;
+    }
+  }
+}
