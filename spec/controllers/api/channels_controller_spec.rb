@@ -4,11 +4,11 @@ RSpec.describe Api::ChannelsController, type: :controller do
   let!(:user) { create(:user) }
   before(:each) { sign_in user }
 
-  let!(:bot) { create(:bot, owner: user) }
+  let!(:bot) { create(:bot, owner: user).add_default_channels!() }
   let!(:channel) { bot.channels.first }
   let!(:websocket_channel) { bot.channels[1] }
-  let!(:shared_bot) { create(:bot, shared_with: user, grants: %w(publish)) }
-  let!(:other_shared_bot) { create(:bot, shared_with: user, grants: %w(results)) }
+  let!(:shared_bot) { create(:bot, shared_with: user, grants: %w(publish)).add_default_channels!() }
+  let!(:other_shared_bot) { create(:bot, shared_with: user, grants: %w(results)).add_default_channels!() }
 
   describe "create" do
     it "create bot facebook channel" do

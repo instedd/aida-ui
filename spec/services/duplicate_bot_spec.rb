@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe DuplicateBot, type: :service do
   let(:bot) {
-    create(:bot, shared_with: create(:user)).tap do |bot|
+    create(:bot, shared_with: create(:user)).add_default_channels!().tap do |bot|
       bot.front_desk.update_attributes! config: {
                                           "greeting" => "Hi",
                                           "introduction" => "I'm a bot",
@@ -56,8 +56,8 @@ RSpec.describe DuplicateBot, type: :service do
   end
 
   it "does not duplicate channel information" do
-    expect(duplicate.channels.count).to eq(2)
-    expect(duplicate.channels.first).not_to eq(bot.channels.first)
+    expect(bot.channels.count).to eq(2)
+    expect(duplicate.channels.count).to eq(0)
   end
 
   it "does not duplicate collaborators" do
