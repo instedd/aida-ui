@@ -12,6 +12,7 @@ import { BotChannelFacebook } from './BotChannelFacebook';
 import { MainWhite } from '../ui/MainWhite';
 import { Button, DialogContainer } from 'react-md'
 import * as routes from '../utils/routes'
+import sortBy from 'lodash/sortBy'
 
 class BotChannelComponent extends Component {
   state = {
@@ -26,7 +27,7 @@ class BotChannelComponent extends Component {
   }
 
   render() {
-    const { permitted, channel, bot, channelActions, history } = this.props
+    const { permitted, channel, bot, channelActions, history, errors } = this.props
     const { deleteDialogVisible } = this.state
 
     const styles = {
@@ -87,13 +88,13 @@ class BotChannelComponent extends Component {
           case 'websocket':
             return  <div>
                       {deleteChannelDialog}
-                      <BotChannelWebSocket channel={channel} errors={this.props.errors.filter((e) => e.path[0] == "channels/1")}
+                      <BotChannelWebSocket channel={channel} errors={errors}
                         channelActions={channelActions} ></BotChannelWebSocket>
                     </div>
           case 'facebook':
             return  <div>
                       {deleteChannelDialog}
-                      <BotChannelFacebook channel={channel} errors={this.props.errors.filter((e) => e.path[0] == "channels/0")}
+                      <BotChannelFacebook channel={channel} errors={errors}
                         channelActions={channelActions} bot={bot} ></BotChannelFacebook>
                     </div>
         }
@@ -112,10 +113,12 @@ const mapStateToProps = ({channels, bots}, {bot, match}) => {
     }
   }
 
+  const errorIndex = sortBy(Object.values(channels.items), 'id').findIndex(channel => channel.id == match.params.c_id)
+
   return {
     permitted: hasPermission(bot, 'can_publish'),
     channel: getChannel(),
-    errors: bots && bots.errors && bots.errors.filter((e) => e.path[0].startsWith("channel")) || []
+    errors: bots && bots.errors && bots.errors.filter((e) => e.path[0] == `channels/${errorIndex}`) || []
   }
 }
 
