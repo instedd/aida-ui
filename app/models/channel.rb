@@ -18,14 +18,6 @@ class Channel < ApplicationRecord
     end
   end
 
-  def self.setup_or_facebook(channel_list)
-    if channel_list.select{ |c| c.setup? }.length > 0
-      channel_list.select{ |c| c.setup? }
-    else
-      channel_list.select{ |c| c.kind == "facebook" }
-    end
-  end
-
   private
 
   def config_must_match_schema
