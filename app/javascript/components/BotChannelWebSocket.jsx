@@ -11,6 +11,13 @@ export class BotChannelWebSocket extends Component {
     }
   }
 
+  updateChannelField(field) {
+    const {channel, channelActions} = this.props
+    return (value) => {
+      channelActions.updateChannel({...channel, [field]: value})
+    }
+  }
+
   render() {
     const { channel, errors } = this.props
 

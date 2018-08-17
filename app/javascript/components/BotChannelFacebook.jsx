@@ -12,6 +12,13 @@ export class BotChannelFacebook extends Component {
     }
   }
 
+  updateChannelField(field) {
+    const {channel, channelActions} = this.props
+    return (value) => {
+      channelActions.updateChannel({...channel, [field]: value})
+    }
+  }
+
   render() {
     const { channel, bot, errors } = this.props
 
@@ -22,6 +29,7 @@ export class BotChannelFacebook extends Component {
     }
 
     let setupFields = <div>
+      <Field label="Name" value={channel.name} onChange={this.updateChannelField('name')} error={errors.filter((e) => e.path[1] == "name")} />
       <Field label="Page ID" value={channel.config.page_id} onChange={this.updateConfigField("page_id")} helpText="The Page ID under the More info section on your Facebook Page's About tab" error={errors.filter((e) => e.path[1] == "page_id")} />
       <Field label="Access Token" value={channel.config.access_token} onChange={this.updateConfigField("access_token")} helpText="The Page Access Token you get on the Token Generation section of the Messenger > Settings tab of your Facebook Application" error={errors.filter((e) => e.path[1] == "access_token")} />
     </div>
