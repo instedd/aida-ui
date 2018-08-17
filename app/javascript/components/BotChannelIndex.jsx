@@ -10,7 +10,8 @@ import { EmptyLoader } from '../ui/Loader'
 import * as actions from '../actions/channels'
 import * as routes from '../utils/routes'
 import { hasPermission } from '../utils'
-import { Button, DialogContainer, List, ListItem } from 'react-md';
+import { Button, DialogContainer, List, ListItem, FontIcon } from 'react-md';
+import sortBy from 'lodash/sortBy'
 
 export class BotChannelIndexComponent extends Component {
   state = {
@@ -25,7 +26,7 @@ export class BotChannelIndexComponent extends Component {
   }
 
   render() {
-    const { channels, history, bot, fetching, actions } = this.props
+    const { channels, history, bot, fetching, actions, errors } = this.props
     const { createDialogVisible } = this.state
 
     const showCreateDialog = () => this.setState({ createDialogVisible: true })
@@ -74,11 +75,18 @@ export class BotChannelIndexComponent extends Component {
                 </EmptyContent>
       }
 
+      const errorIcon = (channelId) => {
+        const errorIndex = sortBy(channelList, 'id').findIndex(channel => channel.id == channelId)
+        const hasErrors = errors.some((e) => e.path[0] == `channels/${errorIndex}`)
+        return hasErrors ? (<FontIcon className="error-in-bot-channel-index">lens</FontIcon>) : null
+      }
+
       const content = () => {
         const title = channelList.length == 1 ? '1 channel' : `${channelList.length} channels`
           return  <Listing items={channelList} title={title}
                     onItemClick={c => history.push(routes.botChannel(bot.id, c.id))}
                   >
+                    <Column title="" render={c => errorIcon(c.id)} />
                     <Column title="Name" render={c => c.name} />
                     <Column title="Type" render={c => c.kind} />
                     <Column title="Uses" render={c => null} />
