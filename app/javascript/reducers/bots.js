@@ -79,7 +79,8 @@ const createSuccess = (state, action) => {
     items: {
       ...state.items,
       ...{[bot.id]: bot}
-    }
+    },
+    errors: null
   }
 }
 
