@@ -30,12 +30,20 @@ export const deleteBot = (bot : T.Bot) => {
   return apiDelete(`bots/${bot.id}`)
 }
 
+export const createChannel = (botId : number, kind: string) => {
+  return apiPostJSON(`bots/${botId}/channels`, null, { kind })
+}
+
 export const fetchChannels = (botId : number) => {
   return (apiFetchJSON(`bots/${botId}/channels`, new schema.Array(channelSchema)) : Promise<{entities: {channels: T.ById<T.Channel>}}>)
 }
 
 export const updateChannel = (channel : T.Channel) => {
   return apiPutJSON(`channels/${channel.id}`, channelSchema, {channel})
+}
+
+export const deleteChannel = (channel : T.Channel) => {
+  return apiDelete(`channels/${channel.id}`)
 }
 
 export const publishBot = (bot : T.Bot) => {

@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   namespace :api, path: "/api/v1" do
     resources :bots, only: [:index, :create, :update, :destroy] do
-      resources :channels, only: [:index]
+      resources :channels, only: [:index, :create]
       resources :collaborators, only: [:index]
       resources :invitations, only: [:create]
       member do
@@ -42,7 +42,7 @@ Rails.application.routes.draw do
       resources :data_tables, only: [:index, :create]
     end
 
-    resources :channels, only: [:update]
+    resources :channels, only: [:update, :destroy]
     resources :skills, only: [:update, :destroy]
     resources :data_tables, only: [:show, :update, :destroy] do
       collection do

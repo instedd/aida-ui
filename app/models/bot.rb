@@ -20,13 +20,6 @@ class Bot < ApplicationRecord
 
     bot.name = "Bot #{bot.id}"
 
-    bot.channels.create! kind: "facebook", name: "facebook", config: {
-      "page_id" => "", "verify_token" => SecureRandom.base58, "access_token" => ""
-    }
-    bot.channels.create! kind: "websocket", name: "websocket", config: {
-      "access_token" => ""
-    }
-
     bot.behaviours.create_front_desk!
 
     bot.generate_notifications_secret!
@@ -49,7 +42,7 @@ class Bot < ApplicationRecord
         skill.manifest_fragment
       end,
       variables: VariableAssignment.manifest(self.variable_assignments, self.default_language, self.other_languages),
-      channels: Channel.setup_or_facebook(channels).map do |channel|
+      channels: channels.order(:id).map do |channel|
         channel.config.merge(type: channel.kind)
       end
     }.tap do |manifest|
@@ -127,6 +120,16 @@ class Bot < ApplicationRecord
 
   def notifications_url
     URI::join(Settings.base_url, "notifications/#{notifications_secret}")
+  end
+
+  def add_default_channels!
+    self.channels.create! kind: "facebook", name: "facebook", config: {
+      "page_id" => "", "verify_token" => SecureRandom.base58, "access_token" => ""
+    }
+    self.channels.create! kind: "websocket", name: "websocket", config: {
+      "access_token" => ""
+    }
+    self
   end
 
   private

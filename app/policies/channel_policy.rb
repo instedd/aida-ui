@@ -1,6 +1,10 @@
 class ChannelPolicy < ApplicationPolicy
   include RolesMixin
 
+  def destroy?
+    can_publish?
+  end
+
   def update?
     can_publish?
   end

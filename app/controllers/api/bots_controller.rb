@@ -145,7 +145,7 @@ class Api::BotsController < ApplicationApiController
       published: bot.published?,
       channel_setup: bot.channels.any?{|c| c.setup? },
       uuid: bot.uuid,
-      channels: bot.channels.select{|c| c.setup? }.map{|c| c.name.capitalize },
+      channels: bot.channels.map{|c| c.name.capitalize },
       updated_at: bot.updated_at,
       active_users: bot.published? ? GatherBotStats.run(bot, 'this_month')[:active_users] : 0,
       permissions: bot_permissions(bot),

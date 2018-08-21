@@ -1,128 +1,124 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-
-import { MainWhite } from '../ui/MainWhite'
-import Title from '../ui/Title'
-import Headline from '../ui/Headline'
-import Field from '../ui/Field'
 import { EmptyLoader }  from '../ui/Loader'
 import { hasPermission } from '../utils'
 import ContentDenied from './ContentDenied'
-import TooltipFontIcon from './TooltipFontIcon';
-
 import * as channelActions from '../actions/channel'
 import * as channelsActions from '../actions/channels'
+import { BotChannelWebSocket } from '../components/BotChannelWebSocket'
+import { withRouter } from 'react-router'
+import { BotChannelFacebook } from './BotChannelFacebook';
+import { MainWhite } from '../ui/MainWhite';
+import { Button, DialogContainer } from 'react-md'
+import * as routes from '../utils/routes'
+import sortBy from 'lodash/sortBy'
 
 class BotChannelComponent extends Component {
+  state = {
+    deleteDialogVisible: false
+  }
+
   componentDidMount() {
-    const { permitted, channelLoaded, bot } = this.props
-    if (permitted && !channelLoaded) {
+    const { permitted, channel, bot } = this.props
+    if (permitted && !channel) {
       this.props.channelsActions.fetchChannels({botId : bot.id})
     }
   }
 
-  updateConfigField(field, type) {
-    const {channelFacebook, channelWebsocket, channelActions} = this.props
-    let channel = null
-    if(type == "facebook") { channel = channelFacebook } else { channel = channelWebsocket }
-    return (value) => {
-      channelActions.updateChannel({...channel, config: { ...channel.config, [field]: value}})
-    }
-  }
-
   render() {
-    const { permitted, channelFacebook, channelWebsocket, bot } = this.props
+    const { permitted, channel, bot, channelActions, history, errors } = this.props
+    const { deleteDialogVisible } = this.state
 
     const styles = {
       multiline_tooltip: {
         "white-space": "pre"
       }
     }
+    const showDeleteDialog = () => this.setState({ deleteDialogVisible: true })
+    const hideDeleteDialog = () => this.setState({ deleteDialogVisible: false })
 
-    if (!permitted) {
-      return <ContentDenied />
+    const DeleteChannelDialog = ({ onHide, onConfirm, visible }) => {
+      const dialogActions = [
+        { primary: true, children: 'Cancel', onClick: onHide },
+        (<Button flat secondary onClick={onConfirm}>Delete</Button>)
+      ]
+      return (
+        <DialogContainer
+          id="delete-channel-dialog"
+          visible={visible}
+          onHide={onHide}
+          actions={dialogActions}
+          title="Delete channel?">
+          <h4>This will destroy the channel and all its associated data. Are you sure?</h4>
+          <b>This action cannot be undone.</b>
+        </DialogContainer>
+      )
     }
 
-    if (channelFacebook || channelWebsocket) {
-      let setupFields = <div>
-        <Field label="Page ID" value={channelFacebook.config.page_id} onChange={this.updateConfigField("page_id", "facebook")} helpText="The Page ID under the More info section on your Facebook Page's About tab" error={this.props.errors.filter((e) => e.path[0] == "channels/0" && e.path[1] == "page_id")} />
-        <Field label="Access Token" value={channelFacebook.config.access_token} onChange={this.updateConfigField("access_token", "facebook")} helpText="The Page Access Token you get on the Token Generation section of the Messenger > Settings tab of your Facebook Application" error={this.props.errors.filter((e) => e.path[0] == "channels/0" && e.path[1] == "access_token")} />
-      </div>
-
-      let websocketSetup =  <div><br />
-          <Title>Setup a websocket channel</Title>
-          <Headline>If you don't need an extra websocket channel, leave this section empty</Headline>
-          <Field label="Access Token" value={channelWebsocket.config.access_token} onChange={this.updateConfigField("access_token", "websocket")} error={this.props.errors.filter((e) => e.path[0] == "channels/1" && e.path[1] == "access_token")} />
-        </div>
-
-      if (bot.published) {
-        return <MainWhite>
-            <Title>Subscribe channel to Aida</Title>
-            <Headline>
-              Finish the channel setup taking your callback URL and verify token to
-              the <a href="https://developers.facebook.com/docs/messenger-platform/getting-started/app-setup" target="_blank" className="hrefLink">subscribe bot page</a>.
-            </Headline>
-
-            <Field label="Callback URL" defaultValue={`${location.protocol}//${location.host}/callback/facebook/${bot.uuid}`} readOnly />
-            <Field label="Verify Token" value={channelFacebook.config.verify_token} onChange={this.updateConfigField("verify_token", "facebook")} error={this.props.errors.filter((e) => e.path[0] == "channels/0" && e.path[1] == "verify_token")} />
-            { /* TODO: replace `<br /><br />` with proper CSS spacing */ }
-            <br /><br />
-            <Title>Facebook channel configuration</Title>
-            <Headline>
-              You can fix your Facebook channel's configuration here in case you've found an error
-            </Headline>
-            {setupFields}
-            {websocketSetup}
-          </MainWhite>
-      } else {
-        return <MainWhite>
-          <Title>Setup a Facebook channel</Title>
-          <Headline>
-            In order to setup this channel you first need
-            to <a href="https://www.facebook.com/business/products/pages" target="_blank" className="hrefLink">create a Facebook page</a> and
-            then paste your credentials here.
-            Follow <a href="https://developers.facebook.com/docs/messenger-platform/prelaunch-checklist" target="_blank" className="hrefLink">Facebook publishing requirements</a> to
-            avoid getting your channel banned&nbsp;
-            <TooltipFontIcon
-              tooltipLabel="Facebook Page must provide customer support contact information.&#013;&#010;Don’t facilitate direct conversations between people and healthcare providers.&#013;&#010;Prevent receiving large amounts of negative feedback or violate Facebook policies."
-              tooltipStyle={styles.multiline_tooltip}
-              tooltipPosition="top">info_outline
-            </TooltipFontIcon>
-            .<br />You will be able to subscribe the bot after you first publish it.
-          </Headline>
-          {setupFields}
-          {websocketSetup}
-        </MainWhite>
+    const deleteButton = () => {
+      if (channel) {
+        return <Button
+          floating
+          secondary
+          className='btn-mainTabs'
+          onClick={showDeleteDialog}>
+            delete
+        </Button>
       }
-    } else {
-      return <EmptyLoader>Loading channels for {bot.name}</EmptyLoader>
+      else {
+        return null
+      }
     }
+
+    const content = () => {
+      if (!permitted) {
+        return <ContentDenied />
+      }
+
+      if (channel) {
+        const deleteChannel = () => {
+          channelActions.deleteChannel(channel)
+          history.push(routes.botChannelIndex(bot.id))
+        }
+
+        const deleteChannelDialog = <DeleteChannelDialog visible={deleteDialogVisible} onHide={hideDeleteDialog} onConfirm={deleteChannel} />
+
+        switch (channel.kind) {
+          case 'websocket':
+            return  <div>
+                      {deleteChannelDialog}
+                      <BotChannelWebSocket channel={channel} errors={errors}
+                        channelActions={channelActions} ></BotChannelWebSocket>
+                    </div>
+          case 'facebook':
+            return  <div>
+                      {deleteChannelDialog}
+                      <BotChannelFacebook channel={channel} errors={errors}
+                        channelActions={channelActions} bot={bot} ></BotChannelFacebook>
+                    </div>
+        }
+      }
+      return <EmptyLoader>Loading channel</EmptyLoader>
+    }
+
+    return <MainWhite buttons={deleteButton()}>{content()}</MainWhite>
   }
 }
 
-const mapStateToProps = (state, {bot}) => {
-  let channelFacebook = null
-  let channelWebsocket = null
-  let channelLoaded = false
-  const channels = state.channels.items
-
-  // TODO deep scope object comparison
-  if (state.channels.scope && state.channels.scope.botId == bot.id && channels) {
-    const channelsIds = Object.keys(channels)
-    channelFacebook = Object.values(channels).filter(c => c.kind == "facebook")[0]
-    channelWebsocket = Object.values(channels).filter(c => c.kind == "websocket")[0]
-    channelLoaded = true
-  } else {
-    channelLoaded = false
+const mapStateToProps = ({channels, bots}, {bot, match}) => {
+  const getChannel = () => {
+    if (channels.scope && channels.scope.botId == bot.id && channels.items) {
+      return Object.values(channels.items).find(c => c.id == match.params.c_id)
+    }
   }
+
+  const errorIndex = sortBy(Object.values(channels.items), 'id').findIndex(channel => channel.id == match.params.c_id)
 
   return {
     permitted: hasPermission(bot, 'can_publish'),
-    channelLoaded: channelLoaded,
-    channelFacebook: channelFacebook,
-    channelWebsocket: channelWebsocket,
-    errors: state.bots && state.bots.errors && state.bots.errors.filter((e) => e.path[0].startsWith("channel")) || []
+    channel: getChannel(),
+    errors: bots && bots.errors && bots.errors.filter((e) => e.path[0] == `channels/${errorIndex}`) || []
   }
 }
 
@@ -131,4 +127,4 @@ const mapDispatchToProps = (dispatch) => ({
   channelsActions: bindActionCreators(channelsActions, dispatch),
 })
 
-export const BotChannel = connect(mapStateToProps, mapDispatchToProps)(BotChannelComponent)
+export const BotChannel = withRouter(connect(mapStateToProps, mapDispatchToProps)(BotChannelComponent))

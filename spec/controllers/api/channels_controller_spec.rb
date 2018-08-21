@@ -4,11 +4,71 @@ RSpec.describe Api::ChannelsController, type: :controller do
   let!(:user) { create(:user) }
   before(:each) { sign_in user }
 
-  let!(:bot) { create(:bot, owner: user) }
+  let!(:bot) { create(:bot, owner: user).add_default_channels!() }
   let!(:channel) { bot.channels.first }
   let!(:websocket_channel) { bot.channels[1] }
-  let!(:shared_bot) { create(:bot, shared_with: user, grants: %w(publish)) }
-  let!(:other_shared_bot) { create(:bot, shared_with: user, grants: %w(results)) }
+  let!(:shared_bot) { create(:bot, shared_with: user, grants: %w(publish)).add_default_channels!() }
+  let!(:other_shared_bot) { create(:bot, shared_with: user, grants: %w(results)).add_default_channels!() }
+
+  describe "create" do
+    it "create bot facebook channel" do
+      expect do
+        post :create, params: {
+          bot_id: bot.id,
+          channel: {
+            kind: 'facebook'
+          }
+        }
+      end.to change(Channel, :count).by(1)
+
+      expect(json_body).to be_a_channel_as_json
+    end
+
+    it "create bot websocket channel" do
+      expect do
+        post :create, params: {
+          bot_id: bot.id,
+          channel: {
+            kind: 'websocket'
+          }
+        }
+      end.to change(Channel, :count).by(1)
+
+      expect(json_body).to be_a_channel_as_json
+    end
+
+    it "returns unprocessable entity when unknown kind" do
+      expect do
+        post :create, params: {
+          bot_id: bot.id,
+          channel: {
+            kind: 'other'
+          }
+        }
+      end.to change(Channel, :count).by(0)
+
+      expect(response).to have_http_status(422)
+    end
+
+    it "returns unprocessable entity when missing channel" do
+      expect do
+        post :create, params: {
+          bot_id: bot.id
+        }
+      end.to change(Channel, :count).by(0)
+
+      expect(response).to have_http_status(422)
+    end
+
+  end
+
+  describe "destroy" do
+    it "delete a bot channel" do
+      expect do
+        delete :destroy, params: { id: channel.id }
+      end.to change(Channel, :count).by(-1)
+    end
+  end
 
   describe "index" do
     it "list bot channel" do
