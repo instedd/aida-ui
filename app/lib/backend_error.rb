@@ -119,6 +119,8 @@ class BackendError < HTTParty::ResponseError
       { 'missing' => %w[question responses] },
       { 'expected' => '^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})(\\.(\\d{3})){0,1}([+-](\\d{2}):(\\d{2})|Z)$'}
       'required'
+    when { 'expected' => '^(\\s)?\\S+(\\s)?$' }
+      'white space'
     else
       ''
     end
