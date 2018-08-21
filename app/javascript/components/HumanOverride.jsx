@@ -85,7 +85,7 @@ class HumanOverride extends Component {
                error={errors.filter(e => e.path[1] == "clarification/en")} />
         <Field id="kr-keywords" label="Valid keywords (comma separated)"
                value={config.keywords} onChange={updateConfig('keywords')}
-               error={errors.filter(e => e.path[1] == "keywords/en")} />
+               error={errors.filter(e => e.path[1].startsWith("keywords/en"))} />
 
         <TimezoneDropdown value={config.timezone} onChange={updateConfig('timezone')} />
         <WeeklySchedule hours={config.hours} onChange={updateConfig('hours')}/>
