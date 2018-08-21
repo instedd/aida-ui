@@ -49,7 +49,7 @@ export default class DecisionTree extends Component {
                error={errors.filter(e => e.path[1] == "clarification/en")} />
         <Field id="tree-clarification" label="Valid keywords (comma separated)"
           value={config.keywords} onChange={updateConfig('keywords')}
-          error={errors.filter(e => e.path[1] == "keywords/en")} />
+          error={errors.filter(e => e.path[1].startsWith("keywords/en"))} />
         <DecisionTreeComponent tree={config.tree} onChange={updateConfig('tree')} errors={errors.filter(e => e.path[1].startsWith("tree"))} />
 
       </div>

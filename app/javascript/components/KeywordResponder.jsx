@@ -41,7 +41,7 @@ export default class KeywordResponder extends Component {
                error={errors.filter(e => e.path[1] == "clarification/en")} />
         <Field id="kr-keywords" label="Valid keywords (comma separated)"
                value={config.keywords} onChange={updateConfig('keywords')}
-               error={errors.filter(e => e.path[1] == "keywords/en")} />
+               error={errors.filter(e => e.path[1].startsWith("keywords/en"))} />
         <Field id="kr-response" label="Message"
                value={config.response} onChange={updateConfig('response')}
                error={errors.filter(e => e.path[1] == "response/en")} />
