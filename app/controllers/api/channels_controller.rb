@@ -13,19 +13,25 @@ class Api::ChannelsController < ApplicationApiController
     bot = Bot.find(params[:bot_id])
     authorize bot, :read_channels?
 
-    channel =
-      case params['channel']['kind']
-      when 'facebook'
-        bot.channels.create! kind: "facebook", name: "facebook", config: {
-          "page_id" => "", "verify_token" => SecureRandom.base58, "access_token" => ""
-        }
-      when 'websocket'
-        bot.channels.create! kind: "websocket", name: "websocket", config: {
-          "access_token" => ""
-        }
-      end
+    if (params['channel'])
+      channel =
+        case params['channel']['kind']
+        when 'facebook'
+          bot.channels.create! kind: "facebook", name: "facebook", config: {
+            "page_id" => "", "verify_token" => SecureRandom.base58, "access_token" => ""
+          }
+        when 'websocket'
+          bot.channels.create! kind: "websocket", name: "websocket", config: {
+            "access_token" => ""
+          }
+        else
+          render json: { error: 'kind unknown' }, status: 422 and return
+        end
 
-    render json: channel_api_json(channel)
+      render json: channel_api_json(channel)
+    else
+      render json: { error: 'missing channel' }, status: 422
+    end
   end
 
   def destroy
