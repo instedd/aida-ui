@@ -7,6 +7,8 @@ import * as botActions from '../actions/bot'
 import * as skillsActions from '../actions/skills'
 import * as skillActions from '../actions/skill'
 import * as chatActions from '../actions/chat'
+import * as channelActions from '../actions/channel'
+import * as channelsActions from '../actions/channels'
 
 const initialState = {
   fetching: false,
@@ -31,6 +33,9 @@ export default (state : T.BotsState, action : T.Action) : T.BotsState => {
     case skillActions.UPDATE: return clearErrors(state, action)
     case skillActions.DELETE: return clearErrors(state, action)
     case botActions.SELECT: return clearErrors(state, action)
+    case channelActions.UPDATE: return clearErrors(state, action)
+    case channelActions.DELETE: return clearErrors(state, action)
+    case channelsActions.CREATE_SUCCESS: return clearErrors(state, action)
     default: return state
   }
 }
