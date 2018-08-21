@@ -1667,7 +1667,7 @@ RSpec.describe BackendError, :type => :helper do
 
     it "parses keyword with white space error" do
       errors_in = [{"path"=>"#/front_desk/unsubscribe/keywords/en/0", "error"=>{"expected"=>"^(\\s)?\\S+(\\s)?$"}}]
-      errors_out = [{:message=>"white space", :path=>["front_desk/unsubscribe/keywords/en/0"]}]
+      errors_out = [{:message=>"white-spaced", :path=>["front_desk/unsubscribe/keywords/en/0"]}]
       expect(BackendError.parse_errors(errors_in)).to eq(errors_out)
     end
 
