@@ -61,7 +61,7 @@ class KeywordInput extends PureComponent {
   }
 
   render() {
-    const { onChange, actions, bot } = this.props
+    const { onChange, actions, bot, className, keywords, onKeywordChange, errors } = this.props
     const { dialogVisible } = this.state
 
     const openDialog = () => {
@@ -79,14 +79,13 @@ class KeywordInput extends PureComponent {
 
     return (
       <div>
-        {// <Field
-        //   id="kr-keywords"
-        //   // className={className}
-        //   label="Valid keywords (comma separated)"
-        //   // value={config.keywords} onChange={onChange}
-        //   // error={errors.filter(e => e.path[1] == "keywords/en")}
-        // />
-        }
+        <Field
+          id="kr-keywords"
+          className={className}
+          label="Valid keywords (comma separated)"
+          value={keywords} onChange={onKeywordChange}
+          error={errors.filter(e => e.path[1].startsWith("keywords/en"))}
+        />
         <Button flat onClick={openDialog}>Enable WIT.ai</Button>
         <DialogComponent
           visible={dialogVisible}

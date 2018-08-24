@@ -5,6 +5,7 @@ import Headline from '../ui/Headline'
 import Field from '../ui/Field'
 import uuidv4 from 'uuid/v4'
 import { isEqual } from 'lodash'
+import KeywordInput from '../ui/KeywordInput'
 
 import {
   Button,
@@ -17,7 +18,7 @@ import RelevanceField from './RelevanceField'
 export default class DecisionTree extends Component {
 
   render() {
-    const { skill, actions, errors } = this.props
+    const { skill, actions, bot, botActions, errors } = this.props
     const { name, config } = skill
 
     const updateConfig = (key) => {
@@ -47,9 +48,7 @@ export default class DecisionTree extends Component {
         <Field id="tree-clarification" label="Skill clarification"
                value={config.clarification} onChange={updateConfig('clarification')}
                error={errors.filter(e => e.path[1] == "clarification/en")} />
-        <Field id="tree-clarification" label="Valid keywords (comma separated)"
-          value={config.keywords} onChange={updateConfig('keywords')}
-          error={errors.filter(e => e.path[1].startsWith("keywords/en"))} />
+        <KeywordInput actions={botActions} bot={bot} onKeywordChange={updateConfig('keywords')} keywords={config.keywords} errors={errors}/>
         <DecisionTreeComponent tree={config.tree} onChange={updateConfig('tree')} errors={errors.filter(e => e.path[1].startsWith("tree"))} />
 
       </div>

@@ -5,6 +5,7 @@ import Headline from '../ui/Headline'
 import Field from '../ui/Field'
 import TimezoneDropdown from '../ui/TimezoneDropdown'
 import WeeklySchedule from '../ui/WeeklySchedule'
+import KeywordInput from '../ui/KeywordInput'
 
 import RelevanceField from './RelevanceField'
 
@@ -25,7 +26,7 @@ class HumanOverride extends Component {
   }
 
   render() {
-    const { skill, actions, errors, permitted, operators, bot } = this.props
+    const { skill, actions, errors, permitted, operators, bot, botActions } = this.props
     const { name, config } = skill
 
     const updateConfig = (key) => {
@@ -83,9 +84,7 @@ class HumanOverride extends Component {
         <Field id="kr-clarification" label="Skill clarification"
                value={config.clarification} onChange={updateConfig('clarification')}
                error={errors.filter(e => e.path[1] == "clarification/en")} />
-        <Field id="kr-keywords" label="Valid keywords (comma separated)"
-               value={config.keywords} onChange={updateConfig('keywords')}
-               error={errors.filter(e => e.path[1].startsWith("keywords/en"))} />
+        <KeywordInput actions={botActions} bot={bot} onKeywordChange={updateConfig('keywords')} keywords={config.keywords} errors={errors}/>
 
         <TimezoneDropdown value={config.timezone} onChange={updateConfig('timezone')} />
         <WeeklySchedule hours={config.hours} onChange={updateConfig('hours')}/>

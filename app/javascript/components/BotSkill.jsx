@@ -23,17 +23,17 @@ const SkillComponent = ({skill, actions, botActions, errors, bot}) => {
 
   switch (kind) {
     case 'keyword_responder':
-      return (<KeywordResponder skill={skill} actions={actions} errors={errors} bot={bot} botActions={botActions}/>)
+      return (<KeywordResponder skill={skill} actions={actions} errors={errors} bot={bot} botActions={botActions} />)
     case 'human_override':
-      return (<HumanOverride skill={skill} actions={actions} errors={errors} bot={bot} />)
+      return (<HumanOverride skill={skill} actions={actions} errors={errors} bot={bot} botActions={botActions} />)
     case 'language_detector':
       return (<LanguageDetector skill={skill} actions={actions} errors={errors} />)
     case 'survey':
-      return (<Survey skill={skill} actions={actions} errors={errors} />)
+      return (<Survey skill={skill} actions={actions} errors={errors} bot={bot} botActions={botActions} />)
     case 'scheduled_messages':
       return (<ScheduledMessages skill={skill} actions={actions} errors={errors} />)
     case 'decision_tree':
-      return (<DecisionTree skill={skill} actions={actions} errors={errors} />)
+      return (<DecisionTree skill={skill} actions={actions} errors={errors} bot={bot} botActions={botActions} />)
     default:
       return (<Title>{skill.name} #{skill.id}</Title>)
   }

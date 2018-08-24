@@ -9,12 +9,13 @@ import Field from '../ui/Field'
 import Title from '../ui/Title'
 import Headline from '../ui/Headline'
 import { getLocalTimezone } from '../utils'
+import KeywordInput from '../ui/KeywordInput'
 
 import RelevanceField from './RelevanceField'
 
 class Survey extends Component {
   render() {
-    const { uploadStatus, skill, actions, xlsFormsActions, errors } = this.props
+    const { uploadStatus, skill, actions, xlsFormsActions, errors, bot, botActions } = this.props
     const { uploading, error: uploadError } = uploadStatus
     const { name, config } = skill
 
@@ -92,9 +93,7 @@ class Survey extends Component {
                       error={errors.some(e => e.path[1] == "schedule")} />
         </div>
 
-        <Field id="survey-keywords" label="Valid keywords (comma separated)"
-          value={config.keywords} onChange={updateConfig('keywords')}
-          error={errors.filter(e => e.path[1] == "keywords")} />
+        <KeywordInput actions={botActions} bot={bot} onKeywordChange={updateConfig('keywords')} keywords={config.keywords} errors={errors}/>
 
         <div className="file-upload-field">
           <label htmlFor="survey-xlsform-upload" className='label'>Survey form</label>
