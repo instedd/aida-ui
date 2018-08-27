@@ -127,6 +127,7 @@
         "explanation": { "$ref": "#/definitions/message" },
         "clarification": { "$ref": "#/definitions/message" },
         "keywords": { "$ref": "#/definitions/keywordList" },
+        "use_wit_ai": { "type": "boolean" },
         "response": { "$ref": "#/definitions/message" }
       },
       "additionalProperties": false,

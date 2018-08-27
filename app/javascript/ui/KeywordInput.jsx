@@ -1,5 +1,5 @@
 import React, { Component, PureComponent } from 'react'
-import { DialogContainer, Button, TextField } from 'react-md'
+import { DialogContainer, Button, TextField, SelectionControl } from 'react-md'
 import Field from './Field'
 
 class DialogComponent extends Component {
@@ -10,7 +10,7 @@ class DialogComponent extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.visible && !this.props.visible) {
       const authToken = nextProps.authToken || ''
-      this.setState({authToken})
+      this.setState({ authToken })
     }
   }
 
@@ -33,9 +33,9 @@ class DialogComponent extends Component {
         title="Use Wit.ai for intent detection">
         <h4>Enter the server access token from the settings section</h4>
         <TextField id="access-token-field"
-                   label="Access token"
-                   value={this.state.authToken}
-                   onChange={(authToken) => this.setState({authToken})} />
+          label="Access token"
+          value={this.state.authToken}
+          onChange={(authToken) => this.setState({ authToken })} />
       </DialogContainer>
     )
   }
@@ -61,7 +61,7 @@ class KeywordInput extends PureComponent {
   }
 
   render() {
-    const { onChange, actions, bot, className, keywords, onKeywordChange, errors } = this.props
+    const { onChange, actions, bot, className, keywords, onKeywordChange, errors, onUseWitAiChange, useWitAi } = this.props
     const { dialogVisible } = this.state
 
     const openDialog = () => {
@@ -77,16 +77,39 @@ class KeywordInput extends PureComponent {
       closeDialog()
     }
 
-    return (
-      <div>
-        <Field
+    const useWitAiChange = checked => {
+      if (checked) {
+        openDialog()
+      }
+      if (onUseWitAiChange) {
+        onUseWitAiChange(checked)
+      }
+    }
+
+    const renderKeywords = () => {
+      if (!useWitAi) {
+        return <Field
           id="kr-keywords"
           className={className}
           label="Valid keywords (comma separated)"
           value={keywords} onChange={onKeywordChange}
           error={errors.filter(e => e.path[1].startsWith("keywords/en"))}
         />
-        <Button flat onClick={openDialog}>Enable WIT.ai</Button>
+      }
+    }
+
+    return (
+      <div>
+        {renderKeywords()}
+        <SelectionControl
+          name="use-wit-ai"
+          id="kr-wit-ai"
+          label="Use Wit.ai for intent detection"
+          type="checkbox"
+          value="wit-ai"
+          checked={useWitAi}
+          onChange={checked => useWitAiChange(checked)}
+        />
         <DialogComponent
           visible={dialogVisible}
           authToken={bot.wit_ai_auth_token}

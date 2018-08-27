@@ -58,6 +58,7 @@ export type KeywordResponderConfig = {
   explanation: Message;
   clarification: Message;
   keywords: KeywordList;
+  use_wit_ai?: boolean;
   response: Message;
 };
 
