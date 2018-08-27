@@ -1,6 +1,7 @@
 import React, { Component, PureComponent } from 'react'
 import { DialogContainer, Button, TextField, SelectionControl } from 'react-md'
 import Field from './Field'
+import KeyValueListField from './KeyValueListField'
 
 class DialogComponent extends Component {
   state = {
@@ -48,12 +49,6 @@ class KeywordInput extends PureComponent {
     this.state = this.stateFor(props.value)
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   if (nextProps.value != this.props.value) {
-  //     this.setState(this.stateFor(nextProps.value))
-  //   }
-  // }
-
   stateFor(_) {
     return {
       dialogVisible: false
@@ -61,7 +56,7 @@ class KeywordInput extends PureComponent {
   }
 
   render() {
-    const { onChange, actions, bot, className, keywords, onKeywordChange, errors, onUseWitAiChange, useWitAi } = this.props
+    const { actions, bot, className, keywords, onKeywordChange, keywordErrors, trainingSentences, trainingSentenceErrors, onTrainingSentenceCreate, onTrainingSentenceRemove, onTrainingSentenceChange, onUseWitAiChange, useWitAi } = this.props
     const { dialogVisible } = this.state
 
     const openDialog = () => {
@@ -93,8 +88,41 @@ class KeywordInput extends PureComponent {
           className={className}
           label="Valid keywords (comma separated)"
           value={keywords} onChange={onKeywordChange}
-          error={errors.filter(e => e.path[1].startsWith("keywords/en"))}
+          error={keywordErrors}
         />
+      }
+    }
+
+    const renderTrainingSentence = (item, ix) => {
+      return (<Field id={`schedule-message-#{index}`}
+        className="editable-field"
+        onChange={onTrainingSentenceChange}
+        value={item}
+        onChange={value => onTrainingSentenceChange(ix, value)}
+        error={trainingSentenceErrors.filter(e => e.path[1] == `training_sentences/en/${ix}`)} />)
+    }
+
+    const renderTrainingSentences = () => {
+      const renderError = () => {
+        const error = trainingSentenceErrors.filter(e => e.path[1] == "training_sentences/en")[0]
+        if (error) {
+          return <label className="error-message">{error.message}</label>
+        }
+      }
+
+      if (useWitAi) {
+        return <div>
+          <KeyValueListField
+            items={trainingSentences}
+            createItemLabel="Add training sentence"
+            onCreateItem={onTrainingSentenceCreate}
+            renderKey={() => null}
+            canRemoveItem={() => true}
+            onRemoveItem={(item, index) => onTrainingSentenceRemove(index)}
+            renderValue={renderTrainingSentence}
+          />
+          {renderError()}
+        </div>
       }
     }
 
@@ -116,6 +144,7 @@ class KeywordInput extends PureComponent {
           onClose={closeDialog}
           onSubmit={dialogSubmit}
         />
+        {renderTrainingSentences()}
       </div>
     )
   }

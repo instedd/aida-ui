@@ -40,8 +40,15 @@ export default class KeywordResponder extends Component {
         <Field id="kr-clarification" label="Skill clarification"
                value={config.clarification} onChange={updateConfig('clarification')}
                error={errors.filter(e => e.path[1] == "clarification/en")} />
-        <KeywordInput actions={botActions} bot={bot} onKeywordChange={updateConfig('keywords')} keywords={config.keywords} errors={errors}
-                      onUseWitAiChange={updateConfig('use_wit_ai')} useWitAi={config.use_wit_ai}/>
+        <KeywordInput
+          actions={botActions}
+          bot={bot}
+          onKeywordChange={updateConfig('keywords')}
+          keywords={config.keywords}
+          keywordErrors={errors.filter(e => e.path[1].startsWith("keywords/en"))}
+          onUseWitAiChange={updateConfig('use_wit_ai')}
+          useWitAi={config.use_wit_ai}
+        />
         <Field id="kr-response" label="Message"
                value={config.response} onChange={updateConfig('response')}
                error={errors.filter(e => e.path[1] == "response/en")} />
