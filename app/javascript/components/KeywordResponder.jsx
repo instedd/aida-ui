@@ -24,6 +24,23 @@ export default class KeywordResponder extends Component {
       }
     }
 
+    const addTrainingSentence = () => {
+      const { training_sentences = training_sentences ? training_sentences : [] } = skill.config
+      updateConfig('training_sentences')([...training_sentences, ''])
+    }
+
+    const removeTrainingSentence = index => {
+      let { training_sentences = [...training_sentences] } = skill.config
+      training_sentences.splice(index, 1)
+      updateConfig('training_sentences')(training_sentences)
+    }
+
+    const updateTrainingSentence = (index, value) => {
+      let { training_sentences = [...training_sentences] } = skill.config
+      training_sentences[index] = value
+      updateConfig('training_sentences')(training_sentences)
+    }
+
     return (
       <div>
         <Title>Keyword responder</Title>
@@ -48,6 +65,11 @@ export default class KeywordResponder extends Component {
           keywordErrors={errors.filter(e => e.path[1].startsWith("keywords/en"))}
           onUseWitAiChange={updateConfig('use_wit_ai')}
           useWitAi={config.use_wit_ai}
+          trainingSentences={config.training_sentences}
+          trainingSentenceErrors={errors.filter(e => e.path[1].startsWith("training_sentences/en"))}
+          onTrainingSentenceCreate={addTrainingSentence}
+          onTrainingSentenceRemove={(index) => removeTrainingSentence(index)}
+          onTrainingSentenceChange={(index, value) => updateTrainingSentence(index, value)}
         />
         <Field id="kr-response" label="Message"
                value={config.response} onChange={updateConfig('response')}

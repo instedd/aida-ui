@@ -128,10 +128,16 @@
         "clarification": { "$ref": "#/definitions/message" },
         "keywords": { "$ref": "#/definitions/keywordList" },
         "use_wit_ai": { "type": "boolean" },
+        "training_sentences": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "response": { "$ref": "#/definitions/message" }
       },
       "additionalProperties": false,
-      "required": [ "explanation", "clarification", "keywords", "response" ]
+      "required": [ "explanation", "clarification", "response" ]
     },
 
     "humanOverrideConfig": {
