@@ -72,10 +72,45 @@ RSpec.describe Behaviour, type: :model do
       expect(responder).to be_enabled
     end
 
-    it "generates manifest fragment" do
+    it "generates manifest fragment with keywords" do
+      responder[:config][:keywords] = 'a_keyword'
+      responder.save!
+
       fragment = responder.manifest_fragment
       expect(fragment).to_not be_nil
       expect(fragment.keys).to match_array(%i(type id name explanation keywords response clarification))
+      expect(fragment[:keywords]['en']).to eq(['a_keyword'])
+    end
+
+    it "generates manifest fragment with training_sentences" do
+      responder[:config][:training_sentences] = ['a training sentence']
+      responder[:config][:use_wit_ai] = true
+      responder.save!
+
+      fragment = responder.manifest_fragment
+      expect(fragment).to_not be_nil
+      expect(fragment.keys).to match_array(%i(type id name explanation training_sentences response clarification))
+      expect(fragment[:training_sentences]['en']).to eq(['a training sentence'])
+    end
+
+    it "generates manifest fragment with no training_sentences when disabled wit_ai" do
+      responder[:config][:training_sentences] = ['a training sentence']
+      responder[:config][:use_wit_ai] = false
+      responder.save!
+
+      fragment = responder.manifest_fragment
+      expect(fragment).to_not be_nil
+      expect(fragment[:training_sentences]).to be_nil
+    end
+
+    it "generates manifest fragment with no keywords when enabled wit_ai" do
+      responder[:config][:keywords] = 'a_keyword'
+      responder[:config][:use_wit_ai] = true
+      responder.save!
+
+      fragment = responder.manifest_fragment
+      expect(fragment).to_not be_nil
+      expect(fragment[:keywords]).to be_nil
     end
 
     it "returns translation keys" do
