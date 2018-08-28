@@ -1611,6 +1611,23 @@ RSpec.describe BackendError, :type => :helper do
       expect(BackendError.parse_errors(errors_in)).to eq(errors_out)
     end
 
+    it "returns errors when keywords or training_sentences required" do
+      errors_in = [{"path"=>["#/skills/0/keywords", "#/skills/0/training_sentences"], "message"=>"One of keywords or training_sentences required"}]
+      errors_out =
+      [
+        {
+          :message => 'required',
+          :path => ['skills/0', 'keywords/en']
+
+        },
+        {
+          :message => 'required',
+          :path => ['skills/0', 'training_sentences/en']
+        }
+      ]
+      expect(BackendError.parse_errors(errors_in)).to eq(errors_out)
+    end
+
   end
 
   describe "front desk errors" do

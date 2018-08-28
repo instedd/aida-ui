@@ -55,6 +55,14 @@ class BackendError < HTTParty::ResponseError
           :path => ['skills'] + error['path'].map { |e| e[2..-1] }
         }
       ]
+    elsif error['message'] && (error['message'].include? 'keywords or training_sentences required')
+      parsed_errors = error['path'].map { |path|
+        splitted = path.split('/')
+        {
+          :message => 'required',
+          :path => ["skills/#{splitted[2]}", "#{splitted[3]}/en"]
+        }
+      }
     else
       parsed_errors = parse_invalid_error([], error)
     end
