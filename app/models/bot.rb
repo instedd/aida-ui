@@ -50,6 +50,11 @@ class Bot < ApplicationRecord
         table.manifest_fragment
       end if data_tables.present?
       manifest[:public_keys] = public_keys_fragment if public_keys_fragment.present?
+      manifest[:natural_language_interface] =
+      {
+        provider: "wit_ai",
+        auth_token: self.wit_ai_auth_token
+      } if self.wit_ai_auth_token and self.skills.any? { |skill| skill["enabled"] and skill["config"]["use_wit_ai"] }
     end
   end
 
