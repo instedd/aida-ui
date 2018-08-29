@@ -87,6 +87,28 @@
   .missing-skill .md-text {
     color: $error-red;
   }
+  &.messages-sidebar {
+    .md-list-item {
+      border-radius: 5px;
+      overflow: hidden;
+      border-bottom: 1px solid $md-grey-300;
+      .md-tile-content {
+        padding-left: 0;
+      }
+      .botName {
+        font-size: 1rem;
+        color: $md-grey-500;
+      }
+      .md-text--secondary {
+        font-size: 1rem;
+        color: $md-grey-500;
+      }
+      &.selected {
+        background-color: #d5d5d5;
+      }
+
+    }
+  }
 }
 
 .button-area {

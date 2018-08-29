@@ -10,26 +10,32 @@ import EmptyContent from '../ui/EmptyContent'
 import Headline from '../ui/Headline'
 import { MainWhite } from '../ui/MainWhite'
 import HumanOverrideChatWindow from './HumanOverrideChatWindow'
-import { FontIcon, List, Subheader, Switch, ListItem, ListItemControl, MenuButton } from 'react-md'
+import { FontIcon, List, Subheader, Switch, ListItem, ListItemControl, MenuButton, Button } from 'react-md'
+import classNames from 'classnames/bind'
 import moment from 'moment'
 
 class MessagesBar extends Component {
   render() {
-    const { messageList, bots, onClick } = this.props
+    const { messageList, bots, onClick, selected } = this.props
 
     const title = messageList.length == 1 ? '1 chat' : `${messageList.length} chats`
 
-    return  <List className='sidebar'>
+    return  <List className='sidebar messages-sidebar'>
       <Subheader primary primaryText={title} />
       {
         messageList.map((message, index) => (
           <ListItem
             key={index}
-            primaryText={`${message.data.name || 'Unknown'} @ ${bots[message.bot_id].name}`}
+            active={index==selected}
+            primaryText={[
+              message.data.name || 'Unknown',
+              ' ',
+              <span className="botName">{`@${bots[message.bot_id].name}`}</span>
+            ]}
+            className={classNames({"selected": index==selected})}
             secondaryText={moment(message.created_at).fromNow()}
-            onClick={() => onClick(message)}
-          >
-          </ListItem>
+            onClick={() => onClick(message, index)}
+          />
         ))
       }
     </List>
@@ -40,7 +46,8 @@ class MessagesComponent extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      message: null
+      message: null,
+      selected: null
     }
     this.selectChat = this.selectChat.bind(this)
   }
@@ -50,10 +57,8 @@ class MessagesComponent extends Component {
     this.props.botActions.fetchBots()
   }
 
-  selectChat(message) {
-    console.log('selecting: ', message)
-
-    this.setState({ message: message })
+  selectChat(message, index) {
+    this.setState({ message: message, selected: index })
   }
 
   render() {
@@ -76,7 +81,7 @@ class MessagesComponent extends Component {
       } else {
         content = (
             <div className='main-with-sidebar'>
-              <MessagesBar messageList={messageList} bots={bots} onClick={this.selectChat} />
+              <MessagesBar messageList={messageList} bots={bots} onClick={this.selectChat} selected={this.state.selected} />
               { this.state.message != null
                 ? <HumanOverrideChatWindow
                     message={this.state.message}
