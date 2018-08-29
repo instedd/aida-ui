@@ -59,7 +59,10 @@ export default class LanguageSelector extends Component {
                     value={this.state.query}
                     onChange={query => this.setState({ query })} />
         </DropdownMenu>
-        <span className='lang-code'>{this.state.lang.code}</span>
+        { this.state.lang
+          ? <span className='lang-code'>{this.state.lang.code}</span>
+          : ""
+        }
       </AUX>
 
     )
