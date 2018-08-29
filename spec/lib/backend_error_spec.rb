@@ -1630,6 +1630,14 @@ RSpec.describe BackendError, :type => :helper do
 
   end
 
+  describe "manifest errors" do
+    it "parse wit-ai-invalid error" do
+      errors_in = [{"path"=>"#/natural_language_interface", "message"=>"Invalid wit ai credentials in manifest"}]
+      errors_out = [{:message => "wit-ai-invalid", :path => ["natural_language_interface"]}]
+      expect(BackendError.parse_errors(errors_in)).to eq(errors_out)
+    end
+  end
+
   describe "front desk errors" do
     it "returns errors when it has no skills" do
       errors_in =

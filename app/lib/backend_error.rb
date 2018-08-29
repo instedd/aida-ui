@@ -122,15 +122,19 @@ class BackendError < HTTParty::ResponseError
   end
 
   def self.get_message(error)
-    case error['error']
-    when { 'expected' => 1, 'actual' => 0 },
-      { 'missing' => %w[question responses] },
-      { 'expected' => '^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})(\\.(\\d{3})){0,1}([+-](\\d{2}):(\\d{2})|Z)$'}
-      'required'
-    when { 'expected' => '^(\\s)?\\S+(\\s)?$' }
-      'white-spaced'
+    if (error['path'] == '#/natural_language_interface')
+      'wit-ai-invalid'
     else
-      ''
+      case error['error']
+      when { 'expected' => 1, 'actual' => 0 },
+        { 'missing' => %w[question responses] },
+        { 'expected' => '^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})(\\.(\\d{3})){0,1}([+-](\\d{2}):(\\d{2})|Z)$'}
+        'required'
+      when { 'expected' => '^(\\s)?\\S+(\\s)?$' }
+        'white-spaced'
+      else
+        ''
+      end
     end
   end
 end

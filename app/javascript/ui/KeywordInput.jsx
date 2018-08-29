@@ -2,7 +2,7 @@ import React, { Component, PureComponent } from 'react'
 import { DialogContainer, Button, TextField, SelectionControl } from 'react-md'
 import Field from './Field'
 import KeyValueListField from './KeyValueListField'
-
+import { connect } from 'react-redux'
 class DialogComponent extends Component {
   state = {
     authToken: ''
@@ -56,7 +56,7 @@ class KeywordInput extends PureComponent {
   }
 
   render() {
-    const { actions, bot, className, keywords, onKeywordChange, keywordErrors, trainingSentences, trainingSentenceErrors, onTrainingSentenceCreate, onTrainingSentenceRemove, onTrainingSentenceChange, onUseWitAiChange, useWitAi } = this.props
+    const { actions, bot, className, keywords, onKeywordChange, keywordErrors, trainingSentences, trainingSentenceErrors, onTrainingSentenceCreate, onTrainingSentenceRemove, onTrainingSentenceChange, onUseWitAiChange, useWitAi, witAiError } = this.props
     const { dialogVisible } = this.state
 
     const openDialog = () => {
@@ -108,6 +108,9 @@ class KeywordInput extends PureComponent {
         if (error) {
           return <label className="error-message">{error.message}</label>
         }
+        else if (witAiError) {
+          return <label className="error-message">Invalid credentials</label>
+        }
       }
 
       if (useWitAi) {
@@ -150,4 +153,12 @@ class KeywordInput extends PureComponent {
   }
 }
 
-export default KeywordInput
+const mapStateToProps = state => {
+  return {
+    witAiError: state.bots && state.bots.errors && state.bots.errors.some(e => e.path == "natural_language_interface")
+  }
+}
+
+export default connect(
+  mapStateToProps
+)(KeywordInput)
