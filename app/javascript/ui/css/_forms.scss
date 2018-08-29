@@ -99,7 +99,19 @@ input[type=number]:invalid {
   }
 }
 
-
+.operators-list-field {
+  font-size: 1.15rem;
+  display: inline-block;
+  margin-top: 33px;
+  span {
+    color: $md-grey-400;
+    font-style: italic;
+  }
+  + a {
+    float: right;
+    margin-top: 33px;
+  }
+}
 
 .error-message {
   color: $error-red;
