@@ -73,7 +73,6 @@ class Behaviour < ApplicationRecord
                           config: {
                             "explanation" => "",
                             "clarification" => "",
-                            "keywords" => "",
                             "hours" => default_hour_matrix,
                             "timezone" => "Etc/UTC",
                             "in_hours_response" => "",
@@ -171,12 +170,16 @@ class Behaviour < ApplicationRecord
         clarification: localized_value(:clarification),
         in_hours: hour_intervals,
         in_hours_response: localized_value(:in_hours_response),
-        off_hours_response: localized_value(:off_hours_response),
-        keywords: localized_value(:keywords) do |keywords|
-          keywords.split(/,\s*/)
-        end
+        off_hours_response: localized_value(:off_hours_response)
       }.tap do |manifest_fragment|
         manifest_fragment[:relevant] = config["relevant"] if config["relevant"].present?
+        if (config["use_wit_ai"])
+          manifest_fragment[:training_sentences] = localized_value(:training_sentences) if config["training_sentences"].present?
+        else
+          manifest_fragment[:keywords] = localized_value(:keywords) do |keywords|
+            keywords.split(/,\s*/)
+          end if config["keywords"].present?
+        end
       end
     when "language_detector"
       {

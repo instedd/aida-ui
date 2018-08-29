@@ -147,6 +147,13 @@
         "explanation": { "$ref": "#/definitions/message" },
         "clarification": { "$ref": "#/definitions/message" },
         "keywords": { "$ref": "#/definitions/keywordList" },
+        "use_wit_ai": { "type": "boolean" },
+        "training_sentences": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "hours": {
           "type": "array",
           "minItems": 7,
@@ -163,7 +170,7 @@
         "off_hours_response": { "$ref": "#/definitions/message" }
       },
       "additionalProperties": false,
-      "required": [ "explanation", "clarification", "keywords", "in_hours_response", "off_hours_response", "hours", "timezone" ]
+      "required": [ "explanation", "clarification", "in_hours_response", "off_hours_response", "hours", "timezone" ]
     },
 
     "surveyConfig": {

@@ -67,7 +67,9 @@ export type HumanOverrideConfig = {
   relevant?: string;
   explanation: Message;
   clarification: Message;
-  keywords: KeywordList;
+  keywords?: KeywordList;
+  use_wit_ai?: boolean;
+  training_sentences?: Array<string>;
   hours: Array<Array<boolean>>;
   timezone: string;
   in_hours_response: Message;
