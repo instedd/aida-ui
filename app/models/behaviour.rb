@@ -106,7 +106,6 @@ class Behaviour < ApplicationRecord
                           config: {
                             "explanation" => "",
                             "clarification" => "",
-                            "keywords" => "",
                             "tree": {
                               initial: uuid,
                               nodes: {
@@ -287,12 +286,16 @@ class Behaviour < ApplicationRecord
         name: name,
         explanation: localized_value(:explanation),
         clarification: localized_value(:clarification),
-        keywords: localized_value(:keywords) do |keywords|
-          keywords.split(/,\s*/)
-        end,
         tree: build_manifest_tree(config["tree"]["nodes"], config["tree"]["initial"])
       }.tap do |manifest_fragment|
         manifest_fragment[:relevant] = config["relevant"] if config["relevant"].present?
+        if (config["use_wit_ai"])
+          manifest_fragment[:training_sentences] = localized_value(:training_sentences) if config["training_sentences"].present?
+        else
+          manifest_fragment[:keywords] = localized_value(:keywords) do |keywords|
+            keywords.split(/,\s*/)
+          end if config["keywords"].present?
+        end
       end
     else
       raise NotImplementedError

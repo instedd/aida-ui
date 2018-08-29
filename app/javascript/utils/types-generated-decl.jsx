@@ -144,7 +144,9 @@ export type DecisionTreeConfig = {
   relevant?: string;
   explanation: Message;
   clarification: Message;
-  keywords: KeywordList;
+  keywords?: KeywordList;
+  use_wit_ai?: boolean;
+  training_sentences?: Array<string>;
   tree: {
     initial: string;
     nodes: TreeNodesDict;

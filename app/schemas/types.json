@@ -347,6 +347,13 @@
         "explanation": { "$ref": "#/definitions/message" },
         "clarification": { "$ref": "#/definitions/message" },
         "keywords": { "$ref": "#/definitions/keywordList" },
+        "use_wit_ai": { "type": "boolean" },
+        "training_sentences": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "tree": {
           "type": "object",
           "properties": {
@@ -358,7 +365,7 @@
         }
       },
       "additionalProperties": false,
-      "required": [ "explanation", "clarification", "keywords", "tree"]
+      "required": [ "explanation", "clarification", "tree"]
     },
 
     "message": {

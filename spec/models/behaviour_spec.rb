@@ -195,6 +195,51 @@ RSpec.describe Behaviour, type: :model do
     end
   end
 
+  describe "decision tree" do
+    let!(:tree) { bot.skills.create_skill!('decision_tree') }
+
+    it "generates manifest fragment with keywords" do
+      tree[:config][:keywords] = 'a_keyword'
+      tree.save!
+
+      fragment = tree.manifest_fragment
+      expect(fragment).to_not be_nil
+      expect(fragment.keys).to match_array(%i(type id name explanation clarification tree keywords))
+      expect(fragment[:keywords]['en']).to eq(['a_keyword'])
+    end
+
+    it "generates manifest fragment with training_sentences" do
+      tree[:config][:training_sentences] = ['a training sentence']
+      tree[:config][:use_wit_ai] = true
+      tree.save!
+
+      fragment = tree.manifest_fragment
+      expect(fragment).to_not be_nil
+      expect(fragment.keys).to match_array(%i(type id name explanation clarification tree training_sentences))
+      expect(fragment[:training_sentences]['en']).to eq(['a training sentence'])
+    end
+
+    it "generates manifest fragment with no training_sentences when disabled wit_ai" do
+      tree[:config][:training_sentences] = ['a training sentence']
+      tree[:config][:use_wit_ai] = false
+      tree.save!
+
+      fragment = tree.manifest_fragment
+      expect(fragment).to_not be_nil
+      expect(fragment[:training_sentences]).to be_nil
+    end
+
+    it "generates manifest fragment with no keywords when enabled wit_ai" do
+      tree[:config][:keywords] = 'a_keyword'
+      tree[:config][:use_wit_ai] = true
+      tree.save!
+
+      fragment = tree.manifest_fragment
+      expect(fragment).to_not be_nil
+      expect(fragment[:keywords]).to be_nil
+    end
+  end
+
   describe "survey" do
     let!(:survey) {
       bot.skills.create_skill!('survey', config: {
