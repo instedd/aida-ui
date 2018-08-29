@@ -1,6 +1,21 @@
 .decision-tree-container {
   margin-top: 3rem;
 
+  ul {
+    border-left: 1px solid $md-grey-300;
+    margin: 0;
+    padding: 0 0 0 2rem;
+  }
+
+  li {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+  hr.md-divider {
+    opacity: 0;
+  }
+
   .title {
     margin-bottom: 20px;
   }
@@ -9,11 +24,9 @@
     padding: 5px 20px 10px;
 
     ul {
-      list-style-type: none;
-      margin: 15px 0 0;
-      padding: 0 0 15px;
-
+      
       li {
+        list-style-type: none;
         margin: 0px 10px;
         display: inline-block;
       }
@@ -50,7 +63,7 @@
 
       .tree-node-option-value {
         display: inline-block;
-        width: 80%;
+        // width: 80%;
       }
 
       .md-text-field-container {
@@ -60,8 +73,21 @@
       }
     }
 
-    .tree-node-option.selected {
-      background: $md-grey-300;
-    }
   }
+  .md-text-field-container--input {
+    
+    input {
+      outline: 0 !important;
+      border: none;
+      &:focus + hr.md-divider {
+        opacity: 1;
+        &:after {
+          background: $md-grey-300;
+        }
+      }
+    } 
+  } 
+  .md-full-width {
+  }
+
 }

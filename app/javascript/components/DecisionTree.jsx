@@ -5,6 +5,7 @@ import Headline from '../ui/Headline'
 import Field from '../ui/Field'
 import uuidv4 from 'uuid/v4'
 import { isEqual } from 'lodash'
+import AUX from '../hoc/Aux'
 
 import {
   Button,
@@ -228,79 +229,63 @@ class DecisionTreeComponent extends Component {
           Tree
         </div>
 
-        {this.state.path.map((currentId, pathIx) => {
-          const currentNode = nodes[currentId]
-          return (
-            <TreeNode
-              key={`tree-node-${currentId}`}
-              node={currentNode}
-              errors={errors.filter(e => e.path[1] == "tree" || getNodeId(e) == currentId)}
-              nextNodeId={this.state.path[pathIx+1]}
-              triggerFocusOnOptionToNode={this.state.triggerFocusOnOptionToNode}
-              updateMessage={(value) => {
-                onChange({ initial, nodes: {
-                  ...nodes,
-                  [currentId]: {
-                    ...currentNode,
-                    message: value
-                  }
-                }})
-              }}
-              addOption={() => {
-                const id = uuidv4()
-                onChange({
-                  initial, nodes: {
-                    ...nodes,
-                    [id]: { id, message: '', options: [] },
-                    [currentId]: {
-                      ...currentNode,
-                      options: [
-                        ...currentNode.options,
-                        { label: '', next: id }
-                      ]
-                    }
-                  }})
-                this.setState({
-                  path: [
-                    ...this.state.path.slice(0, pathIx + 1),
-                    id
-                  ],
-                  triggerFocusOnOptionToNode: id
-                })
-              }}
-              updateOption={(ix, value) => {
-                onChange({initial, nodes: {
-                  ...nodes,
-                  [currentId]: {
-                    ...currentNode,
-                    options: [
-                      ...currentNode.options.slice(0, ix),
-                      { ...currentNode.options[ix], label: value },
-                      ...currentNode.options.slice(ix + 1)
-                    ]
-                  }
-                }})
-              }}
-              selectOption={(ix) => {
-                this.setState({
-                  path: [
-                    ...this.state.path.slice(0, pathIx + 1),
-                    ...this._buildDefaultPath(nodes, currentNode.options[ix].next)
+        <TreeNode
+          node={nodes[initial]}
+          nodes={nodes}
+          errors={errors.filter(e => e.path[1] == "tree" || getNodeId(e) == initial)}
+          triggerFocusOnOptionToNode={this.state.triggerFocusOnOptionToNode}
+          updateMessage={(value) => {
+            onChange({ initial, nodes: {
+              ...nodes,
+              [initial]: {
+                ...currentNode,
+                message: value
+              }
+            }})
+          }}
+          addOption={() => {
+            const id = uuidv4()
+            onChange({
+              initial, nodes: {
+                ...nodes,
+                [id]: { id, message: '', options: [] },
+                [initial]: {
+                  ...currentNode,
+                  options: [
+                    ...currentNode.options,
+                    { label: '', next: id }
                   ]
-                })
-              }}
-              deleteOption={(ix) => {
-                onChange({initial, nodes: this._deleteOption(nodes, currentNode, ix)})
-              }}
-              focusedOption={(ix) => {
-                this.setState({
-                  ...this.state,
-                  triggerFocusOnOptionToNode: null
-                })
-              }}
-            />
-          )
-        })}
+                }
+              }})
+            this.setState({
+              triggerFocusOnOptionToNode: id
+            })
+          }}
+          updateOption={(ix, value) => {
+            onChange({initial, nodes: {
+              ...nodes,
+              [initial]: {
+                ...currentNode,
+                options: [
+                  ...currentNode.options.slice(0, ix),
+                  { ...currentNode.options[ix], label: value },
+                  ...currentNode.options.slice(ix + 1)
+                ]
+              }
+            }})
+          }}
+          selectOption={(ix) => {
+          }}
+          deleteOption={(ix) => {
+            onChange({initial, nodes: this._deleteOption(nodes, currentNode, ix)})
+          }}
+          focusedOption={(ix) => {
+            this.setState({
+              ...this.state,
+              triggerFocusOnOptionToNode: null
+            })
+          }}
+        />
       </div>
     )
   }
@@ -310,7 +295,7 @@ class TreeNode extends Component {
 
   render() {
     const { node, nextNodeId, triggerFocusOnOptionToNode, updateMessage,
-      addOption, updateOption, selectOption, deleteOption, focusedOption, errors } = this.props
+      addOption, updateOption, selectOption, deleteOption, focusedOption, errors, nodes } = this.props
 
     let optionError = ""
 
@@ -334,45 +319,51 @@ class TreeNode extends Component {
     )}
 
     return (
-      <Paper
-        className="tree-node-container"
-        zDepth={1} >
-        <Field
-          id={`tree-node-message-${node.id}`}
-          className="tree-node-message"
-          placeholder="Message"
-          value={node.message}
-          onChange={updateMessage}
-          error= {errors.filter(e => showableMessageError(e, node.message))} />
+      <AUX>
         <ul>
-          {
-            node.options.map((option, ix) => (
-              <li key={ix}>
-                <TreeNodeOption
-                  id={ix}
-                  selected={nextNodeId == option.next}
-                  focused={triggerFocusOnOptionToNode == option.next}
-                  option={option}
-                  onChange={(value) => updateOption(ix, value)}
-                  onSelect={() => selectOption(ix)}
-                  onDelete={() => deleteOption(ix)}
-                  onFocused={(ix) => focusedOption(ix)}
-                  error={errors.filter(e => showableOptionError(e, ix, node.id, nextNodeId == option.next))} />
-              </li>
-            ))
-          }
+          <li>
+            <Field
+              id={`tree-node-message-${node.id}`}
+              className="tree-node-message FIRST"
+              placeholder="Enter the first question"
+              value={node.message}
+              onChange={updateMessage}
+              fullWidth={false}
+              error= {errors.filter(e => showableMessageError(e, node.message))} />
+          </li>
+          <li>
+            {
+              node.options.map((option, ix) => (
+                <ul>
+                  <li key={ix}>
+                    <TreeNodeOption
+                      id={ix}
+                      selected={nextNodeId == option.next}
+                      focused={triggerFocusOnOptionToNode == option.next}
+                      option={option}
+                      nodes={nodes}
+                      onChange={(value) => updateOption(ix, value)}
+                      onSelect={() => selectOption(ix)}
+                      onDelete={() => deleteOption(ix)}
+                      onFocused={(ix) => focusedOption(ix)}
+                      error={errors.filter(e => showableOptionError(e, ix, node.id, nextNodeId == option.next))}
+                      errors={errors} />
+                    <Button
+                      flat
+                      className="addlink"
+                      iconChildren="add"
+                      onClick={addOption}>
+                      Add option
+                    </Button>
+                    <br/>{optionError}
+                  </li>
+                </ul>
+              ))
+            }
+          </li>
         </ul>
-        <div className="option-toolbar">
-          <Button
-            flat
-            className="addlink"
-            iconChildren="add"
-            onClick={addOption}>
-            Add option
-          </Button>
-          <br/>{optionError}
-        </div>
-      </Paper>
+
+      </AUX>
     )
   }
 }
@@ -386,37 +377,104 @@ const TreeNodeOption = ({
   onSelect,
   onDelete,
   onFocused,
+  nodes,
+  errors,
   error
 }) => {
   return (
-    <div className={`tree-node-option ${selected ? 'selected' : ''} ${error && error.length > 0 ? 'error-tree' : ''}`}>
-      <TextField
-        id={`option-${id}`}
-        className="tree-node-option-value"
-        lineDirection="center"
-        value={option.label}
-        placeholder="Enter option"
-        default={false}
-        onChange={onChange}
-        onClick={onSelect}
-        error={error && error.length > 0 && error[0].message != 'children'}
-        errorText={error && error[0] && error[0].message != 'children' && error[0].message}
-        ref={
-          focused
-          ? (el) => {
+    <ul className={`tree-node-option ${selected ? 'selected' : ''} ${error && error.length > 0 ? 'error-tree' : ''}`}>
+      <li>
+        <TextField
+          id={`option-${id}`}
+          className="tree-node-option-value"
+          lineDirection="center"
+          value={option.label}
+          placeholder="Enter option"
+          default={false}
+          onChange={onChange}
+          onClick={onSelect}
+          fullWidth={false}
+          error={error && error.length > 0 && error[0].message != 'children'}
+          errorText={error && error[0] && error[0].message != 'children' && error[0].message}
+          ref={
+            focused
+            ? (el) => {
               if (el) {
                 el.focus()
                 onFocused(id)
               }
             }
-          : null}
-        resize={ { min: 90, max: 200 } }
-      />
-      <Button
-        icon
-        onClick={onDelete}>
-        close
-      </Button>
-    </div>
+            : null}
+            // resize={ { min: 90, max: 200 } }
+        />
+        <Button
+          icon
+          onClick={onDelete}>
+          close
+        </Button>
+      </li>
+      {
+        option.next
+        ? <li><TreeNode
+            node={nodes[option.next]}
+            nodes={nodes}
+            errors={errors.filter(e => e.path[1] == "tree" || getNodeId(e) == nodes[option.next])}
+            // triggerFocusOnOptionToNode={this.state.triggerFocusOnOptionToNode}
+            updateMessage={(value) => {
+              onChange({ initial, nodes: {
+                ...nodes,
+                [option.next]: {
+                  ...currentNode,
+                  message: value
+                }
+              }})
+            }}
+            addOption={() => {
+              const id = uuidv4()
+              onChange({
+                initial, nodes: {
+                  ...nodes,
+                  [id]: { id, message: '', options: [] },
+                  [option.next]: {
+                    ...currentNode,
+                    options: [
+                      ...currentNode.options,
+                      { label: '', next: id }
+                    ]
+                  }
+                }})
+              // this.setState({
+              //   triggerFocusOnOptionToNode: id
+              // })
+            }}
+            updateOption={(ix, value) => {
+              onChange({initial, nodes: {
+                ...nodes,
+                [option.next]: {
+                  ...currentNode,
+                  options: [
+                    ...currentNode.options.slice(0, ix),
+                    { ...currentNode.options[ix], label: value },
+                    ...currentNode.options.slice(ix + 1)
+                  ]
+                }
+              }})
+            }}
+            selectOption={(ix) => {
+            }}
+            deleteOption={(ix) => {
+              onChange({initial, nodes: this._deleteOption(nodes, currentNode, ix)})
+            }}
+            focusedOption={(ix) => {
+              // this.setState({
+              //   ...this.state,
+              //   triggerFocusOnOptionToNode: null
+              // })
+            }}
+          />
+          </li> 
+        : ''
+      }
+    </ul>
   )
 }
