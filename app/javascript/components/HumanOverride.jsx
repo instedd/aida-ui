@@ -51,14 +51,22 @@ class HumanOverride extends Component {
           ).toString() : null
       )
 
-      if (permitted && operators.length) {
+      if (permitted) {
+        
         return (
-          <div>
-            <Field id="kr-operators" label="Operators" readOnly={true} value={spaceSeparatedOperators()} />
+          <div className="md-text-field-container md-full-width md-text-field-container--input ui-field">
+            <label className="md-floating-label md-floating-label--floating md-text--secondary">Operators</label>
+            
+            <div className="operators-list-field">
+              {operators.length
+              ? spaceSeparatedOperators()
+              : <span>You don't have any operators yet</span>
+              }
+            </div>
             <Button
               flat
               iconChildren="edit"
-              className="hrefLink"
+              className="btnLink pull-right"
               to={r.botCollaborators(bot.id)}
               component={Link} >
               Manage permissions
