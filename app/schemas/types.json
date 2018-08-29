@@ -179,6 +179,13 @@
         "relevant": { "type": "string" },
         "schedule": { "type": "string" },
         "keywords": { "$ref": "#/definitions/keywordList" },
+        "use_wit_ai": { "type": "boolean" },
+        "training_sentences": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "questions": {
           "type": "array",
           "items": { "$ref": "#/definitions/surveyQuestion" }

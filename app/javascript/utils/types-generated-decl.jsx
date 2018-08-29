@@ -80,6 +80,8 @@ export type SurveyConfig = {
   relevant?: string;
   schedule?: string;
   keywords?: KeywordList;
+  use_wit_ai?: boolean;
+  training_sentences?: Array<string>;
   questions?: Array<SurveyQuestion>;
   choice_lists?: Array<SurveyChoiceList>;
 };

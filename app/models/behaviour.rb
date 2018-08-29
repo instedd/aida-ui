@@ -85,7 +85,6 @@ class Behaviour < ApplicationRecord
                          name: "Survey",
                          config: {
                            "schedule" => "",
-                           "keywords" => "",
                            "questions" => [],
                            "choice_lists" => []
                          }
@@ -227,11 +226,12 @@ class Behaviour < ApplicationRecord
       }.tap do |manifest_fragment|
         manifest_fragment[:relevant] = config["relevant"] if config["relevant"].present?
         manifest_fragment[:schedule] = config["schedule"] if config["schedule"].present?
-        if config["keywords"].present?
-          manifest_fragment[:keywords] =
-            localized_value(:keywords) do |keywords|
-              keywords.split(/,\s*/)
-            end
+        if (config["use_wit_ai"])
+          manifest_fragment[:training_sentences] = localized_value(:training_sentences) if config["training_sentences"].present?
+        else
+          manifest_fragment[:keywords] = localized_value(:keywords) do |keywords|
+            keywords.split(/,\s*/)
+          end if config["keywords"].present?
         end
       end
     when "scheduled_messages"

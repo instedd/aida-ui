@@ -63,6 +63,23 @@ class Survey extends Component {
       formIcon = (<FontIcon>file_upload</FontIcon>)
     }
 
+    const addTrainingSentence = () => {
+      const { training_sentences = training_sentences ? training_sentences : [] } = skill.config
+      updateConfig('training_sentences')([...training_sentences, ''])
+    }
+
+    const removeTrainingSentence = index => {
+      let { training_sentences = [...training_sentences] } = skill.config
+      training_sentences.splice(index, 1)
+      updateConfig('training_sentences')(training_sentences)
+    }
+
+    const updateTrainingSentence = (index, value) => {
+      let { training_sentences = [...training_sentences] } = skill.config
+      training_sentences[index] = value
+      updateConfig('training_sentences')(training_sentences)
+    }
+
     return (
       <div>
         <Title>Survey</Title>
@@ -93,7 +110,20 @@ class Survey extends Component {
                       error={errors.some(e => e.path[1] == "schedule")} />
         </div>
 
-        <KeywordInput actions={botActions} bot={bot} onKeywordChange={updateConfig('keywords')} keywords={config.keywords} errors={errors}/>
+        <KeywordInput
+          actions={botActions}
+          bot={bot}
+          onKeywordChange={updateConfig('keywords')}
+          keywords={config.keywords}
+          keywordErrors={errors.filter(e => e.path[1].startsWith("keywords/en"))}
+          onUseWitAiChange={updateConfig('use_wit_ai')}
+          useWitAi={config.use_wit_ai}
+          trainingSentences={config.training_sentences}
+          trainingSentenceErrors={errors.filter(e => e.path[1].startsWith("training_sentences/en"))}
+          onTrainingSentenceCreate={addTrainingSentence}
+          onTrainingSentenceRemove={(index) => removeTrainingSentence(index)}
+          onTrainingSentenceChange={(index, value) => updateTrainingSentence(index, value)}
+        />
 
         <div className="file-upload-field">
           <label htmlFor="survey-xlsform-upload" className='label'>Survey form</label>
