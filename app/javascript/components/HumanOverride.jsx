@@ -52,11 +52,9 @@ class HumanOverride extends Component {
       )
 
       if (permitted) {
-        
         return (
           <div className="md-text-field-container md-full-width md-text-field-container--input ui-field">
             <label className="md-floating-label md-floating-label--floating md-text--secondary">Operators</label>
-            
             <div className="operators-list-field">
               {operators.length
               ? spaceSeparatedOperators()
@@ -74,23 +72,6 @@ class HumanOverride extends Component {
           </div>
         )
       }
-    }
-
-    const addTrainingSentence = () => {
-      const { training_sentences = training_sentences ? training_sentences : [] } = skill.config
-      updateConfig('training_sentences')([...training_sentences, ''])
-    }
-
-    const removeTrainingSentence = index => {
-      let { training_sentences = [...training_sentences] } = skill.config
-      training_sentences.splice(index, 1)
-      updateConfig('training_sentences')(training_sentences)
-    }
-
-    const updateTrainingSentence = (index, value) => {
-      let { training_sentences = [...training_sentences] } = skill.config
-      training_sentences[index] = value
-      updateConfig('training_sentences')(training_sentences)
     }
 
     return (
@@ -119,9 +100,7 @@ class HumanOverride extends Component {
           useWitAi={config.use_wit_ai}
           trainingSentences={config.training_sentences}
           trainingSentenceErrors={errors.filter(e => e.path[1].startsWith("training_sentences/en"))}
-          onTrainingSentenceCreate={addTrainingSentence}
-          onTrainingSentenceRemove={(index) => removeTrainingSentence(index)}
-          onTrainingSentenceChange={(index, value) => updateTrainingSentence(index, value)}
+          onTrainingSentenceChange={updateConfig('training_sentences')}
         />
         <TimezoneDropdown value={config.timezone} onChange={updateConfig('timezone')} />
         <WeeklySchedule hours={config.hours} onChange={updateConfig('hours')}/>

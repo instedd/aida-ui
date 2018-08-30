@@ -61,7 +61,7 @@ class KeywordInput extends PureComponent {
   }
 
   render() {
-    const { actions, bot, className, keywords, onKeywordChange, keywordErrors, trainingSentences, trainingSentenceErrors, onTrainingSentenceCreate, onTrainingSentenceRemove, onTrainingSentenceChange, onUseWitAiChange, useWitAi, witAiErrors } = this.props
+    const { actions, bot, className, keywords, onKeywordChange, keywordErrors, trainingSentences, trainingSentenceErrors, onTrainingSentenceChange, onUseWitAiChange, useWitAi, witAiErrors } = this.props
     const { dialogVisible } = this.state
 
     const openDialog = () => {
@@ -84,28 +84,55 @@ class KeywordInput extends PureComponent {
       onUseWitAiChange(checked)
     }
 
-    const renderKeywords = () => {
-      if (!useWitAi) {
-        return <Field
-          id="kr-keywords"
-          className={className}
-          label="Valid keywords (comma separated)"
-          value={keywords} onChange={onKeywordChange}
-          error={keywordErrors}
+    const renderKeywords = () => <Field
+      id="kr-keywords"
+      className={className}
+      label="Valid keywords (comma separated)"
+      value={keywords} onChange={onKeywordChange}
+      error={keywordErrors}
+    />
+
+    const renderWitAi = () => {
+      const renderTrainingSentences = () => {
+
+        const renderTrainingSentence = (item, ix) => {
+
+          const updateTrainingSentence = (index, value) => {
+            let _trainingSentences = [...trainingSentences]
+            _trainingSentences[index] = value
+            onTrainingSentenceChange(_trainingSentences)
+          }
+
+          return (<Field id={`schedule-message-#{index}`}
+            className="editable-field"
+            onChange={updateTrainingSentence}
+            value={item}
+            onChange={value => updateTrainingSentence(ix, value)}
+            error={trainingSentenceErrors.filter(e => e.path[1] == `training_sentences/en/${ix}`)} />)
+        }
+
+        const addTrainingSentence = () => {
+          const _trainingSentences = trainingSentences ? trainingSentences : []
+          onTrainingSentenceChange([..._trainingSentences, ''])
+        }
+
+        const removeTrainingSentence = index => {
+          let _trainingSentences = [...trainingSentences]
+          _trainingSentences.splice(index, 1)
+          onTrainingSentenceChange(_trainingSentences)
+        }
+
+        return <KeyValueListField
+          items={trainingSentences}
+          createItemLabel="Add training sentence"
+          onCreateItem={addTrainingSentence}
+          renderKey={() => null}
+          canRemoveItem={() => true}
+          onRemoveItem={(item, index) => removeTrainingSentence(index)}
+          renderValue={renderTrainingSentence}
         />
       }
-    }
 
-    const renderTrainingSentence = (item, ix) => {
-      return (<Field id={`schedule-message-#{index}`}
-        className="editable-field"
-        onChange={onTrainingSentenceChange}
-        value={item}
-        onChange={value => onTrainingSentenceChange(ix, value)}
-        error={trainingSentenceErrors.filter(e => e.path[1] == `training_sentences/en/${ix}`)} />)
-    }
-
-    const renderTrainingSentences = () => {
       const renderError = () => {
         const error = trainingSentenceErrors.filter(e => e.path[1] == "training_sentences/en")[0]
         if (error) {
@@ -121,43 +148,33 @@ class KeywordInput extends PureComponent {
         }
       }
 
-      if (useWitAi) {
-        return <div>
-          <KeyValueListField
-            items={trainingSentences}
-            createItemLabel="Add training sentence"
-            onCreateItem={onTrainingSentenceCreate}
-            renderKey={() => null}
-            canRemoveItem={() => true}
-            onRemoveItem={(item, index) => onTrainingSentenceRemove(index)}
-            renderValue={renderTrainingSentence}
-          />
+      return (
+        <div>
+          {renderTrainingSentences()}
           {renderError()}
         </div>
-      }
+      )
     }
 
-    return (
-      <div>
-        {renderKeywords()}
-        <SelectionControl
-          name="use-wit-ai"
-          id="kr-wit-ai"
-          label="Use Wit.ai for intent detection"
-          type="checkbox"
-          value="wit-ai"
-          checked={useWitAi}
-          onChange={checked => useWitAiChange(checked)}
-        />
-        <DialogComponent
-          visible={dialogVisible}
-          authToken={bot.wit_ai_auth_token}
-          onClose={closeDialog}
-          onSubmit={dialogSubmit}
-        />
-        {renderTrainingSentences()}
-      </div>
-    )
+    return <div>
+      {useWitAi ? null : renderKeywords()}
+      <SelectionControl
+        name="use-wit-ai"
+        id="kr-wit-ai"
+        label="Use Wit.ai for intent detection"
+        type="checkbox"
+        value="wit-ai"
+        checked={useWitAi}
+        onChange={checked => useWitAiChange(checked)}
+      />
+      {useWitAi ? renderWitAi() : null}
+      <DialogComponent
+        visible={dialogVisible}
+        authToken={bot.wit_ai_auth_token}
+        onClose={closeDialog}
+        onSubmit={dialogSubmit}
+      />
+    </div>
   }
 }
 

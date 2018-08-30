@@ -63,23 +63,6 @@ class Survey extends Component {
       formIcon = (<FontIcon>file_upload</FontIcon>)
     }
 
-    const addTrainingSentence = () => {
-      const { training_sentences = training_sentences ? training_sentences : [] } = skill.config
-      updateConfig('training_sentences')([...training_sentences, ''])
-    }
-
-    const removeTrainingSentence = index => {
-      let { training_sentences = [...training_sentences] } = skill.config
-      training_sentences.splice(index, 1)
-      updateConfig('training_sentences')(training_sentences)
-    }
-
-    const updateTrainingSentence = (index, value) => {
-      let { training_sentences = [...training_sentences] } = skill.config
-      training_sentences[index] = value
-      updateConfig('training_sentences')(training_sentences)
-    }
-
     return (
       <div>
         <Title>Survey</Title>
@@ -120,9 +103,7 @@ class Survey extends Component {
           useWitAi={config.use_wit_ai}
           trainingSentences={config.training_sentences}
           trainingSentenceErrors={errors.filter(e => e.path[1].startsWith("training_sentences/en"))}
-          onTrainingSentenceCreate={addTrainingSentence}
-          onTrainingSentenceRemove={(index) => removeTrainingSentence(index)}
-          onTrainingSentenceChange={(index, value) => updateTrainingSentence(index, value)}
+          onTrainingSentenceChange={updateConfig('training_sentences')}
         />
 
         <div className="file-upload-field">
