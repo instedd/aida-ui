@@ -3,6 +3,7 @@ import { DialogContainer, Button, TextField, SelectionControl } from 'react-md'
 import Field from './Field'
 import KeyValueListField from './KeyValueListField'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 class DialogComponent extends Component {
   state = {
     authToken: ''
@@ -16,9 +17,7 @@ class DialogComponent extends Component {
   }
 
   render() {
-    const { visible, skill, onClose, onSubmit } = this.props
-    const isNewSkill = !skill || !skill.id
-    const kind = skill && skill.kind
+    const { visible, onClose, onSubmit } = this.props
 
     const actions = [
       { primary: true, children: 'Cancel', onClick: onClose },
@@ -44,6 +43,12 @@ class DialogComponent extends Component {
 
 
 class KeywordInput extends PureComponent {
+  static propTypes = {
+    onKeywordChange: PropTypes.func.isRequired,
+    onUseWitAiChange: PropTypes.func.isRequired,
+    onTrainingSentenceChange: PropTypes.func.isRequired
+  }
+
   constructor(props) {
     super(props)
     this.state = this.stateFor(props.value)
@@ -76,9 +81,7 @@ class KeywordInput extends PureComponent {
       if (checked) {
         openDialog()
       }
-      if (onUseWitAiChange) {
-        onUseWitAiChange(checked)
-      }
+      onUseWitAiChange(checked)
     }
 
     const renderKeywords = () => {
