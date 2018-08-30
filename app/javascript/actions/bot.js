@@ -73,7 +73,7 @@ export const checkWitAICredentials = (bot : T.Bot, authToken: string) =>
         dispatch(pushNotification('Invalid credentials'))
         dispatch(_botPublishFailure(bot.id, [{
           'message': 'Invalid credentials',
-          'path': ['natural_language_interface']
+          'path': ['wit_ai']
         }]))
       })
   }

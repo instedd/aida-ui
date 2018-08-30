@@ -1607,7 +1607,13 @@ RSpec.describe BackendError, :type => :helper do
 
     it "returns errors when language detector is duplicated" do
       errors_in = [{"path"=>["#/skills/1", "#/skills/0"], "message"=>"Duplicated skills (language_detector)"}]
-      errors_out =[{:message=>"Duplicated skills (language_detector)", :path=>["skills", "skills/1", "skills/0"]}]
+      errors_out = [{:message=>"Duplicated skills (language_detector)", :path=>["skills", "skills/1", "skills/0"]}]
+      expect(BackendError.parse_errors(errors_in)).to eq(errors_out)
+    end
+
+    it "return error when wit_ai in multilingual bot" do
+      errors_in = [{"path"=>["#/languages"], "message"=>"Wit.ai only works with english bots"}]
+      errors_out = [{:message=>"multilingual-bot", :path=>["wit_ai"]}]
       expect(BackendError.parse_errors(errors_in)).to eq(errors_out)
     end
 
@@ -1632,8 +1638,8 @@ RSpec.describe BackendError, :type => :helper do
 
   describe "manifest errors" do
     it "parse wit-ai-invalid error" do
-      errors_in = [{"path"=>"#/natural_language_interface", "message"=>"Invalid wit ai credentials in manifest"}]
-      errors_out = [{:message => "wit-ai-invalid", :path => ["natural_language_interface"]}]
+      errors_in = [{"path"=>"#/natural_language_interface", "message"=>"any message"}]
+      errors_out = [{:message => "invalid-credentials", :path => ["wit_ai"]}]
       expect(BackendError.parse_errors(errors_in)).to eq(errors_out)
     end
   end

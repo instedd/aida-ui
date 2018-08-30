@@ -123,7 +123,12 @@ class SkillsBar extends Component {
     const dialogVisible = !!dialogSkill
 
     const hasError = skill => {
-      const hasWitError = skill.enabled && skill.config && skill.config.use_wit_ai && errors.some(e => e.path[0] == 'natural_language_interface')
+      const hasWitError = (
+        (skill.enabled && skill.config) &&
+        (skill.config.use_wit_ai && errors.some(e => e.path[0] == 'wit_ai')) ||
+        (skill.kind == 'language_detector' && skill.config.languages && skill.config.languages.some(language => language.code != 'en'))
+      )
+
       const skillErrorIndex = skills.filter(s => s.enabled).findIndex(s => s.id == skill.id)
       return errors.some(e => e.path[0] == `skills/${skillErrorIndex}`) || hasWitError
     }

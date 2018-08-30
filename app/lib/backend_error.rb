@@ -16,6 +16,7 @@ class BackendError < HTTParty::ResponseError
   end
 
   def self.parse_errors(errors)
+
     skill_errors = errors.select{ |error| error['path'][2..7] == 'skills' || (error['path'].is_a?(Array) && error['path'].any? {|path| path[2..7] == 'skills'}) }
     channel_errors = errors.select{ |error| error['path'][2..9] == 'channels' || (error['path'].is_a?(Array) && error['path'].any? {|path| path[2..9] == 'channels'}) }
 
@@ -115,6 +116,8 @@ class BackendError < HTTParty::ResponseError
   end
 
   def self.parse_error(error)
+    error['path'] = '#/wit_ai' if error['path'] == '#/natural_language_interface'
+    error['path'] = '#/wit_ai' if error == {"path"=>["#/languages"], "message"=>"Wit.ai only works with english bots"}
     {
       message: get_message(error),
       path: [error['path'][2..-1]]
@@ -122,8 +125,12 @@ class BackendError < HTTParty::ResponseError
   end
 
   def self.get_message(error)
-    if (error['path'] == '#/natural_language_interface')
-      'wit-ai-invalid'
+    if (error['path'] == '#/wit_ai')
+      if (error['message'].include?('only works with english'))
+        'multilingual-bot'
+      else
+        'invalid-credentials'
+      end
     else
       case error['error']
       when { 'expected' => 1, 'actual' => 0 },
