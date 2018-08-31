@@ -78,7 +78,7 @@ class KeywordInput extends PureComponent {
     }
 
     const useWitAiChange = checked => {
-      if (checked) {
+      if (checked && !bot.wit_ai_auth_token) {
         openDialog()
       }
       onUseWitAiChange(checked)
@@ -138,18 +138,50 @@ class KeywordInput extends PureComponent {
         if (error) {
           return <label className="error-message">{error.message}</label>
         }
-        else if (witAiErrors && witAiErrors.length) {
-          if (witAiErrors[0].message == 'multilingual-bot') {
-            return <label className="error-message">Wit.ai only works with english bots</label>
+        else if (witAiErrors.some(error => error.message == 'multilingual-bot')) {
+          return <label className="error-message">Wit.ai only works with english bots</label>
+        }
+      }
+
+      const renderConnectionButton = () => {
+
+        const connectionStatus = () => {
+          if (witAiErrors.length && witAiErrors.some(error => error.message != 'multilingual-bot')) {
+            return 'invalid'
           }
-          else {
-            return <label className="error-message">Invalid credentials</label>
+          else if (bot.wit_ai_auth_token) {
+            return 'connected'
           }
         }
+
+        const connButtonProps = () => {
+          switch (connectionStatus()) {
+            case 'connected':
+              return {
+                secondary: true,
+                className: 'wit-ai-conn-ok',
+                children: 'Connected'
+              }
+            case 'invalid':
+              return {
+                primary: true,
+                className: 'wit-ai-conn-error',
+                children: 'Invalid credentials'
+              }
+            default:
+              return {
+                className: 'wit-ai-conn',
+                children: 'Enable Wit.ai'
+              }
+          }
+        }
+
+        return <Button flat swapTheming onClick={openDialog} {...connButtonProps()} />
       }
 
       return (
         <div>
+          {renderConnectionButton()}
           {renderTrainingSentences()}
           {renderError()}
         </div>
@@ -180,7 +212,7 @@ class KeywordInput extends PureComponent {
 
 const mapStateToProps = state => {
   return {
-    witAiErrors: state.bots && state.bots.errors && state.bots.errors.filter(e => e.path == 'wit_ai')
+    witAiErrors: (state.bots && state.bots.errors) ? state.bots.errors.filter(e => e.path == 'wit_ai') : []
   }
 }
 
