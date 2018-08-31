@@ -49,10 +49,15 @@ export const SidebarItem = ({id, className, icon, label, enabled, active, menuIt
       onClick={onClick}
     />)
   } else {
+    const append = (<div className="sidebar-item-append">
+      {error}
+    </div>)
+
     return (<ListItem
       className={(className || "") + " " + itemClassActive}
       leftIcon={<FontIcon>{icon}</FontIcon>}
       primaryText={label}
+      rightIcon={append}
       onClick={onClick}
     />)
   }
