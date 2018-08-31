@@ -5,7 +5,6 @@ import Headline from '../ui/Headline'
 import Field from '../ui/Field'
 import TimezoneDropdown from '../ui/TimezoneDropdown'
 import WeeklySchedule from '../ui/WeeklySchedule'
-import KeywordInput from '../ui/KeywordInput'
 
 import RelevanceField from './RelevanceField'
 
@@ -16,6 +15,7 @@ import * as collaboratorsActions from '../actions/collaborators'
 import * as r from '../utils/routes'
 import { Button } from 'react-md'
 import { Link } from 'react-router-dom'
+import KeywordInput from '../ui/KeywordInput'
 
 class HumanOverride extends Component {
   componentDidMount() {
@@ -52,11 +52,9 @@ class HumanOverride extends Component {
       )
 
       if (permitted) {
-        
         return (
           <div className="md-text-field-container md-full-width md-text-field-container--input ui-field">
             <label className="md-floating-label md-floating-label--floating md-text--secondary">Operators</label>
-            
             <div className="operators-list-field">
               {operators.length
               ? spaceSeparatedOperators()
@@ -92,8 +90,18 @@ class HumanOverride extends Component {
         <Field id="kr-clarification" label="Skill clarification"
                value={config.clarification} onChange={updateConfig('clarification')}
                error={errors.filter(e => e.path[1] == "clarification/en")} />
-        <KeywordInput actions={botActions} bot={bot} onKeywordChange={updateConfig('keywords')} keywords={config.keywords} errors={errors}/>
-
+        <KeywordInput
+          actions={botActions}
+          bot={bot}
+          onKeywordChange={updateConfig('keywords')}
+          keywords={config.keywords}
+          keywordErrors={errors.filter(e => e.path[1].startsWith("keywords/en"))}
+          onUseWitAiChange={updateConfig('use_wit_ai')}
+          useWitAi={config.use_wit_ai}
+          trainingSentences={config.training_sentences}
+          trainingSentenceErrors={errors.filter(e => e.path[1].startsWith("training_sentences/en"))}
+          onTrainingSentenceChange={updateConfig('training_sentences')}
+        />
         <TimezoneDropdown value={config.timezone} onChange={updateConfig('timezone')} />
         <WeeklySchedule hours={config.hours} onChange={updateConfig('hours')}/>
 

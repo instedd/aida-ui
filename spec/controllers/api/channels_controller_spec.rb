@@ -37,7 +37,7 @@ RSpec.describe Api::ChannelsController, type: :controller do
       expect(json_body).to be_a_channel_as_json
     end
 
-    it "returns unprocessable entity when unknown kind" do
+    it "returns unprocessable entity when unknown channel kind" do
       expect do
         post :create, params: {
           bot_id: bot.id,
@@ -48,6 +48,21 @@ RSpec.describe Api::ChannelsController, type: :controller do
       end.to change(Channel, :count).by(0)
 
       expect(response).to have_http_status(422)
+      expect(response.body).to eq('{"error":"unknown channel kind"}')
+    end
+
+    it "returns unprocessable entity when missing channel kind" do
+      expect do
+        post :create, params: {
+          bot_id: bot.id,
+          channel: {
+            other: 'other'
+          }
+        }
+      end.to change(Channel, :count).by(0)
+
+      expect(response).to have_http_status(422)
+      expect(response.body).to eq('{"error":"missing channel kind"}')
     end
 
     it "returns unprocessable entity when missing channel" do
@@ -58,8 +73,8 @@ RSpec.describe Api::ChannelsController, type: :controller do
       end.to change(Channel, :count).by(0)
 
       expect(response).to have_http_status(422)
+      expect(response.body).to eq('{"error":"missing channel"}')
     end
-
   end
 
   describe "destroy" do

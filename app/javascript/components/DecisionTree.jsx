@@ -48,7 +48,18 @@ export default class DecisionTree extends Component {
         <Field id="tree-clarification" label="Skill clarification"
                value={config.clarification} onChange={updateConfig('clarification')}
                error={errors.filter(e => e.path[1] == "clarification/en")} />
-        <KeywordInput actions={botActions} bot={bot} onKeywordChange={updateConfig('keywords')} keywords={config.keywords} errors={errors}/>
+        <KeywordInput
+          actions={botActions}
+          bot={bot}
+          onKeywordChange={updateConfig('keywords')}
+          keywords={config.keywords}
+          keywordErrors={errors.filter(e => e.path[1].startsWith("keywords/en"))}
+          onUseWitAiChange={updateConfig('use_wit_ai')}
+          useWitAi={config.use_wit_ai}
+          trainingSentences={config.training_sentences}
+          trainingSentenceErrors={errors.filter(e => e.path[1].startsWith("training_sentences/en"))}
+          onTrainingSentenceChange={updateConfig('training_sentences')}
+        />
         <DecisionTreeComponent tree={config.tree} onChange={updateConfig('tree')} errors={errors.filter(e => e.path[1].startsWith("tree"))} />
 
       </div>

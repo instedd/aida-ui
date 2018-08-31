@@ -93,7 +93,18 @@ class Survey extends Component {
                       error={errors.some(e => e.path[1] == "schedule")} />
         </div>
 
-        <KeywordInput actions={botActions} bot={bot} onKeywordChange={updateConfig('keywords')} keywords={config.keywords} errors={errors}/>
+        <KeywordInput
+          actions={botActions}
+          bot={bot}
+          onKeywordChange={updateConfig('keywords')}
+          keywords={config.keywords}
+          keywordErrors={errors.filter(e => e.path[1].startsWith("keywords/en"))}
+          onUseWitAiChange={updateConfig('use_wit_ai')}
+          useWitAi={config.use_wit_ai}
+          trainingSentences={config.training_sentences}
+          trainingSentenceErrors={errors.filter(e => e.path[1].startsWith("training_sentences/en"))}
+          onTrainingSentenceChange={updateConfig('training_sentences')}
+        />
 
         <div className="file-upload-field">
           <label htmlFor="survey-xlsform-upload" className='label'>Survey form</label>

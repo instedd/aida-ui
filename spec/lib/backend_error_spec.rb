@@ -1607,10 +1607,41 @@ RSpec.describe BackendError, :type => :helper do
 
     it "returns errors when language detector is duplicated" do
       errors_in = [{"path"=>["#/skills/1", "#/skills/0"], "message"=>"Duplicated skills (language_detector)"}]
-      errors_out =[{:message=>"Duplicated skills (language_detector)", :path=>["skills", "skills/1", "skills/0"]}]
+      errors_out = [{:message=>"Duplicated skills (language_detector)", :path=>["skills", "skills/1", "skills/0"]}]
       expect(BackendError.parse_errors(errors_in)).to eq(errors_out)
     end
 
+    it "return error when wit_ai in multilingual bot" do
+      errors_in = [{"path"=>["#/languages"], "message"=>"Wit.ai only works with english bots"}]
+      errors_out = [{:message=>"multilingual-bot", :path=>["wit_ai"]}]
+      expect(BackendError.parse_errors(errors_in)).to eq(errors_out)
+    end
+
+    it "returns errors when keywords or training_sentences required" do
+      errors_in = [{"path"=>["#/skills/0/keywords", "#/skills/0/training_sentences"], "message"=>"One of keywords or training_sentences required"}]
+      errors_out =
+      [
+        {
+          :message => 'required',
+          :path => ['skills/0', 'keywords/en']
+
+        },
+        {
+          :message => 'required',
+          :path => ['skills/0', 'training_sentences/en']
+        }
+      ]
+      expect(BackendError.parse_errors(errors_in)).to eq(errors_out)
+    end
+
+  end
+
+  describe "manifest errors" do
+    it "parse wit-ai-invalid error" do
+      errors_in = [{"path"=>"#/natural_language_interface", "message"=>"any message"}]
+      errors_out = [{:message => "invalid-credentials", :path => ["wit_ai"]}]
+      expect(BackendError.parse_errors(errors_in)).to eq(errors_out)
+    end
   end
 
   describe "front desk errors" do

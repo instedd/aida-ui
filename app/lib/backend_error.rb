@@ -16,6 +16,7 @@ class BackendError < HTTParty::ResponseError
   end
 
   def self.parse_errors(errors)
+
     skill_errors = errors.select{ |error| error['path'][2..7] == 'skills' || (error['path'].is_a?(Array) && error['path'].any? {|path| path[2..7] == 'skills'}) }
     channel_errors = errors.select{ |error| error['path'][2..9] == 'channels' || (error['path'].is_a?(Array) && error['path'].any? {|path| path[2..9] == 'channels'}) }
 
@@ -55,6 +56,14 @@ class BackendError < HTTParty::ResponseError
           :path => ['skills'] + error['path'].map { |e| e[2..-1] }
         }
       ]
+    elsif error['message'] && (error['message'].include? 'keywords or training_sentences required')
+      parsed_errors = error['path'].map { |path|
+        splitted = path.split('/')
+        {
+          :message => 'required',
+          :path => ["skills/#{splitted[2]}", "#{splitted[3]}/en"]
+        }
+      }
     else
       parsed_errors = parse_invalid_error([], error)
     end
@@ -107,6 +116,8 @@ class BackendError < HTTParty::ResponseError
   end
 
   def self.parse_error(error)
+    error['path'] = '#/wit_ai' if error['path'] == '#/natural_language_interface'
+    error['path'] = '#/wit_ai' if error == {"path"=>["#/languages"], "message"=>"Wit.ai only works with english bots"}
     {
       message: get_message(error),
       path: [error['path'][2..-1]]
@@ -114,15 +125,23 @@ class BackendError < HTTParty::ResponseError
   end
 
   def self.get_message(error)
-    case error['error']
-    when { 'expected' => 1, 'actual' => 0 },
-      { 'missing' => %w[question responses] },
-      { 'expected' => '^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})(\\.(\\d{3})){0,1}([+-](\\d{2}):(\\d{2})|Z)$'}
-      'required'
-    when { 'expected' => '^(\\s)?\\S+(\\s)?$' }
-      'white-spaced'
+    if (error['path'] == '#/wit_ai')
+      if (error['message'].include?('only works with english'))
+        'multilingual-bot'
+      else
+        'invalid-credentials'
+      end
     else
-      ''
+      case error['error']
+      when { 'expected' => 1, 'actual' => 0 },
+        { 'missing' => %w[question responses] },
+        { 'expected' => '^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})(\\.(\\d{3})){0,1}([+-](\\d{2}):(\\d{2})|Z)$'}
+        'required'
+      when { 'expected' => '^(\\s)?\\S+(\\s)?$' }
+        'white-spaced'
+      else
+        ''
+      end
     end
   end
 end

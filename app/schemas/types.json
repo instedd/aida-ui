@@ -127,10 +127,17 @@
         "explanation": { "$ref": "#/definitions/message" },
         "clarification": { "$ref": "#/definitions/message" },
         "keywords": { "$ref": "#/definitions/keywordList" },
+        "use_wit_ai": { "type": "boolean" },
+        "training_sentences": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "response": { "$ref": "#/definitions/message" }
       },
       "additionalProperties": false,
-      "required": [ "explanation", "clarification", "keywords", "response" ]
+      "required": [ "explanation", "clarification", "response" ]
     },
 
     "humanOverrideConfig": {
@@ -140,6 +147,13 @@
         "explanation": { "$ref": "#/definitions/message" },
         "clarification": { "$ref": "#/definitions/message" },
         "keywords": { "$ref": "#/definitions/keywordList" },
+        "use_wit_ai": { "type": "boolean" },
+        "training_sentences": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "hours": {
           "type": "array",
           "minItems": 7,
@@ -156,7 +170,7 @@
         "off_hours_response": { "$ref": "#/definitions/message" }
       },
       "additionalProperties": false,
-      "required": [ "explanation", "clarification", "keywords", "in_hours_response", "off_hours_response", "hours", "timezone" ]
+      "required": [ "explanation", "clarification", "in_hours_response", "off_hours_response", "hours", "timezone" ]
     },
 
     "surveyConfig": {
@@ -165,6 +179,13 @@
         "relevant": { "type": "string" },
         "schedule": { "type": "string" },
         "keywords": { "$ref": "#/definitions/keywordList" },
+        "use_wit_ai": { "type": "boolean" },
+        "training_sentences": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "questions": {
           "type": "array",
           "items": { "$ref": "#/definitions/surveyQuestion" }
@@ -326,6 +347,13 @@
         "explanation": { "$ref": "#/definitions/message" },
         "clarification": { "$ref": "#/definitions/message" },
         "keywords": { "$ref": "#/definitions/keywordList" },
+        "use_wit_ai": { "type": "boolean" },
+        "training_sentences": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "tree": {
           "type": "object",
           "properties": {
@@ -337,7 +365,7 @@
         }
       },
       "additionalProperties": false,
-      "required": [ "explanation", "clarification", "keywords", "tree"]
+      "required": [ "explanation", "clarification", "tree"]
     },
 
     "message": {

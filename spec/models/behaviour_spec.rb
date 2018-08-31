@@ -72,10 +72,45 @@ RSpec.describe Behaviour, type: :model do
       expect(responder).to be_enabled
     end
 
-    it "generates manifest fragment" do
+    it "generates manifest fragment with keywords" do
+      responder[:config][:keywords] = 'a_keyword'
+      responder.save!
+
       fragment = responder.manifest_fragment
       expect(fragment).to_not be_nil
       expect(fragment.keys).to match_array(%i(type id name explanation keywords response clarification))
+      expect(fragment[:keywords]['en']).to eq(['a_keyword'])
+    end
+
+    it "generates manifest fragment with training_sentences" do
+      responder[:config][:training_sentences] = ['a training sentence']
+      responder[:config][:use_wit_ai] = true
+      responder.save!
+
+      fragment = responder.manifest_fragment
+      expect(fragment).to_not be_nil
+      expect(fragment.keys).to match_array(%i(type id name explanation training_sentences response clarification))
+      expect(fragment[:training_sentences]['en']).to eq(['a training sentence'])
+    end
+
+    it "generates manifest fragment with no training_sentences when disabled wit_ai" do
+      responder[:config][:training_sentences] = ['a training sentence']
+      responder[:config][:use_wit_ai] = false
+      responder.save!
+
+      fragment = responder.manifest_fragment
+      expect(fragment).to_not be_nil
+      expect(fragment[:training_sentences]).to be_nil
+    end
+
+    it "generates manifest fragment with no keywords when enabled wit_ai" do
+      responder[:config][:keywords] = 'a_keyword'
+      responder[:config][:use_wit_ai] = true
+      responder.save!
+
+      fragment = responder.manifest_fragment
+      expect(fragment).to_not be_nil
+      expect(fragment[:keywords]).to be_nil
     end
 
     it "returns translation keys" do
@@ -115,11 +150,100 @@ RSpec.describe Behaviour, type: :model do
     end
   end
 
+  describe "human override" do
+    let!(:human) { bot.skills.create_skill!('human_override') }
+
+    it "generates manifest fragment with keywords" do
+      human[:config][:keywords] = 'a_keyword'
+      human.save!
+
+      fragment = human.manifest_fragment
+      expect(fragment).to_not be_nil
+      expect(fragment.keys).to match_array(%i(type id name explanation keywords clarification in_hours in_hours_response off_hours_response))
+      expect(fragment[:keywords]['en']).to eq(['a_keyword'])
+    end
+
+    it "generates manifest fragment with training_sentences" do
+      human[:config][:training_sentences] = ['a training sentence']
+      human[:config][:use_wit_ai] = true
+      human.save!
+
+      fragment = human.manifest_fragment
+      expect(fragment).to_not be_nil
+      expect(fragment.keys).to match_array(%i(type id name explanation training_sentences clarification in_hours in_hours_response off_hours_response))
+      expect(fragment[:training_sentences]['en']).to eq(['a training sentence'])
+    end
+
+    it "generates manifest fragment with no training_sentences when disabled wit_ai" do
+      human[:config][:training_sentences] = ['a training sentence']
+      human[:config][:use_wit_ai] = false
+      human.save!
+
+      fragment = human.manifest_fragment
+      expect(fragment).to_not be_nil
+      expect(fragment[:training_sentences]).to be_nil
+    end
+
+    it "generates manifest fragment with no keywords when enabled wit_ai" do
+      human[:config][:keywords] = 'a_keyword'
+      human[:config][:use_wit_ai] = true
+      human.save!
+
+      fragment = human.manifest_fragment
+      expect(fragment).to_not be_nil
+      expect(fragment[:keywords]).to be_nil
+    end
+  end
+
+  describe "decision tree" do
+    let!(:tree) { bot.skills.create_skill!('decision_tree') }
+
+    it "generates manifest fragment with keywords" do
+      tree[:config][:keywords] = 'a_keyword'
+      tree.save!
+
+      fragment = tree.manifest_fragment
+      expect(fragment).to_not be_nil
+      expect(fragment.keys).to match_array(%i(type id name explanation clarification tree keywords))
+      expect(fragment[:keywords]['en']).to eq(['a_keyword'])
+    end
+
+    it "generates manifest fragment with training_sentences" do
+      tree[:config][:training_sentences] = ['a training sentence']
+      tree[:config][:use_wit_ai] = true
+      tree.save!
+
+      fragment = tree.manifest_fragment
+      expect(fragment).to_not be_nil
+      expect(fragment.keys).to match_array(%i(type id name explanation clarification tree training_sentences))
+      expect(fragment[:training_sentences]['en']).to eq(['a training sentence'])
+    end
+
+    it "generates manifest fragment with no training_sentences when disabled wit_ai" do
+      tree[:config][:training_sentences] = ['a training sentence']
+      tree[:config][:use_wit_ai] = false
+      tree.save!
+
+      fragment = tree.manifest_fragment
+      expect(fragment).to_not be_nil
+      expect(fragment[:training_sentences]).to be_nil
+    end
+
+    it "generates manifest fragment with no keywords when enabled wit_ai" do
+      tree[:config][:keywords] = 'a_keyword'
+      tree[:config][:use_wit_ai] = true
+      tree.save!
+
+      fragment = tree.manifest_fragment
+      expect(fragment).to_not be_nil
+      expect(fragment[:keywords]).to be_nil
+    end
+  end
+
   describe "survey" do
     let!(:survey) {
       bot.skills.create_skill!('survey', config: {
                                  schedule: '2017-12-15T14:30:00Z',
-                                 keywords: 'age',
                                  questions: [
                                    { type: 'select_one',
                                      name: 'opt_in',
@@ -141,6 +265,47 @@ RSpec.describe Behaviour, type: :model do
                                })
     }
 
+    it "generates manifest fragment with keywords" do
+      survey[:config][:keywords] = 'a_keyword'
+      survey.save!
+
+      fragment = survey.manifest_fragment
+      expect(fragment).to_not be_nil
+      expect(fragment.keys).to match_array(%i(type id schedule name questions choice_lists keywords))
+      expect(fragment[:keywords]['en']).to eq(['a_keyword'])
+    end
+
+    it "generates manifest fragment with training_sentences" do
+      survey[:config][:training_sentences] = ['a training sentence']
+      survey[:config][:use_wit_ai] = true
+      survey.save!
+
+      fragment = survey.manifest_fragment
+      expect(fragment).to_not be_nil
+      expect(fragment.keys).to match_array(%i(type id schedule name questions choice_lists training_sentences))
+      expect(fragment[:training_sentences]['en']).to eq(['a training sentence'])
+    end
+
+    it "generates manifest fragment with no training_sentences when disabled wit_ai" do
+      survey[:config][:training_sentences] = ['a training sentence']
+      survey[:config][:use_wit_ai] = false
+      survey.save!
+
+      fragment = survey.manifest_fragment
+      expect(fragment).to_not be_nil
+      expect(fragment[:training_sentences]).to be_nil
+    end
+
+    it "generates manifest fragment with no keywords when enabled wit_ai" do
+      survey[:config][:keywords] = 'a_keyword'
+      survey[:config][:use_wit_ai] = true
+      survey.save!
+
+      fragment = survey.manifest_fragment
+      expect(fragment).to_not be_nil
+      expect(fragment[:keywords]).to be_nil
+    end
+
     it "creates valid skill" do
       expect(survey).to be_valid
       expect(survey).to be_enabled
@@ -149,7 +314,7 @@ RSpec.describe Behaviour, type: :model do
     it "generates manifest fragment" do
       fragment = survey.manifest_fragment
       expect(fragment).to_not be_nil
-      expect(fragment.keys).to match_array(%i(type id schedule keywords name questions choice_lists))
+      expect(fragment.keys).to match_array(%i(type id schedule name questions choice_lists))
       expect(fragment[:questions].size).to eq(2)
       expect(fragment[:questions][0]).to match({ type: 'select_one',
                                                  name: 'opt_in',
@@ -190,6 +355,8 @@ RSpec.describe Behaviour, type: :model do
 
     it "generates manifest with translations" do
       add_languages 'en', 'es'
+      survey.config['keywords'] = 'age'
+
       survey.translations.create! key: 'keywords', lang: 'es', value: 'edad'
       survey.translations.create! key: 'questions/[name=opt_in]/message', lang: 'es', value: 'Puedo preguntarte algo?'
       survey.translations.create! key: 'questions/[name=age]/message', lang: 'es', value: 'Qué edad tenés?'
@@ -212,6 +379,7 @@ RSpec.describe Behaviour, type: :model do
     end
 
     it "returns translation keys for questions and choice lists" do
+      survey.config['keywords'] = 'age'
       keys = survey.translation_keys
       expect(keys).to be_an(Array)
       expect(keys.map { |key| key[:key] }).to match_array(['keywords',

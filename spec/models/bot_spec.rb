@@ -77,6 +77,30 @@ RSpec.describe Bot, type: :model do
       expect(channels[1]['access_token'].to_i).to eq(channels[0]['access_token'].to_i + 1)
     end
 
+    it "outputs wit_ai" do
+      bot.wit_ai_auth_token = 'an auth token'
+      bot.save!
+
+      responder = bot.skills.create_skill! 'keyword_responder'
+      responder[:config][:use_wit_ai] = true
+      responder.save!
+
+      wit_ai = bot.manifest[:natural_language_interface]
+
+      expect(wit_ai).to be_truthy
+      expect(wit_ai[:provider]).to eq('wit_ai')
+      expect(wit_ai[:auth_token]).to eq('an auth token')
+    end
+
+    it "does not output wit_ai when unnecessary" do
+      bot.wit_ai_auth_token = 'an auth token'
+      bot.save!
+
+      wit_ai = bot.manifest[:natural_language_interface]
+
+      expect(wit_ai).to be_nil
+    end
+
     it "outputs channels with config type" do
       bot.channels.create! kind: "facebook", name: "facebook", config: {
         "page_id" => "", "verify_token" => SecureRandom.base58, "access_token" => ""

@@ -24,8 +24,10 @@ class Api::ChannelsController < ApplicationApiController
           bot.channels.create! kind: "websocket", name: "websocket", config: {
             "access_token" => ""
           }
+        when nil
+          render json: { error: 'missing channel kind' }, status: 422 and return
         else
-          render json: { error: 'kind unknown' }, status: 422 and return
+          render json: { error: 'unknown channel kind' }, status: 422 and return
         end
 
       render json: channel_api_json(channel)

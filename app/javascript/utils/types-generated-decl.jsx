@@ -57,7 +57,9 @@ export type KeywordResponderConfig = {
   relevant?: string;
   explanation: Message;
   clarification: Message;
-  keywords: KeywordList;
+  keywords?: KeywordList;
+  use_wit_ai?: boolean;
+  training_sentences?: Array<string>;
   response: Message;
 };
 
@@ -65,7 +67,9 @@ export type HumanOverrideConfig = {
   relevant?: string;
   explanation: Message;
   clarification: Message;
-  keywords: KeywordList;
+  keywords?: KeywordList;
+  use_wit_ai?: boolean;
+  training_sentences?: Array<string>;
   hours: Array<Array<boolean>>;
   timezone: string;
   in_hours_response: Message;
@@ -76,6 +80,8 @@ export type SurveyConfig = {
   relevant?: string;
   schedule?: string;
   keywords?: KeywordList;
+  use_wit_ai?: boolean;
+  training_sentences?: Array<string>;
   questions?: Array<SurveyQuestion>;
   choice_lists?: Array<SurveyChoiceList>;
 };
@@ -138,7 +144,9 @@ export type DecisionTreeConfig = {
   relevant?: string;
   explanation: Message;
   clarification: Message;
-  keywords: KeywordList;
+  keywords?: KeywordList;
+  use_wit_ai?: boolean;
+  training_sentences?: Array<string>;
   tree: {
     initial: string;
     nodes: TreeNodesDict;
