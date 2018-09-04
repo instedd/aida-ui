@@ -87,7 +87,6 @@ class MessagesComponent extends Component {
                     message={this.state.message}
                     bot={bots[this.state.message.bot_id]}
                     onSendMessage={(answer) => {
-                      this.setState({ message: null })
                       this.props.actions.answerMessage(this.state.message.id, answer)
                     }}
                   />

@@ -115,6 +115,13 @@ class InputMessage extends Component {
   render() {
     const { onSend } = this.props
 
+    const sendMessageIfEnterPressed = (ev) => {
+      if (ev.key === 'Enter') {
+        ev.preventDefault()
+        sendMessageAndClearInput()
+      }
+    }
+
     const sendMessageAndClearInput = () => {
       const text = this._textfield.value.trim()
       if (text != "") {
@@ -132,13 +139,14 @@ class InputMessage extends Component {
             placeholder="Write your message here"
             value={this.state.messageText}
             onChange={messageText => this.setState({ messageText })}
+            onKeyPress={sendMessageIfEnterPressed}
             ref={node => { this._textfield = node }} />
         </div>
         <div className="chat-button">
           <Button
             icon
             onClick={sendMessageAndClearInput}>
-            done
+            send
           </Button>
         </div>
       </div>

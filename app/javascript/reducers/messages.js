@@ -14,7 +14,6 @@ export default (state : T.HumanOverrideMessagesState, action : T.Action) : T.Hum
   switch (action.type) {
     case actions.FETCH: return fetch(state, action)
     case actions.RECEIVE: return receive(state, action)
-    case actions.ANSWER: return answerMessage(state, action)
     default: return state
   }
 }
@@ -32,12 +31,5 @@ const fetch = (state, action) => {
   return {
     ...state,
     fetching: true,
-  }
-}
-
-const answerMessage = (state, {messageId}) => {
-  return {
-    ...state,
-    items: omit(state.items, [messageId]),
   }
 }
