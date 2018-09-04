@@ -21,8 +21,6 @@ class Api::MessagesController < ApplicationApiController
 
     result = Backend.sessions_send_message(@notification.data["bot_id"], @notification.data["session_id"], {message: params[:answer]})
 
-    @notification.resolved = true
-
     if @notification.save
       render json: { data: result }
     else
