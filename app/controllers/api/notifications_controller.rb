@@ -2,6 +2,24 @@ class Api::NotificationsController < ActionController::Base
   before_action :set_raven_context
   rescue_from ActionController::ParameterMissing, with: :render_unprocessable_entity_response
 
+  def create_message
+    bot = Bot.find_by_notifications_secret(params[:notifications_secret])
+    return render json: {error: "Unknown notification secret"}, status: :unauthorized unless bot
+
+    notification = Notification.find_by uuid: params[:uuid]
+    return render json: {error: "Notification not found"}, status: :not_found unless notification
+    return render json: {error: "Invalid notification secret"}, status: :unauthorized unless bot == notification.bot
+    return render json: {error: "Unsupported notification type"}, status: :bad_request if notification.type != 'human_override'
+
+    notification.add_message!(request.raw_post)
+
+    if notification.save
+      render json: {result: :ok}
+    else
+      render json: notification.errors, status: :unprocessable_entity
+    end
+  end
+
   def create
     bot = Bot.find_by_notifications_secret(params[:notifications_secret])
     return render json: {error: "Unknown notification secret"}, status: :unauthorized unless bot
