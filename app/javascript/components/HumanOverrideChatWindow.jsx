@@ -154,15 +154,28 @@ class InputMessage extends Component {
   }
 }
 
-const ChatWindowComponent = ({ sendMessage, bot, message, inputRef }) => (
-  <Paper
+const ChatWindowComponent = ({ sendMessage, bot, message, inputRef }) => {
+
+  const messages = () => {
+
+    const textMessages = (messages) => (
+      messages.filter(msg => msg.type == 'text').map(msg => ({text: msg.content, sent: msg.direction == 'otu'}))
+    )
+
+    return [
+      ...[{text: message.data.message, sent: false}],
+      ...message.data.messages ? textMessages(message.data.messages) : []
+    ]
+  }
+
+  return <Paper
     zDepth={5}
     className={"chat-window"}>
       <ChatHeader title={message.data.name || 'Unknown'} subtitle={bot.name} />
-      <MessageList messages={[{id: message.id, text: message.data.message, sent: false, timestamp: message.created_at}]} />
+      <MessageList messages={messages()} />
       <InputMessage onSend={sendMessage} ref={inputRef}/>
   </Paper>
-)
+}
 
 class ChatWindow extends Component {
   static propTypes = {
