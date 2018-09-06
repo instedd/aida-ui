@@ -10,7 +10,7 @@ import LanguageSelector from './LanguageSelector'
 
 export default class LanguageDetector extends Component {
   render() {
-    const { skill, actions } = this.props
+    const { skill, actions, errors } = this.props
     const { name, config } = skill
 
     const updateConfig = (key) => {
@@ -41,6 +41,12 @@ export default class LanguageDetector extends Component {
       updateConfig('languages')(newLangs)
     }
 
+    const renderError = () => {
+      if (errors.some(e => e.path[0] == 'wit_ai' && e.message == 'multilingual-bot')) {
+        return <label className="error-message">Wit.ai only works with english bots</label>
+      }
+    }
+
     const replyToUnsupportedLang = !!config['reply_to_unsupported_language']
 
     return (
@@ -51,9 +57,9 @@ export default class LanguageDetector extends Component {
           detect the user preference
         </Headline>
 
-        <Field id="ld-explanation" 
+        <Field id="ld-explanation"
                label="Language message"
-               value={config.explanation} 
+               value={config.explanation}
                onChange={updateConfig('explanation')} />
 
         <KeyValueListField
@@ -64,6 +70,8 @@ export default class LanguageDetector extends Component {
           renderKey={({code, keywords}, index) => <Field className="editable-field lang-text-input" id="ld-key" value={keywords} onChange={updateLanguage(index, 'keywords')} resize={{min: 100, max: 200}} />}
           renderValue={({code, keywords}, index) => <LanguageSelector code={code} onChange={updateLanguage(index, 'code')} />}
         />
+
+        {renderError()}
 
         <Checkbox id="reply-to-unsupported-language"
                   name="reply-to-unsupported-language"
