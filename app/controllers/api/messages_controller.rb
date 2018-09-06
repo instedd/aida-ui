@@ -19,7 +19,16 @@ class Api::MessagesController < ApplicationApiController
     bot = @notification.bot
     authorize bot, :can_message?
 
+    return render json: {error: 'missing answer'}, status: :unprocessable_entity if params[:answer] == nil
+    return render json: {error: 'empty answer'}, status: :unprocessable_entity if params[:answer] == ''
+
     result = Backend.sessions_send_message(@notification.data["bot_id"], @notification.data["session_id"], {message: params[:answer]})
+
+    @notification.add_message!({
+      type: 'text',
+      direction: 'otu',
+      content: params[:answer]
+    })
 
     if @notification.save
       render json: { data: result }
