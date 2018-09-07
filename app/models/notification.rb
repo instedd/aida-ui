@@ -7,6 +7,16 @@ class Notification < ApplicationRecord
     self.uuid ||= SecureRandom.uuid
   end
 
+  def bot_forwarding_messages!(value)
+    raise 'bot_forwarding_messages only supported for a human_override notification' if notification_type != 'human_override'
+
+    data['bot_forwarding_messages'] = value
+  end
+
+  def bot_forwarding_messages?
+    data['bot_forwarding_messages'] || false
+  end
+
   def messages
     data['messages'] || []
   end

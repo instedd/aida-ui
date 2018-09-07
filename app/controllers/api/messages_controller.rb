@@ -22,6 +22,11 @@ class Api::MessagesController < ApplicationApiController
     return render json: {error: 'missing answer'}, status: :unprocessable_entity if params[:answer] == nil
     return render json: {error: 'empty answer'}, status: :unprocessable_entity if params[:answer] == ''
 
+    unless @notification.bot_forwarding_messages?()
+      result = Backend.sessions_forward_messages(@notification.data["bot_id"], @notification.data["session_id"], {forward_messages_id: @notification.uuid})
+      @notification.bot_forwarding_messages!(true) if result['forward_messages_id']
+    end
+
     result = Backend.sessions_send_message(@notification.data["bot_id"], @notification.data["session_id"], {message: params[:answer]})
 
     @notification.add_message!({

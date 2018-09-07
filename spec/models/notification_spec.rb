@@ -40,5 +40,17 @@ RSpec.describe Notification, type: :model do
     it 'rejects messages for other types' do
       expect { other_notification.add_message!(uto_message) }.to raise_error('messages only supported for a human_override notification')
     end
+
+    it 'sets bot_forwarding_messages' do
+      expect(notification.bot_forwarding_messages?()).to be false
+      notification.bot_forwarding_messages!(true)
+      expect(notification.bot_forwarding_messages?()).to be true
+      notification.bot_forwarding_messages!(false)
+      expect(notification.bot_forwarding_messages?()).to be false
+    end
+
+    it 'rejects setting bot_forwarding_messages for other types' do
+      expect { other_notification.bot_forwarding_messages!(true) }.to raise_error('bot_forwarding_messages only supported for a human_override notification')
+    end
   end
 end
