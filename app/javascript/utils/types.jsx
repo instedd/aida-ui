@@ -237,6 +237,9 @@ export type HumanOverrideMessageAction = {
   messageId: number,
   answer: string
 } | {
+  type: 'MESSAGES_RESOLVE',
+  messageId: number
+} | {
   type: 'MESSAGES_RECEIVE',
   items: ById<HumanOverrideMessage>,
 } | {

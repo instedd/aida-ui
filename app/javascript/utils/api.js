@@ -224,6 +224,10 @@ export const answerMessage = (messageId : number, answer : string) => {
   return apiPostJSON(`messages/${messageId}/answer`, null, {answer})
 }
 
+export const resolveMessage = (messageId : number) => {
+  return apiPostJSON(`messages/${messageId}/resolve`, null, null)
+}
+
 export const checkWitAICredentials = (botId : number, authToken : string) => {
   return apiFetchJSON(`bots/${botId}/check_wit_ai_credentials/${authToken}`)
 }

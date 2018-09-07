@@ -113,7 +113,7 @@ class InputMessage extends Component {
   }
 
   render() {
-    const { onSend } = this.props
+    const { onSend, onResolve } = this.props
 
     const sendMessageIfEnterPressed = (ev) => {
       if (ev.key === 'Enter') {
@@ -129,6 +129,10 @@ class InputMessage extends Component {
         this.setState({ messageText: "" })
       }
       this.focus()
+    }
+
+    const resolveMessage = () => {
+      onResolve()
     }
 
     return (
@@ -148,13 +152,18 @@ class InputMessage extends Component {
             onClick={sendMessageAndClearInput}>
             send
           </Button>
+          <Button
+            icon
+            onClick={resolveMessage}>
+            done
+          </Button>
         </div>
       </div>
     )
   }
 }
 
-const ChatWindowComponent = ({ sendMessage, bot, message, inputRef }) => {
+const ChatWindowComponent = ({ sendMessage, resolveMessage, bot, message, inputRef }) => {
 
   const messages = () => {
 
@@ -173,7 +182,7 @@ const ChatWindowComponent = ({ sendMessage, bot, message, inputRef }) => {
     className={"chat-window"}>
       <ChatHeader title={message.data.name || 'Unknown'} subtitle={bot.name} />
       <MessageList messages={messages()} />
-      <InputMessage onSend={sendMessage} ref={inputRef}/>
+      <InputMessage onSend={sendMessage} onResolve={resolveMessage} ref={inputRef}/>
   </Paper>
 }
 
@@ -181,7 +190,8 @@ class ChatWindow extends Component {
   static propTypes = {
     message: PropTypes.object.isRequired,
     bot: PropTypes.object.isRequired,
-    onSendMessage: PropTypes.func.isRequired
+    onSendMessage: PropTypes.func.isRequired,
+    onResolveMessage: PropTypes.func.isRequired
   }
 
   constructor(props) {
@@ -210,13 +220,14 @@ class ChatWindow extends Component {
   }
 
   render() {
-    const { message, onSendMessage, bot } = this.props
+    const { message, onSendMessage, onResolveMessage, bot } = this.props
 
     if (message != null) {
       return (
         <ChatWindowComponent message={message}
                              bot={bot}
                              sendMessage={onSendMessage}
+                             resolveMessage={onResolveMessage}
                              inputRef={input => this._input = input}
                              />
       )

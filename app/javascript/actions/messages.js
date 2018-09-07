@@ -5,6 +5,7 @@ import * as routes from '../utils/routes'
 
 export const FETCH = 'MESSAGES_FETCH'
 export const ANSWER = 'MESSAGES_ANSWER'
+export const RESOLVE = 'MESSAGES_RESOLVE'
 export const RECEIVE = 'MESSAGES_RECEIVE'
 export const RECEIVE_ERROR = 'MESSAGES_RECEIVE_ERROR'
 
@@ -45,4 +46,15 @@ export const answerMessage = (messageId : number, answer : string) => (dispatch 
   dispatch(_answerMessage(messageId, answer))
 
   api.answerMessage(messageId, answer)
+}
+
+export const _resolveMessage = (messageId : number) : T.HumanOverrideMessageAction => ({
+  type: RESOLVE,
+  messageId
+})
+
+export const resolveMessage = (messageId : number) => (dispatch : T.Dispatch, getState : T.GetState) => {
+  dispatch(_resolveMessage(messageId))
+
+  api.resolveMessage(messageId)
 }

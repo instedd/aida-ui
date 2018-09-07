@@ -89,6 +89,7 @@ class MessagesComponent extends Component {
                     onSendMessage={(answer) => {
                       this.props.actions.answerMessage(this.state.message.id, answer)
                     }}
+                    onResolveMessage={() => this.props.actions.resolveMessage(this.state.message.id)}
                   />
                 : ''
               }
