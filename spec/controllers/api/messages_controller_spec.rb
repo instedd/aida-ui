@@ -5,6 +5,21 @@ RSpec.describe Api::MessagesController, type: :controller do
   before(:each) { sign_in user }
   let!(:bot) { create(:bot, owner: user) }
 
+  describe 'resolve' do
+    let!(:notification) { create(:notification, bot: bot, notification_type: 'human_override', data: { bot_id: '', session_id: '' }) }
+
+    it 'sets the bot free' do
+      notification.bot_forwarding_messages!(true)
+      expect(notification.resolved).to eq(false)
+      expect(Backend).to receive(:sessions_forward_messages) {{'forward_messages_id' => ''}}
+      post :resolve, params: { id: notification.id }
+      expect(response).to be_success
+      notification.reload
+      expect(notification.bot_forwarding_messages?()).to eq(false)
+      expect(notification.resolved).to eq(true)
+    end
+  end
+
   describe 'answer' do
     let!(:notification) { create(:notification, bot: bot, notification_type: 'human_override', data: { bot_id: '', session_id: '' }) }
 

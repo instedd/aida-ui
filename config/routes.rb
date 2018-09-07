@@ -70,6 +70,7 @@ Rails.application.routes.draw do
     resources :messages, only: [:index] do
       member do
         post :answer
+        post :resolve
       end
     end
   end
