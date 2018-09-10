@@ -15,7 +15,15 @@ export default (state: T.HumanOverrideMessagesState, action: T.Action): T.HumanO
     case actions.FETCH: return fetch(state, action)
     case actions.RECEIVE: return receive(state, action)
     case actions.ANSWER: return answer(state, action)
+    case actions.RESOLVE: return resolve(state, action)
     default: return state
+  }
+}
+
+const resolve = (state, {messageId}) => {
+  return {
+    ...state,
+    items: omit(state.items, [messageId]),
   }
 }
 
