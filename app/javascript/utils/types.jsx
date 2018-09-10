@@ -241,7 +241,7 @@ export type HumanOverrideMessageAction = {
   messageId: number
 } | {
   type: 'MESSAGES_RECEIVE',
-  items: ById<HumanOverrideMessage>,
+  items: ById<T.HumanOverrideMessage>,
 } | {
   type: 'MESSAGES_RECEIVE_ERROR',
 };
@@ -488,19 +488,9 @@ export type InvitationState = {
   invitation: ?T.InvitationData
 };
 
-export type HumanOverrideMessage = {
-  id: number;
-  created_at: Date;
-  data: {
-    sessionId: string;
-    message: string;
-    name: string
-  }
-};
-
 export type HumanOverrideMessagesState = {
   fetching: boolean,
-  items: ?ById<HumanOverrideMessage>
+  items: ?ById<T.HumanOverrideMessage>
 };
 
 export type NotifState = {
