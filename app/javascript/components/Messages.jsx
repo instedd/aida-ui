@@ -90,8 +90,7 @@ class MessagesComponent extends Component {
                       actions.answerMessage(this.state.message.id, answer)
                     }}
                     onResolveMessage={() => {
-                      this.setState({ message: null, selected: null })
-                      actions.resolveMessage(this.state.message.id)
+                      actions.resolveMessage(this.state.message.id, () => this.setState({ message: null, selected: null }))
                     }}
                   />
                 : ''

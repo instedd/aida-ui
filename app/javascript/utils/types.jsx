@@ -233,11 +233,11 @@ export type FrontDeskAction = {
 export type HumanOverrideMessageAction = {
   type: 'MESSAGES_FETCH',
 } | {
-  type: 'MESSAGES_ANSWER',
+  type: 'MESSAGES_ANSWER_SUCCESS',
   messageId: number,
   answer: string
 } | {
-  type: 'MESSAGES_RESOLVE',
+  type: 'MESSAGES_RESOLVE_SUCCESS',
   messageId: number
 } | {
   type: 'MESSAGES_RECEIVE',
