@@ -69,7 +69,7 @@ input[type=number]:invalid {
     display: inline-flex;
   }
   label {
-    transform: translate3d(0, -15px, 0); 
+    transform: translate3d(0, -15px, 0);
   }
 }
 
@@ -95,7 +95,7 @@ input[type=number]:invalid {
     width: 3rem;
   }
   .survey-time-picker {
-    width: 4rem;
+    width: 5rem;
   }
 }
 
@@ -118,7 +118,7 @@ input[type=number]:invalid {
 }
 .error-tree {
   border-color: $error-red !important;
-  
+
   .md-text--error {
     position: absolute;
     margin-top: .4rem;
