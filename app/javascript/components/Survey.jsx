@@ -78,7 +78,7 @@ class Survey extends Component {
                       inline
                       fullwidth={false}
                       rightIcon={<FontIcon className='overlapped-icon'>date_range</FontIcon>}
-                      icon={false}
+                      icon={null}
                       value={date}
                       timeZone={getLocalTimezone()}
                       onChange={(_, value) => updateConfig('schedule')(value)}
@@ -88,7 +88,7 @@ class Survey extends Component {
                       textFieldClassName='survey-time-picker'
                       inline
                       value={date}
-                      icon={false}
+                      icon={null}
                       onChange={(_, value) => updateConfig('schedule')(value)}
                       error={errors.some(e => e.path[1] == "schedule")} />
         </div>
