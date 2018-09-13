@@ -19,6 +19,30 @@ main {
   }
 }
 
+
+.icon {
+  font-size: 24px;
+  font-family: 'Material Icons' !important;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  display: inline-block;
+  vertical-align: middle;
+  word-wrap: normal;
+  white-space: normal;
+  direction: ltr;
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+}
+
 .ui-field {
   margin-top: 3rem;
 }
@@ -158,6 +182,59 @@ main {
     opacity: 1;
   }
 }
+.btn-status {
+  font-size: 1.1rem;
+  border: 1px solid $md-grey-300;
+  border-radius: 5rem;
+  padding: .5rem 2.6rem .5rem .6rem;
+  margin-left: 1.5rem;
+  position: relative;
+
+  i {
+    font-size: 1.2rem !important;
+    border-radius: 50%;
+    color: white !important;
+    padding: .1rem;
+    min-width: 1.2rem;
+    min-height: 1.2rem;
+  }
+  .md-icon-text {
+    padding-left: .9rem;
+    padding-bottom: .05rem;
+  }
+  &:after {
+    @extend .icon;
+    content: 'chevron_right';
+    color: $md-grey-300;
+    position: absolute;
+    right: .5rem;
+    top: .35rem;
+  }
+  &.wit-ai-conn {
+    .md-icon-text {
+      color: $md-grey-300;
+    }
+    i {
+      background-color: $md-grey-300;
+    }    
+  }
+  &.wit-ai-conn-ok {
+    .md-icon-text {
+      color: #CDDC39;
+    }
+    i {
+      background-color: #CDDC39;
+    }
+  }
+  &.wit-ai-conn-error {
+    .md-icon-text {
+      color: #F44336;
+    }
+    i {
+      background-color: #F44336;
+    }    
+  }
+}
 tr.md-table-row {
   &.noHover:hover {
     background: none;
@@ -170,6 +247,7 @@ tr.md-table-row {
   color: #CDDC39;
 }
 .btnLink {
+  background: none !important;
   color: #02bbd3;
   text-transform: none;
   text-decoration: none !important;
@@ -200,4 +278,10 @@ tr.md-table-row {
   vertical-align: middle;
   font-size: 90%;
   padding: 0 5px;
+}
+.pull-left {
+  float: left;
+}
+.pull-right {
+  float: right;
 }
