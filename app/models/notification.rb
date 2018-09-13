@@ -22,6 +22,9 @@ class Notification < ApplicationRecord
   end
 
   def add_message!(message)
+    message = message.clone()
+    message['timestamp'] = DateTime.now.utc.to_s(:iso8601)
+
     raise 'messages only supported for a human_override notification' if notification_type != 'human_override'
     raise "invalid message" unless JSON::Validator.validate(schema_file, message, fragment: message_schema_fragment)
     data['messages'] = messages.push(message)

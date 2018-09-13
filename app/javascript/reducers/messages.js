@@ -28,19 +28,19 @@ const resolveSuccess = (state, {messageId}) => {
 }
 
 const answerSuccess = (state, action) => {
-  const { messageId, answer } = action
+  const { messageId, message } = action
   const { items } = state
 
   if (items) {
-    const message = { ...items[messageId.toString()] }
-    message.data.messages = message.data.messages || []
-    message.data.messages.push({ content: answer, direction: 'otu', type: 'text' })
+    const notification = { ...items[messageId.toString()] }
+    notification.data.messages = notification.data.messages || []
+    notification.data.messages.push(message)
 
     return {
       ...state,
       items: {
         ...state.items,
-        ...{ [message.id]: message }
+        ...{ [notification.id]: notification }
       }
     }
   }

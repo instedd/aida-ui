@@ -53,14 +53,14 @@ RSpec.describe Api::NotificationsController, type: :controller do
       })}
 
       it "creates a message" do
-        notification.add_message!(message_0)
+        notification.add_message!(JSON.parse(message_0))
         notification.save!
 
         post :create_message, params: {notifications_secret: bot.notifications_secret, uuid: notification.uuid }, body: message
         expect(response).to be_success
 
         notification.reload
-        expect(notification.messages()[1]).to eq(message)
+        expect(notification.messages()[1].except("timestamp")).to eq(JSON.parse(message))
       end
 
       it "rejects an unknown notification secret" do

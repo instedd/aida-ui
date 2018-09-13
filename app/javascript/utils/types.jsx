@@ -4,6 +4,7 @@ export * from './types-generated-decl'
 import * as T from './types-generated-decl'
 
 export type ById<T> = { [string]: T };
+export type DirectionalMessage = T.DirectionalMessage
 
 export type Scope = {
   botId: number
@@ -235,7 +236,7 @@ export type HumanOverrideMessageAction = {
 } | {
   type: 'MESSAGES_ANSWER_SUCCESS',
   messageId: number,
-  answer: string
+  message: T.DirectionalMessage
 } | {
   type: 'MESSAGES_RESOLVE_SUCCESS',
   messageId: number

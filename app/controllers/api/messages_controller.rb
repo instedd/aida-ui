@@ -56,7 +56,7 @@ class Api::MessagesController < ApplicationApiController
     })
 
     if @notification.save
-      render json: { data: result }
+      render json: { message: @notification.messages.last }
     else
       render json: {result: :error}, status: :bad_request
     end

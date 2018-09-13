@@ -291,6 +291,7 @@ export type DirectionalMessage = {
   content: string;
   direction: string;
   type: string;
+  timestamp?: string;
 };
 
 export type TranslationBehaviours = Array<{

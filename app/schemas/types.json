@@ -639,7 +639,8 @@
       "properties": {
         "content": { "type": "string" },
         "direction": { "type": "string" },
-        "type": { "type": "string" }
+        "type": { "type": "string" },
+        "timestamp": { "type": "string" }
       },
       "additionalProperties": false,
       "required": [ "content", "direction", "type" ]

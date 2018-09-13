@@ -33,6 +33,19 @@ RSpec.describe Api::MessagesController, type: :controller do
       expect(notification.resolved).to eq(false)
     end
 
+    it 'returns the created message' do
+      allow(Backend).to receive(:sessions_send_message)
+      allow(Backend).to receive(:sessions_forward_messages) {{'forward_messages_id' => notification.uuid}}
+      result = post :answer, params: { id: notification.id, answer: 'a message' }
+
+      message = JSON.parse(result.body)['message']
+      expect(message.except('timestamp')).to eq({
+        'type' => 'text',
+        'direction' => 'otu',
+        'content' => 'a message'
+      })
+    end
+
     it 'takes control of the bot' do
       expect(notification.bot_forwarding_messages?()).to eq(false)
       allow(Backend).to receive(:sessions_send_message)
@@ -80,7 +93,7 @@ RSpec.describe Api::MessagesController, type: :controller do
       post :answer, params: { id: notification.id, answer: 'an answer' }
       expect(response).to be_success
       notification.reload
-      expect(notification.messages[0]).to eq({
+      expect(notification.messages[0].except("timestamp")).to eq({
         'type' => 'text',
         'direction' => 'otu',
         'content' => 'an answer'

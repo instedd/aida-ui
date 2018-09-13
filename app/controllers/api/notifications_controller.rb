@@ -11,7 +11,7 @@ class Api::NotificationsController < ActionController::Base
     return render json: {error: "Invalid notification secret"}, status: :unauthorized unless bot == notification.bot
     return render json: {error: "Unsupported notification type"}, status: :bad_request if notification.type != 'human_override'
 
-    notification.add_message!(request.raw_post)
+    notification.add_message!(JSON.parse(request.raw_post))
 
     if notification.save
       render json: {result: :ok}

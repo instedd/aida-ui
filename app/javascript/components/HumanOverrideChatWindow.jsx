@@ -168,7 +168,13 @@ const ChatWindowComponent = ({ sendMessage, resolveMessage, bot, message, inputR
   const messages = () => {
 
     const textMessages = (messages) => (
-      messages.filter(msg => msg.type == 'text').map(msg => ({text: msg.content, sent: msg.direction == 'otu'}))
+      messages.filter(
+        msg => msg.type == 'text'
+      ).sort(
+        (a, b) => a.timestamp < b.timestamp ? -1 : 1
+      ).map(
+        msg => ({ text: msg.content, sent: msg.direction == 'otu' })
+      )
     )
 
     return [

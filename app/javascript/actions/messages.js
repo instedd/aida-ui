@@ -36,16 +36,16 @@ export const fetchMessages = () => (dispatch : T.Dispatch, getState : T.GetState
             .catch(error => dispatch(_messagesReceiveError()))
 }
 
-export const _answerMessageSuccess = (messageId : number, answer : string) : T.HumanOverrideMessageAction => ({
+export const _answerMessageSuccess = (messageId : number, message : T.DirectionalMessage) : T.HumanOverrideMessageAction => ({
   type: ANSWER_SUCCESS,
   messageId,
-  answer
+  message
 })
 
 export const answerMessage = (messageId : number, answer : string) => (dispatch : T.Dispatch, getState : T.GetState) => {
   api.answerMessage(messageId, answer)
-    .then(() => {
-      dispatch(_answerMessageSuccess(messageId, answer))
+    .then((result) => {
+      dispatch(_answerMessageSuccess(messageId, result.message))
     })
     .catch(() => {
       dispatch(pushNotification('Answer could not be sent'))

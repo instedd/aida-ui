@@ -33,10 +33,17 @@ RSpec.describe Notification, type: :model do
       expect(notification.messages().length).to eq(0)
       notification.add_message!(uto_message)
       expect(notification.messages().length).to eq(1)
-      expect(notification.messages()[0]).to eq(uto_message)
+      expect(notification.messages()[0].except("timestamp")).to eq(uto_message)
       notification.add_message!(otu_message)
       expect(notification.messages().length).to eq(2)
-      expect(notification.messages()[1]).to eq(otu_message)
+      expect(notification.messages()[1].except("timestamp")).to eq(otu_message)
+    end
+
+    it 'adds a timestamp to the message' do
+      notification.add_message!(uto_message)
+      timestamp = notification.messages()[0]['timestamp']
+      expect(timestamp).to_not be_nil
+      expect(timestamp).to be > Time.now.getutc - 60
     end
 
     it 'rejects invalid messages' do
