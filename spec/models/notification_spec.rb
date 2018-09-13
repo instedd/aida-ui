@@ -26,6 +26,8 @@ RSpec.describe Notification, type: :model do
 
     let(:uto_message) {{"type"=>"text", "direction"=>"uto", "content"=>"user to operator message"}}
     let(:otu_message) {{"type"=>"text", "direction"=>"otu", "content"=>"operator user message"}}
+    let(:message_without_required) {{"type"=>"text"}}
+    let(:message_with_additional) {{"type"=>"text", "direction"=>"otu", "content"=>"operator user message", "other"=>"other"}}
 
     it 'adds messages' do
       expect(notification.messages().length).to eq(0)
@@ -35,6 +37,11 @@ RSpec.describe Notification, type: :model do
       notification.add_message!(otu_message)
       expect(notification.messages().length).to eq(2)
       expect(notification.messages()[1]).to eq(otu_message)
+    end
+
+    it 'rejects invalid messages' do
+      expect { notification.add_message!(message_without_required) }.to raise_error('invalid message')
+      expect { notification.add_message!(message_with_additional) }.to raise_error('invalid message')
     end
 
     it 'rejects messages for other types' do

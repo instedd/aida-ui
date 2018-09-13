@@ -277,16 +277,20 @@ export type BotErrorLog = {
 export type HumanOverrideMessage = {
   id: number;
   created_at?: any;
-  data: {
-    session_id?: string;
-    message?: string;
-    name: string;
-    messages: Array<{
-      content: string;
-      direction: string;
-      type: string;
-    }>;
-  };
+  data: NotificationData;
+};
+
+export type NotificationData = {
+  session_id: string;
+  message: string;
+  name?: string;
+  messages?: Array<DirectionalMessage>;
+};
+
+export type DirectionalMessage = {
+  content: string;
+  direction: string;
+  type: string;
 };
 
 export type TranslationBehaviours = Array<{
