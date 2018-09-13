@@ -1,9 +1,10 @@
 import React, { Component, PureComponent } from 'react'
-import { DialogContainer, Button, TextField, SelectionControl } from 'react-md'
+import { DialogContainer, Button, FontIcon, TextField, SelectionControl } from 'react-md'
 import Field from './Field'
 import KeyValueListField from './KeyValueListField'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
+import Aux from '../hoc/Aux'
 class DialogComponent extends Component {
   state = {
     authToken: ''
@@ -123,6 +124,7 @@ class KeywordInput extends PureComponent {
         }
 
         return <KeyValueListField
+          className="trainingSentences"
           items={trainingSentences}
           createItemLabel="Add training sentence"
           onCreateItem={addTrainingSentence}
@@ -158,37 +160,38 @@ class KeywordInput extends PureComponent {
           switch (connectionStatus()) {
             case 'connected':
               return {
-                secondary: true,
-                className: 'wit-ai-conn-ok',
-                children: 'Connected'
+                className: 'btn-status wit-ai-conn-ok',
+                children: 'Connected',
+                iconChildren: 'check'
               }
             case 'invalid':
               return {
-                primary: true,
-                className: 'wit-ai-conn-error',
-                children: 'Invalid credentials'
+                className: 'btn-status wit-ai-conn-error',
+                children: 'Invalid credentials',
+                iconChildren: 'close'
               }
             default:
               return {
-                className: 'wit-ai-conn',
-                children: 'Enable Wit.ai'
+                className: 'btn-status wit-ai-conn',
+                children: 'Enable Wit.ai',
+                iconChildren: ''
               }
           }
         }
 
-        return <Button flat swapTheming onClick={openDialog} {...connButtonProps()} />
+        return <Button onClick={openDialog} {...connButtonProps()} />
       }
 
       return (
-        <div>
+        <Aux>
           {renderConnectionButton()}
           {renderTrainingSentences()}
           {renderError()}
-        </div>
+        </Aux>
       )
     }
 
-    return <div>
+    return <div className='ui-field'>
       {useWitAi ? null : renderKeywords()}
       <SelectionControl
         name="use-wit-ai"
@@ -196,6 +199,7 @@ class KeywordInput extends PureComponent {
         label="Use Wit.ai for intent detection"
         type="checkbox"
         value="wit-ai"
+        className="pull-left"
         checked={useWitAi}
         onChange={checked => useWitAiChange(checked)}
       />
