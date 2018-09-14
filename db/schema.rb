@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180906211836) do
+ActiveRecord::Schema.define(version: 20180914133242) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -114,6 +114,7 @@ ActiveRecord::Schema.define(version: 20180906211836) do
     t.datetime "updated_at", null: false
     t.boolean "resolved", default: false
     t.string "uuid"
+    t.string "session_uuid"
     t.index ["bot_id"], name: "index_notifications_on_bot_id"
   end
 

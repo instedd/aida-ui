@@ -3,6 +3,10 @@ class Notification < ApplicationRecord
   alias_attribute :type, :notification_type
   after_initialize :init
 
+  scope :pending_human_override_for_session, ->(session_uuid) {
+    Notification.where(session_uuid: session_uuid, resolved: false, notification_type: 'human_override')
+  }
+
   def init
     self.uuid ||= SecureRandom.uuid
   end
@@ -22,22 +26,21 @@ class Notification < ApplicationRecord
   end
 
   def add_message!(message)
-    message = message.clone()
+    message = message.clone
     message['timestamp'] = DateTime.now.utc.to_s(:iso8601)
 
     raise 'messages only supported for a human_override notification' if notification_type != 'human_override'
-    raise "invalid message" unless JSON::Validator.validate(schema_file, message, fragment: message_schema_fragment)
+    raise 'invalid message' unless JSON::Validator.validate(schema_file, message, fragment: message_schema_fragment)
     data['messages'] = messages.push(message)
   end
 
   private
 
   def schema_file
-    Rails.root.join("app", "schemas", "types.json").read
+    Rails.root.join('app', 'schemas', 'types.json').read
   end
 
   def message_schema_fragment
-    "#/definitions/directional_message"
+    '#/definitions/directional_message'
   end
-
 end

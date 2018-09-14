@@ -17,6 +17,18 @@ RSpec.describe Api::NotificationsController, type: :controller do
     })
   }
 
+  let(:human_override_notification) {
+    JSON.dump({
+      type: 'human_override',
+      data: {
+        'message': 'a message',
+        'bot_id': 'a bot id',
+        'session_id': 'a session id',
+        'name': 'a name'
+      }
+    })
+  }
+
   describe "POST create_message" do
 
     let(:message_0) {
@@ -97,7 +109,7 @@ RSpec.describe Api::NotificationsController, type: :controller do
 
   describe "POST #create" do
     context "human override" do
-      let(:human_override_notification) {
+      let(:human_override_notification_1) {
         JSON.dump({
           type: 'human_override',
           data: {
@@ -109,20 +121,74 @@ RSpec.describe Api::NotificationsController, type: :controller do
         })
       }
 
+      let(:human_override_notification_2) {
+        JSON.dump({
+          type: 'human_override',
+          data: {
+            'message': 'second message',
+            'session_id': 'a session id'
+          }
+        })
+      }
+
       it "creates the notification" do
         expect {
-          post :create, params: {notifications_secret: bot.notifications_secret}, body: human_override_notification
+          post :create, params: {notifications_secret: bot.notifications_secret}, body: human_override_notification_1
         }.to change(Notification, :count).by(1)
         expect(response).to be_success
 
-        expect(Notification.last.notification_type).to eq("human_override")
+        notification = Notification.last
+        expect(notification.notification_type).to eq("human_override")
+        expect(notification.bot_id).to eq(bot.id)
+        expect(notification.data['session_id']).to eq('a session id')
+        expect(notification.data['message']).to eq('first message')
       end
 
-      it "adds no message" do
-        post :create, params: {notifications_secret: bot.notifications_secret}, body: human_override_notification
+      it "does not add messages" do
+        post :create, params: {notifications_secret: bot.notifications_secret}, body: human_override_notification_1
         expect(Notification.last.messages().length()).to eq(0)
       end
-  end
+
+      it "appends as a message when pending notfication" do
+        expect {
+          post :create, params: {notifications_secret: bot.notifications_secret}, body: human_override_notification_1
+        }.to change(Notification, :count).by(1)
+        expect {
+          post :create, params: {notifications_secret: bot.notifications_secret}, body: human_override_notification_2
+        }.to change(Notification, :count).by(0)
+
+        data = Notification.last.data
+        expect(data['message']).to eq('first message')
+        expect(data['messages'][0].except('timestamp')).to eq({
+          "content" => "second message",
+          "direction" => "uto",
+          "type" => "text"
+        })
+      end
+
+      it "create human_override_notification when policy_enforcement" do
+        expect {
+          post :create, params: {notifications_secret: bot.notifications_secret}, body: policy_enforcement_block_notification
+        }.to change(Notification, :count).by(1)
+        expect {
+          post :create, params: {notifications_secret: bot.notifications_secret}, body: human_override_notification
+        }.to change(Notification, :count).by(1)
+      end
+
+      it "create a second notification when first resolved" do
+        expect {
+          post :create, params: {notifications_secret: bot.notifications_secret}, body: human_override_notification_1
+        }.to change(Notification, :count).by(1)
+        first = Notification.last
+        first.resolved = true
+        first.save!
+
+        expect {
+          post :create, params: {notifications_secret: bot.notifications_secret}, body: human_override_notification_2
+        }.to change(Notification, :count).by(1)
+        expect(Notification.last.data['message']).to eq('second message')
+      end
+    end
 
     context "with valid params" do
       it "creates a new Notification by bot secret" do
@@ -133,6 +199,24 @@ RSpec.describe Api::NotificationsController, type: :controller do
         expect(Notification.last.notification_type).to eq("policy_enforcement")
         expect(Notification.last.data.keys).to match_array(["reason", "action"])
         expect(Notification.last.data['action']).to eq("block")
+      end
+
+      it "creates a second policy_enforcement notification" do
+        expect {
+          post :create, params: {notifications_secret: bot.notifications_secret}, body: policy_enforcement_block_notification
+        }.to change(Notification, :count).by(1)
+        expect {
+          post :create, params: {notifications_secret: bot.notifications_secret}, body: policy_enforcement_block_notification
+        }.to change(Notification, :count).by(1)
+      end
+
+      it "creates a policy_enforcement notification when human_override" do
+        expect {
+          post :create, params: {notifications_secret: bot.notifications_secret}, body: human_override_notification
+        }.to change(Notification, :count).by(1)
+        expect {
+          post :create, params: {notifications_secret: bot.notifications_secret}, body: policy_enforcement_block_notification
+        }.to change(Notification, :count).by(1)
       end
 
       it "creates a new Notification with an unknown type" do

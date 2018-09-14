@@ -26,7 +26,18 @@ class Api::NotificationsController < ActionController::Base
 
     content = JSON.parse(request.raw_post) rescue notification_params
 
-    @notification = bot.notifications.create(content)
+    pending_human_override_for_session = Notification.pending_human_override_for_session(content['session_id']).first
+
+    if (content['type'] == 'human_override' && pending_human_override_for_session)
+      @notification = pending_human_override_for_session
+      @notification.add_message!({
+        "type"=>"text",
+        "direction"=>"uto",
+        "content"=>content['data']['message']
+      })
+    else
+      @notification = bot.notifications.create(content)
+    end
 
     if @notification.save
       alert_by_email_if_needed
@@ -34,6 +45,7 @@ class Api::NotificationsController < ActionController::Base
     else
       render json: @notification.errors, status: :unprocessable_entity
     end
+
   end
 
   def alert_by_email_if_needed
