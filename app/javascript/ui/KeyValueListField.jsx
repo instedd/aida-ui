@@ -15,7 +15,7 @@ export class KeyValueListField extends Component {
     const {label, items,
       createItemLabel, onCreateItem,
       canRemoveItem, onRemoveItem,
-      renderKey, renderValue} = this.props
+      renderKey, renderValue, className} = this.props
 
     const itemRows = map(items, (item, index) => {
       return (
@@ -36,7 +36,7 @@ export class KeyValueListField extends Component {
       )
     })
 
-    return (<div className="ui-field">
+    return (<div className={`ui-field ${className}`}>
         <h4>{label}</h4>
 
         <DataTable plain className="ui-key-value-list" responsive={false} >
@@ -51,17 +51,14 @@ export class KeyValueListField extends Component {
             {itemRows}
           </TableBody>
 
-          <TableBody>
-            <TableRow className="addlink" onClick={onCreateItem}>
-              <TableColumn>
-                <Button icon iconChildren="add" />
-              </TableColumn>
-              <TableColumn colSpan={3}>
-                {createItemLabel}
-              </TableColumn>
-            </TableRow>
-          </TableBody>
         </DataTable>
+        <br/>
+        <Button 
+          iconChildren="add" 
+          className="addlink btnLink" 
+          onClick={onCreateItem}>
+          {createItemLabel}
+        </Button>
     </div>)
   }
 }

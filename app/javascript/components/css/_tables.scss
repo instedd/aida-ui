@@ -106,3 +106,34 @@ tbody .md-table-row:last-child {
     }
   }
 }
+
+.trainingSentences {
+  margin-top: 1rem;
+  thead, h4 {
+    display: none;
+  }
+  tbody {
+    tr {
+      td {
+        &:first-child {
+          width: 1rem;
+          padding: 0;
+        }
+        &:nth-child(2),
+        &:nth-child(3) {
+          display: none;
+        }
+        hr {
+          opacity: 0;
+        }
+      }
+      &:hover {
+        td {
+          hr {
+            opacity: .7;
+          }
+        }
+      }
+    }
+  }
+}
