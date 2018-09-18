@@ -113,7 +113,14 @@ class InputMessage extends Component {
   }
 
   render() {
-    const { onSend } = this.props
+    const { onSend, onResolve } = this.props
+
+    const sendMessageIfEnterPressed = (ev) => {
+      if (ev.key === 'Enter') {
+        ev.preventDefault()
+        sendMessageAndClearInput()
+      }
+    }
 
     const sendMessageAndClearInput = () => {
       const text = this._textfield.value.trim()
@@ -124,6 +131,10 @@ class InputMessage extends Component {
       this.focus()
     }
 
+    const resolveMessage = () => {
+      onResolve()
+    }
+
     return (
       <div className="chat-window-input">
         <div className="chat-input">
@@ -132,12 +143,18 @@ class InputMessage extends Component {
             placeholder="Write your message here"
             value={this.state.messageText}
             onChange={messageText => this.setState({ messageText })}
+            onKeyPress={sendMessageIfEnterPressed}
             ref={node => { this._textfield = node }} />
         </div>
         <div className="chat-button">
           <Button
             icon
             onClick={sendMessageAndClearInput}>
+            send
+          </Button>
+          <Button
+            icon
+            onClick={resolveMessage}>
             done
           </Button>
         </div>
@@ -146,21 +163,41 @@ class InputMessage extends Component {
   }
 }
 
-const ChatWindowComponent = ({ sendMessage, bot, message, inputRef }) => (
-  <Paper
+const ChatWindowComponent = ({ sendMessage, resolveMessage, bot, message, inputRef }) => {
+
+  const messages = () => {
+
+    const textMessages = (messages) => (
+      messages.filter(
+        msg => msg.type == 'text'
+      ).sort(
+        (a, b) => a.timestamp < b.timestamp ? -1 : 1
+      ).map(
+        msg => ({ text: msg.content, sent: msg.direction == 'otu' })
+      )
+    )
+
+    return [
+      ...[{text: message.data.message, sent: false}],
+      ...message.data.messages ? textMessages(message.data.messages) : []
+    ]
+  }
+
+  return <Paper
     zDepth={5}
     className={"chat-window"}>
       <ChatHeader title={message.data.name || 'Unknown'} subtitle={bot.name} />
-      <MessageList messages={[{id: message.id, text: message.data.message, sent: false, timestamp: message.created_at}]} />
-      <InputMessage onSend={sendMessage} ref={inputRef}/>
+      <MessageList messages={messages()} />
+      <InputMessage onSend={sendMessage} onResolve={resolveMessage} ref={inputRef}/>
   </Paper>
-)
+}
 
 class ChatWindow extends Component {
   static propTypes = {
     message: PropTypes.object.isRequired,
     bot: PropTypes.object.isRequired,
-    onSendMessage: PropTypes.func.isRequired
+    onSendMessage: PropTypes.func.isRequired,
+    onResolveMessage: PropTypes.func.isRequired
   }
 
   constructor(props) {
@@ -189,13 +226,14 @@ class ChatWindow extends Component {
   }
 
   render() {
-    const { message, onSendMessage, bot } = this.props
+    const { message, onSendMessage, onResolveMessage, bot } = this.props
 
     if (message != null) {
       return (
         <ChatWindowComponent message={message}
                              bot={bot}
                              sendMessage={onSendMessage}
+                             resolveMessage={onResolveMessage}
                              inputRef={input => this._input = input}
                              />
       )

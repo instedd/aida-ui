@@ -9,13 +9,43 @@ const initialState = {
   items: null,
 }
 
-export default (state : T.HumanOverrideMessagesState, action : T.Action) : T.HumanOverrideMessagesState => {
+export default (state: T.HumanOverrideMessagesState, action: T.Action): T.HumanOverrideMessagesState => {
   state = state || initialState
   switch (action.type) {
     case actions.FETCH: return fetch(state, action)
     case actions.RECEIVE: return receive(state, action)
-    case actions.ANSWER: return answerMessage(state, action)
+    case actions.ANSWER_SUCCESS: return answerSuccess(state, action)
+    case actions.RESOLVE_SUCCESS: return resolveSuccess(state, action)
     default: return state
+  }
+}
+
+const resolveSuccess = (state, {messageId}) => {
+  return {
+    ...state,
+    items: omit(state.items, [messageId]),
+  }
+}
+
+const answerSuccess = (state, action) => {
+  const { messageId, message } = action
+  const { items } = state
+
+  if (items) {
+    const notification = { ...items[messageId.toString()] }
+    notification.data.messages = notification.data.messages || []
+    notification.data.messages.push(message)
+
+    return {
+      ...state,
+      items: {
+        ...state.items,
+        ...{ [notification.id]: notification }
+      }
+    }
+  }
+  else {
+    return state
   }
 }
 
@@ -32,12 +62,5 @@ const fetch = (state, action) => {
   return {
     ...state,
     fetching: true,
-  }
-}
-
-const answerMessage = (state, {messageId}) => {
-  return {
-    ...state,
-    items: omit(state.items, [messageId]),
   }
 }

@@ -608,6 +608,44 @@
       "required": [ "timestamp", "bot_id", "session_id", "skill_id", "message" ]
     },
 
+    "human_override_message": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "created_at": "string",
+        "data": { "$ref": "#/definitions/notification_data" }
+      },
+      "additionalProperties": false,
+      "required": [ "id", "data" ]
+    },
+
+    "notification_data": {
+      "type": "object",
+      "properties": {
+        "session_id": { "type": "string" },
+        "message": { "type": "string" },
+        "name": { "type": "string" },
+        "messages": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/directional_message" }
+        }
+      },
+      "additionalProperties": false,
+      "required": [ "session_id", "message" ]
+    },
+
+    "directional_message": {
+      "type": "object",
+      "properties": {
+        "content": { "type": "string" },
+        "direction": { "type": "string" },
+        "type": { "type": "string" },
+        "timestamp": { "type": "string" }
+      },
+      "additionalProperties": false,
+      "required": [ "content", "direction", "type" ]
+    },
+
     "translation_behaviours": {
       "type": "array",
       "items": {

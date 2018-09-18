@@ -2,13 +2,42 @@ class Api::NotificationsController < ActionController::Base
   before_action :set_raven_context
   rescue_from ActionController::ParameterMissing, with: :render_unprocessable_entity_response
 
+  def create_message
+    bot = Bot.find_by_notifications_secret(params[:notifications_secret])
+    return render json: {error: "Unknown notification secret"}, status: :unauthorized unless bot
+
+    notification = Notification.find_by uuid: params[:uuid]
+    return render json: {error: "Notification not found"}, status: :not_found unless notification
+    return render json: {error: "Invalid notification secret"}, status: :unauthorized unless bot == notification.bot
+    return render json: {error: "Unsupported notification type"}, status: :bad_request if notification.type != 'human_override'
+
+    notification.add_message!(JSON.parse(request.raw_post))
+
+    if notification.save
+      render json: {result: :ok}
+    else
+      render json: notification.errors, status: :unprocessable_entity
+    end
+  end
+
   def create
     bot = Bot.find_by_notifications_secret(params[:notifications_secret])
     return render json: {error: "Unknown notification secret"}, status: :unauthorized unless bot
 
     content = JSON.parse(request.raw_post) rescue notification_params
 
-    @notification = bot.notifications.create(content)
+    pending_human_override_for_session = Notification.pending_human_override_for_session(content['session_id']).first
+
+    if (content['type'] == 'human_override' && pending_human_override_for_session)
+      @notification = pending_human_override_for_session
+      @notification.add_message!({
+        "type"=>"text",
+        "direction"=>"uto",
+        "content"=>content['data']['message']
+      })
+    else
+      @notification = bot.notifications.create(content)
+    end
 
     if @notification.save
       alert_by_email_if_needed
@@ -16,6 +45,7 @@ class Api::NotificationsController < ActionController::Base
     else
       render json: @notification.errors, status: :unprocessable_entity
     end
+
   end
 
   def alert_by_email_if_needed

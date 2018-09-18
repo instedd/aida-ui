@@ -70,6 +70,7 @@ Rails.application.routes.draw do
     resources :messages, only: [:index] do
       member do
         post :answer
+        post :resolve
       end
     end
   end
@@ -88,6 +89,7 @@ Rails.application.routes.draw do
   get "/invitation/:token", to: 'welcome#index', as: 'invitation'
 
   post '/notifications/:notifications_secret', to: 'api/notifications#create', as: 'notifications_create'
+  post '/notifications/:notifications_secret/messages/:uuid', to: 'api/notifications#create_message', as: 'notifications_create_message'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

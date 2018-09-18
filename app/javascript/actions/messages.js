@@ -1,10 +1,11 @@
 // @flow
 import * as T from '../utils/types'
 import * as api from '../utils/api'
-import * as routes from '../utils/routes'
+import { pushNotification } from './notifications'
 
 export const FETCH = 'MESSAGES_FETCH'
-export const ANSWER = 'MESSAGES_ANSWER'
+export const ANSWER_SUCCESS = 'MESSAGES_ANSWER_SUCCESS'
+export const RESOLVE_SUCCESS = 'MESSAGES_RESOLVE_SUCCESS'
 export const RECEIVE = 'MESSAGES_RECEIVE'
 export const RECEIVE_ERROR = 'MESSAGES_RECEIVE_ERROR'
 
@@ -35,14 +36,34 @@ export const fetchMessages = () => (dispatch : T.Dispatch, getState : T.GetState
             .catch(error => dispatch(_messagesReceiveError()))
 }
 
-export const _answerMessage = (messageId : number, answer : string) : T.HumanOverrideMessageAction => ({
-  type: ANSWER,
+export const _answerMessageSuccess = (messageId : number, message : T.DirectionalMessage) : T.HumanOverrideMessageAction => ({
+  type: ANSWER_SUCCESS,
   messageId,
-  answer
+  message
 })
 
 export const answerMessage = (messageId : number, answer : string) => (dispatch : T.Dispatch, getState : T.GetState) => {
-  dispatch(_answerMessage(messageId, answer))
-
   api.answerMessage(messageId, answer)
+    .then((result) => {
+      dispatch(_answerMessageSuccess(messageId, result.message))
+    })
+    .catch(() => {
+      dispatch(pushNotification('Answer could not be sent'))
+    })
+}
+
+export const _resolveMessageSuccess = (messageId : number) : T.HumanOverrideMessageAction => ({
+  type: RESOLVE_SUCCESS,
+  messageId
+})
+
+export const resolveMessage = (messageId : number, onResolveSuccess : () => void) => (dispatch : T.Dispatch, getState : T.GetState) => {
+  api.resolveMessage(messageId)
+    .then(() => {
+      dispatch(_resolveMessageSuccess(messageId))
+      onResolveSuccess()
+    })
+    .catch(() => {
+      dispatch(pushNotification('Message could not be resolved'))
+    })
 }
