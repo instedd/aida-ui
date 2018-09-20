@@ -26,6 +26,8 @@ services:
       SETTINGS__BACKEND__PUBLIC_CONTENT_URL: http://app.aida.lvh.me/content
       SETTINGS__BASE_URL: http://ui.aidaui.lvh.me:3000/
     stdin_open: true
+    depends_on:
+      - redis
 
   webpack:
     <<: *base
@@ -40,6 +42,9 @@ services:
       POSTGRES_PASSWORD:
     volumes:
       - db:/var/lib/postgresql/data
+
+  redis:
+    image: redis:4
 
   backend:
     image: instedd/aida:dev
