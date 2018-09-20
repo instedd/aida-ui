@@ -92,6 +92,10 @@ class MessagesComponent extends Component {
                     onResolveMessage={() => {
                       actions.resolveMessage(this.state.message.id, () => this.setState({ message: null, selected: null }))
                     }}
+                    onReceiveBroadcastMessage={(message) => {
+                      actions.receiveBroadcast(this.state.message.id, message)
+                    }
+                    }
                   />
                 : ''
               }

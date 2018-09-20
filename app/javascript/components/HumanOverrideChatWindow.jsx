@@ -163,7 +163,7 @@ class InputMessage extends Component {
   }
 }
 
-const ChatWindowComponent = ({ sendMessage, resolveMessage, bot, message, inputRef }) => {
+const ChatWindowComponent = ({ sendMessage, resolveMessage, bot, message, inputRef, receiveBroadcastMessage }) => {
 
   const messages = () => {
 
@@ -188,7 +188,7 @@ const ChatWindowComponent = ({ sendMessage, resolveMessage, bot, message, inputR
     className={"chat-window"}>
       <ChatHeader title={message.data.name || 'Unknown'} subtitle={bot.name} />
       <MessageList messages={messages()} />
-      <InputMessage onSend={sendMessage} onResolve={resolveMessage} ref={inputRef}/>
+      <InputMessage onSend={sendMessage} onResolve={resolveMessage} ref={inputRef} />
   </Paper>
 }
 
@@ -197,7 +197,8 @@ class ChatWindow extends Component {
     message: PropTypes.object.isRequired,
     bot: PropTypes.object.isRequired,
     onSendMessage: PropTypes.func.isRequired,
-    onResolveMessage: PropTypes.func.isRequired
+    onResolveMessage: PropTypes.func.isRequired,
+    onReceiveBroadcastMessage: PropTypes.func.isRequired
   }
 
   constructor(props) {
@@ -209,12 +210,25 @@ class ChatWindow extends Component {
     if (this._wantsFocus) {
       this.focus()
     }
+
+    this.setChannel(this.props)
   }
 
   componentWillReceiveProps(nextProps) {
     if (!this.props.message && nextProps.message) {
       this._wantsFocus = true
       this.focus()
+    }
+
+    if(this.props.message && this.subscription) {
+      App.cable.subscriptions.remove(this.subscription)
+    }
+    this.setChannel(nextProps)
+  }
+
+  setChannel(props) {
+    if(props.message) {
+      this.subscription = App.cable.subscriptions.create({ channel: "HumanOverrideChannel", room: props.message.id }, { received: (data) => props.onReceiveBroadcastMessage(data) })
     }
   }
 
@@ -226,7 +240,7 @@ class ChatWindow extends Component {
   }
 
   render() {
-    const { message, onSendMessage, onResolveMessage, bot } = this.props
+    const { message, onSendMessage, onResolveMessage, bot, onReceiveBroadcastMessage } = this.props
 
     if (message != null) {
       return (
@@ -235,6 +249,7 @@ class ChatWindow extends Component {
                              sendMessage={onSendMessage}
                              resolveMessage={onResolveMessage}
                              inputRef={input => this._input = input}
+                             receiveBroadcastMessage={onReceiveBroadcastMessage}
                              />
       )
     } else {

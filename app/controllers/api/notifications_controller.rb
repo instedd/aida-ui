@@ -13,6 +13,8 @@ class Api::NotificationsController < ActionController::Base
 
     notification.add_message!(JSON.parse(request.raw_post))
 
+    ActionCable.server.broadcast("human_override_channel_#{notification.id}", notification.data['messages'].last)
+
     if notification.save
       render json: {result: :ok}
     else
@@ -26,7 +28,7 @@ class Api::NotificationsController < ActionController::Base
 
     content = JSON.parse(request.raw_post) rescue notification_params
 
-    pending_human_override_for_session = Notification.pending_human_override_for_session(content['session_id']).first
+    pending_human_override_for_session = Notification.pending_human_override_for_session(content['data']['session_id']).first
 
     if (content['type'] == 'human_override' && pending_human_override_for_session)
       @notification = pending_human_override_for_session

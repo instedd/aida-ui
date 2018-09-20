@@ -55,6 +55,8 @@ class Api::MessagesController < ApplicationApiController
       content: params[:answer]
     })
 
+    ActionCable.server.broadcast("human_override_channel_#{@notification.id}", @notification.data['messages'].last)
+
     if @notification.save
       render json: { message: @notification.messages.last }
     else
