@@ -13,6 +13,8 @@ class Api::NotificationsController < ActionController::Base
 
     notification.add_message!(JSON.parse(request.raw_post))
 
+    ActionCable.server.broadcast("human_override_channel_#{notification.id}", notification.data['messages'].last)
+
     if notification.save
       render json: {result: :ok}
     else

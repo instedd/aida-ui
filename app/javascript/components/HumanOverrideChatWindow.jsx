@@ -209,6 +209,7 @@ class ChatWindow extends Component {
     if (this._wantsFocus) {
       this.focus()
     }
+    App.cable.subscriptions.create({ channel: "HumanOverrideChannel", room: this.props.message.id }, { received: (data) => console.log(data) })
   }
 
   componentWillReceiveProps(nextProps) {
