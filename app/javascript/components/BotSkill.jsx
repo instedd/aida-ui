@@ -60,7 +60,7 @@ const mapStateToProps = (state, {skillId, errors}) => {
     return {
       loading: false,
       skill: items[skillId],
-      errors: errors = errors.filter(e => e.path[0] == `skills/${errorIndex}`)
+      errors: errors = errors.filter(e => e.path[0] == `skills/${errorIndex}` || (items[skillId].kind == 'language_detector' && e.path[0].startsWith('languages/')))
     }
   } else {
     return { loading: true }
