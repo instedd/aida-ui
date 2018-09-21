@@ -14,7 +14,6 @@ export default (state: T.HumanOverrideMessagesState, action: T.Action): T.HumanO
   switch (action.type) {
     case actions.FETCH: return fetch(state, action)
     case actions.RECEIVE: return receive(state, action)
-    case actions.ANSWER_SUCCESS: return addMessage(state, action)
     case actions.RESOLVE_SUCCESS: return resolveSuccess(state, action)
     case actions.RECEIVE_BROADCAST: return addMessage(state, action)
     default: return state

@@ -4,7 +4,6 @@ import * as api from '../utils/api'
 import { pushNotification } from './notifications'
 
 export const FETCH = 'MESSAGES_FETCH'
-export const ANSWER_SUCCESS = 'MESSAGES_ANSWER_SUCCESS'
 export const RESOLVE_SUCCESS = 'MESSAGES_RESOLVE_SUCCESS'
 export const RECEIVE = 'MESSAGES_RECEIVE'
 export const RECEIVE_ERROR = 'MESSAGES_RECEIVE_ERROR'
@@ -37,17 +36,8 @@ export const fetchMessages = () => (dispatch : T.Dispatch, getState : T.GetState
             .catch(error => dispatch(_messagesReceiveError()))
 }
 
-export const _answerMessageSuccess = (messageId : number, message : T.DirectionalMessage) : T.HumanOverrideMessageAction => ({
-  type: ANSWER_SUCCESS,
-  messageId,
-  message
-})
-
 export const answerMessage = (messageId : number, answer : string) => (dispatch : T.Dispatch, getState : T.GetState) => {
   api.answerMessage(messageId, answer)
-    .then((result) => {
-      dispatch(_answerMessageSuccess(messageId, result.message))
-    })
     .catch(() => {
       dispatch(pushNotification('Answer could not be sent'))
     })
