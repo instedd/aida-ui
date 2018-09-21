@@ -13,7 +13,7 @@ export const _messagesFetch = () : T.HumanOverrideMessageAction => ({
   type: FETCH
 })
 
-export const _messagesReceive = (items : T.ById<T.HumanOverrideMessage>) : T.HumanOverrideMessageAction => ({
+export const _messagesReceive = (items : T.ById<T.HumanOverrideNotification>) : T.HumanOverrideMessageAction => ({
   type: RECEIVE,
   items
 })

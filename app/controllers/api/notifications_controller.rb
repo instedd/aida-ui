@@ -27,8 +27,9 @@ class Api::NotificationsController < ActionController::Base
     return render json: {error: "Unknown notification secret"}, status: :unauthorized unless bot
 
     content = JSON.parse(request.raw_post) rescue notification_params
+    return render json: {error: "Unsupported notification data"}, status: :unprocessable_entity unless valid_content?(content)
 
-    pending_human_override_for_session = Notification.pending_human_override_for_session(content['session_id']).first
+    pending_human_override_for_session = Notification.pending_human_override_for_session(content['data']['session_id']).first
 
     if (content['type'] == 'human_override' && pending_human_override_for_session)
       @notification = pending_human_override_for_session
@@ -37,8 +38,10 @@ class Api::NotificationsController < ActionController::Base
         "direction"=>"uto",
         "content"=>content['data']['message']
       })
+      ActionCable.server.broadcast("human_override_channel_#{@notification.id}", @notification.data['messages'].last)
     else
       @notification = bot.notifications.create(content)
+      @notification.session_uuid = content['data']['session_id']
     end
 
     if @notification.save
@@ -59,6 +62,11 @@ class Api::NotificationsController < ActionController::Base
   end
 
   private
+
+    def valid_content?(content)
+      JSON::Validator.validate(Rails.root.join("app", "schemas", "types.json").read, content['data'], fragment: "#/definitions/notification_data")
+    end
+
     def notification_params
       the_params = params.require(:notification).permit(:type)
       the_params[:data] = params.require(:notification).fetch(:data, {}).permit!

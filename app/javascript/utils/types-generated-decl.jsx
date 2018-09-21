@@ -274,17 +274,25 @@ export type BotErrorLog = {
   message: string;
 };
 
-export type HumanOverrideMessage = {
-  id: number;
-  created_at?: any;
-  data: NotificationData;
+export type PolicyEnforcementData = {
+  action: string;
+  reason?: string;
 };
 
-export type NotificationData = {
+export type HumanOverrideData = {
   session_id: string;
   message: string;
   name?: string;
+  bot_id?: string;
   messages?: Array<DirectionalMessage>;
+};
+
+export type NotificationData = PolicyEnforcementData | HumanOverrideData;
+
+export type HumanOverrideNotification = {
+  id: number;
+  created_at?: any;
+  data: HumanOverrideData;
 };
 
 export type DirectionalMessage = {
