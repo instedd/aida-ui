@@ -69,6 +69,12 @@ class MessagesComponent extends Component {
     } else {
       const messageList = Object.values(messages)
 
+      messageList.forEach(function(message) {
+        if (!App.cable.subscriptions.subscriptions.some(s => s.identifier == `{"channel":"HumanOverrideChannel","room":${message.id}}`)) {
+          App.cable.subscriptions.create({ channel: "HumanOverrideChannel", room: message.id }, { received: (data) => actions.receiveBroadcast(message.id, data) })
+        }
+      })
+
       let content
       if (messageList.length == 0) {
         content = (

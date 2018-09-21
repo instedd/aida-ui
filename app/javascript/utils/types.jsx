@@ -238,6 +238,10 @@ export type HumanOverrideMessageAction = {
   messageId: number,
   message: T.DirectionalMessage
 } | {
+  type: 'MESSAGES_RECEIVE_BROADCAST',
+  messageId: number,
+  message: T.DirectionalMessage
+} | {
   type: 'MESSAGES_RESOLVE_SUCCESS',
   messageId: number
 } | {

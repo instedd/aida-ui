@@ -8,6 +8,7 @@ export const ANSWER_SUCCESS = 'MESSAGES_ANSWER_SUCCESS'
 export const RESOLVE_SUCCESS = 'MESSAGES_RESOLVE_SUCCESS'
 export const RECEIVE = 'MESSAGES_RECEIVE'
 export const RECEIVE_ERROR = 'MESSAGES_RECEIVE_ERROR'
+export const RECEIVE_BROADCAST = 'MESSAGES_RECEIVE_BROADCAST'
 
 export const _messagesFetch = () : T.HumanOverrideMessageAction => ({
   type: FETCH
@@ -50,6 +51,16 @@ export const answerMessage = (messageId : number, answer : string) => (dispatch 
     .catch(() => {
       dispatch(pushNotification('Answer could not be sent'))
     })
+}
+
+export const _receiveBroadcast = (messageId : number, message : T.DirectionalMessage) : T.HumanOverrideMessageAction => ({
+  type: RECEIVE_BROADCAST,
+  messageId,
+  message
+})
+
+export const receiveBroadcast = (messageId : number, message : T.DirectionalMessage) => (dispatch : T.Dispatch, getState : T.GetState) => {
+    dispatch(_receiveBroadcast(messageId, message))
 }
 
 export const _resolveMessageSuccess = (messageId : number) : T.HumanOverrideMessageAction => ({

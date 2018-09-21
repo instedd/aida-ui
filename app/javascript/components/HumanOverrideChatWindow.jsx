@@ -188,7 +188,7 @@ const ChatWindowComponent = ({ sendMessage, resolveMessage, bot, message, inputR
     className={"chat-window"}>
       <ChatHeader title={message.data.name || 'Unknown'} subtitle={bot.name} />
       <MessageList messages={messages()} />
-      <InputMessage onSend={sendMessage} onResolve={resolveMessage} ref={inputRef}/>
+      <InputMessage onSend={sendMessage} onResolve={resolveMessage} ref={inputRef} />
   </Paper>
 }
 
@@ -209,7 +209,6 @@ class ChatWindow extends Component {
     if (this._wantsFocus) {
       this.focus()
     }
-    App.cable.subscriptions.create({ channel: "HumanOverrideChannel", room: this.props.message.id }, { received: (data) => console.log(data) })
   }
 
   componentWillReceiveProps(nextProps) {
