@@ -234,7 +234,7 @@ export type FrontDeskAction = {
 export type HumanOverrideMessageAction = {
   type: 'MESSAGES_FETCH',
 } | {
-  type: 'MESSAGES_RECEIVE_BROADCAST',
+  type: 'MESSAGES_ADD_SUCCESS',
   messageId: number,
   message: T.DirectionalMessage
 } | {

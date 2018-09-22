@@ -28,6 +28,12 @@ class Api::MessagesController < ApplicationApiController
       render json: {result: :error}, status: :bad_request and return
     end
 
+    ActionCable.server.broadcast("human_override_channel_#{@notification.id}", {
+      type: 'action',
+      direction: 'otb',
+      content: 'resolve'
+    })
+
     if @notification.save
       render json: {}
     else

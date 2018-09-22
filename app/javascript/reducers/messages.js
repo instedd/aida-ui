@@ -15,7 +15,7 @@ export default (state: T.HumanOverrideMessagesState, action: T.Action): T.HumanO
     case actions.FETCH: return fetch(state, action)
     case actions.RECEIVE: return receive(state, action)
     case actions.RESOLVE_SUCCESS: return resolveSuccess(state, action)
-    case actions.RECEIVE_BROADCAST: return addMessage(state, action)
+    case actions.ADD_SUCCESS: return addSuccess(state, action)
     default: return state
   }
 }
@@ -27,7 +27,7 @@ const resolveSuccess = (state, {messageId}) => {
   }
 }
 
-const addMessage = (state, action) => {
+const addSuccess = (state, action) => {
   const { messageId, message } = action
   const { items } = state
 

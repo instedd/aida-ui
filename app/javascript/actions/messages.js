@@ -7,7 +7,7 @@ export const FETCH = 'MESSAGES_FETCH'
 export const RESOLVE_SUCCESS = 'MESSAGES_RESOLVE_SUCCESS'
 export const RECEIVE = 'MESSAGES_RECEIVE'
 export const RECEIVE_ERROR = 'MESSAGES_RECEIVE_ERROR'
-export const RECEIVE_BROADCAST = 'MESSAGES_RECEIVE_BROADCAST'
+export const ADD_SUCCESS = 'MESSAGES_ADD_SUCCESS'
 
 export const _messagesFetch = () : T.HumanOverrideMessageAction => ({
   type: FETCH
@@ -43,14 +43,14 @@ export const answerMessage = (messageId : number, answer : string) => (dispatch 
     })
 }
 
-export const _receiveBroadcast = (messageId : number, message : T.DirectionalMessage) : T.HumanOverrideMessageAction => ({
-  type: RECEIVE_BROADCAST,
+export const _addMessageSuccess = (messageId : number, message : T.DirectionalMessage) : T.HumanOverrideMessageAction => ({
+  type: ADD_SUCCESS,
   messageId,
   message
 })
 
-export const receiveBroadcast = (messageId : number, message : T.DirectionalMessage) => (dispatch : T.Dispatch, getState : T.GetState) => {
-    dispatch(_receiveBroadcast(messageId, message))
+export const addMessageSuccess = (messageId : number, message : T.DirectionalMessage) => (dispatch : T.Dispatch, getState : T.GetState) => {
+    dispatch(_addMessageSuccess(messageId, message))
 }
 
 export const _resolveMessageSuccess = (messageId : number) : T.HumanOverrideMessageAction => ({
@@ -58,12 +58,12 @@ export const _resolveMessageSuccess = (messageId : number) : T.HumanOverrideMess
   messageId
 })
 
-export const resolveMessage = (messageId : number, onResolveSuccess : () => void) => (dispatch : T.Dispatch, getState : T.GetState) => {
+export const resolveMessageSuccess = (messageId : number) => (dispatch : T.Dispatch, getState : T.GetState) => {
+  dispatch(_resolveMessageSuccess(messageId))
+}
+
+export const resolveMessage = (messageId : number) => (dispatch : T.Dispatch, getState : T.GetState) => {
   api.resolveMessage(messageId)
-    .then(() => {
-      dispatch(_resolveMessageSuccess(messageId))
-      onResolveSuccess()
-    })
     .catch(() => {
       dispatch(pushNotification('Message could not be resolved'))
     })
