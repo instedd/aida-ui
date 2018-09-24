@@ -3,16 +3,8 @@
   var baseUrl = '<%= j Settings.base_url %>';
   var backendContentUrl = '<%= j Settings.backend.public_content_url %>';
   var previewSocketUrl = '<%= j Settings.backend.public_socket_url %>';
-  var userId = <%= current_user.id %>;
-  var userEmail = '<%=j current_user.email %>';
-  var userName = '<%=j current_user.display_name %>';
   var version = '<%=j VersionHelper.version_name %>';
-  Raven.setUserContext({
-    id: userId,
-    email: userEmail,
-    username: userName
-  });
-  Raven.setExtraContext({version: version})
-  var webChat = false;
+  Raven.setExtraContext({version: version});
+  var webChat = true;
 <% end -%>
 <%= javascript_pack_tag 'application' %>

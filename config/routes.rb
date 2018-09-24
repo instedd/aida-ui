@@ -83,6 +83,7 @@ Rails.application.routes.draw do
 
   root to: 'welcome#index'
   get "/b(/*path)", to: 'welcome#index'
+  get "/c(/*path)", to: 'welcome#chat'
   get "/b/:bot_id/behaviour", to: 'welcome#index', as: 'bot_behaviour'
   get "/settings(/*path)", to: 'welcome#index'
   get "/messages", to: 'welcome#index'

@@ -14,8 +14,9 @@ import { App, createAppStore } from '../app/application'
 
 import { authInit } from '../actions/auth'
 const store = createAppStore()
-store.dispatch(authInit(userEmail, userName))
-
+if (!webChat) {
+  store.dispatch(authInit(userEmail, userName))
+}
 
 // console.log(store.getState())
 // const unsubscribe = store.subscribe(() =>
@@ -37,4 +38,3 @@ if (module.hot) {
     console.log("Application hot updated")
   });
 }
-
