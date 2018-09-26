@@ -17,11 +17,11 @@ class Api::ChannelsController < ApplicationApiController
       channel =
         case params['channel']['kind']
         when 'facebook'
-          bot.channels.create! kind: "facebook", name: "facebook", config: {
+          bot.channels.create! kind: "facebook", name: "Facebook", config: {
             "page_id" => "", "verify_token" => SecureRandom.base58, "access_token" => ""
           }
         when 'websocket'
-          bot.channels.create! kind: "websocket", name: "websocket", config: {
+          bot.channels.create! kind: "websocket", name: "Web", config: {
             "access_token" => ""
           }
         when nil

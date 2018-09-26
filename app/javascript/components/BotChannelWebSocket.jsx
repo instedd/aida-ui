@@ -22,7 +22,7 @@ export class BotChannelWebSocket extends Component {
     const { channel, errors } = this.props
 
     return <div>
-        <Title>Setup websocket channel</Title>
+        <Title>Set up a Web channel</Title>
         <Field label="Name" value={channel.name} onChange={this.updateChannelField('name')} error={errors.filter((e) => e.path[1] == "name")} />
         <Field label="Access Token" value={channel.config.access_token} onChange={this.updateConfigField("access_token")} error={errors.filter((e) => e.path[1] == "access_token")} />
     </div>
