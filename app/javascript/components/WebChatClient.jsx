@@ -5,10 +5,36 @@ import * as actions from '../actions/webChat'
 import * as backend from '../utils/backend'
 import * as notificationsActions from '../actions/notifications'
 import socket from '../utils/socket'
+import PropTypes from 'prop-types'
 
-class ChatClient extends Component {
+class WebChatClient extends Component {
+  static propTypes = {
+    botId: PropTypes.string.isRequired,
+    accessToken: PropTypes.string.isRequired
+  }
+
   state = {
-    channel: null
+    channel: null,
+    sessionId: null
+  }
+
+  getNewSession() {
+    let { channel } = this.state
+    const { actions } = this.props
+
+    if (channel) {
+      channel
+        .push('new_session', {})
+        .receive('ok', ({ session }) => {
+          actions.newSession(session)
+          this.setState({ sessionId: session })
+        })
+        .receive('error', resp => {
+          if (this.props.visible) {
+            this.props.notificationsActions.pushNotification("Unable to start session")
+          }
+        })
+    }
   }
 
   openChannel() {
@@ -18,7 +44,7 @@ class ChatClient extends Component {
     channel.join().receive('ok', response => {
       this.props.actions.chatConnected(botId)
       channel.on('btu_msg', payload => {
-        if (payload.session == this.props.sessionId) {
+        if (payload.session == this.state.sessionId) {
           this.props.actions.receiveMessage(payload.text)
         }
       })
@@ -33,7 +59,7 @@ class ChatClient extends Component {
       this.openChannel()
     })
 
-    this.setState({ channel })
+    this.setState({ channel: channel })
   }
 
   closeChannel() {
@@ -46,24 +72,9 @@ class ChatClient extends Component {
     this.setState({ channel: null })
   }
 
-  getNewSession() {
-    const { channel } = this.state
-    const { bot } = this.props
-
-    if (channel && bot) {
-      channel
-        .push('new_session', { data: { first_name: 'John', last_name: 'Doe', gender: 'male' } })
-        .receive('error', resp => {
-          this.props.notificationsActions.pushNotification("Unable to start session")
-        })
-    } else {
-      console.error('Attempt to create a chat session with no connection')
-    }
-  }
-
   sendMessage(text) {
-    const { actions, sessionId } = this.props
-    const { channel } = this.state
+    const { actions } = this.props
+    const { channel, sessionId } = this.state
 
     if (channel) {
       actions.sendMessage(text)
@@ -74,8 +85,8 @@ class ChatClient extends Component {
   }
 
   sendAttachment(file) {
-    const { actions, sessionId, botId } = this.props
-    const { channel } = this.state
+    const { actions, botId } = this.props
+    const { channel, sessionId } = this.state
 
     if (channel) {
       // TODO: trigger "uploadingAttachment" event to some hint in the UI
@@ -116,22 +127,9 @@ class ChatClient extends Component {
   }
 }
 
-
-const mapStateToProps = (state, { botId, accessToken }) => {
-  console.log('state')
-  console.log(state)
-  const { sessionId } = state.webChat
-
-  return {
-    botId,
-    accessToken,
-    sessionId
-  }
-}
-
 const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(actions, dispatch),
   notificationsActions: bindActionCreators(notificationsActions, dispatch)
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(ChatClient)
+export default connect(null, mapDispatchToProps)(WebChatClient)

@@ -147,6 +147,13 @@ export type ChatAction = {
 }
 
 export type WebChatAction = {
+  type: 'WEB_CHAT_START',
+  botId: string,
+  accessToken: string
+} | {
+  type: 'NEW_WEB_CHAT_SESSION',
+  sessionId: string
+} | {
   type: 'WEB_CHAT_SEND_MESSAGE',
   id: number,
   text: string,

@@ -117,7 +117,7 @@ class InputMessage extends Component {
   }
 
   render() {
-    const { onSend, onSendAttachment, disabled, newSession } = this.props
+    const { onSend, onSendAttachment, disabled } = this.props
 
     const sendMessageAndClearInput = () => {
       const text = this._textfield.value.trim()
@@ -174,14 +174,14 @@ class InputMessage extends Component {
   }
 }
 
-const ChatWindowComponent = ({ sendMessage, sendAttachment, newSession, messages, disabled, inputRef }) => (
+const ChatWindowComponent = ({ sendMessage, sendAttachment, messages, disabled, inputRef }) => (
   <Paper
     zDepth={5}
     className={"chat-window"}>
     <MessageList
       messages={messages} />
     <InputMessage
-      onSend={sendMessage} onSendAttachment={sendAttachment} newSession={newSession} disabled={disabled} ref={inputRef} />
+      onSend={sendMessage} onSendAttachment={sendAttachment} disabled={disabled} ref={inputRef} />
   </Paper>
 )
 
@@ -213,14 +213,11 @@ class WebChatWindow extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { connected, sessionId, onNewSession } = nextProps
-    this._wantsFocus = true
     if (connected) {
       if (!sessionId) {
         onNewSession()
-      } else {
-        if (this._wantsFocus) {
-          this.focus()
-        }
+      } else if (this._wantsFocus) {
+        this.focus()
       }
     }
   }
@@ -245,12 +242,9 @@ class WebChatWindow extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  messages: state.chat.messages,
-  sessionId: state.chat.sessionId,
-  connected: state.chat.connected
+  messages: state.webChat.messages,
+  sessionId: state.webChat.sessionId,
+  connected: state.webChat.connected
 })
 
-const mapDispatchToProps = (dispatch) => ({
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(WebChatWindow)
+export default connect(mapStateToProps)(WebChatWindow)

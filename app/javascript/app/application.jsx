@@ -8,7 +8,7 @@ import createRavenMiddleware from "raven-for-redux"
 import { BrowserRouter, Redirect, Route, Link } from 'react-router-dom'
 import reducers from '../reducers'
 
-import { WebChat } from '../components/WebChat'
+import WebChat from '../components/WebChat'
 import { BotIndex } from '../components/BotIndex'
 import { BotLayout } from '../components/BotLayout'
 import InvitationView from '../components/InvitationView'

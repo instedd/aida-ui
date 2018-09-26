@@ -1,11 +1,14 @@
 import React, { Component } from 'react'
 import WebChatWindow from './WebChatWindow'
 import WebChatClient from './WebChatClient'
+import * as actions from '../actions/webChat'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 
-export class WebChat extends Component {
+class WebChat extends Component {
 
   render() {
-    const { botId, accessToken } = this.props
+    const { botId, accessToken, actions } = this.props
 
     const sendChatMessage = (message) => {
       if (this._chatClient) {
@@ -25,13 +28,21 @@ export class WebChat extends Component {
       }
     }
 
-    return  <div>
-              <WebChatClient botId={botId} clientRef={client => this._chatClient = client} />
-              <WebChatWindow
-                onSendMessage={sendChatMessage}
-                onSendAttachment={sendChatAttachment}
-                onNewSession={newChatSession}
-              />
+    actions.start(botId, accessToken)
+
+    return <div>
+      <WebChatClient botId={botId} accessToken={accessToken} clientRef={client => this._chatClient = client} />
+      <WebChatWindow
+        onSendMessage={sendChatMessage}
+        onSendAttachment={sendChatAttachment}
+        onNewSession={newChatSession}
+      />
     </div>
   }
 }
+
+const mapDispatchToProps = dispatch => {
+  return { actions: bindActionCreators(actions, dispatch) }
+}
+
+export default connect(null, mapDispatchToProps)(WebChat)
