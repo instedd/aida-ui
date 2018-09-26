@@ -89,7 +89,7 @@ class BotChannelComponent extends Component {
             return  <div>
                       {deleteChannelDialog}
                       <BotChannelWebSocket channel={channel} errors={errors}
-                        channelActions={channelActions} ></BotChannelWebSocket>
+                        channelActions={channelActions} bot={bot} ></BotChannelWebSocket>
                     </div>
           case 'facebook':
             return  <div>
