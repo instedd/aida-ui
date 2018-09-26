@@ -22,7 +22,7 @@ class Api::ChannelsController < ApplicationApiController
           }
         when 'websocket'
           bot.channels.create! kind: "websocket", name: "Web", config: {
-            "access_token" => ""
+            "access_token" => SecureRandom.uuid
           }
         when nil
           render json: { error: 'missing channel kind' }, status: 422 and return
