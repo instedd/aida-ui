@@ -92,5 +92,6 @@ Rails.application.routes.draw do
   post '/notifications/:notifications_secret', to: 'api/notifications#create', as: 'notifications_create'
   post '/notifications/:notifications_secret/messages/:uuid', to: 'api/notifications#create_message', as: 'notifications_create_message'
 
+  get '/s/:id' => "shortener/shortened_urls#show"
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

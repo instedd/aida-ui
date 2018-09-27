@@ -275,6 +275,8 @@ GEM
       rubyzip (~> 1.0)
     sentry-raven (2.7.1)
       faraday (>= 0.7.6, < 1.0)
+    shortener (0.8.0)
+      voight_kampff (~> 1.1.2)
     spreadsheet (1.1.5)
       ruby-ole (>= 1.0)
     spring (2.0.2)
@@ -297,6 +299,8 @@ GEM
       thread_safe (~> 0.1)
     uglifier (3.2.0)
       execjs (>= 0.3.0, < 3)
+    voight_kampff (1.1.2)
+      rack (>= 1.4, < 3.0)
     warden (1.2.7)
       rack (>= 1.0)
     web-console (3.5.1)
@@ -342,6 +346,7 @@ DEPENDENCIES
   sass-rails (~> 5.0)
   selenium-webdriver
   sentry-raven
+  shortener (~> 0.8)
   spring
   spring-watcher-listen (~> 2.0.0)
   timecop (~> 0.9)
