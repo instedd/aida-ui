@@ -89,7 +89,7 @@ class BotChannelComponent extends Component {
             return  <div>
                       {deleteChannelDialog}
                       <BotChannelWebSocket channel={channel} errors={errors}
-                        channelActions={channelActions} ></BotChannelWebSocket>
+                        channelActions={channelActions} bot={bot} ></BotChannelWebSocket>
                     </div>
           case 'facebook':
             return  <div>
@@ -113,7 +113,7 @@ const mapStateToProps = ({channels, bots}, {bot, match}) => {
     }
   }
 
-  const errorIndex = sortBy(Object.values(channels.items), 'id').findIndex(channel => channel.id == match.params.c_id)
+  const errorIndex = channels.items ? sortBy(Object.values(channels.items), 'id').findIndex(channel => channel.id == match.params.c_id) : null
 
   return {
     permitted: hasPermission(bot, 'can_publish'),

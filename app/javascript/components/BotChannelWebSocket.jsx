@@ -19,12 +19,12 @@ export class BotChannelWebSocket extends Component {
   }
 
   render() {
-    const { channel, errors } = this.props
+    const { channel, errors, bot } = this.props
 
     return <div>
-        <Title>Setup websocket channel</Title>
+        <Title>Set up a Web channel</Title>
         <Field label="Name" value={channel.name} onChange={this.updateChannelField('name')} error={errors.filter((e) => e.path[1] == "name")} />
-        <Field label="Access Token" value={channel.config.access_token} onChange={this.updateConfigField("access_token")} error={errors.filter((e) => e.path[1] == "access_token")} />
+        <Field label="Access Url" defaultValue={`${location.protocol}//${location.host}/c/${bot.uuid}/${channel.config.access_token}`} readOnly />
     </div>
   }
 }

@@ -44,7 +44,7 @@ export class BotChannelIndexComponent extends Component {
         >
           <List>
             <ListItem primaryText="Facebook" onClick={() => createChannel('facebook')} />
-            <ListItem primaryText="Web Socket" onClick={() => createChannel('websocket')} />
+            <ListItem primaryText="Web" onClick={() => createChannel('websocket')} />
           </List>
         </DialogContainer>
       )
@@ -81,6 +81,12 @@ export class BotChannelIndexComponent extends Component {
         return hasErrors ? (<FontIcon className="error-in-bot-channel-index">lens</FontIcon>) : null
       }
 
+      const channelType = kind => {
+        if (kind == 'websocket') return 'Web'
+
+        return kind.charAt(0).toUpperCase() + kind.slice(1)
+      }
+
       const content = () => {
         const title = channelList.length == 1 ? '1 channel' : `${channelList.length} channels`
           return  <Listing items={channelList} title={title}
@@ -88,7 +94,7 @@ export class BotChannelIndexComponent extends Component {
                   >
                     <Column title="" render={c => errorIcon(c.id)} />
                     <Column title="Name" render={c => c.name} />
-                    <Column title="Type" render={c => c.kind} />
+                    <Column title="Type" render={c => channelType(c.kind)} />
                     <Column title="Uses" render={c => null} />
                     <Column title="Last activity date" render={c => null} />
                   </Listing>

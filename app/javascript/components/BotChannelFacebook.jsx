@@ -54,7 +54,7 @@ export class BotChannelFacebook extends Component {
         </div>
     } else {
       return <div>
-        <Title>Setup a Facebook channel</Title>
+        <Title>Set up a Facebook channel</Title>
         <Headline>
           In order to setup this channel you first need
           to <a href="https://www.facebook.com/business/products/pages" target="_blank" className="hrefLink">create a Facebook page</a> and
