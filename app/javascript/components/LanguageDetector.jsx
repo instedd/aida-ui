@@ -7,10 +7,11 @@ import Headline from '../ui/Headline'
 import Field from '../ui/Field'
 import KeyValueListField from '../ui/KeyValueListField'
 import LanguageSelector from './LanguageSelector'
+import { connect } from 'react-redux'
 
-export default class LanguageDetector extends Component {
+class LanguageDetector extends Component {
   render() {
-    const { skill, actions, errors } = this.props
+    const { skill, actions, witAiErrors, errors } = this.props
     const { name, config } = skill
 
     const updateConfig = (key) => {
@@ -42,7 +43,7 @@ export default class LanguageDetector extends Component {
     }
 
     const renderError = () => {
-      if (errors.some(e => e.path[0] == 'wit_ai' && e.message == 'multilingual-bot')) {
+      if (witAiErrors.some(e => e.message == 'multilingual-bot')) {
         return <label className="error-message">Wit.ai only works with english bots</label>
       }
     }
@@ -67,8 +68,8 @@ export default class LanguageDetector extends Component {
           items={config.languages}
           createItemLabel="Add language" onCreateItem={addLanguage}
           canRemoveItem={(item, index) => index > 0} onRemoveItem={(item, index) => removeLanguage(index)}
-          renderKey={({code, keywords}, index) => <Field className="editable-field lang-text-input" id="ld-key" value={keywords} onChange={updateLanguage(index, 'keywords')} resize={{min: 100, max: 200}} />}
-          renderValue={({code, keywords}, index) => <LanguageSelector code={code} onChange={updateLanguage(index, 'code')} />}
+          renderKey={({code, keywords}, index) => <Field className="editable-field lang-text-input" id="ld-key" value={keywords} onChange={updateLanguage(index, 'keywords')} resize={{min: 100, max: 200}} error={errors.filter(e => e.path[1] && e.path[1].startsWith(`languages/${code}`))} />}
+          renderValue={({code, keywords}, index) => <LanguageSelector code={code} onChange={updateLanguage(index, 'code')} error={errors.filter(e => e.path[0].startsWith(`languages/${index}`))} />}
         />
 
         {renderError()}
@@ -82,3 +83,13 @@ export default class LanguageDetector extends Component {
     )
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    witAiErrors: (state.bots && state.bots.errors) ? state.bots.errors.filter(e => e.path == 'wit_ai') : []
+  }
+}
+
+export default connect(
+  mapStateToProps
+)(LanguageDetector)

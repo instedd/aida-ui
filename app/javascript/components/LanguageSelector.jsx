@@ -25,7 +25,7 @@ export default class LanguageSelector extends Component {
   }
 
   render() {
-    const { onChange } = this.props
+    const { onChange, error } = this.props
     const { query } = this.state
     const lowerQuery = (query || '').toLocaleLowerCase()
     const filtered = filter(LANGUAGES, lang => {
@@ -57,7 +57,10 @@ export default class LanguageSelector extends Component {
                     className="lang-text-input"
                     placeholder="Language"
                     value={this.state.query}
-                    onChange={query => this.setState({ query })} />
+                    onChange={query => this.setState({ query })}
+                    error={error && error.length > 0}
+                    errorText='Required field'
+               />
         </DropdownMenu>
         { this.state.lang
           ? <span className='lang-code'>{this.state.lang.code}</span>

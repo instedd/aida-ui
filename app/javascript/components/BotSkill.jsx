@@ -18,22 +18,22 @@ import ScheduledMessages from './ScheduledMessages'
 import DecisionTree from './DecisionTree'
 import sortBy from 'lodash/sortBy'
 
-const SkillComponent = ({skill, actions, botActions, errors, bot, errorIndex}) => {
+const SkillComponent = ({skill, actions, botActions, errors, bot}) => {
   const { kind } = skill
 
   switch (kind) {
     case 'keyword_responder':
-      return (<KeywordResponder skill={skill} actions={actions} errors={errors.filter(e => e.path[0] == `skills/${errorIndex}`)} bot={bot} botActions={botActions} />)
+      return (<KeywordResponder skill={skill} actions={actions} errors={errors} bot={bot} botActions={botActions} />)
     case 'human_override':
-      return (<HumanOverride skill={skill} actions={actions} errors={errors.filter(e => e.path[0] == `skills/${errorIndex}`)} bot={bot} botActions={botActions} />)
+      return (<HumanOverride skill={skill} actions={actions} errors={errors} bot={bot} botActions={botActions} />)
     case 'language_detector':
       return (<LanguageDetector skill={skill} actions={actions} errors={errors} />)
     case 'survey':
-      return (<Survey skill={skill} actions={actions} errors={errors.filter(e => e.path[0] == `skills/${errorIndex}`)} bot={bot} botActions={botActions} />)
+      return (<Survey skill={skill} actions={actions} errors={errors} bot={bot} botActions={botActions} />)
     case 'scheduled_messages':
-      return (<ScheduledMessages skill={skill} actions={actions} errors={errors.filter(e => e.path[0] == `skills/${errorIndex}`)} />)
+      return (<ScheduledMessages skill={skill} actions={actions} errors={errors} />)
     case 'decision_tree':
-      return (<DecisionTree skill={skill} actions={actions} errors={errors.filter(e => e.path[0] == `skills/${errorIndex}`)} bot={bot} botActions={botActions} />)
+      return (<DecisionTree skill={skill} actions={actions} errors={errors} bot={bot} botActions={botActions} />)
     default:
       return (<Title>{skill.name} #{skill.id}</Title>)
   }
@@ -60,8 +60,7 @@ const mapStateToProps = (state, {skillId, errors}) => {
     return {
       loading: false,
       skill: items[skillId],
-      errors: errors,
-      errorIndex: errorIndex
+      errors: errors = errors.filter(e => e.path[0] == `skills/${errorIndex}` || (items[skillId].kind == 'language_detector' && e.path[0].startsWith('languages/')))
     }
   } else {
     return { loading: true }
