@@ -175,14 +175,13 @@ class InputMessage extends Component {
 }
 
 const ChatWindowComponent = ({ sendMessage, sendAttachment, messages, disabled, inputRef }) => (
-  <Paper
-    zDepth={5}
-    className={"chat-window"}>
+  <div
+    className={"chat-window mobile-chat"}>
     <MessageList
       messages={messages} />
     <InputMessage
       onSend={sendMessage} onSendAttachment={sendAttachment} disabled={disabled} ref={inputRef} />
-  </Paper>
+  </div>
 )
 
 class WebChatWindow extends Component {

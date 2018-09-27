@@ -162,3 +162,40 @@
     }
   }
 }
+.chat-window.mobile-chat {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  .chat-window-body {
+    height: calc(100vh - 68px);
+    ul {
+      .message-bubble {
+        width: auto;
+        li {
+          position: relative;
+        }
+        .content-text {
+          width: auto;
+        }
+        .content-timestamp {
+          font-size: 12px;
+          position: absolute;
+          bottom: .3rem;
+          right: .7rem;
+        }
+        &.message-sent {
+          margin-left: 5vw;
+        }
+      }
+    } 
+  }
+  .chat-window-input {
+    bottom: 0;
+    position: fixed;
+    width: 100%;
+  }
+}
