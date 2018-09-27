@@ -234,7 +234,7 @@ export type FrontDeskAction = {
 export type HumanOverrideMessageAction = {
   type: 'MESSAGES_FETCH',
 } | {
-  type: 'MESSAGES_ANSWER_SUCCESS',
+  type: 'MESSAGES_ADD_SUCCESS',
   messageId: number,
   message: T.DirectionalMessage
 } | {
@@ -242,7 +242,7 @@ export type HumanOverrideMessageAction = {
   messageId: number
 } | {
   type: 'MESSAGES_RECEIVE',
-  items: ById<T.HumanOverrideMessage>,
+  items: ById<T.HumanOverrideNotification>,
 } | {
   type: 'MESSAGES_RECEIVE_ERROR',
 };
@@ -491,7 +491,7 @@ export type InvitationState = {
 
 export type HumanOverrideMessagesState = {
   fetching: boolean,
-  items: ?ById<T.HumanOverrideMessage>
+  items: ?ById<T.HumanOverrideNotification>
 };
 
 export type NotifState = {

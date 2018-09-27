@@ -608,23 +608,23 @@
       "required": [ "timestamp", "bot_id", "session_id", "skill_id", "message" ]
     },
 
-    "human_override_message": {
+    "policy_enforcement_data": {
       "type": "object",
       "properties": {
-        "id": { "type": "integer" },
-        "created_at": "string",
-        "data": { "$ref": "#/definitions/notification_data" }
+        "action": { "type": "string" },
+        "reason": { "type": "string" }
       },
       "additionalProperties": false,
-      "required": [ "id", "data" ]
+      "required": [ "action" ]
     },
 
-    "notification_data": {
+    "human_override_data": {
       "type": "object",
       "properties": {
         "session_id": { "type": "string" },
         "message": { "type": "string" },
         "name": { "type": "string" },
+        "bot_id": { "type": "string" },
         "messages": {
           "type": "array",
           "items": { "$ref": "#/definitions/directional_message" }
@@ -632,6 +632,24 @@
       },
       "additionalProperties": false,
       "required": [ "session_id", "message" ]
+    },
+
+    "notification_data": {
+      "oneOf": [
+        { "$ref": "#/definitions/policy_enforcement_data" },
+        { "$ref": "#/definitions/human_override_data" }
+      ]
+    },
+
+    "human_override_notification": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "created_at": "string",
+        "data": { "$ref": "#/definitions/human_override_data" }
+      },
+      "additionalProperties": false,
+      "required": [ "id", "data" ]
     },
 
     "directional_message": {

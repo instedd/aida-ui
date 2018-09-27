@@ -13,6 +13,7 @@ import HumanOverrideChatWindow from './HumanOverrideChatWindow'
 import { FontIcon, List, Subheader, Switch, ListItem, ListItemControl, MenuButton, Button } from 'react-md'
 import classNames from 'classnames/bind'
 import moment from 'moment'
+import { isEqual } from 'lodash'
 
 class MessagesBar extends Component {
   render() {
@@ -64,10 +65,31 @@ class MessagesComponent extends Component {
   render() {
     const { messages, bots, actions } = this.props
 
+    const receiveBroadcast = (messageId, message) => {
+      const resolve = isEqual(message, {
+        type: 'action',
+        direction: 'otb',
+        content: 'resolve'
+      })
+      if (resolve) {
+        actions.resolveMessageSuccess(messageId)
+        this.setState({ message: null, selected: null })
+      }
+      else {
+        actions.addMessageSuccess(messageId, message)
+      }
+    }
+
     if (!messages || !bots) {
       return <AppLayout title='Messages'><EmptyLoader>Loading messages</EmptyLoader></AppLayout>
     } else {
       const messageList = Object.values(messages)
+
+      messageList.forEach(function(message) {
+        if (!App.cable.subscriptions.subscriptions.some(s => s.identifier == `{"channel":"HumanOverrideChannel","room":${message.id}}`)) {
+          App.cable.subscriptions.create({ channel: "HumanOverrideChannel", room: message.id }, { received: (childMessage) => receiveBroadcast(message.id, childMessage) })
+        }
+      })
 
       let content
       if (messageList.length == 0) {
@@ -90,7 +112,7 @@ class MessagesComponent extends Component {
                       actions.answerMessage(this.state.message.id, answer)
                     }}
                     onResolveMessage={() => {
-                      actions.resolveMessage(this.state.message.id, () => this.setState({ message: null, selected: null }))
+                      actions.resolveMessage(this.state.message.id)
                     }}
                   />
                 : ''

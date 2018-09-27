@@ -4,16 +4,16 @@ import * as api from '../utils/api'
 import { pushNotification } from './notifications'
 
 export const FETCH = 'MESSAGES_FETCH'
-export const ANSWER_SUCCESS = 'MESSAGES_ANSWER_SUCCESS'
 export const RESOLVE_SUCCESS = 'MESSAGES_RESOLVE_SUCCESS'
 export const RECEIVE = 'MESSAGES_RECEIVE'
 export const RECEIVE_ERROR = 'MESSAGES_RECEIVE_ERROR'
+export const ADD_SUCCESS = 'MESSAGES_ADD_SUCCESS'
 
 export const _messagesFetch = () : T.HumanOverrideMessageAction => ({
   type: FETCH
 })
 
-export const _messagesReceive = (items : T.ById<T.HumanOverrideMessage>) : T.HumanOverrideMessageAction => ({
+export const _messagesReceive = (items : T.ById<T.HumanOverrideNotification>) : T.HumanOverrideMessageAction => ({
   type: RECEIVE,
   items
 })
@@ -36,20 +36,21 @@ export const fetchMessages = () => (dispatch : T.Dispatch, getState : T.GetState
             .catch(error => dispatch(_messagesReceiveError()))
 }
 
-export const _answerMessageSuccess = (messageId : number, message : T.DirectionalMessage) : T.HumanOverrideMessageAction => ({
-  type: ANSWER_SUCCESS,
+export const answerMessage = (messageId : number, answer : string) => (dispatch : T.Dispatch, getState : T.GetState) => {
+  api.answerMessage(messageId, answer)
+    .catch(() => {
+      dispatch(pushNotification('Answer could not be sent'))
+    })
+}
+
+export const _addMessageSuccess = (messageId : number, message : T.DirectionalMessage) : T.HumanOverrideMessageAction => ({
+  type: ADD_SUCCESS,
   messageId,
   message
 })
 
-export const answerMessage = (messageId : number, answer : string) => (dispatch : T.Dispatch, getState : T.GetState) => {
-  api.answerMessage(messageId, answer)
-    .then((result) => {
-      dispatch(_answerMessageSuccess(messageId, result.message))
-    })
-    .catch(() => {
-      dispatch(pushNotification('Answer could not be sent'))
-    })
+export const addMessageSuccess = (messageId : number, message : T.DirectionalMessage) => (dispatch : T.Dispatch, getState : T.GetState) => {
+    dispatch(_addMessageSuccess(messageId, message))
 }
 
 export const _resolveMessageSuccess = (messageId : number) : T.HumanOverrideMessageAction => ({
@@ -57,12 +58,12 @@ export const _resolveMessageSuccess = (messageId : number) : T.HumanOverrideMess
   messageId
 })
 
-export const resolveMessage = (messageId : number, onResolveSuccess : () => void) => (dispatch : T.Dispatch, getState : T.GetState) => {
+export const resolveMessageSuccess = (messageId : number) => (dispatch : T.Dispatch, getState : T.GetState) => {
+  dispatch(_resolveMessageSuccess(messageId))
+}
+
+export const resolveMessage = (messageId : number) => (dispatch : T.Dispatch, getState : T.GetState) => {
   api.resolveMessage(messageId)
-    .then(() => {
-      dispatch(_resolveMessageSuccess(messageId))
-      onResolveSuccess()
-    })
     .catch(() => {
       dispatch(pushNotification('Message could not be resolved'))
     })

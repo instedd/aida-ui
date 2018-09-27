@@ -188,7 +188,7 @@ const ChatWindowComponent = ({ sendMessage, resolveMessage, bot, message, inputR
     className={"chat-window"}>
       <ChatHeader title={message.data.name || 'Unknown'} subtitle={bot.name} />
       <MessageList messages={messages()} />
-      <InputMessage onSend={sendMessage} onResolve={resolveMessage} ref={inputRef}/>
+      <InputMessage onSend={sendMessage} onResolve={resolveMessage} ref={inputRef} />
   </Paper>
 }
 

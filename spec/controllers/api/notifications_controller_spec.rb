@@ -137,11 +137,19 @@ RSpec.describe Api::NotificationsController, type: :controller do
         }.to change(Notification, :count).by(1)
         expect(response).to be_success
 
-        notification = Notification.last
-        expect(notification.notification_type).to eq("human_override")
-        expect(notification.bot_id).to eq(bot.id)
-        expect(notification.data['session_id']).to eq('a session id')
-        expect(notification.data['message']).to eq('first message')
+        in_notification = JSON.parse(human_override_notification_1)
+        out_notification = Notification.last
+        expect(out_notification.notification_type).to eq(in_notification['type'])
+        expect(out_notification.bot_id).to eq(bot.id)
+        expect(out_notification.data['session_id']).to eq(in_notification['data']['session_id'])
+        expect(out_notification.data['message']).to eq(in_notification['data']['message'])
+        expect(out_notification.session_uuid).to eq(in_notification['data']['session_id'])
+      end
+
+      it "doesn't email" do
+        expect {
+          post :create, params: {notifications_secret: bot.notifications_secret}, body: human_override_notification_1
+        }.not_to change(ActionMailer::Base.deliveries, :count)
       end
 
       it "does not add messages" do
@@ -157,10 +165,13 @@ RSpec.describe Api::NotificationsController, type: :controller do
           post :create, params: {notifications_secret: bot.notifications_secret}, body: human_override_notification_2
         }.to change(Notification, :count).by(0)
 
-        data = Notification.last.data
-        expect(data['message']).to eq('first message')
-        expect(data['messages'][0].except('timestamp')).to eq({
-          "content" => "second message",
+        first_notification = JSON.parse(human_override_notification_1)
+        second_notification = JSON.parse(human_override_notification_2)
+        out_notification = Notification.last
+
+        expect(out_notification.data['message']).to eq(first_notification['data']['message'])
+        expect(out_notification.data['messages'][0].except('timestamp')).to eq({
+          "content" => second_notification['data']['message'],
           "direction" => "uto",
           "type" => "text"
         })
@@ -219,15 +230,6 @@ RSpec.describe Api::NotificationsController, type: :controller do
         }.to change(Notification, :count).by(1)
       end
 
-      it "creates a new Notification with an unknown type" do
-        expect {
-          post :create, params: {notifications_secret: bot.notifications_secret}, body: JSON.dump({ type: 'an-unknown-type', data: {}})
-        }.to change(Notification, :count).by(1)
-        expect(response).to be_success
-        expect(Notification.last.notification_type).to eq('an-unknown-type')
-        expect(Notification.last.data).to be_empty
-      end
-
       it "emails block notifications" do
         expect {
           post :create, params: {notifications_secret: bot.notifications_secret}, body: policy_enforcement_block_notification
@@ -261,15 +263,6 @@ RSpec.describe Api::NotificationsController, type: :controller do
         }.not_to change(ActionMailer::Base.deliveries, :count)
         expect(response).to be_success
       end
-
-      it "doesn't email unknown notifications" do
-        expect {
-          post :create, params: {notifications_secret: bot.notifications_secret}, body: JSON.dump({
-            type: "unknown-type"
-          })
-        }.not_to change(ActionMailer::Base.deliveries, :count)
-        expect(response).to be_success
-      end
     end
 
     context "error handling" do
@@ -285,6 +278,40 @@ RSpec.describe Api::NotificationsController, type: :controller do
           post :create, params: {notifications_secret: bot.notifications_secret}
         }.not_to change(Notification, :count)
         expect(response).not_to be_success
+      end
+
+      it "rejects notifications with no or invalid data" do
+        post :create, params: {notifications_secret: bot.notifications_secret}, body: JSON.dump({
+          type: 'other_type'
+        })
+
+        expect(response).to_not be_success
+        expect(response.status).to eq(422)
+        expect(response.body).to eq("{\"error\":\"Unsupported notification data\"}")
+
+        post :create, params: {notifications_secret: bot.notifications_secret}, body: JSON.dump({
+          type: 'other_type',
+          data: {
+            'message': 'a message'
+          }
+        })
+
+        expect(response).to_not be_success
+        expect(response.status).to eq(422)
+        expect(response.body).to eq("{\"error\":\"Unsupported notification data\"}")
+
+        post :create, params: {notifications_secret: bot.notifications_secret}, body: JSON.dump({
+          type: 'other_type',
+          data: {
+            'message': 'a message',
+            'session_id': 'a session_id',
+            'other': 'an additionalProperties'
+          }
+        })
+
+        expect(response).to_not be_success
+        expect(response.status).to eq(422)
+        expect(response.body).to eq("{\"error\":\"Unsupported notification data\"}")
       end
     end
   end
