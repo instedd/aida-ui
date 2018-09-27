@@ -11,6 +11,10 @@ class WelcomeController < ApplicationController
     end
   end
 
+  def chat
+    render :chat
+  end
+
   def login
     redirect_to login_path
   end

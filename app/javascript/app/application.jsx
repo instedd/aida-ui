@@ -8,6 +8,7 @@ import createRavenMiddleware from "raven-for-redux"
 import { BrowserRouter, Redirect, Route, Link } from 'react-router-dom'
 import reducers from '../reducers'
 
+import WebChat from '../components/WebChat'
 import { BotIndex } from '../components/BotIndex'
 import { BotLayout } from '../components/BotLayout'
 import InvitationView from '../components/InvitationView'
@@ -36,6 +37,7 @@ export const App = ({store}) => (
       <div>
         <Route exact path="/" render={() => <Redirect to="/b"/>} />
         <Route exact path="/b" component={BotIndex} />
+        <Route path="/c/:bot_id/:access_token" render={({match}) => <WebChat botId={match.params.bot_id} accessToken={match.params.access_token} />} />
         <Route path="/b/:id" component={BotLayout} />
         <Route path="/invitation/:token" render={({match}) => <InvitationView token={match.params.token} />} />
         <Route exact path="/settings/api" component={SettingsApi} />

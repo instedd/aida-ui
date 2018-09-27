@@ -146,6 +146,39 @@ export type ChatAction = {
   previewUuid: string
 }
 
+export type WebChatAction = {
+  type: 'WEB_CHAT_START',
+  botId: string,
+  accessToken: string
+} | {
+  type: 'NEW_WEB_CHAT_SESSION',
+  sessionId: string
+} | {
+  type: 'WEB_CHAT_SEND_MESSAGE',
+  id: number,
+  text: string,
+  sent: boolean,
+  timestamp: Date
+} | {
+  type: 'WEB_CHAT_RECEIVE_MESSAGE',
+  id: number,
+  text: string,
+  sent: boolean,
+  timestamp: Date
+} | {
+  type: 'WEB_CHAT_SEND_ATTACHMENT_SUCCESS',
+  id: number,
+  attachment: string,
+  sent: boolean,
+  timestamp: Date
+} | {
+  type: 'WEB_CHAT_CONNECTED',
+  previewUuid: string
+} | {
+  type: 'WEB_CHAT_DISCONNECTED',
+  previewUuid: string
+}
+
 export type CollaboratorsAction = {
   type: 'COLLABORATORS_FETCH',
   scope: Scope,
@@ -452,6 +485,13 @@ export type ChatState = {
   sessionId: ?string,
 };
 
+export type WebChatState = {
+  messages: Array<ChatMessage>,
+  botId: string,
+  accessToken: string,
+  sessionId: ?string,
+};
+
 export type CollaboratorsState = {
   fetching: boolean,
   scope: ?Scope,
@@ -540,6 +580,7 @@ export type State = {
   bots: BotsState,
   channels: ChannelsState,
   chat: ChatState,
+  webChat: WebChatState,
   collaborators: CollaboratorsState,
   errorLogs: ErrorLogsState,
   frontDesk: FrontDeskState,

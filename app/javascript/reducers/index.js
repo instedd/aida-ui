@@ -3,6 +3,7 @@ import auth from './auth'
 import bots from './bots'
 import channels from './channels'
 import chat from './chat'
+import webChat from './webChat'
 import collaborators from './collaborators'
 import errorLogs from './errorLogs'
 import frontDesk from './frontDesk'
@@ -21,6 +22,7 @@ export default combineReducers({
   bots,
   channels,
   chat,
+  webChat,
   collaborators,
   errorLogs,
   frontDesk,
