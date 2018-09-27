@@ -126,7 +126,7 @@ class SkillsBar extends Component {
       const hasWitError = (
         (skill.enabled && skill.config) &&
         ((skill.config.use_wit_ai && errors.some(e => e.path[0] == 'wit_ai')) ||
-        (skill.kind == 'language_detector' && errors.some(e => e.path[0] == 'wit_ai' && e.message == 'multilingual-bot')))
+        (skill.kind == 'language_detector' && (errors.some(e => (e.path[0] == 'wit_ai' && e.message == 'multilingual-bot') || e.path[0].startsWith('languages')))))
       )
 
       const skillErrorIndex = skills.filter(s => s.enabled).findIndex(s => s.id == skill.id)
@@ -196,7 +196,7 @@ class SkillsBar extends Component {
           skill={{"kind": "front_desk"}}
           icon={skillIcon("front_desk")}
           onClick={() => history.push(routes.botFrontDesk(bot.id))}
-          hasError={errors.some(e => e.path[0].startsWith("front_desk"))} />
+          hasError={errors.some(e => e.path[0].startsWith("front_desk") && e.path[0].endsWith("/en"))} />
         {skillsItems}
         {missingSkill}
         <DropdownMenu id="add-skill-menu"
