@@ -31,6 +31,7 @@ export type FacebookChannelConfig = {
 
 export type WebsocketChannelConfig = {
   access_token: string;
+  url_key: string;
 };
 
 export type FrontDeskConfig = {

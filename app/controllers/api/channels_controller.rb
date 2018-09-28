@@ -21,8 +21,11 @@ class Api::ChannelsController < ApplicationApiController
             "page_id" => "", "verify_token" => SecureRandom.base58, "access_token" => ""
           }
         when 'websocket'
+          access_token = SecureRandom.uuid
+
           bot.channels.create! kind: "websocket", name: "Web", config: {
-            "access_token" => SecureRandom.uuid
+            "access_token" => access_token,
+            "url_key" => bot.uuid ? Shortener::ShortenedUrl.generate("/c/#{bot.uuid}/#{access_token}").unique_key : ""
           }
         when nil
           render json: { error: 'missing channel kind' }, status: 422 and return

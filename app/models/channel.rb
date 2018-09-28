@@ -3,10 +3,11 @@ class Channel < ApplicationRecord
 
   validates :name, presence: true
   validates :kind, inclusion: { in: %w(facebook websocket) }
-
   validate :config_must_match_schema
 
   scope :of_bots_owned_by, -> (user) { Channel.where(bot: user.bots) }
+
+  before_destroy :destroy_shortened_url
 
   def setup?
     if self.kind == "facebook"
@@ -40,4 +41,9 @@ class Channel < ApplicationRecord
       fail "config schema not defined"
     end
   end
+
+  private
+    def destroy_shortened_url
+      Shortener::ShortenedUrl.where(unique_key: self.config['url_key']).destroy_all
+    end
 end

@@ -133,7 +133,7 @@ ActiveRecord::Schema.define(version: 20180927150728) do
     t.integer "owner_id"
     t.string "owner_type", limit: 20
     t.text "url", null: false
-    t.string "unique_key", limit: 10, null: false
+    t.string "unique_key", limit: 12, null: false
     t.string "category"
     t.integer "use_count", default: 0, null: false
     t.datetime "expires_at"
