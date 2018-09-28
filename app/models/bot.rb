@@ -138,6 +138,13 @@ class Bot < ApplicationRecord
     self
   end
 
+  def set_web_channel_url_keys!
+    self.channels.where(kind: "websocket").each do |channel|
+      channel.config['url_key'] = self.uuid ? Shortener::ShortenedUrl.generate("/c/#{self.uuid}/#{channel.config['access_token']}").unique_key : ""
+      channel.save!
+    end
+  end
+
   private
 
   def has_single_front_desk
