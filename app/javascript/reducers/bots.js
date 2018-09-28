@@ -104,14 +104,14 @@ const clearErrors = (state, action) => {
 }
 
 const publishSuccess = (state, action) => {
-  const {botId} = action
+  const { botId, uuid } = action
   const bot = state.items && state.items[botId.toString()]
   if (bot) {
     return {
       ...state,
       items: {
         ...state.items,
-        ...{[botId]: {...bot, published: true}}
+        ...{[botId]: {...bot, published: true, uuid}}
       },
       errors: null
     }
