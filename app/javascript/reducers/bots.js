@@ -64,7 +64,8 @@ const update = (state, action) => {
     items: {
       ...state.items,
       ...{[bot.id]: bot}
-    }
+    },
+    errors: null
   }
 }
 
