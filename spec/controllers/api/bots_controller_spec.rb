@@ -260,12 +260,13 @@ RSpec.describe Api::BotsController, type: :controller do
 
   describe "publish" do
     it "publishes the bot manifest to the backend" do
-      expect(Backend).to receive(:create_bot).and_return('bot-id')
+      expect(Backend).to receive(:create_bot).and_return('a bot id')
 
       post :publish, params: { id: bot.id }
 
       expect(response).to be_success
       expect(bot.reload).to be_published
+      expect(JSON.parse(response.body)['uuid']).to eq('a bot id')
     end
 
     it "re-publishes an already published bot" do

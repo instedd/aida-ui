@@ -32,7 +32,7 @@ class Api::BotsController < ApplicationApiController
     authorize @bot
     result = PublishBot.run(@bot)
     if result[:status] == :ok
-      render json: {result: :ok}
+      render json: {result: :ok, uuid: result[:bot]}
     else
       render json: {result: result[:errors]}, status: :bad_request
     end
