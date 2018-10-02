@@ -13,7 +13,7 @@ import { Card,
 import moment from 'moment'
 import { Loader } from '../ui/Loader'
 
-let ChatHeader = ({ title, publishing }) => (
+let ChatHeader = ({ title, publishing, connecting }) => (
   <div className="chat-window-header">
     <h2 className="bot-name">
       {title}
@@ -22,7 +22,7 @@ let ChatHeader = ({ title, publishing }) => (
       Use this tool to test your bot skills
     </span>
     <div className="status">
-      { publishing ? <Loader /> : null }
+      { publishing || connecting ? <Loader /> : null }
     </div>
   </div>
 )
@@ -197,12 +197,12 @@ class InputMessage extends Component {
   }
 }
 
-const ChatWindowComponent = ({ sendMessage, sendAttachment, newSession, bot, messages, publishing, disabled, inputRef }) => (
+const ChatWindowComponent = ({ sendMessage, sendAttachment, newSession, bot, messages, publishing, disabled, inputRef, connecting }) => (
   <Paper
     zDepth={5}
     className={"chat-window"}>
       <ChatHeader
-        title={bot.name} publishing={publishing} />
+        title={bot.name} publishing={publishing} connecting={connecting} />
       <MessageList
         messages={messages} />
       <InputMessage
@@ -220,7 +220,8 @@ class ChatWindow extends Component {
     sessionId: PropTypes.string,
     onSendMessage: PropTypes.func.isRequired,
     onSendAttachment: PropTypes.func.isRequired,
-    onNewSession: PropTypes.func.isRequired
+    onNewSession: PropTypes.func.isRequired,
+    connecting: PropTypes.bool,
   }
 
   constructor(props) {
@@ -263,7 +264,7 @@ class ChatWindow extends Component {
   }
 
   render() {
-    const { bot, messages, connected, publishing, visible, sessionId, onSendMessage, onSendAttachment, onNewSession } = this.props
+    const { bot, messages, connected, publishing, visible, sessionId, onSendMessage, onSendAttachment, onNewSession, connecting } = this.props
 
     if (visible) {
       return (
@@ -274,7 +275,8 @@ class ChatWindow extends Component {
                              newSession={onNewSession}
                              publishing={publishing}
                              inputRef={input => this._input = input}
-                             disabled={!connected || publishing || sessionId == null} />
+                             disabled={!connected || publishing || sessionId == null}
+                             connecting={connecting} />
       )
     } else {
       return null
@@ -286,7 +288,8 @@ const mapStateToProps = (state) => ({
   messages: state.chat.messages,
   publishing: state.chat.publishing,
   sessionId: state.chat.sessionId,
-  connected: state.chat.connected
+  connected: state.chat.connected,
+  connecting: state.chat.connecting
 })
 
 const mapDispatchToProps = (dispatch) => ({

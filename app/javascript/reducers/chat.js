@@ -26,6 +26,7 @@ export default (state : T.ChatState, action : T.ChatAction) : T.ChatState => {
     case actions.NEW_SESSION: return newSession(state, action)
     case actions.CONNECTED: return chatConnected(state, action)
     case actions.DISCONNECTED: return chatDisconnected(state, action)
+    case actions.CONNECTING: return chatConnecting(state, action)
     default:
       return state;
   }
@@ -44,6 +45,7 @@ const startPreview = (state, action) => {
       accessToken,
       connected: false,
       sessionId: null,
+      connecting: false
     }
   } else {
     state = {...state, publishing: true, pausePreview: false, accessToken}
@@ -120,7 +122,19 @@ const chatConnected = (state, action) => {
   if (action.previewUuid == state.previewUuid) {
     return {
       ...state,
-      connected: true
+      connected: true,
+      connecting: false
+    }
+  } else {
+    return state
+  }
+}
+
+const chatConnecting = (state, action) => {
+  if (action.previewUuid == state.previewUuid) {
+    return {
+      ...state,
+      connecting: true
     }
   } else {
     return state
@@ -131,7 +145,8 @@ const chatDisconnected = (state, action) => {
   if (action.previewUuid == state.previewUuid) {
     return {
       ...state,
-      connected: false
+      connected: false,
+      connecting: false
     }
   } else {
     return state

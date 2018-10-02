@@ -16,6 +16,7 @@ class ChatClient extends Component {
   openChannel(uuid, accessToken) {
     const channel = socket.channel(`bot:${uuid}`, { access_token: accessToken })
 
+    this.props.actions.chatConnecting(uuid)
     channel.join().receive('ok', response => {
       this.props.actions.chatConnected(uuid)
       channel.on('btu_msg', payload => {
@@ -26,9 +27,15 @@ class ChatClient extends Component {
 
     }).receive('error', err => {
       if (this.props.visible) {
-        this.props.notificationsActions.pushNotification("Could not connect to bot preview")
+        if (err.retry) {
+          const sleep = time => (new Promise(resolve => setTimeout(resolve, time)))
+          sleep(5000).then(() => this.openChannel(uuid, accessToken))
+        }
+        else {
+          this.props.actions.chatDisconnected(uuid)
+          this.props.notificationsActions.pushNotification("Could not connect to bot preview")
+        }
       }
-      this.closeChannel()
     })
 
     channel.onError(() => {

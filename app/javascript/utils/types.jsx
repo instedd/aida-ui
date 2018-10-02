@@ -143,6 +143,9 @@ export type ChatAction = {
 } | {
   type: 'CHAT_DISCONNECTED',
   previewUuid: string
+} | {
+  type: 'CHAT_CONNECTING',
+  previewUuid: string
 }
 
 export type CollaboratorsAction = {
