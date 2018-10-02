@@ -41,6 +41,7 @@ export type BotAction = {
 } | {
   type: "BOT_PUBLISH_SUCCESS",
   botId: number,
+  uuid: string
 } | {
   type: "BOT_PUBLISH_FAILURE",
   botId: number,

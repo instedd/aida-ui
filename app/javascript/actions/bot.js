@@ -25,9 +25,10 @@ export const _botPublish = (botId : number) : T.BotAction => ({
   botId
 })
 
-export const _botPublishSuccess = (botId : number) : T.BotAction => ({
+export const _botPublishSuccess = (botId : number, uuid: string) : T.BotAction => ({
   type: PUBLISH_SUCCESS,
-  botId
+  botId,
+  uuid
 })
 
 export const _botPublishFailure = (botId : number, errors: any) : T.BotAction => ({
@@ -83,9 +84,9 @@ export const publishBot = (bot : T.Bot) => (dispatch : T.Dispatch) => {
   dispatch(_botPublish(bot.id))
 
   return api.publishBot(bot)
-            .then(() => {
+            .then((response) => {
               dispatch(pushNotification('The bot was published successfully'))
-              dispatch(_botPublishSuccess(bot.id))
+              dispatch(_botPublishSuccess(bot.id, response.uuid))
             })
             .catch((error) => {
               dispatch(pushNotification('Bot publication failed'))
