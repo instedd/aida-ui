@@ -84,6 +84,10 @@ main {
     td {
       padding: 0 12px 0 0;
     }
+    &:last-child td.md-table-column--plain {
+     height: 75px;
+     padding-bottom: 3px;
+    }
   }
   .md-edit-dialog__blocked-field {
     width: auto;
@@ -93,6 +97,16 @@ main {
   .addlink .md-icon {
     color: $md-secondary-color;
     cursor: pointer;
+  }
+  .md-text-field-message--inactive {
+    position: absolute;
+    margin-top: -3px;
+  }
+  .md-text--error{
+    position: absolute;
+  }
+  .md-text-field-message {
+    white-space: nowrap;
   }
 }
 
