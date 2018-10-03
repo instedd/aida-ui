@@ -109,6 +109,11 @@
 
     }
   }
+  .frontDeskItem {
+    .md-tile-addon:last-child {
+      width: 40%;
+    }
+  }
 }
 
 .button-area {
