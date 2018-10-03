@@ -96,10 +96,9 @@
 }
 
 .variable-buttons {
-  display: flex;
-  align-items: flex-end;
   padding: 0 !important;
-  float: right;
+  text-align: right;
+  width: 4rem;
   .btn-remove-variable, .btn-remove-condition {
     visibility: hidden;
   }
