@@ -16,6 +16,7 @@ export const PAUSE_PREVIEW = 'PAUSE_PREVIEW'
 export const NEW_SESSION = 'NEW_SESSION'
 export const CONNECTED = 'CHAT_CONNECTED'
 export const DISCONNECTED = 'CHAT_DISCONNECTED'
+export const CONNECTING = 'CHAT_CONNECTING'
 
 // Action Creator
 let nextMessageId = 1;
@@ -119,5 +120,10 @@ export const chatConnected = (previewUuid : string) => ({
 
 export const chatDisconnected = (previewUuid : string) => ({
   type: DISCONNECTED,
+  previewUuid
+})
+
+export const chatConnecting = (previewUuid : string) => ({
+  type: CONNECTING,
   previewUuid
 })
