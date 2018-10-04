@@ -43,7 +43,7 @@ class Bot < ApplicationRecord
       end,
       variables: VariableAssignment.manifest(self.variable_assignments, self.default_language, self.other_languages),
       channels: channels.order(:id).map do |channel|
-        channel.config.merge(type: channel.kind)
+        channel.config.except('url_key').merge(type: channel.kind)
       end
     }.tap do |manifest|
       manifest[:data_tables] = data_tables.map do |table|
@@ -128,13 +128,21 @@ class Bot < ApplicationRecord
   end
 
   def add_default_channels!
-    self.channels.create! kind: "facebook", name: "facebook", config: {
+    self.channels.create! kind: "facebook", name: "Facebook", config: {
       "page_id" => "", "verify_token" => SecureRandom.base58, "access_token" => ""
     }
-    self.channels.create! kind: "websocket", name: "websocket", config: {
-      "access_token" => ""
+    self.channels.create! kind: "websocket", name: "Web", config: {
+      "access_token" => SecureRandom.uuid,
+      "url_key" => ""
     }
     self
+  end
+
+  def set_web_channel_url_keys!
+    self.channels.where(kind: "websocket").each do |channel|
+      channel.config['url_key'] = self.uuid ? Shortener::ShortenedUrl.generate("/c/#{self.uuid}/#{channel.config['access_token']}").unique_key : ""
+      channel.save!
+    end
   end
 
   private

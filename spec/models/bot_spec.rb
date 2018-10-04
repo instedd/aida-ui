@@ -46,10 +46,12 @@ RSpec.describe Bot, type: :model do
         "page_id" => "", "verify_token" => SecureRandom.base58, "access_token" => ""
       }
       bot.channels.create! kind: "websocket", name: "websocket", config: {
-        "access_token" => ""
+        "access_token" => "",
+        "url_key" => ""
       }
       bot.channels.create! kind: "websocket", name: "websocket", config: {
-        "access_token" => ""
+        "access_token" => "",
+        "url_key" => ""
       }
 
       expect(bot.manifest[:channels].size).to eq(3)
@@ -57,24 +59,36 @@ RSpec.describe Bot, type: :model do
 
     it "outputs channels ordered by id" do
       channel_1 = bot.channels.create! kind: "websocket", name: "websocket", config: {
-        "access_token" => ""
+        "access_token" => "",
+        "url_key" => ""
       }
       channel_0 = bot.channels.create! kind: "websocket", name: "websocket", config: {
-        "access_token" => ""
+        "access_token" => "",
+        "url_key" => ""
       }
       channel_0.config = {
-        "access_token" => "#{channel_0.id}"
+        "access_token" => "#{channel_0.id}",
+        "url_key" => ""
       }
       channel_0.save!
 
       channel_1.id = (channel_0.id + 1)
       channel_1.config = {
-        "access_token" => "#{channel_1.id}"
+        "access_token" => "#{channel_1.id}",
+        "url_key" => ""
       }
       channel_1.save!
 
       channels = bot.manifest[:channels]
       expect(channels[1]['access_token'].to_i).to eq(channels[0]['access_token'].to_i + 1)
+    end
+
+    it "does not expose url_key" do
+      channel = bot.channels.create! kind: "websocket", name: "websocket", config: {
+        "access_token" => "an access token",
+        "url_key" => "a url key"
+      }
+      expect(bot.manifest[:channels][0]['url_key']).to be_nil
     end
 
     it "outputs wit_ai" do
@@ -106,10 +120,12 @@ RSpec.describe Bot, type: :model do
         "page_id" => "", "verify_token" => SecureRandom.base58, "access_token" => ""
       }
       bot.channels.create! kind: "websocket", name: "websocket", config: {
-        "access_token" => ""
+        "access_token" => "",
+        "url_key" => ""
       }
       bot.channels.create! kind: "websocket", name: "websocket", config: {
-        "access_token" => ""
+        "access_token" => "",
+        "url_key" => ""
       }
 
       expect(bot.manifest[:channels].all? { |channel| not channel[:type].nil? }).to be true

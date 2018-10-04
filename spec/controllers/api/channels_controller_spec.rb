@@ -37,6 +37,43 @@ RSpec.describe Api::ChannelsController, type: :controller do
       expect(json_body).to be_a_channel_as_json
     end
 
+    it "create bot websocket Web" do
+      post :create, params: {
+        bot_id: bot.id,
+        channel: {
+          kind: 'websocket'
+        }
+      }
+
+      channel = Channel.last
+      access_token = channel.config['access_token']
+      url_key = channel.config['url_key']
+      redirect_url = ::Shortener::ShortenedUrl.fetch_with_token(token: url_key)
+      chat_url = "/c/#{bot.uuid}/#{access_token}"
+
+      expect(channel.name).to eq('Web')
+      expect(channel.config['access_token'].length).to eq(36)
+    end
+
+    it "create bot websocket Web with url when published" do
+      bot.uuid = SecureRandom.uuid
+      bot.save!
+
+      shortened = Shortener::ShortenedUrl.new
+      shortened.unique_key = '123456789012'
+
+      expect(Shortener::ShortenedUrl).to receive(:generate) { shortened }
+
+      post :create, params: {
+        bot_id: bot.id,
+        channel: {
+          kind: 'websocket'
+        }
+      }
+
+      expect(Channel.last.config['url_key'].length).to eq(12)
+    end
+
     it "returns unprocessable entity when unknown channel kind" do
       expect do
         post :create, params: {

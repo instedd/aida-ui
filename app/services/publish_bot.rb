@@ -5,6 +5,7 @@ class PublishBot
     else
       uuid = Backend.create_bot(bot.manifest)
       bot.uuid = uuid
+      bot.set_web_channel_url_keys!()
       bot.save!
     end
     {status: :ok, bot: bot.uuid}
