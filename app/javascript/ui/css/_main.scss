@@ -15,6 +15,14 @@
   }
 }
 
+@media screen and (max-width: $md-desktop-min-width) {
+  .sidebar .frontDeskItem {
+    .md-tile-addon:last-child {
+      width: 42%;
+    }
+  }
+}
+
 @media screen and (max-width: $md-tablet-min-width) {
   .main-with-sidebar {
     grid-template-columns: 1fr;
@@ -23,6 +31,11 @@
       "main-content";
     grid-auto-rows: auto;
     grid-row-gap: 4rem;
+  }
+  .sidebar .frontDeskItem {
+    .md-tile-addon:last-child {
+      width: 13.3%;
+    }
   }
 }
 
