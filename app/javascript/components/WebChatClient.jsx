@@ -24,7 +24,7 @@ class WebChatClient extends Component {
 
     if (channel) {
       channel
-        .push('new_session', {})
+        .push('new_session', {data: {first_name: 'Web', last_name: 'Chat', gender: 'male'}})
         .receive('ok', ({ session }) => {
           actions.newSession(session)
           this.setState({ sessionId: session })
