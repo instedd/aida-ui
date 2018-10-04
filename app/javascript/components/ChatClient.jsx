@@ -61,7 +61,7 @@ class ChatClient extends Component {
 
     if (channel && bot) {
       channel
-        .push('new_session', {data: {first_name: 'John', last_name: 'Doe', gender: 'male'}})
+        .push('new_session', {data: {first_name: 'Simulator', last_name: 'Chat', gender: 'male'}})
         .receive('ok', resp => {
           api.setBotSession(bot, resp.session)
           .then((result) => {
