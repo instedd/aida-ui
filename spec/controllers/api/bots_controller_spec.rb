@@ -317,6 +317,18 @@ RSpec.describe Api::BotsController, type: :controller do
       delete :unpublish, params: { id: shared_bot.id }
       expect(response).to be_denied
     end
+
+    it "deletes the web channel urls" do
+      published_bot.channels.create! kind: "websocket", name: "Web", config: {
+        "access_token" => "an access token",
+        "url_key" => "an url key"
+      }
+      expect(published_bot.channels.last.config.has_key?('url_key')).to be true
+      allow(Backend).to receive(:destroy_bot)
+      delete :unpublish, params: { id: published_bot.id }
+      published_bot.reload
+      expect(published_bot.channels.last.config.has_key?('url_key')).to be false
+    end
   end
 
   describe "duplicate" do

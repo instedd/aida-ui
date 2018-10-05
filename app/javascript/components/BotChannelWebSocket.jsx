@@ -21,8 +21,8 @@ export class BotChannelWebSocket extends Component {
   render() {
     const { channel, errors, bot } = this.props
 
-    const chatLink = (urlKey) => {
-      if (urlKey) {
+    const chatLink = () => {
+      if (bot.published) {
         return <Field label="Chat link" value={`${location.protocol}//${location.host}/s/${channel.config.url_key}`} readOnly />
       }
       else {

@@ -140,8 +140,13 @@ class Bot < ApplicationRecord
 
   def set_web_channel_url_keys!
     self.channels.where(kind: "websocket").each do |channel|
-      channel.config['url_key'] = self.uuid ? Shortener::ShortenedUrl.generate("/c/#{self.uuid}/#{channel.config['access_token']}").unique_key : ""
-      channel.save!
+      if (self.uuid)
+        channel.config['url_key'] = Shortener::ShortenedUrl.generate("/c/#{self.uuid}/#{channel.config['access_token']}").unique_key
+        channel.save!
+      elsif channel.config.has_key?('url_key')
+        channel.config.except!('url_key')
+        channel.save!
+      end
     end
   end
 
