@@ -71,7 +71,7 @@
         "url_key": { "type": "string" }
       },
       "additionalProperties": false,
-      "required": [ "access_token", "url_key" ]
+      "required": [ "access_token" ]
     },
 
     "frontDeskConfig": {

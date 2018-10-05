@@ -37,7 +37,7 @@ RSpec.describe Api::ChannelsController, type: :controller do
       expect(json_body).to be_a_channel_as_json
     end
 
-    it "create bot websocket Web" do
+    it "create the websocket Web" do
       post :create, params: {
         bot_id: bot.id,
         channel: {
@@ -55,7 +55,7 @@ RSpec.describe Api::ChannelsController, type: :controller do
       expect(channel.config['access_token'].length).to eq(36)
     end
 
-    it "create bot websocket Web with url when published" do
+    it "create the websocket with url when published" do
       bot.uuid = SecureRandom.uuid
       bot.save!
 
@@ -72,6 +72,17 @@ RSpec.describe Api::ChannelsController, type: :controller do
       }
 
       expect(Channel.last.config['url_key'].length).to eq(12)
+    end
+
+    it "create the websocket without url when unpublished" do
+      post :create, params: {
+        bot_id: bot.id,
+        channel: {
+          kind: 'websocket'
+        }
+      }
+
+      expect(Channel.last.config.has_key?('url_key')).to be false
     end
 
     it "returns unprocessable entity when unknown channel kind" do
