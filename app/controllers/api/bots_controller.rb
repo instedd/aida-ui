@@ -41,6 +41,7 @@ class Api::BotsController < ApplicationApiController
   def unpublish
     authorize @bot
     if UnpublishBot.run(@bot)
+      @bot.set_web_channel_url_keys!()
       head :no_content
     else
       render json: {result: :error}, status: :bad_request
