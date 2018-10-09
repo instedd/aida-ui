@@ -79,12 +79,13 @@ export const checkWitAICredentials = (bot : T.Bot, authToken: string) =>
       })
   }
 
-export const publishBot = (bot : T.Bot) => (dispatch : T.Dispatch) => {
+export const publishBot = (bot : T.Bot, fetchChannels : any) => (dispatch : T.Dispatch) => {
   // TODO actually handle this action to show the publish is in progress, or just remove it
   dispatch(_botPublish(bot.id))
 
   return api.publishBot(bot)
             .then((response) => {
+              if (fetchChannels) fetchChannels({botId : bot.id})
               dispatch(pushNotification('The bot was published successfully'))
               dispatch(_botPublishSuccess(bot.id, response.uuid))
             })

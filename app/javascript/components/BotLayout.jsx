@@ -27,6 +27,7 @@ import { hasPermission } from '../utils'
 import ChatClient from './ChatClient'
 import ChatWindow from './ChatWindow'
 import * as chatActions from '../actions/chat'
+import * as channelsActions from '../actions/channels'
 import { BotChannelIndex } from '../components/BotChannelIndex'
 
 const DeleteBotDialog = ({ onHide, onConfirm, visible }) => {
@@ -79,7 +80,7 @@ export class BotLayoutComponent extends Component {
   }
 
   render() {
-    const { botsLoaded, bot, children, botActions, history, chatActions, location } = this.props
+    const { botsLoaded, bot, botActions, history, chatActions, location, channelsActions } = this.props
     const { dialogVisible, chatWindowVisible } = this.state
 
     const showDialog = () => this.setState({ dialogVisible: true })
@@ -198,6 +199,7 @@ export class BotLayoutComponent extends Component {
           headerNavExtra={[
             <HeaderNavAction children={<FontIcon>get_app</FontIcon>} label="Download Manifest" disabled={!canPublish} onClick={() => window.location = `/api/v1/bots/${bot.id}/manifest.json`} />,
             <HeaderNavAction children={<FontIcon>content_copy</FontIcon>} label="Duplicate" disabled={!canAdmin} onClick={duplicateBot} />,
+            <HeaderNavAction children={<FontIcon>file_upload</FontIcon>} label="Publish" disabled={!canPublish} onClick={() => botActions.publishBot(bot, channelsActions.fetchChannels)}/>,
             <HeaderNavAction children={<FontIcon>remove_circle</FontIcon>} label="Unpublish" disabled={!canPublish} onClick={() => botActions.unpublishBot(bot)}/>,
             <HeaderNavAction children={<FontIcon>delete</FontIcon>} label={isCollaborator ? 'Leave' : 'Delete'} onClick={showDialog} />,
           ]}
@@ -251,7 +253,8 @@ const mapStateToProps = (state, {match}) => {
 const mapDispatchToProps = (dispatch) => ({
   botActions: bindActionCreators(botActions, dispatch),
   botsActions: bindActionCreators(botsActions, dispatch),
-  chatActions: bindActionCreators(chatActions, dispatch)
+  chatActions: bindActionCreators(chatActions, dispatch),
+  channelsActions: bindActionCreators(channelsActions, dispatch)
 })
 
 export const BotLayout = withRouter(connect(mapStateToProps, mapDispatchToProps)(BotLayoutComponent))
