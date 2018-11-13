@@ -1,5 +1,7 @@
 class WelcomeController < ApplicationController
   before_action :authenticate_user!, only: [:login, :generate_token]
+  after_action :prepare_intercom_shutdown, only: [:logout]
+  after_action :intercom_shutdown, only: [:index]
 
   def index
     if user_signed_in?
@@ -29,5 +31,15 @@ class WelcomeController < ApplicationController
 
   def generate_token
     render json: { token: Guisso.generate_bearer_token(current_user.email) }
+  end
+
+  protected
+  
+  def prepare_intercom_shutdown
+    IntercomRails::ShutdownHelper.prepare_intercom_shutdown(session)
+  end
+
+  def intercom_shutdown
+    IntercomRails::ShutdownHelper.intercom_shutdown(session, cookies, request.domain)
   end
 end
